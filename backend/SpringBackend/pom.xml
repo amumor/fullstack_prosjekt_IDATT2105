@@ -8,11 +8,11 @@
 		<version>3.3.10</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>edu.ntnu.idatt2105</groupId>
+	<groupId>edu.ntnu</groupId>
 	<artifactId>SpringBackend</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>SpringBackend</name>
-	<description>Springboot Backend for marketplace website</description>
+	<description>Springboot backend for marketplace website</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -43,6 +43,11 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<scope>runtime</scope>
+		</dependency>
 		<dependency>
 			<groupId>com.mysql</groupId>
 			<artifactId>mysql-connector-j</artifactId>

@@ -1,4 +1,4 @@
-package edu.ntnu.idatt2105.SpringBackend;
+package edu.ntnu.SpringBackend;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
