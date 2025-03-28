@@ -30,21 +30,24 @@ const listings = [
   <div class="search-container">
     <input type="text" class="search-input" placeholder="Search for listings..." id="searchInput">
     <button class="search-btn" @click="searchFunction">Search</button>
+    <button class="map-btn">Map</button>
   </div>
 
   <div class="category-container">
     <!-- Get categories from backend -->
-    <button>Boats</button>
-    <button>Cars</button>
-    <button>Motorcycles</button>
-    <button>Real Estate</button>
+    <button id="category-btn">Boats</button>
+    <button id="category-btn">Cars</button>
+    <button id="category-btn">Motorcycles</button>
+    <button id="category-btn">Real Estate</button>
   </div>
 
-  <div class="image-container">
+  <div class="listings">
     <!-- Get images from backend -->
     <li v-for="listing in listings" :key="listing.id">
-      <img class="image-item" :src="listing.image" alt="Boat">
-      <div class="price">{{ listing.price }}</div>
+      <div class="image-container">
+        <img class="image-item" :src="listing.image" alt="Boat">
+        <div class="price">{{ listing.price }}</div>
+      </div>
       <div class="town">{{ listing.town }}</div>
       <div class="title">{{ listing.title }}</div>
     </li>
@@ -52,5 +55,111 @@ const listings = [
 </template>
 
 <style scoped>
+/* Search bar */
+.search-container {
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  background-color: #ffffff;
+  border-radius: 5px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 300px;
+}
 
+.search-input {
+  flex-grow: 1;
+  border: none;
+  outline: none;
+  padding: 10px;
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+}
+
+.search-btn, .map-btn {
+  background-color: #D9D9D9;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.search-btn:hover, .map-btn:hover {
+  background-color: #f1f1f1;
+  transform: scale(1.05);
+}
+
+/* Categories */
+.category-container {
+  display: flex;
+  gap: 20px;
+  margin-left: auto;
+}
+
+#category-btn {
+  color: white;
+  font-family: 'Inter', sans-serif;
+  text-decoration: none;
+  background-color: #1C64FF;
+  padding: 10px 15px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+#category-btn:hover {
+  background-color: #7BA5FF;
+  transform: scale(1.05);
+}
+.listings {
+  font-family: 'Inter', sans-serif;
+  list-style: none;
+  padding: 0;
+  display: flex;
+  gap: 20px;
+}
+
+.listings li {
+  position: relative;
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+/* Image container */
+.image-container {
+  position: relative;
+}
+
+.image-item {
+  width: 200px;
+  height: auto;
+  display: block;
+}
+
+.price {
+  color: white;
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+/* Listing info */
+.town {
+  font-size: 15px;
+  color: darkgray;
+}
+
+.title {
+  font-size: 25px;
+  color: #333333;
+}
 </style>
