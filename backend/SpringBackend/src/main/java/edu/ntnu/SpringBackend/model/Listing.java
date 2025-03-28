@@ -1,8 +1,8 @@
-package edu.ntnu.idatt2105.SpringBackend.model;
+package edu.ntnu.SpringBackend.model;
 
 
-import edu.ntnu.idatt2105.SpringBackend.model.enums.Category;
-import edu.ntnu.idatt2105.SpringBackend.model.enums.ListingStatus;
+import edu.ntnu.SpringBackend.model.enums.Category;
+import edu.ntnu.SpringBackend.model.enums.ListingStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

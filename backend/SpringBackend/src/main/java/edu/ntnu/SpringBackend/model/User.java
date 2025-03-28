@@ -1,6 +1,6 @@
-package edu.ntnu.idatt2105.SpringBackend.model;
+package edu.ntnu.SpringBackend.model;
 
-import edu.ntnu.idatt2105.SpringBackend.model.enums.Role;
+import edu.ntnu.SpringBackend.model.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
 

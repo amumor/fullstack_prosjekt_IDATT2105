@@ -1,4 +1,4 @@
-package edu.ntnu.idatt2105.SpringBackend.model;
+package edu.ntnu.SpringBackend.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
