@@ -54,6 +54,16 @@ public class User implements UserDetails {
   private List<Bookmark> bookmarks = new ArrayList<>();
 
   @Override
+  public String getPassword() {
+    return password;
+  }
+
+  @Override
+  public String getUsername() {
+    return email;
+  }
+
+  @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
     return List.of(new SimpleGrantedAuthority(role.name()));
   }
@@ -76,5 +86,16 @@ public class User implements UserDetails {
   @Override
   public boolean isEnabled() {
     return true;
+  }
+
+  @Override
+  public String toString() {
+    return "User{" +
+            "id=" + id +
+            ", firstname='" + firstName + '\'' +
+            ", lastname='" + lastName + '\'' +
+            ", email='" + email + '\'' +
+            ", role=" + role +
+            '}';
   }
 }

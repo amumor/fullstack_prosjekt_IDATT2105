@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+@Service
 public class JwtService {
     private final Logger logger = LoggerFactory.getLogger(JwtService.class);
     private static final String SECRET_KEY = ""; // TODO: implement secret in .env
