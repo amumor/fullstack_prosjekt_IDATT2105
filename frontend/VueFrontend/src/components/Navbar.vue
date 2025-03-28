@@ -11,6 +11,11 @@ const props = defineProps({
     default: false
   }
 });
+
+const isOpen = ref(false);
+const toggleMenu = () => {
+  isOpen.value = !isOpen.value;
+};
 </script>
 
 <template>
@@ -39,17 +44,26 @@ const props = defineProps({
     </div>
   </template>
 
-  <!-- Mobile Menu -->
+  <!-- Mobile Dropdown Menu -->
   <template v-else>
     <div class="mobile-navbar">
       <h4 class="logo-header">FIND.no</h4>
+      <button class="menu-btn" @click="toggleMenu" v-if="isMobile">☰</button>
       <div class="options">
+
+        <!-- Logged In Menu -->
         <template v-if="isLoggedIn">
-
+          <li><router-link to="/newListing" @click="toggleMenu">New listing</router-link></li>
+          <li><router-link to="/favourites" @click="toggleMenu">Favourites</router-link></li>
+          <li><router-link to="/inbox" @click="toggleMenu">Inbox</router-link></li>
+          <li><router-link to="/profile" @click="toggleMenu">Profile</router-link></li>
         </template>
+
+        <!-- Logged Out Menu -->
         <template v-else>
-
+          <li><router-link to="/login" @click="toggleMenu">Login</router-link></li>
         </template>
+
       </div>
     </div>
   </template>
