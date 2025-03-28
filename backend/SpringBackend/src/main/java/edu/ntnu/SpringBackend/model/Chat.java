@@ -19,7 +19,7 @@ import java.util.List;
 public class Chat {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+  private int id;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "buyer_id", nullable = false)
