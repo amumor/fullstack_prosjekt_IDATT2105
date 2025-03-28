@@ -193,3 +193,7 @@ xcuserdata/
 .env.secret.toml
 .env*
 # --- . ---
+
+.factorypath
+.project
+maven-wrapper.properties
