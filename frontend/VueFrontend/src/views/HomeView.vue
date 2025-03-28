@@ -1,9 +1,15 @@
 <script setup lang="ts">
-import TheWelcome from '../components/TheWelcome.vue'
+import Navbar from '@/components/Navbar.vue'
+
 </script>
 
 <template>
-  <main>
-    <TheWelcome />
-  </main>
+  <div class="display-page-container">
+    <Navbar />
+  </div>
+
 </template>
+
+<style scoped>
+
+</style>
