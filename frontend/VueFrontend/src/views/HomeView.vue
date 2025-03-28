@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import HomeView from '@/views/HomeView.vue'
 
 </script>
 
 <template>
-  <div id="App">
-    <HomeView />
+  <div class="display-page-container">
+    <Navbar />
   </div>
+
 </template>
 
 <style scoped>
