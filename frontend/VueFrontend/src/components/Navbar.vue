@@ -30,11 +30,11 @@ onMounted(() => {
 
 <template>
   <div class="navbar">
+    <router-link to ="/">FIND.no</router-link>
 
     <!-- Desktop Menu -->
     <template v-if="!isMobile">
       <div class="desktop-navbar">
-        <h4 class="logo-header">FIND.no</h4>
         <div class="options">
 
           <!-- Logged in menu -->
@@ -56,7 +56,6 @@ onMounted(() => {
     <!-- Mobile Dropdown Menu -->
     <template v-else>
       <div class="mobile-navbar">
-        <h4 class="logo-header">FIND.no</h4>
         <button class="menu-btn" @click="toggleMenu">☰</button>
         <div class="options">
 
