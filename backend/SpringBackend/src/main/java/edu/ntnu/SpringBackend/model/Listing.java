@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
 public class Listing {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+  private int id;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "user_id", nullable = false)
@@ -41,13 +41,11 @@ public class Listing {
   @Column(nullable = false)
   private ListingStatus status;
 
-  @Column(nullable = false, precision = 10, scale = 2)
+  @Column(nullable = false)
   private BigDecimal price;
 
-  @Column(precision = 10, scale = 7)
   private Double latitude;
 
-  @Column(precision = 10, scale = 7)
   private Double longitude;
 
   @Column(nullable = false)
