@@ -1,4 +1,4 @@
-package edu.ntnu.idatt2105.SpringBackend.model.enums;
+package edu.ntnu.SpringBackend.model.enums;
 
 public enum ListingStatus {
   ACTIVE,
