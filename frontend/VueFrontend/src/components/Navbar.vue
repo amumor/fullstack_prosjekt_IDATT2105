@@ -4,7 +4,7 @@ import { ref, defineProps, onMounted } from 'vue';
 const props = defineProps({
   isLoggedIn: {
     type: Boolean,
-    default: true
+    default: false
   },
 });
 
@@ -29,55 +29,55 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="navbar">
-    <router-link to ="/" id="header">FIND.no</router-link>
+<div class="navbar">
+  <router-link to ="/" id="header">FIND.no</router-link>
 
-    <!-- Desktop Menu -->
-    <template v-if="!isMobile">
-      <div class="desktop-navbar">
-        <div class="options">
+  <!-- Desktop Menu -->
+  <template v-if="!isMobile">
+    <div class="desktop-navbar">
+      <div class="options">
 
-          <!-- Logged in menu -->
-          <template v-if="props.isLoggedIn">
-            <router-link to ="/newListing" id="router-link">New listing</router-link>
-            <router-link to ="/favourites" id="router-link">Favourites</router-link>
-            <router-link to ="/inbox" id="router-link">Inbox</router-link>
-            <router-link to ="/profile" id="router-link">Profile</router-link>
+        <!-- Logged in menu -->
+        <template v-if="props.isLoggedIn">
+          <router-link to ="/newListing" id="router-link">New listing</router-link>
+          <router-link to ="/favourites" id="router-link">Favourites</router-link>
+          <router-link to ="/inbox" id="router-link">Inbox</router-link>
+          <router-link to ="/profile" id="router-link">Profile</router-link>
+        </template>
+
+        <!-- Logged out menu -->
+        <template v-else>
+          <router-link to ="/login" id="router-link">Log in</router-link>
+        </template>
+      </div>
+    </div>
+  </template>
+
+  <!-- Mobile Dropdown Menu -->
+  <template v-else>
+    <div class="mobile-navbar">
+      <button class="menu-btn" @click="toggleMenu">☰</button>
+      <div class="options">
+
+        <ul v-show="isOpen" class="dropdown">
+          <!-- Logged In Menu -->
+          <template v-if="props.isLoggedIn" v-show="isOpen">
+            <li><router-link to="/newListing" @click="toggleMenu" id="router-link">New listing</router-link></li>
+            <li><router-link to="/favourites" @click="toggleMenu" id="router-link">Favourites</router-link></li>
+            <li><router-link to="/inbox" @click="toggleMenu" id="router-link">Inbox</router-link></li>
+            <li><router-link to="/profile" @click="toggleMenu" id="router-link">Profile</router-link></li>
           </template>
 
-          <!-- Logged out menu -->
+          <!-- Logged Out Menu -->
           <template v-else>
-            <router-link to ="/login" id="router-link">Log in</router-link>
+            <li><router-link to="/login" id="router-link">Log in</router-link></li>
           </template>
-        </div>
+        </ul>
+
       </div>
-    </template>
-
-    <!-- Mobile Dropdown Menu -->
-    <template v-else>
-      <div class="mobile-navbar">
-        <button class="menu-btn" @click="toggleMenu">☰</button>
-        <div class="options">
-
-          <ul v-show="isOpen" class="dropdown">
-            <!-- Logged In Menu -->
-            <template v-if="props.isLoggedIn" v-show="isOpen">
-              <li><router-link to="/newListing" @click="toggleMenu" id="router-link">New listing</router-link></li>
-              <li><router-link to="/favourites" @click="toggleMenu" id="router-link">Favourites</router-link></li>
-              <li><router-link to="/inbox" @click="toggleMenu" id="router-link">Inbox</router-link></li>
-              <li><router-link to="/profile" @click="toggleMenu" id="router-link">Profile</router-link></li>
-            </template>
-
-            <!-- Logged Out Menu -->
-            <template v-else>
-              <li><router-link to="/login" id="router-link">Log in</router-link></li>
-            </template>
-          </ul>
-
-        </div>
-      </div>
-    </template>
-  </div>
+    </div>
+  </template>
+</div>
 </template>
 
 <style scoped>
