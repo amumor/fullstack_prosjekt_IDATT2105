@@ -4,6 +4,7 @@ import Navbar from '@/components/Navbar.vue'
 
 const searchFunction = () => {};
 
+//Get images from backend
 const listings = [
   {
     id: 1,
@@ -20,6 +21,14 @@ const listings = [
     title: 'Big Boat 2',
   },
 ];
+
+//Get categories from backend
+const categories = [
+  { id: 1, name: 'Boats' },
+  { id: 2, name: 'Cars' },
+  { id: 3, name: 'Motorcycles' },
+  { id: 4, name: 'Real Estate' },
+];
 </script>
 
 <template>
@@ -27,22 +36,22 @@ const listings = [
     <Navbar />
   </div>
 
+  <!-- Search bar -->
   <div class="search-container">
     <input type="text" class="search-input" placeholder="Search for listings..." id="searchInput">
     <button class="search-btn" @click="searchFunction">Search</button>
     <button class="map-btn">Map</button>
   </div>
 
+  <!-- Categories -->
   <div class="category-container">
-    <!-- Get categories from backend -->
-    <button id="category-btn">Boats</button>
-    <button id="category-btn">Cars</button>
-    <button id="category-btn">Motorcycles</button>
-    <button id="category-btn">Real Estate</button>
+    <li v-for="category in categories" :key="category.id">
+      <button id="category-btn">{{ category.name }}</button>
+    </li>
   </div>
 
+  <!-- Listings -->
   <div class="listings">
-    <!-- Get images from backend -->
     <li v-for="listing in listings" :key="listing.id">
       <div class="image-container">
         <img class="image-item" :src="listing.image" alt="Boat">
@@ -97,6 +106,7 @@ const listings = [
   display: flex;
   gap: 20px;
   margin-left: auto;
+  list-style: none;
 }
 
 #category-btn {
@@ -115,6 +125,8 @@ const listings = [
   background-color: #7BA5FF;
   transform: scale(1.05);
 }
+
+/* Listings */
 .listings {
   font-family: 'Inter', sans-serif;
   list-style: none;
