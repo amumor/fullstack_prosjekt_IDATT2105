@@ -71,19 +71,23 @@ const categories = [
   align-items: center;
   gap: 10px;
   padding: 10px;
-  background-color: #ffffff;
   border-radius: 5px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  width: 300px;
+  width: 500px;
+  margin: 20px auto;
 }
 
 .search-input {
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  box-shadow: 0 4px 6px #333333;
+  border-radius: 5px;
+
+
   flex-grow: 1;
   border: none;
   outline: none;
   padding: 10px;
-  font-family: 'Inter', sans-serif;
-  font-size: 16px;
+  outline: none;
 }
 
 .search-btn, .map-btn {
@@ -103,10 +107,13 @@ const categories = [
 
 /* Categories */
 .category-container {
-  display: flex;
-  gap: 20px;
-  margin-left: auto;
   list-style: none;
+
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin: 20px auto;
 }
 
 #category-btn {
