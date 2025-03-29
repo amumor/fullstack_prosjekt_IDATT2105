@@ -87,7 +87,7 @@ onMounted(() => {
   align-items: center;
   padding: 15px 20px;
   background-color: #ffffff;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 #header {
@@ -169,11 +169,12 @@ onMounted(() => {
   top: 60px;
   right: 20px;
   background-color: white;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
   padding: 10px;
   border-radius: 4px;
   list-style-type: none;
   width: 200px;
+  z-index: 1000;
 }
 
 .dropdown li {
