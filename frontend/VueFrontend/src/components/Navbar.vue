@@ -174,6 +174,7 @@ onMounted(() => {
   border-radius: 4px;
   list-style-type: none;
   width: 200px;
+  z-index: 1000;
 }
 
 .dropdown li {
