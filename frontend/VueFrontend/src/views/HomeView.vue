@@ -1,5 +1,6 @@
 <script setup>
 import Navbar from '@/components/Navbar.vue'
+document.body.style.backgroundColor = "#ffffff";
 
 
 const searchFunction = () => {};
