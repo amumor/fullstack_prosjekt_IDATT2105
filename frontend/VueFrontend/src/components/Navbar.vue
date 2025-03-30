@@ -9,6 +9,7 @@ const props = defineProps({
 });
 
 // Mobile menu state
+const isUserLoggedIn = ref(props.isLoggedIn);
 const isOpen = ref(false);
 const isMobile = ref(window.innerWidth <= 768);
 
@@ -38,7 +39,7 @@ onMounted(() => {
       <div class="options">
 
         <!-- Logged in menu -->
-        <template v-if="props.isLoggedIn">
+        <template v-if="isUserLoggedIn">
           <router-link to ="/newListing" id="router-link">New listing</router-link>
           <router-link to ="/favourites" id="router-link">Favourites</router-link>
           <router-link to ="/inbox" id="router-link">Inbox</router-link>
@@ -61,7 +62,7 @@ onMounted(() => {
 
         <ul v-show="isOpen" class="dropdown">
           <!-- Logged In Menu -->
-          <template v-if="props.isLoggedIn" v-show="isOpen">
+          <template v-if="isUserLoggedIn" v-show="isOpen">
             <li><router-link to="/newListing" @click="toggleMenu" id="router-link">New listing</router-link></li>
             <li><router-link to="/favourites" @click="toggleMenu" id="router-link">Favourites</router-link></li>
             <li><router-link to="/inbox" @click="toggleMenu" id="router-link">Inbox</router-link></li>

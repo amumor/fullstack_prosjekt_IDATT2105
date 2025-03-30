@@ -8,8 +8,10 @@ const props = defineProps({
   },
 });
 
-const isRegistered = () => {
-  props.hasUser = !props.hasUser;
+const isUserRegistered = ref(props.hasUser);
+
+const toggleForm = () => {
+  isUserRegistered.value = !isUserRegistered.value;
 };
 
 const login = () => {
@@ -22,7 +24,7 @@ const login = () => {
 <template>
 <div class="credentials-box">
   <h2 class="logo-header">FIND.no</h2>
-  <template v-if="props.hasUser">
+  <template v-if="isUserRegistered">
     <div class="login">
       <h2>Log in</h2>
       <div class="fields">
@@ -32,7 +34,7 @@ const login = () => {
       </div>
       <div class="to-sign-up">
         <p>Don't have an account yet?</p>
-        <button @click="isRegistered">Sign up</button>
+        <button @click="toggleForm">Sign up</button>
       </div>
     </div>
   </template>
@@ -46,11 +48,11 @@ const login = () => {
         <input type="text" placeholder="Phone number" required />
         <input type="password" placeholder="Password" required />
         <input type="password" placeholder="Confirm password" required />
-        <button type="submit" @click="isRegistered">Register</button>
+        <button type="submit" @click="toggleForm">Register</button>
       </div>
       <div class="to-login">
         <p>Already have an account?</p>
-        <button @click="isRegistered">Log in</button>
+        <button @click="toggleForm">Log in</button>
       </div>
     </div>
   </template>
