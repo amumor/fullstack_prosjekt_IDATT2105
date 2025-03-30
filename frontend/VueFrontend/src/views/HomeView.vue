@@ -33,6 +33,7 @@ const categories = [
 
 <template>
   <div class="display-page-container">
+    <!-- fix login logic!! -->
     <Navbar />
   </div>
 
@@ -87,7 +88,6 @@ const categories = [
   border: none;
   outline: none;
   padding: 10px;
-  outline: none;
 }
 
 .search-btn, .map-btn {
