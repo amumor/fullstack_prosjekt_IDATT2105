@@ -34,7 +34,7 @@ const categories = [
 <template>
   <div class="display-page-container">
     <!-- fix login logic!! -->
-    <Navbar isLoggedIn="false"/>
+    <Navbar />
   </div>
 
   <!-- Search bar -->
