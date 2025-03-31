@@ -197,5 +197,10 @@ xcuserdata/
 .factorypath
 .project
 maven-wrapper.properties
+
+# intellij run-button generated file
+SpringBackend.iml
+
 .classpath
 .settings
+

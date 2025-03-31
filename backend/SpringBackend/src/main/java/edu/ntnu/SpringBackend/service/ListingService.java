@@ -47,28 +47,36 @@ public class ListingService {
 
   @Transactional
   public Optional<Listing> updateListing(int id, Listing updatedListing) {
-    return listingRepository.findById(id)
-            .map(existingListing -> {
-              if (updatedListing.getTitle() != null) {
-                existingListing.setTitle(updatedListing.getTitle());
-              }
-              if (updatedListing.getDescription() != null) {
-                existingListing.setDescription(updatedListing.getDescription());
-              }
-              if (updatedListing.getPrice() != null) {
-                existingListing.setPrice(updatedListing.getPrice());
-              }
-              if (updatedListing.getCategory() != null) {
-                existingListing.setCategory(updatedListing.getCategory());
-              }
-              if (updatedListing.getLatitude() != null) {
-                existingListing.setLatitude(updatedListing.getLatitude());
-              }
-              if (updatedListing.getLongitude() != null) {
-                existingListing.setLongitude(updatedListing.getLongitude());
-              }
-              return listingRepository.save(existingListing);
-            });
+    Optional<Listing> listingOptional = listingRepository.findById(id);
+    if (listingOptional.isEmpty()) {
+      return Optional.empty();
+    }
+
+    Listing existingListing = listingOptional.get();
+
+    if (updatedListing.getTitle() != null) {
+      existingListing.setTitle(updatedListing.getTitle());
+    }
+    if (updatedListing.getDescription() != null) {
+      existingListing.setDescription(updatedListing.getDescription());
+    }
+    if (updatedListing.getPrice() != null) {
+      existingListing.setPrice(updatedListing.getPrice());
+    }
+    if (updatedListing.getCategory() != null) {
+      existingListing.setCategory(updatedListing.getCategory());
+    }
+    if (updatedListing.getLatitude() != null) {
+      existingListing.setLatitude(updatedListing.getLatitude());
+    }
+    if (updatedListing.getLongitude() != null) {
+      existingListing.setLongitude(updatedListing.getLongitude());
+    }
+    if (updatedListing.getStatus() != null) {
+      existingListing.setStatus(updatedListing.getStatus());
+    }
+
+    return Optional.of(listingRepository.save(existingListing));
   }
 
   @Transactional

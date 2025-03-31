@@ -41,14 +41,6 @@ public class ChatService {
   }
 
   @Transactional
-  public Chat addChat(Chat chat) {
-    if (chat.getCreatedAt() == null) {
-      chat.setCreatedAt(LocalDateTime.now());
-    }
-    return chatRepository.save(chat);
-  }
-
-  @Transactional
   public Chat createChat(User buyer, Listing listing) {
     // Check if a chat already exists between the buyer for this listing
     Optional<Chat> existingChat = getChatByUserAndListing(buyer, listing);

@@ -41,25 +41,33 @@ public class UserService {
 
   @Transactional
   public Optional<User> updateUser(int id, User updatedUser) {
-    return userRepository.findById(id)
-            .map(existingUser -> {
-              if (updatedUser.getEmail() != null) {
-                existingUser.setEmail(updatedUser.getEmail());
-              }
-              if (updatedUser.getPassword() != null) {
-                existingUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
-              }
-              if (updatedUser.getFirstName() != null) {
-                existingUser.setFirstName(updatedUser.getFirstName());
-              }
-              if (updatedUser.getLastName() != null) {
-                existingUser.setLastName(updatedUser.getLastName());
-              }
-              if (updatedUser.getPhoneNumber() != null) {
-                existingUser.setPhoneNumber(updatedUser.getPhoneNumber());
-              }
-              return userRepository.save(existingUser);
-    });
+    Optional<User> userOptional = userRepository.findById(id);
+    if (userOptional.isEmpty()) {
+      return Optional.empty();
+    }
+
+    User existingUser = userOptional.get();
+
+    if (updatedUser.getEmail() != null) {
+      existingUser.setEmail(updatedUser.getEmail());
+    }
+    if (updatedUser.getPassword() != null) {
+      existingUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
+    }
+    if (updatedUser.getFirstName() != null) {
+      existingUser.setFirstName(updatedUser.getFirstName());
+    }
+    if (updatedUser.getLastName() != null) {
+      existingUser.setLastName(updatedUser.getLastName());
+    }
+    if (updatedUser.getPhoneNumber() != null) {
+      existingUser.setPhoneNumber(updatedUser.getPhoneNumber());
+    }
+    if (updatedUser.getRole() != null) {
+      existingUser.setRole(updatedUser.getRole());
+    }
+
+    return Optional.of(userRepository.save(existingUser));
   }
 
   @Transactional
