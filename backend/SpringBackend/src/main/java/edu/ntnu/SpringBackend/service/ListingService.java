@@ -8,6 +8,7 @@ import edu.ntnu.SpringBackend.repository.ListingRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,13 +41,8 @@ public class ListingService {
   }
 
   @Transactional
-  public Listing addListing(Listing listing) {
+  public Listing createListing(Listing listing) {
     return listingRepository.save(listing);
-  }
-
-  @Transactional
-  public void deleteListing(Listing listing) {
-    listingRepository.delete(listing);
   }
 
   @Transactional
@@ -84,6 +80,8 @@ public class ListingService {
             });
   }
 
-
-
+  @Transactional
+  public void deleteListingById(int id) {
+    listingRepository.deleteById(id);
+  }
 }
