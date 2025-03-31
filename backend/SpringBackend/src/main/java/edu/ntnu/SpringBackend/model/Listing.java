@@ -42,7 +42,7 @@ public class Listing {
   private ListingStatus status;
 
   @Column(nullable = false)
-  private BigDecimal price;
+  private Double price;
 
   private Double latitude;
 
