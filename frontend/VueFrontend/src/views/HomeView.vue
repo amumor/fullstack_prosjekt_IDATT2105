@@ -1,5 +1,6 @@
 <script setup>
 import Navbar from '@/components/Navbar.vue'
+import ListingPreviewComponent from '@/components/ListingPreviewComponent.vue'
 document.body.style.backgroundColor = "#ffffff";
 
 
@@ -56,12 +57,11 @@ const categories = [
   <!-- Listings -->
   <div class="listings">
     <li v-for="listing in listings" :key="listing.id">
-      <div class="image-container">
-        <img class="image-item" :src="listing.image" alt="Boat">
-        <div class="price">{{ listing.price }}</div>
-      </div>
-      <div class="town">{{ listing.town }}</div>
-      <div class="title">{{ listing.title }}</div>
+      <ListingPreviewComponent
+        :image="listing.image"
+        :price="listing.price"
+        :town="listing.town"
+        :title="listing.title" />
     </li>
   </div>
 </template>
@@ -144,43 +144,4 @@ const categories = [
   gap: 20px;
 }
 
-.listings li {
-  position: relative;
-  border: 1px solid #ddd;
-  padding: 10px;
-  border-radius: 10px;
-  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
-  text-align: center;
-}
-
-/* Image container */
-.image-container {
-  position: relative;
-}
-
-.image-item {
-  width: 200px;
-  height: auto;
-  display: block;
-}
-
-.price {
-  color: white;
-  position: absolute;
-  bottom: 10px;
-  left: 10px;
-  padding: 5px;
-  border-radius: 5px;
-}
-
-/* Listing info */
-.town {
-  font-size: 15px;
-  color: darkgray;
-}
-
-.title {
-  font-size: 25px;
-  color: #333333;
-}
 </style>

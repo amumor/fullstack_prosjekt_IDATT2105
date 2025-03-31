@@ -1,6 +1,6 @@
 <script setup>
 import Navbar from '@/components/Navbar.vue'
-import ProfileContainer from '@/components/ProfileContainer.vue'
+import ProfileOption from '@/components/ProfileOption.vue'
 
 const fullName = 'Fyfasan Ben Reddik';
 const email = 'fasan@reddik.ben'
@@ -27,17 +27,17 @@ const getInitials = (name) => {
       </div>
     </div>
     <div class="options-containers">
-      <ProfileContainer
+      <ProfileOption
         class="profile-container"
         title="My Profile"
         description="Edit profile information"
         :iconString="'material-symbols:person'"  />
-      <ProfileContainer
+      <ProfileOption
         class="profile-container"
         title="Listings"
         description="See all your listings"
         :iconString="'material-symbols:format-list-bulleted'" />
-      <ProfileContainer
+      <ProfileOption
         class="profile-container"
         title="Favourites"
         description="See all your saved favourites"
