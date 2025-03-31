@@ -2,9 +2,9 @@ package edu.ntnu.SpringBackend.service;
 
 import java.util.NoSuchElementException;
 
-import edu.ntnu.SpringBackend.auth.AuthenticationRequest;
-import edu.ntnu.SpringBackend.auth.AuthenticationResponse;
-import edu.ntnu.SpringBackend.auth.RegisterRequest;
+import edu.ntnu.SpringBackend.dto.AuthenticationRequest;
+import edu.ntnu.SpringBackend.dto.AuthenticationResponse;
+import edu.ntnu.SpringBackend.dto.RegisterRequest;
 import edu.ntnu.SpringBackend.model.User;
 import edu.ntnu.SpringBackend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +35,6 @@ public class AuthenticationService {
                 .lastName(request.getLastName())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .phoneNumber(request.getPhoneNumber())
-                .role(request.getRole())
                 .build();
         var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder().token(jwtToken).build();
