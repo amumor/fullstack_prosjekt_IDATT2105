@@ -1,12 +1,12 @@
 <script setup>
-import CredentialsBox from '@/components/CredentialsBox.vue'
+import CredentialsContainer from '@/components/CredentialsContainer.vue'
 document.body.style.backgroundColor = "#D9D9D9";
 </script>
 
 <template>
 <div class="display-page-container">
   <div class="credentials-container">
-    <CredentialsBox
+    <CredentialsContainer
       :hasUser=true />
   </div>
 </div>
