@@ -1,8 +1,8 @@
 package edu.ntnu.SpringBackend.controller;
 
-import edu.ntnu.SpringBackend.auth.AuthenticationRequest;
-import edu.ntnu.SpringBackend.auth.AuthenticationResponse;
-import edu.ntnu.SpringBackend.auth.RegisterRequest;
+import edu.ntnu.SpringBackend.dto.AuthenticationRequest;
+import edu.ntnu.SpringBackend.dto.AuthenticationResponse;
+import edu.ntnu.SpringBackend.dto.RegisterRequest;
 import edu.ntnu.SpringBackend.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;

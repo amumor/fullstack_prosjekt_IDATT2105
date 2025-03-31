@@ -1,5 +1,6 @@
 package edu.ntnu.SpringBackend.service;
 
+import io.github.cdimascio.dotenv.Dotenv;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -19,7 +20,8 @@ import java.util.function.Function;
 @Service
 public class JwtService {
     private final Logger logger = LoggerFactory.getLogger(JwtService.class);
-    private static final String SECRET_KEY = ""; // TODO: implement secret in .env
+    private static final Dotenv dotenv = Dotenv.load();
+    private static final String SECRET_KEY = dotenv.get("SECRET_KEY");
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -35,7 +37,6 @@ public class JwtService {
     }
 
     public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
-        logger.info("Generating jwt token for user [" + userDetails.getUsername() + "]");
         return Jwts
                 .builder()
                 .setClaims(extraClaims)
