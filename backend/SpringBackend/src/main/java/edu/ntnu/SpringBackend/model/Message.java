@@ -33,11 +33,8 @@ public class Message {
   @Column(nullable = false)
   private LocalDateTime sentAt;
 
-  private boolean read;
-
   @PrePersist
   protected void onCreate() {
     sentAt = LocalDateTime.now();
-    read = false;
   }
 }

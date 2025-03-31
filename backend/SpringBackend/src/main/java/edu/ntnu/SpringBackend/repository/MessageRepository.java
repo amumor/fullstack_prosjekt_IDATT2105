@@ -9,6 +9,7 @@ import java.util.List;
 
 public interface MessageRepository extends JpaRepository<Message, Integer> {
   List<Message> findByChatOrderBySentAtDesc(Chat chat);
-  List<Message> findBySenderAndReadFalse(User sender);
-  List<Message> findByChatAndSenderNotAndReadFalse(Chat chat, User sender);
+  List<Message> findByChatOrderBySentAtAsc(Chat chat);
+  List<Message> findBySender(User sender);
+  List<Message> findByChatAndSender(Chat chat, User sender);
  }

@@ -63,8 +63,8 @@ public class UserService {
   }
 
   @Transactional
-  public void deleteUser(User user) {
-    userRepository.delete(user);
+  public void deleteUserById(int id) {
+    userRepository.deleteById(id);
   }
 
   public boolean verifyPassword(User user, String password) {
