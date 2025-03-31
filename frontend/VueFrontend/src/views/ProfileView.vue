@@ -7,10 +7,9 @@ const email = 'fasan@reddik.ben'
 
 const getInitials = (name) => {
   const nameArray = name.split(' ');
-  const initials = nameArray
+  return nameArray
     .map((word) => word.charAt(0).toUpperCase())
     .join('');
-  return initials;
 };
 </script>
 
