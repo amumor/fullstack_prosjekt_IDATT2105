@@ -7,10 +7,9 @@ const email = 'fasan@reddik.ben'
 
 const getInitials = (name) => {
   const nameArray = name.split(' ');
-  const initials = nameArray
+  return nameArray
     .map((word) => word.charAt(0).toUpperCase())
     .join('');
-  return initials;
 };
 </script>
 
@@ -48,12 +47,15 @@ const getInitials = (name) => {
 </template>
 
 <style scoped>
+
+/* Profile initials */
 .profile-icon {
   background-color: #D9D9D9;
   border-radius: 50%;
   color: #333333;
   font-size: 30px;
   text-transform: uppercase;
+  font-family: 'Inter', sans-serif;
 
   display: flex;
   justify-content: center;
@@ -67,6 +69,7 @@ const getInitials = (name) => {
   margin: 30px 0 0 70px;
 }
 
+/* Title */
 h2 {
   font-size: 24px;
   font-family: 'Inter', sans-serif;
@@ -75,6 +78,7 @@ h2 {
   margin: 30px 0 0 30px;
 }
 
+/* Description */
 h1 {
   font-size: 16px;
   font-family: 'Inter', sans-serif;
