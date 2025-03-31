@@ -1,4 +1,4 @@
-package edu.ntnu.SpringBackend.auth;
+package edu.ntnu.SpringBackend.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
