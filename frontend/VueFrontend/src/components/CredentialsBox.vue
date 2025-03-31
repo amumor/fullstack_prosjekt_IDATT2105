@@ -1,6 +1,9 @@
 <script setup>
 import { ref, defineProps, onMounted } from 'vue';
 
+/**
+ * @property {Boolean} hasUser - Indicates if the user is registered.
+ */
 const props = defineProps({
   hasUser: {
     type: Boolean,

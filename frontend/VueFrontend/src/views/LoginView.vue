@@ -6,7 +6,8 @@ document.body.style.backgroundColor = "#D9D9D9";
 <template>
 <div class="display-page-container">
   <div class="credentials-container">
-    <CredentialsBox />
+    <CredentialsBox
+      :hasUser=true />
   </div>
 </div>
 </template>

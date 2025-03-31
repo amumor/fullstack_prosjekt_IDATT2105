@@ -1,6 +1,9 @@
 <script setup>
 import { ref, defineProps, onMounted } from 'vue';
 
+/**
+ * @property {Boolean} isLoggedIn - Indicates if the user is logged in.
+ */
 const props = defineProps({
   isLoggedIn: {
     type: Boolean,
