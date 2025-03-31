@@ -197,3 +197,5 @@ xcuserdata/
 .factorypath
 .project
 maven-wrapper.properties
+.classpath
+.settings
