@@ -2,94 +2,168 @@ package edu.ntnu.SpringBackend.service;
 
 import edu.ntnu.SpringBackend.model.Listing;
 import edu.ntnu.SpringBackend.model.User;
-import edu.ntnu.SpringBackend.model.enums.Category;
 import edu.ntnu.SpringBackend.model.enums.ListingStatus;
 import edu.ntnu.SpringBackend.repository.ListingRepository;
+import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
+import java.util.NoSuchElementException;
 
 @Service
+@RequiredArgsConstructor
 public class ListingService {
+
   private final ListingRepository listingRepository;
+  private final Logger logger = LoggerFactory.getLogger(ListingService.class);
 
-  public ListingService(ListingRepository listingRepository) {
-    this.listingRepository = listingRepository;
-  }
-
-  public Optional<Listing> getListingById(int id) {
-    return listingRepository.findById(id);
-  }
-
-  public List<Listing> getAllListings() {
-    return listingRepository.findAll();
+  public Listing getListingById(int id) {
+    logger.info("Getting listing by id: {}", id);
+    return listingRepository.findById(id)
+            .orElseThrow(() -> new NoSuchElementException("Listing with ID " + id + " not found."));
   }
 
   public List<Listing> getListingBySeller(User seller) {
-    return listingRepository.findBySeller(seller);
+    logger.info("Getting listings by seller: {}", seller.getId());
+    if (seller.getId() == 0) {
+      throw new IllegalArgumentException("Invalid seller provided.");
+    }
+
+    List<Listing> listings = listingRepository.findBySeller(seller);
+    if (listings.isEmpty()) {
+      throw new NoSuchElementException("No listings found for seller with ID " + seller.getId());
+    }
+    return listings;
   }
 
-  public List<Listing> getListingByListingStatus(ListingStatus listingStatus) {
-    return listingRepository.findByStatus(listingStatus);
+  public List<Listing> getAllListings() {
+    logger.info("Getting all listings...");
+    List<Listing> all = listingRepository.findAll();
+    if (all.isEmpty()) {
+      throw new NoSuchElementException("No listings found.");
+    }
+    return all;
   }
 
-  public List<Listing> getListingByCategory(Category category) {
-    return listingRepository.findByCategory(category);
-  }
-
-  @Transactional
   public Listing createListing(Listing listing) {
+    logger.info("Creating listing: {}", listing.getTitle());
+    validateListing(listing);
+
+    if (listing.getStatus() == null || listing.getStatus() == ListingStatus.SOLD) {
+      listing.setStatus(ListingStatus.ACTIVE);
+    }
+
     return listingRepository.save(listing);
   }
 
   @Transactional
-  public Optional<Listing> updateListing(int id, Listing updatedListing) {
-    Optional<Listing> listingOptional = listingRepository.findById(id);
-    if (listingOptional.isEmpty()) {
-      return Optional.empty();
-    }
-
-    Listing existingListing = listingOptional.get();
+  public Listing updateListing(int id, Listing updatedListing) {
+    logger.info("Updating listing with ID: {}", id);
+    Listing existing = listingRepository.findById(id)
+            .orElseThrow(() -> new NoSuchElementException("Listing with ID " + id + " not found."));
 
     if (updatedListing.getTitle() != null) {
-      existingListing.setTitle(updatedListing.getTitle());
+      validateTitle(updatedListing.getTitle());
+      existing.setTitle(updatedListing.getTitle());
     }
+
     if (updatedListing.getDescription() != null) {
-      existingListing.setDescription(updatedListing.getDescription());
+      validateDescription(updatedListing.getDescription());
+      existing.setDescription(updatedListing.getDescription());
     }
+
     if (updatedListing.getPrice() != null) {
-      existingListing.setPrice(updatedListing.getPrice());
+      validatePrice(updatedListing.getPrice());
+      existing.setPrice(updatedListing.getPrice());
     }
+
     if (updatedListing.getCategory() != null) {
-      existingListing.setCategory(updatedListing.getCategory());
+      existing.setCategory(updatedListing.getCategory());
     }
+
     if (updatedListing.getLatitude() != null) {
-      existingListing.setLatitude(updatedListing.getLatitude());
+      validateLatitude(updatedListing.getLatitude());
+      existing.setLatitude(updatedListing.getLatitude());
     }
+
     if (updatedListing.getLongitude() != null) {
-      existingListing.setLongitude(updatedListing.getLongitude());
+      validateLongitude(updatedListing.getLongitude());
+      existing.setLongitude(updatedListing.getLongitude());
     }
+
     if (updatedListing.getStatus() != null) {
-      existingListing.setStatus(updatedListing.getStatus());
+      existing.setStatus(updatedListing.getStatus());
     }
 
-    return Optional.of(listingRepository.save(existingListing));
-  }
-
-  @Transactional
-  public Optional<Listing> updateListingStatus(int id, ListingStatus listingStatus) {
-    return listingRepository.findById(id)
-            .map(existingListing -> {
-              existingListing.setStatus(listingStatus);
-              return listingRepository.save(existingListing);
-            });
+    return listingRepository.save(existing);
   }
 
   @Transactional
   public void deleteListingById(int id) {
+    logger.info("Deleting listing with ID: {}", id);
+    if (!listingRepository.existsById(id)) {
+      throw new NoSuchElementException("Listing with ID " + id + " does not exist.");
+    }
     listingRepository.deleteById(id);
   }
+
+  public Listing updateListingStatus(int id, ListingStatus status) {
+    logger.info("Updating listing status for ID: {}", id);
+    if (status == null) {
+      throw new IllegalArgumentException("Status must not be null.");
+    }
+
+    Listing listing = listingRepository.findById(id)
+            .orElseThrow(() -> new NoSuchElementException("Listing with ID " + id + " not found."));
+
+    listing.setStatus(status);
+    return listingRepository.save(listing);
+  }
+  
+  private void validateListing(Listing listing) {
+    validateTitle(listing.getTitle());
+    validateDescription(listing.getDescription());
+    validatePrice(listing.getPrice());
+
+    if (listing.getCategory() == null) {
+      throw new IllegalArgumentException("Category must not be null.");
+    }
+  }
+
+  private void validateTitle(String title) {
+    if (title == null || title.trim().isEmpty()) {
+      throw new IllegalArgumentException("Title cannot be empty.");
+    }
+    if (title.length() > 100) {
+      throw new IllegalArgumentException("Title cannot exceed 100 characters.");
+    }
+  }
+
+  private void validateDescription(String description) {
+    if (description == null || description.trim().length() < 10) {
+      throw new IllegalArgumentException("Description must be at least 10 characters long.");
+    }
+  }
+
+  private void validatePrice(Double price) {
+    if (price == null || price <= 0) {
+      throw new IllegalArgumentException("Price must be a positive number.");
+    }
+  }
+
+  private void validateLatitude(Double latitude) {
+    if (latitude == null || latitude < -90 || latitude > 90) {
+      throw new IllegalArgumentException("Latitude must be between -90 and 90 degrees.");
+    }
+  }
+
+  private void validateLongitude(Double longitude) {
+    if (longitude == null || longitude < -180 || longitude > 180) {
+      throw new IllegalArgumentException("Longitude must be between -180 and 180 degrees.");
+    }
+  }
 }
+
