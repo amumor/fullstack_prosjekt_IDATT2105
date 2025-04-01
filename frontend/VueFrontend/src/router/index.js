@@ -25,9 +25,9 @@ const router = createRouter({
       component: ProfileView
     },
     {
-      path: '/listing',
+      path: '/listing/:id',
       name: 'listing',
-      component: ListingView
+      component: ListingView,
     },
     {
       path: '/newListing',

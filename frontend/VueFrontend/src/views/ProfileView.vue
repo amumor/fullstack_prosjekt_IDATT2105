@@ -1,4 +1,5 @@
 <script setup>
+import { useRouter } from 'vue-router'
 import Navbar from '@/components/Navbar.vue'
 import ProfileOption from '@/components/Profile/ProfileOption.vue'
 
@@ -6,6 +7,7 @@ document.body.style.backgroundColor = "#ffffff";
 
 const fullName = 'Fyfasan Ben Reddik';
 const email = 'fasan@reddik.ben'
+const router = useRouter()
 
 const getInitials = (name) => {
   const nameArray = name.split(' ');
@@ -13,6 +15,10 @@ const getInitials = (name) => {
     .map((word) => word.charAt(0).toUpperCase())
     .join('');
 };
+
+const routeTo = (route) => {
+  router.push('/profile'+ route);
+}
 </script>
 
 <template>
@@ -27,6 +33,7 @@ const getInitials = (name) => {
         <h2>{{ fullName }}</h2>
         <h1>{{email}}</h1>
       </div>
+      <!-- Log out logic -->
       <router-link to="/login" id="router-link">Log out</router-link>
     </div>
     <div class="options-containers">
@@ -39,7 +46,8 @@ const getInitials = (name) => {
         class="profile-container"
         title="Listings"
         shortDescription="See all your listings"
-        :iconString="'material-symbols:format-list-bulleted'" />
+        :iconString="'material-symbols:format-list-bulleted'"
+        @click="routeTo('/myListings')" />
       <ProfileOption
         class="profile-container"
         title="Favourites"
