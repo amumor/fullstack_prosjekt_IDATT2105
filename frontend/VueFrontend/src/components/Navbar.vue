@@ -127,6 +127,7 @@ onMounted(() => {
   font-family: 'Inter', sans-serif;
   text-decoration: none;
   background-color: #D9D9D9;
+
   padding: 10px 15px;
   border-radius: 5px;
   transition: background-color 0.3s, transform 0.3s;
@@ -156,6 +157,7 @@ onMounted(() => {
   background: none;
   border: none;
   color: black;
+
   cursor: pointer;
   padding: 20px;
   transition: color 0.3s;
@@ -169,11 +171,12 @@ onMounted(() => {
 
 /* Dropdown menu */
 .dropdown {
+  background-color: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+
   position: absolute;
   top: 60px;
   right: 20px;
-  background-color: white;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
   padding: 10px;
   border-radius: 4px;
   list-style-type: none;

@@ -13,6 +13,7 @@ const props = defineProps({
   isLoggedIn: Boolean,
 })
 
+const isOwner = ref(true);
 const isFavorite = ref(false);
 const toggleFavorite = () => {
   isFavorite.value = !isFavorite.value;
@@ -40,15 +41,26 @@ const toggleFavorite = () => {
     </div>
 
     <!-- Buy item or message seller -->
-    <div class="btn" v-if="props.isLoggedIn">
-      <button class="message-button">Message seller</button>
-      <button class="buy-button">Buy</button>
+    <div class="btn" v-if="props.isLoggedIn && !isOwner">
+      <button class="message-btn">Message seller</button>
+      <button class="buy-btn">Buy</button>
+    </div>
+
+    <!-- Owner options -->
+    <div class="owner-options">
+      <template v-if="isOwner">
+        <button class="owner-btn">Edit</button>
+        <button class="owner-btn">Archive</button>
+        <button class="owner-btn" id="delete">Delete</button>
+      </template>
     </div>
 
     <!-- Map -->
     <div class="map">
 
     </div>
+
+
 
   </div>
 
@@ -77,6 +89,7 @@ const toggleFavorite = () => {
 
   position: relative;
   width: 100%;
+  height: 100%;
   border-radius: 10px;
   overflow: hidden;
   max-width: 350px;
@@ -85,7 +98,7 @@ const toggleFavorite = () => {
 
 .image-item {
   width: 100%;
-  height: 250px;
+  height: 295px;
   object-fit: cover;
   border-radius: 10px;
 }
@@ -130,7 +143,8 @@ const toggleFavorite = () => {
 }
 
 /* Buttons */
-.btn {
+.btn,
+.owner-options {
   display: flex;
   gap: 10px;
   width: 100%;
@@ -139,8 +153,9 @@ const toggleFavorite = () => {
   margin-bottom: 10px;
 }
 
-.buy-button,
-.message-button {
+.buy-btn,
+.message-btn,
+.owner-btn {
   flex: 1;
   padding: 10px;
   border: none;
@@ -150,23 +165,30 @@ const toggleFavorite = () => {
   transition: all 0.3s ease;
 }
 
-.buy-button {
+.buy-btn,
+.owner-btn {
   background-color: white;
   color: #333333;
   border: #1C64FF 2px solid;
 }
 
-.buy-button:hover {
+.buy-btn:hover,
+.owner-btn:hover {
   background-color: #D9D9D9;
 }
 
-.message-button {
+.message-btn {
   background-color: #1C64FF;
   color: white;
 }
 
-.message-button:hover {
+.message-btn:hover {
   background-color: #0066cc;
+}
+
+#delete:hover {
+  background-color: crimson;
+  border: crimson 2px solid;
 }
 
 /* Map placeholder */
@@ -176,5 +198,4 @@ const toggleFavorite = () => {
   background-color: #eee;
   border-radius: 10px;
 }
-
 </style>
