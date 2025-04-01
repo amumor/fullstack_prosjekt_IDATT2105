@@ -44,7 +44,7 @@ onMounted(() => {
         <!-- Logged in menu -->
         <template v-if="isUserLoggedIn">
           <router-link to ="/newListing" id="router-link">New listing</router-link>
-          <router-link to ="/favourites" id="router-link">Favourites</router-link>
+          <router-link to ="/profile/favorites" id="router-link">Favorites</router-link>
           <router-link to ="/inbox" id="router-link">Inbox</router-link>
           <router-link to ="/profile" id="router-link">Profile</router-link>
         </template>
@@ -67,7 +67,7 @@ onMounted(() => {
           <!-- Logged In Menu -->
           <template v-if="isUserLoggedIn" v-show="isOpen">
             <li><router-link to="/newListing" @click="toggleMenu" id="router-link">New listing</router-link></li>
-            <li><router-link to="/favourites" @click="toggleMenu" id="router-link">Favourites</router-link></li>
+            <li><router-link to="/profile/favorites" @click="toggleMenu" id="router-link">Favorites</router-link></li>
             <li><router-link to="/inbox" @click="toggleMenu" id="router-link">Inbox</router-link></li>
             <li><router-link to="/profile" @click="toggleMenu" id="router-link">Profile</router-link></li>
           </template>
