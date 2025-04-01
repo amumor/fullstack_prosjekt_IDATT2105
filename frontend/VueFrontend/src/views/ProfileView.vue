@@ -2,6 +2,8 @@
 import Navbar from '@/components/Navbar.vue'
 import ProfileOption from '@/components/ProfileOption.vue'
 
+document.body.style.backgroundColor = "#ffffff";
+
 const fullName = 'Fyfasan Ben Reddik';
 const email = 'fasan@reddik.ben'
 
@@ -25,22 +27,23 @@ const getInitials = (name) => {
         <h2>{{ fullName }}</h2>
         <h1>{{email}}</h1>
       </div>
+      <router-link to="/login" id="router-link">Log out</router-link>
     </div>
     <div class="options-containers">
       <ProfileOption
         class="profile-container"
         title="My Profile"
-        description="Edit profile information"
+        shortDescription="Edit profile information"
         :iconString="'material-symbols:person'"  />
       <ProfileOption
         class="profile-container"
         title="Listings"
-        description="See all your listings"
+        shortDescription="See all your listings"
         :iconString="'material-symbols:format-list-bulleted'" />
       <ProfileOption
         class="profile-container"
         title="Favourites"
-        description="See all your saved favourites"
+        shortDescription="See all your saved favourites"
         :iconString="'material-symbols:favorite'" />
     </div>
   </div>
@@ -87,6 +90,19 @@ h1 {
   margin: 10px 0 0 30px;
 }
 
+/* Log out button */
+#router-link {
+  text-decoration: none;
+  font-family: 'Inter', sans-serif;
+  color: #ffffff;
+  margin: 30px 70px 0 auto;
+  font-size: 16px;
+  background-color: #007bff;
+  padding: 10px 15px;
+  border-radius: 5px;
+  max-height: 20px;
+}
+
 .options-containers {
   display: flex;
   justify-content: space-between;
@@ -101,5 +117,4 @@ h1 {
   max-width: 300px;
   max-height: 200px;
 }
-
 </style>

@@ -4,7 +4,7 @@ import { Icon } from '@iconify/vue';
 
 const props = defineProps({
   title: String,
-  description: String,
+  shortDescription: String,
   iconString: String
 });
 
@@ -17,7 +17,7 @@ const props = defineProps({
   </div>
   <div class="option-text">
     <h2>{{ props.title }}</h2>
-    <p>{{ props.description }}</p>
+    <p>{{ props.shortDescription }}</p>
   </div>
 </button>
 </template>
