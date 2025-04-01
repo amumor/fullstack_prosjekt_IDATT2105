@@ -4,9 +4,8 @@ import java.util.NoSuchElementException;
 
 import edu.ntnu.SpringBackend.dto.AuthenticationRequest;
 import edu.ntnu.SpringBackend.dto.AuthenticationResponse;
-import edu.ntnu.SpringBackend.dto.RegisterRequest;
+import edu.ntnu.SpringBackend.dto.UserRequestDTO;
 import edu.ntnu.SpringBackend.model.User;
-import edu.ntnu.SpringBackend.model.enums.Role;
 import edu.ntnu.SpringBackend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -14,8 +13,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +28,7 @@ public class AuthenticationService {
         AuthenticationService.class
     );
 
-    public AuthenticationResponse register(RegisterRequest request) { // TODO: protect ADMIN registration with JWT?
+    public AuthenticationResponse register(UserRequestDTO request) { // TODO: protect ADMIN registration with JWT?
         logger.info("Handling register request...");
 
         if (repository.findByEmail(request.getEmail()).isPresent()) {

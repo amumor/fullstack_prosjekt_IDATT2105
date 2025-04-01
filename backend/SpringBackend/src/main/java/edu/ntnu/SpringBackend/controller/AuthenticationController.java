@@ -2,7 +2,7 @@ package edu.ntnu.SpringBackend.controller;
 
 import edu.ntnu.SpringBackend.dto.AuthenticationRequest;
 import edu.ntnu.SpringBackend.dto.AuthenticationResponse;
-import edu.ntnu.SpringBackend.dto.RegisterRequest;
+import edu.ntnu.SpringBackend.dto.UserRequestDTO;
 import edu.ntnu.SpringBackend.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -23,7 +23,7 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(
-            @RequestBody RegisterRequest request
+            @RequestBody UserRequestDTO request
     ) {
         logger.info("Request recieved on [/api/v1/auth/register]");
         return ResponseEntity.ok(service.register(request));

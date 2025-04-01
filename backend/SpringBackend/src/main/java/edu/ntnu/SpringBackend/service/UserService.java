@@ -1,5 +1,8 @@
 package edu.ntnu.SpringBackend.service;
 
+import edu.ntnu.SpringBackend.dto.UserRequestDTO;
+import edu.ntnu.SpringBackend.dto.UserResponseDTO;
+import edu.ntnu.SpringBackend.mapper.UserMapper;
 import edu.ntnu.SpringBackend.model.User;
 import edu.ntnu.SpringBackend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -21,92 +24,89 @@ public class UserService {
   private final PasswordEncoder passwordEncoder;
   private final Logger logger = LoggerFactory.getLogger(UserService.class);
 
-  public List<User> getAllUsers() {
+  public List<UserResponseDTO> getAllUsers() {
     logger.info("Fetching all users...");
-    return userRepository.findAll();
+    return userRepository.findAll().stream()
+            .map(UserMapper::toDto)
+            .collect(Collectors.toList());
   }
 
-  public User getUserById(int id) {
+  public UserResponseDTO getUserById(int id) {
     return userRepository.findById(id)
+            .map(UserMapper::toDto)
             .orElseThrow(() -> new NoSuchElementException("User with ID " + id + " not found"));
   }
 
-  public User getUserByEmail(String email) {
+  public UserResponseDTO getUserByEmail(String email) {
     return userRepository.findByEmail(email)
+            .map(UserMapper::toDto)
             .orElseThrow(() -> new NoSuchElementException("User with email " + email + " not found"));
   }
 
   @Transactional
-  public User addUser(User user) {
-    logger.info("Adding user: {}", user.getEmail());
+  public UserResponseDTO addUser(UserRequestDTO userDTO) {
+    logger.info("Adding user: {}", userDTO.getEmail());
 
-    validateEmail(user.getEmail());
-    validatePassword(user.getPassword());
-    validateName(user.getFirstName());
-    validateName(user.getLastName());
-    validatePhone(user.getPhoneNumber());
+    validateEmail(userDTO.getEmail());
+    validatePassword(userDTO.getPassword());
+    validateName(userDTO.getFirstName());
+    validateName(userDTO.getLastName());
+    validatePhone(userDTO.getPhoneNumber());
 
-    if (userRepository.existsByEmail(user.getEmail())) {
+    if (userRepository.existsByEmail(userDTO.getEmail())) {
       throw new IllegalArgumentException("Email is already in use.");
     }
 
-    if (userRepository.findAll().stream().anyMatch(u -> u.getPhoneNumber().equals(user.getPhoneNumber()))) {
+    if (userRepository.findAll().stream().anyMatch(u -> u.getPhoneNumber().equals(userDTO.getPhoneNumber()))) {
       throw new IllegalArgumentException("Phone number is already in use.");
     }
 
+    User user = UserMapper.toEntity(userDTO);
     user.setPassword(passwordEncoder.encode(user.getPassword()));
-    return userRepository.save(user);
+    return UserMapper.toDto(userRepository.save(user));
   }
 
-
   @Transactional
-  public User updateUser(int id, User updatedUser) {
-    User existingUser = getUserById(id);
+  public UserResponseDTO updateUser(int id, UserRequestDTO userDTO) {
+    User existingUser = userRepository.findById(id)
+            .orElseThrow(() -> new NoSuchElementException("User with ID " + id + " not found"));
 
-    // Email
-    if (updatedUser.getEmail() != null && !updatedUser.getEmail().equals(existingUser.getEmail())) {
-      validateEmail(updatedUser.getEmail());
-      if (userRepository.existsByEmail(updatedUser.getEmail())) {
+    if (userDTO.getEmail() != null && !userDTO.getEmail().equals(existingUser.getEmail())) {
+      validateEmail(userDTO.getEmail());
+      if (userRepository.existsByEmail(userDTO.getEmail())) {
         throw new IllegalArgumentException("Email already in use.");
       }
-      existingUser.setEmail(updatedUser.getEmail());
+      existingUser.setEmail(userDTO.getEmail());
     }
 
-    // Password
-    if (updatedUser.getPassword() != null) {
-      validatePassword(updatedUser.getPassword());
-      existingUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
+    if (userDTO.getPassword() != null) {
+      validatePassword(userDTO.getPassword());
+      existingUser.setPassword(passwordEncoder.encode(userDTO.getPassword()));
     }
 
-    // First name
-    if (updatedUser.getFirstName() != null) {
-      validateName(updatedUser.getFirstName());
-      existingUser.setFirstName(updatedUser.getFirstName());
+    if (userDTO.getFirstName() != null) {
+      validateName(userDTO.getFirstName());
+      existingUser.setFirstName(userDTO.getFirstName());
     }
 
-    // Last name
-    if (updatedUser.getLastName() != null) {
-      validateName(updatedUser.getLastName());
-      existingUser.setLastName(updatedUser.getLastName());
+    if (userDTO.getLastName() != null) {
+      validateName(userDTO.getLastName());
+      existingUser.setLastName(userDTO.getLastName());
     }
 
-    // Phone number
-    if (updatedUser.getPhoneNumber() != null && !updatedUser.getPhoneNumber().equals(existingUser.getPhoneNumber())) {
-      validatePhone(updatedUser.getPhoneNumber());
-
-      if (userRepository.findAll().stream().anyMatch(u -> u.getPhoneNumber().equals(updatedUser.getPhoneNumber()))) {
+    if (userDTO.getPhoneNumber() != null && !userDTO.getPhoneNumber().equals(existingUser.getPhoneNumber())) {
+      validatePhone(userDTO.getPhoneNumber());
+      if (userRepository.findAll().stream().anyMatch(u -> u.getPhoneNumber().equals(userDTO.getPhoneNumber()))) {
         throw new IllegalArgumentException("Phone number already in use.");
       }
-
-      existingUser.setPhoneNumber(updatedUser.getPhoneNumber());
+      existingUser.setPhoneNumber(userDTO.getPhoneNumber());
     }
 
-    // Role
-    if (updatedUser.getRole() != null) {
-      existingUser.setRole(updatedUser.getRole());
+    if (userDTO.getRole() != null) {
+      existingUser.setRole(userDTO.getRole());
     }
 
-    return userRepository.save(existingUser);
+    return UserMapper.toDto(userRepository.save(existingUser));
   }
 
 
