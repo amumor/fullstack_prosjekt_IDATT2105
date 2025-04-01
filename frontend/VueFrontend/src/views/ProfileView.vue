@@ -1,6 +1,6 @@
 <script setup>
 import Navbar from '@/components/Navbar.vue'
-import ProfileOption from '@/components/ProfileOption.vue'
+import ProfileOption from '@/components/Profile/ProfileOption.vue'
 
 document.body.style.backgroundColor = "#ffffff";
 
