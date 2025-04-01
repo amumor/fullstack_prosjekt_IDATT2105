@@ -16,20 +16,14 @@ import java.util.UUID;
 public class UserController {
   private final UserService userService;
 
-  @GetMapping
-  public ResponseEntity<List<UserResponseDTO>> getAllUsers() {
-    return ResponseEntity.ok(userService.getAllUsers());
-  }
-
-  @GetMapping("/{id}")
+  @GetMapping("/id/{id}")
   public ResponseEntity<UserResponseDTO> getUserById(@PathVariable UUID id) {
     return ResponseEntity.ok(userService.getUserById(id));
   }
 
-  // not necessary ?? AuthenticationController handles this
-  @PostMapping
-  public ResponseEntity<UserResponseDTO> createUser(@RequestBody UserRequestDTO user) {
-    return ResponseEntity.ok(userService.addUser(user));
+  @GetMapping("/email/{email}")
+  public ResponseEntity<UserResponseDTO> getUserByEmail(@PathVariable String email) {
+    return ResponseEntity.ok(userService.getUserByEmail(email));
   }
 
   @PutMapping("/{id}")
