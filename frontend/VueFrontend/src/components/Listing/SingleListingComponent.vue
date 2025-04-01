@@ -46,7 +46,9 @@ const delListing = () => {
     <!-- Description -->
     <div class="description">
       <h2>{{ props.title }}</h2>
+      <p id="price">{{ props.price }}</p>
       <p id="description">{{ props.description }}</p>
+      <p id="categories">{{ props.category }}</p>
     </div>
 
     <!-- Buy item or message seller -->
@@ -146,7 +148,17 @@ const delListing = () => {
   color: #333;
 }
 
-.description p {
+#price {
+  font-size: 20px;
+  color: #333333;
+}
+
+#description {
+  font-size: 15px;
+  color: #777;
+}
+
+#categories {
   font-size: 15px;
   color: #777;
 }

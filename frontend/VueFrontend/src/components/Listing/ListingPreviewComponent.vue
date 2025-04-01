@@ -1,16 +1,18 @@
 <script setup>
 import { defineProps } from 'vue';
+import { useRouter } from 'vue-router';
 
 const props = defineProps({
+  id: Number,
   image: String,
   price: String,
   town: String,
   title: String,
 })
+const router = useRouter();
 
 const toListingView = () => {
-  // Navigate to the listing view
-
+  router.push('/listing/' + props.id);
 }
 </script>
 

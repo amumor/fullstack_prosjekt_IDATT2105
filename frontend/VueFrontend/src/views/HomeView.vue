@@ -58,6 +58,7 @@ const categories = [
   <div class="listings">
     <div v-for="listing in listings" :key="listing.id">
       <ListingPreviewComponent
+        :id="listing.id"
         :image="listing.image"
         :price="listing.price"
         :town="listing.town"
