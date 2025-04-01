@@ -58,9 +58,15 @@ public class Listing {
 
 
   @PrePersist
-  protected void onCreate() {
-    createdAt = LocalDateTime.now();
+  public void initializeDefaults() {
+    if (createdAt == null) {
+      createdAt = LocalDateTime.now();
+    }
+    if (status == null || status == ListingStatus.SOLD) {
+      status = ListingStatus.ACTIVE;
+    }
   }
+
 
   @PreUpdate
   protected void onUpdate() {

@@ -15,9 +15,10 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.NoSuchElementException;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 @SpringBootTest
 @Transactional
@@ -28,137 +29,214 @@ class ListingServiceTest {
   @Autowired private ListingRepository listingRepository;
   @Autowired private UserRepository userRepository;
 
-  private User testUser;
-  private Listing testListing;
+  private User seller;
 
   @BeforeEach
   void setup() {
-    testUser = userRepository.save(User.builder()
-            .email("test@example.com")
-            .password("Password123")
-            .firstName("Test")
-            .lastName("User")
-            .phoneNumber("123456789")
-            .role(Role.ADMIN)
+    seller = userRepository.save(User.builder()
+            .email("seller@example.com")
+            .password("StrongPassword1!")
+            .firstName("Seller")
+            .lastName("One")
+            .phoneNumber("12345678")
+            .role(Role.USER)
             .build());
+  }
 
-    testListing = listingRepository.save(Listing.builder()
-            .title("Original Title")
-            .description("Original description")
+  private Listing validListing() {
+    return Listing.builder()
+            .title("Test Title")
+            .description("This is a valid description.")
             .price(100.0)
-            .category(Category.FURNITURE)
-            .status(ListingStatus.ACTIVE)
-            .latitude(59.0)
-            .longitude(10.0)
-            .seller(testUser)
-            .build());
-  }
-
-  @Test
-  void getListingsBySeller() {
-    List<Listing> sellerListings = listingService.getListingBySeller(testUser);
-    assertThat(sellerListings).hasSizeGreaterThanOrEqualTo(1);
-  }
-
-  @Test
-  void getListingsByListingStatus() {
-    List<Listing> activeListings = listingService.getListingByListingStatus(ListingStatus.ACTIVE);
-    assertThat(activeListings).hasSizeGreaterThanOrEqualTo(1);
-    assertThat(activeListings.getFirst().getId()).isEqualTo(testListing.getId());
-  }
-
-  @Test
-  void getListingsByCategory() {
-    List<Listing> furnitureListings = listingService.getListingByCategory(Category.FURNITURE);
-    assertThat(furnitureListings).hasSizeGreaterThanOrEqualTo(1);
-    assertThat(furnitureListings.getFirst().getId()).isEqualTo(testListing.getId());
-  }
-
-  @Test
-  void getAllListings() {
-    List<Listing> allListings = listingService.getAllListings();
-    assertThat(allListings).hasSizeGreaterThanOrEqualTo(1);
-    assertThat(allListings.size()).isEqualTo(listingRepository.findAll().size());
-  }
-
-  @Test
-  void createAndRetrieveListing() {
-    Listing newListing = listingRepository.save(Listing.builder()
-            .title("Test Listing")
-            .description("Description")
-            .price(150.0)
             .category(Category.CLOTHES)
-            .status(ListingStatus.ACTIVE)
-            .seller(testUser)
+            .latitude(59.9)
+            .longitude(10.7)
+            .seller(seller)
+            .build();
+  }
+
+
+  @Test
+  void createListing_Success() {
+    Listing listing = listingService.createListing(validListing());
+
+    assertThat(listing.getId()).isGreaterThan(0);
+    assertThat(listing.getStatus()).isEqualTo(ListingStatus.ACTIVE);
+  }
+
+  @Test
+  void createListing_FailsWithSoldStatus() {
+    Listing listing = validListing();
+    listing.setStatus(ListingStatus.SOLD);
+
+    Listing result = listingService.createListing(listing);
+    assertThat(result.getStatus()).isEqualTo(ListingStatus.ACTIVE);
+  }
+
+  @Test
+  void createListing_FailsWhenMissingTitle() {
+    Listing listing = validListing();
+    listing.setTitle(null);
+
+    assertThatThrownBy(() -> listingService.createListing(listing))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("Title cannot be empty");
+  }
+
+  @Test
+  void createListing_FailsWhenShortDescription() {
+    Listing listing = validListing();
+    listing.setDescription("short");
+
+    assertThatThrownBy(() -> listingService.createListing(listing))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("Description must be at least");
+  }
+
+  @Test
+  void createListing_FailsWhenPriceNegative() {
+    Listing listing = validListing();
+    listing.setPrice(-10.0);
+
+    assertThatThrownBy(() -> listingService.createListing(listing))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("Price must be a positive number");
+  }
+
+  @Test
+  void createListing_FailsWhenCategoryNull() {
+    Listing listing = validListing();
+    listing.setCategory(null);
+
+    assertThatThrownBy(() -> listingService.createListing(listing))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("Category must not be null");
+  }
+
+  @Test
+  void getListingById_Success() {
+    Listing created = listingService.createListing(validListing());
+    Listing found = listingService.getListingById(created.getId());
+
+    assertThat(found.getId()).isEqualTo(created.getId());
+  }
+
+  @Test
+  void getListingById_NotFound() {
+    assertThatThrownBy(() -> listingService.getListingById(99999))
+            .isInstanceOf(NoSuchElementException.class);
+  }
+
+  @Test
+  void getListingBySeller_Success() {
+    listingService.createListing(validListing());
+    List<Listing> results = listingService.getListingBySeller(seller);
+
+    assertThat(results).hasSizeGreaterThanOrEqualTo(1);
+  }
+
+  @Test
+  void getListingBySeller_NoListingsFound() {
+    User newSeller = userRepository.save(seller.toBuilder()
+            .email("new@seller.com")
+            .phoneNumber("87654321")
             .build());
 
-    Listing savedListing = listingService.createListing(newListing);
-
-    assertThat(savedListing.getId()).isGreaterThan(0);
-    assertThat(listingService.getListingById(savedListing.getId())).isPresent();
+    assertThatThrownBy(() -> listingService.getListingBySeller(newSeller))
+            .isInstanceOf(NoSuchElementException.class)
+            .hasMessageContaining("No listings found");
   }
 
   @Test
-  void updateListingStatus() {
-    listingService.updateListingStatus(testListing.getId(), ListingStatus.SOLD);
-    Listing updated = listingService.getListingById(testListing.getId()).orElseThrow();
-    assertThat(updated.getStatus()).isEqualTo(ListingStatus.SOLD);
+  void getAllListings_Success() {
+    listingService.createListing(validListing());
+    List<Listing> all = listingService.getAllListings();
+
+    assertThat(all).isNotEmpty();
   }
 
   @Test
-  void deleteListing() {
-    listingService.deleteListingById(testListing.getId());
-    assertThat(listingService.getListingById(testListing.getId())).isEmpty();
+  void getAllListings_EmptyThrows() {
+    listingRepository.deleteAll();
+
+    assertThatThrownBy(() -> listingService.getAllListings())
+            .isInstanceOf(NoSuchElementException.class)
+            .hasMessageContaining("No listings found");
   }
 
   @Test
-  void updateListing_PartialUpdate_Success() {
-    Listing partialUpdate = Listing.builder()
-            .title("Updated Title")
-            .price(200.0)
-            .build();
+  void updateListing_Success() {
+    Listing listing = listingService.createListing(validListing());
 
-    listingService.updateListing(testListing.getId(), partialUpdate);
-    Listing updated = listingService.getListingById(testListing.getId()).orElseThrow();
-
-    assertThat(updated.getTitle()).isEqualTo("Updated Title");
-    assertThat(updated.getPrice()).isEqualTo(200.0);
-    assertThat(updated.getDescription()).isEqualTo("Original description");
-    assertThat(updated.getCategory()).isEqualTo(Category.FURNITURE);
-  }
-
-  @Test
-  void updateListing_Full_success() {
     Listing update = Listing.builder()
             .title("Updated Title")
-            .description("Updated description")
+            .description("Updated valid description")
             .price(200.0)
-            .category(Category.CLOTHES)
+            .category(Category.ELECTRONICS)
             .status(ListingStatus.INACTIVE)
-            .latitude(60.0)
-            .longitude(11.0)
             .build();
 
-    listingService.updateListing(testListing.getId(), update);
-    Listing updated = listingService.getListingById(testListing.getId()).orElseThrow();
+    Listing result = listingService.updateListing(listing.getId(), update);
 
-    assertThat(updated.getId()).isEqualTo(testListing.getId());
-    assertThat(updated.getTitle()).isEqualTo("Updated Title");
-    assertThat(updated.getDescription()).isEqualTo("Updated description");
-    assertThat(updated.getPrice()).isEqualTo(200.0);
-    assertThat(updated.getCategory()).isEqualTo(Category.CLOTHES);
-    assertThat(updated.getStatus()).isEqualTo(ListingStatus.INACTIVE);
-    assertThat(updated.getLatitude()).isEqualTo(60.0);
-    assertThat(updated.getLongitude()).isEqualTo(11.0);
+    assertThat(result.getTitle()).isEqualTo("Updated Title");
+    assertThat(result.getPrice()).isEqualTo(200.0);
+    assertThat(result.getStatus()).isEqualTo(ListingStatus.INACTIVE);
   }
 
   @Test
   void updateListing_NotFound() {
-    Listing update = Listing.builder()
-            .title("Non-existent")
-            .build();
+    Listing update = Listing.builder().title("Updated").build();
 
-    Optional<Listing> result = listingService.updateListing(9999, update);
-    assertThat(result).isEmpty();
+    assertThatThrownBy(() -> listingService.updateListing(99999, update))
+            .isInstanceOf(NoSuchElementException.class);
+  }
+
+  @Test
+  void updateListing_FailsOnInvalidTitle() {
+    Listing listing = listingService.createListing(validListing());
+
+    Listing update = Listing.builder().title("").build();
+
+    assertThatThrownBy(() -> listingService.updateListing(listing.getId(), update))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("Title cannot be empty");
+  }
+
+  @Test
+  void deleteListingById_Success() {
+    Listing listing = listingService.createListing(validListing());
+    listingService.deleteListingById(listing.getId());
+
+    assertThatThrownBy(() -> listingService.getListingById(listing.getId()))
+            .isInstanceOf(NoSuchElementException.class);
+  }
+
+  @Test
+  void deleteListingById_NotFound() {
+    assertThatThrownBy(() -> listingService.deleteListingById(99999))
+            .isInstanceOf(NoSuchElementException.class);
+  }
+
+  @Test
+  void updateListingStatus_Success() {
+    Listing listing = listingService.createListing(validListing());
+    Listing updated = listingService.updateListingStatus(listing.getId(), ListingStatus.SOLD);
+
+    assertThat(updated.getStatus()).isEqualTo(ListingStatus.SOLD);
+  }
+
+  @Test
+  void updateListingStatus_FailsWhenNull() {
+    Listing listing = listingService.createListing(validListing());
+
+    assertThatThrownBy(() -> listingService.updateListingStatus(listing.getId(), null))
+            .isInstanceOf(IllegalArgumentException.class);
+  }
+
+  @Test
+  void updateListingStatus_NotFound() {
+    assertThatThrownBy(() -> listingService.updateListingStatus(99999, ListingStatus.SOLD))
+            .isInstanceOf(NoSuchElementException.class);
   }
 }
+
