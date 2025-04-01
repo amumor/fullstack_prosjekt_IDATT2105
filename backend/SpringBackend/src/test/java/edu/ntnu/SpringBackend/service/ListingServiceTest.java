@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
@@ -60,7 +61,6 @@ class ListingServiceTest {
   void createListing_Success() {
     Listing listing = listingService.createListing(validListing());
 
-    assertThat(listing.getId()).isGreaterThan(0);
     assertThat(listing.getStatus()).isEqualTo(ListingStatus.ACTIVE);
   }
 
@@ -123,7 +123,7 @@ class ListingServiceTest {
 
   @Test
   void getListingById_NotFound() {
-    assertThatThrownBy(() -> listingService.getListingById(99999))
+    assertThatThrownBy(() -> listingService.getListingById(UUID.randomUUID()))
             .isInstanceOf(NoSuchElementException.class);
   }
 
@@ -187,7 +187,7 @@ class ListingServiceTest {
   void updateListing_NotFound() {
     Listing update = Listing.builder().title("Updated").build();
 
-    assertThatThrownBy(() -> listingService.updateListing(99999, update))
+    assertThatThrownBy(() -> listingService.updateListing(UUID.randomUUID(), update))
             .isInstanceOf(NoSuchElementException.class);
   }
 
@@ -213,7 +213,7 @@ class ListingServiceTest {
 
   @Test
   void deleteListingById_NotFound() {
-    assertThatThrownBy(() -> listingService.deleteListingById(99999))
+    assertThatThrownBy(() -> listingService.deleteListingById(UUID.randomUUID()))
             .isInstanceOf(NoSuchElementException.class);
   }
 
@@ -235,7 +235,7 @@ class ListingServiceTest {
 
   @Test
   void updateListingStatus_NotFound() {
-    assertThatThrownBy(() -> listingService.updateListingStatus(99999, ListingStatus.SOLD))
+    assertThatThrownBy(() -> listingService.updateListingStatus(UUID.randomUUID(), ListingStatus.SOLD))
             .isInstanceOf(NoSuchElementException.class);
   }
 }

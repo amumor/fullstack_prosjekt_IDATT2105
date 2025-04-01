@@ -16,6 +16,7 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -86,7 +87,6 @@ class BookmarkServiceTest {
   void addBookmark_Success() {
     Bookmark bookmark = bookmarkService.addBookmark(testUser, testListing);
 
-    assertThat(bookmark.getId()).isGreaterThan(0);
     assertThat(bookmark.getUser().getEmail()).isEqualTo("test@example.com");
   }
 
@@ -103,7 +103,7 @@ class BookmarkServiceTest {
   void deleteBookmarkById_Success() {
     bookmarkService.addBookmark(testUser, testListing);
     List<Bookmark> bookmarks = bookmarkService.getBookmarksByUser(testUser);
-    int bookmarkId = bookmarks.getFirst().getId();
+    UUID bookmarkId = bookmarks.getFirst().getId();
 
     bookmarkService.deleteBookmarkById(bookmarkId);
 

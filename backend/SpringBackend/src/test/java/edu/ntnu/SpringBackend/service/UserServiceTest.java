@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
@@ -120,7 +121,6 @@ class UserServiceTest {
 
     User createdUser = userService.addUser(newUser);
 
-    assertThat(createdUser.getId()).isGreaterThan(0);
     assertThat(passwordEncoder.matches("StrongPass1!", createdUser.getPassword())).isTrue();
   }
 
@@ -181,7 +181,7 @@ class UserServiceTest {
 
   @Test
   void getUserById_NotFound() {
-    assertThatThrownBy(() -> userService.getUserById(99999))
+    assertThatThrownBy(() -> userService.getUserById(UUID.randomUUID()))
             .isInstanceOf(NoSuchElementException.class);
   }
 
@@ -227,7 +227,7 @@ class UserServiceTest {
 
   @Test
   void deleteUserById_NotFound() {
-    assertThatThrownBy(() -> userService.deleteUserById(99999))
+    assertThatThrownBy(() -> userService.deleteUserById(UUID.randomUUID()))
             .isInstanceOf(NoSuchElementException.class);
   }
 

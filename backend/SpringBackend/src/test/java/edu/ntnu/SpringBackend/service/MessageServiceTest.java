@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -104,7 +105,7 @@ public class MessageServiceTest {
 
   @Test
   void getMessageById_NotFound() {
-    Optional<Message> retrievedMessage = messageService.getMessageById(9999);
+    Optional<Message> retrievedMessage = messageService.getMessageById(UUID.randomUUID());
 
     assertThat(retrievedMessage).isEmpty();
   }
@@ -192,14 +193,14 @@ public class MessageServiceTest {
 
   @Test
   void updateMessage_NotFound() {
-    Optional<Message> updatedMessage = messageService.updateMessage(9999, "This message doesn't exist");
+    Optional<Message> updatedMessage = messageService.updateMessage(UUID.randomUUID(), "This message doesn't exist");
 
     assertThat(updatedMessage).isEmpty();
   }
 
   @Test
   void deleteMessageById() {
-    int messageId = testMessage.getId();
+    UUID messageId = testMessage.getId();
     assertThat(messageService.getMessageById(messageId)).isPresent();
 
     messageService.deleteMessageById(messageId);

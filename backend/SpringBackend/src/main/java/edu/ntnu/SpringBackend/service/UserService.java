@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -26,7 +27,7 @@ public class UserService {
     return userRepository.findAll();
   }
 
-  public User getUserById(int id) {
+  public User getUserById(UUID id) {
     return userRepository.findById(id)
             .orElseThrow(() -> new NoSuchElementException("User with ID " + id + " not found"));
   }
@@ -60,7 +61,7 @@ public class UserService {
 
 
   @Transactional
-  public User updateUser(int id, User updatedUser) {
+  public User updateUser(UUID id, User updatedUser) {
     User existingUser = getUserById(id);
 
     // Email
@@ -111,7 +112,7 @@ public class UserService {
 
 
   @Transactional
-  public void deleteUserById(int id) {
+  public void deleteUserById(UUID id) {
     logger.info("Deleting user with ID: {}", id);
     if (!userRepository.existsById(id)) {
       throw new NoSuchElementException("User with ID " + id + " does not exist");

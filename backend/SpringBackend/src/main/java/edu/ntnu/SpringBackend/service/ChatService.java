@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class ChatService {
@@ -23,7 +24,7 @@ public class ChatService {
     return chatRepository.findAll();
   }
 
-  public Optional<Chat> getChatById(int id) {
+  public Optional<Chat> getChatById(UUID id) {
     return chatRepository.findById(id);
   }
 
@@ -58,7 +59,7 @@ public class ChatService {
   }
 
   @Transactional
-  public void deleteChatById(int id) {
+  public void deleteChatById(UUID id) {
     chatRepository.deleteById(id);
   }
 }
