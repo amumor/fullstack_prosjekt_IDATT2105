@@ -123,25 +123,25 @@ public class UserService {
     return passwordEncoder.matches(password, user.getPassword());
   }
 
-  private void validateEmail(String email) {
+  public void validateEmail(String email) {
     if (!email.matches("^[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
       throw new IllegalArgumentException("Invalid email format.");
     }
   }
 
-  private void validatePassword(String password) {
+  public void validatePassword(String password) {
     if (!password.matches("^(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()_+\\-={}:;\"'|<>,.?]).{10,}$")) {
       throw new IllegalArgumentException("Password must be at least 10 characters, contain an uppercase letter, a digit, and a special character.");
     }
   }
 
-  private void validateName(String name) {
+  public void validateName(String name) {
     if (!name.matches("^[A-Za-zÆØÅæøå]+$")) {
       throw new IllegalArgumentException("Names must only contain letters.");
     }
   }
 
-  private void validatePhone(String phone) {
+  public void validatePhone(String phone) {
     if (!phone.matches("^\\d{8}$")) {
       throw new IllegalArgumentException("Phone number must be exactly 8 digits.");
     }
