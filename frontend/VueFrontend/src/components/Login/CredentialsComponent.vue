@@ -1,5 +1,5 @@
 <script setup>
-import { ref, defineProps, onMounted } from 'vue';
+import { ref, defineProps } from 'vue';
 
 /**
  * @property {Boolean} hasUser - Indicates if the user is registered.

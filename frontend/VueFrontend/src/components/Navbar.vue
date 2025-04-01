@@ -44,7 +44,7 @@ onMounted(() => {
         <!-- Logged in menu -->
         <template v-if="isUserLoggedIn">
           <router-link to ="/newListing" id="router-link">New listing</router-link>
-          <router-link to ="/favourites" id="router-link">Favourites</router-link>
+          <router-link to ="/profile/favorites" id="router-link">Favorites</router-link>
           <router-link to ="/inbox" id="router-link">Inbox</router-link>
           <router-link to ="/profile" id="router-link">Profile</router-link>
         </template>
@@ -67,7 +67,7 @@ onMounted(() => {
           <!-- Logged In Menu -->
           <template v-if="isUserLoggedIn" v-show="isOpen">
             <li><router-link to="/newListing" @click="toggleMenu" id="router-link">New listing</router-link></li>
-            <li><router-link to="/favourites" @click="toggleMenu" id="router-link">Favourites</router-link></li>
+            <li><router-link to="/profile/favorites" @click="toggleMenu" id="router-link">Favorites</router-link></li>
             <li><router-link to="/inbox" @click="toggleMenu" id="router-link">Inbox</router-link></li>
             <li><router-link to="/profile" @click="toggleMenu" id="router-link">Profile</router-link></li>
           </template>
@@ -127,6 +127,7 @@ onMounted(() => {
   font-family: 'Inter', sans-serif;
   text-decoration: none;
   background-color: #D9D9D9;
+
   padding: 10px 15px;
   border-radius: 5px;
   transition: background-color 0.3s, transform 0.3s;
@@ -156,6 +157,7 @@ onMounted(() => {
   background: none;
   border: none;
   color: black;
+
   cursor: pointer;
   padding: 20px;
   transition: color 0.3s;
@@ -169,11 +171,12 @@ onMounted(() => {
 
 /* Dropdown menu */
 .dropdown {
+  background-color: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+
   position: absolute;
   top: 60px;
   right: 20px;
-  background-color: white;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
   padding: 10px;
   border-radius: 4px;
   list-style-type: none;

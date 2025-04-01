@@ -1,9 +1,13 @@
 <script setup>
+import { useRouter } from 'vue-router'
 import Navbar from '@/components/Navbar.vue'
-import ProfileContainer from '@/components/ProfileContainer.vue'
+import ProfileOption from '@/components/Profile/ProfileOption.vue'
+
+document.body.style.backgroundColor = "#ffffff";
 
 const fullName = 'Fyfasan Ben Reddik';
 const email = 'fasan@reddik.ben'
+const router = useRouter()
 
 const getInitials = (name) => {
   const nameArray = name.split(' ');
@@ -11,6 +15,10 @@ const getInitials = (name) => {
     .map((word) => word.charAt(0).toUpperCase())
     .join('');
 };
+
+const routeTo = (route) => {
+  router.push('/profile'+ route);
+}
 </script>
 
 <template>
@@ -25,23 +33,27 @@ const getInitials = (name) => {
         <h2>{{ fullName }}</h2>
         <h1>{{email}}</h1>
       </div>
+      <!-- Log out logic -->
+      <router-link to="/login" id="router-link">Log out</router-link>
     </div>
     <div class="options-containers">
-      <ProfileContainer
+      <ProfileOption
         class="profile-container"
         title="My Profile"
-        description="Edit profile information"
+        shortDescription="Edit profile information"
         :iconString="'material-symbols:person'"  />
-      <ProfileContainer
+      <ProfileOption
         class="profile-container"
         title="Listings"
-        description="See all your listings"
-        :iconString="'material-symbols:format-list-bulleted'" />
-      <ProfileContainer
+        shortDescription="See all your listings"
+        :iconString="'material-symbols:format-list-bulleted'"
+        @click="routeTo('/myListings')" />
+      <ProfileOption
         class="profile-container"
-        title="Favourites"
-        description="See all your saved favourites"
-        :iconString="'material-symbols:favorite'" />
+        title="Favorites"
+        shortDescription="See all your saved favorites"
+        :iconString="'material-symbols:favorite'"
+        @click="routeTo('/favorites')"/>
     </div>
   </div>
 </template>
@@ -87,6 +99,19 @@ h1 {
   margin: 10px 0 0 30px;
 }
 
+/* Log out button */
+#router-link {
+  text-decoration: none;
+  font-family: 'Inter', sans-serif;
+  color: #ffffff;
+  margin: 30px 70px 0 auto;
+  font-size: 16px;
+  background-color: #007bff;
+  padding: 10px 15px;
+  border-radius: 5px;
+  max-height: 20px;
+}
+
 .options-containers {
   display: flex;
   justify-content: space-between;
@@ -101,5 +126,4 @@ h1 {
   max-width: 300px;
   max-height: 200px;
 }
-
 </style>
