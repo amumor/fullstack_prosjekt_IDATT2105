@@ -13,7 +13,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.UUID;
 import java.util.Optional;
 
@@ -44,8 +43,9 @@ class UserServiceTest {
             .role(Role.USER)
             .build();
 
+    UUID id = UUID.randomUUID();
     User savedUser = User.builder()
-            .id(1)
+            .id(id)
             .firstName("Jane")
             .lastName("Doe")
             .email("jane@doe.com")
@@ -61,18 +61,18 @@ class UserServiceTest {
 
     UserResponseDTO response = userService.addUser(request);
 
-    assertEquals("1", response.getId());
+    assertEquals(id, response.getId());
     assertEquals("Jane", response.getFirstName());
     assertEquals("Doe", response.getLastName());
     assertEquals("jane@doe.com", response.getEmail());
     assertEquals("12345678", response.getPhoneNumber());
-    assertEquals("USER", response.getRole());
+    assertEquals("USER", response.getRole().toString());
   }
 
   @Test
   void testGetAllUsersReturnsListOfDTOs() {
     User user = User.builder()
-            .id(1)
+            .id(UUID.randomUUID())
             .firstName("John")
             .lastName("Smith")
             .email("john@smith.com")
@@ -86,17 +86,18 @@ class UserServiceTest {
     List<UserResponseDTO> result = userService.getAllUsers();
 
     assertEquals(1, result.size());
-    assertEquals("John", result.get(0).getFirstName());
-    assertEquals("Smith", result.get(0).getLastName());
-    assertEquals("john@smith.com", result.get(0).getEmail());
-    assertEquals("87654321", result.get(0).getPhoneNumber());
-    assertEquals("ADMIN", result.get(0).getRole());
+    assertEquals("John", result.getFirst().getFirstName());
+    assertEquals("Smith", result.getFirst().getLastName());
+    assertEquals("john@smith.com", result.getFirst().getEmail());
+    assertEquals("87654321", result.getFirst().getPhoneNumber());
+    assertEquals("ADMIN", result.getFirst().getRole().toString());
   }
 
   @Test
   void testGetUserByIdReturnsCorrectDTO() {
+    UUID id = UUID.randomUUID();
     User user = User.builder()
-            .id(42)
+            .id(id)
             .firstName("Alice")
             .lastName("Wonder")
             .email("alice@wonder.com")
@@ -105,15 +106,15 @@ class UserServiceTest {
             .role(Role.USER)
             .build();
 
-    when(userRepository.findById(42)).thenReturn(Optional.of(user));
+    when(userRepository.findById(id)).thenReturn(Optional.of(user));
 
-    UserResponseDTO result = userService.getUserById(42);
+    UserResponseDTO result = userService.getUserById(id);
 
-    assertEquals("42", result.getId());
+    assertEquals(id, result.getId());
     assertEquals("Alice", result.getFirstName());
     assertEquals("Wonder", result.getLastName());
     assertEquals("alice@wonder.com", result.getEmail());
     assertEquals("11112222", result.getPhoneNumber());
-    assertEquals("USER", result.getRole());
+    assertEquals("USER", result.getRole().toString());
   }
 }

@@ -33,7 +33,7 @@ public class UserService {
             .collect(Collectors.toList());
   }
 
-  public UserResponseDTO getUserById(int id) {
+  public UserResponseDTO getUserById(UUID id) {
     return userRepository.findById(id)
             .map(UserMapper::toDto)
             .orElseThrow(() -> new NoSuchElementException("User with ID " + id + " not found"));
@@ -69,7 +69,7 @@ public class UserService {
   }
 
   @Transactional
-  public UserResponseDTO updateUser(int id, UserRequestDTO userDTO) {
+  public UserResponseDTO updateUser(UUID id, UserRequestDTO userDTO) {
     User existingUser = userRepository.findById(id)
             .orElseThrow(() -> new NoSuchElementException("User with ID " + id + " not found"));
 
