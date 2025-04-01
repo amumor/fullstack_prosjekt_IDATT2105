@@ -39,5 +39,25 @@ const listings = [
 </template>
 
 <style scoped>
+.display-page-container {
+  font-family: 'Inter', sans-serif;
+}
 
+/* Header */
+h2 {
+  font-size: 24px;
+  color: #333333;
+  font-weight: 500;
+
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+/* Listings */
+.listings {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  gap: 20px;
+}
 </style>
