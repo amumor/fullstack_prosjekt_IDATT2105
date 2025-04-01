@@ -46,7 +46,14 @@ const props = defineProps({
 .option-text {
   font-family: 'Inter', sans-serif;
   color: #333333;
-  padding: 10px;
+
+}
+
+/* Header */
+h2 {
+  font-size: 20px;
+  color: #333333;
+  font-weight: 500;
 }
 
 </style>

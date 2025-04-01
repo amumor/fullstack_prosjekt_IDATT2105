@@ -82,7 +82,7 @@ const categories = [
 .search-input {
   font-family: 'Inter', sans-serif;
   font-size: 16px;
-  box-shadow: 0 4px 6px #333333;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
   border-radius: 5px;
 
 
