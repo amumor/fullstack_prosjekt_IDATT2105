@@ -1,8 +1,10 @@
 package edu.ntnu.SpringBackend.exception;
 
 import edu.ntnu.SpringBackend.service.AuthenticationService;
+import org.hibernate.exception.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -31,16 +33,28 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>("Bad request: " + ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<String> handleGlobalException(Exception ex, WebRequest request) {
-        logger.error("Internal server error: {}", ex.getMessage());
-        return new ResponseEntity<>("Internal server error: " + ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-
     @ExceptionHandler(HttpMessageNotReadableException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<String> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex, WebRequest request) {
         logger.error("Invalid input: {}", ex.getMessage());
         return ResponseEntity.badRequest().body("Invalid input: " + ex.getMessage());
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<String> handleConstraintViolationException(ConstraintViolationException ex, WebRequest request) {
+        logger.error("Database error: {}", ex.getMessage());
+        return new ResponseEntity<>("Database constraint error", HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<String> handleDataIntegrityViolationException(DataIntegrityViolationException ex, WebRequest request) {
+        logger.error("Data integrity violation: {}", ex.getMessage());
+        return new ResponseEntity<>("Invalid input: An instance of this field already exists.", HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<String> handleGlobalException(Exception ex, WebRequest request) {
+        logger.error("Internal server error: {}", ex.getMessage());
+        return new ResponseEntity<>("Internal server error", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
