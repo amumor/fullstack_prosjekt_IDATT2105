@@ -8,10 +8,14 @@ const props = defineProps({
   title: String,
 })
 
+const toListingView = () => {
+  // Navigate to the listing view
+
+}
 </script>
 
 <template>
-  <button class="listings">
+  <button class="listings" @click="toListingView">
     <div class="image-container">
       <img class="image-item" :src="props.image" alt="Boat">
       <div class="price">{{ props.price }}</div>
