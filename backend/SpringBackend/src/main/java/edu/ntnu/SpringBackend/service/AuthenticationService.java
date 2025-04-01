@@ -14,6 +14,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +31,7 @@ public class AuthenticationService {
         AuthenticationService.class
     );
 
-    public AuthenticationResponse register(RegisterRequest request) {
+    public AuthenticationResponse register(RegisterRequest request) { // TODO: protect ADMIN registration with JWT?
         logger.info("Handling register request...");
 
         if (repository.findByEmail(request.getEmail()).isPresent()) {
@@ -43,7 +45,7 @@ public class AuthenticationService {
                 .lastName(request.getLastName())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .phoneNumber(request.getPhoneNumber())
-                .role(Role.USER)
+                .role(request.getRole())
                 .build();
 
         logger.info("> Saving user to the database.");

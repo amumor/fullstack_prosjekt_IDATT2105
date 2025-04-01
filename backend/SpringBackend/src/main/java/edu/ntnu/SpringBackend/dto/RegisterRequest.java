@@ -1,5 +1,6 @@
 package edu.ntnu.SpringBackend.dto;
 
+import edu.ntnu.SpringBackend.model.enums.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,4 +17,5 @@ public class RegisterRequest {
     private String email;
     private String password;
     private String phoneNumber;
+    private Role role;
 }
