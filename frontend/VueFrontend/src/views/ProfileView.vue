@@ -50,9 +50,10 @@ const routeTo = (route) => {
         @click="routeTo('/myListings')" />
       <ProfileOption
         class="profile-container"
-        title="Favourites"
-        shortDescription="See all your saved favourites"
-        :iconString="'material-symbols:favorite'" />
+        title="Favorites"
+        shortDescription="See all your saved favorites"
+        :iconString="'material-symbols:favorite'"
+        @click="routeTo('/favorites')"/>
     </div>
   </div>
 </template>
