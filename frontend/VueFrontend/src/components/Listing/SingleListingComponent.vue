@@ -1,5 +1,6 @@
 <script setup>
 import { ref, defineProps } from 'vue';
+import { useRouter } from 'vue-router';
 import { Icon } from '@iconify/vue'
 
 const props = defineProps({
@@ -13,11 +14,19 @@ const props = defineProps({
   isLoggedIn: Boolean,
 })
 
+const router = useRouter();
 const isOwner = ref(true);
 const isFavorite = ref(false);
+
 const toggleFavorite = () => {
   isFavorite.value = !isFavorite.value;
 }
+
+const delListing = () => {
+  // Logic to delete the listing
+  router.push('/myListings');
+}
+
 </script>
 
 <template>
@@ -51,7 +60,7 @@ const toggleFavorite = () => {
       <template v-if="isOwner">
         <button class="owner-btn">Edit</button>
         <button class="owner-btn">Archive</button>
-        <button class="owner-btn" id="delete">Delete</button>
+        <button class="owner-btn" id="delete" @click=delListing>Delete</button>
       </template>
     </div>
 
