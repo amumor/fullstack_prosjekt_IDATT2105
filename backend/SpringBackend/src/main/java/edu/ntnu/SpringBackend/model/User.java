@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @Builder(toBuilder = true)
@@ -18,9 +19,10 @@ import java.util.List;
 @Entity
 @Table(name = "users")
 public class User implements UserDetails {
+
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private int id;
+  @GeneratedValue(strategy = GenerationType.UUID)
+  private UUID id;
 
   // hash this ??
   @Column(nullable = false)

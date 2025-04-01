@@ -7,8 +7,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
-public interface ChatRepository extends JpaRepository<Chat, Integer> {
+public interface ChatRepository extends JpaRepository<Chat, UUID> {
   List<Chat> findByBuyer(User buyer);
   List<Chat> findByListing(Listing listing);
   Optional<Chat> findByBuyerAndListing(User firstUser, Listing listing);

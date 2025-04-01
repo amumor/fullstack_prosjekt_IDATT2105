@@ -6,8 +6,9 @@ import edu.ntnu.SpringBackend.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.UUID;
 
-public interface MessageRepository extends JpaRepository<Message, Integer> {
+public interface MessageRepository extends JpaRepository<Message, UUID> {
   List<Message> findByChatOrderBySentAtDesc(Chat chat);
   List<Message> findByChatOrderBySentAtAsc(Chat chat);
   List<Message> findBySender(User sender);

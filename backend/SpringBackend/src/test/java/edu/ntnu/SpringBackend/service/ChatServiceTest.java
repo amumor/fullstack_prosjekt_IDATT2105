@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -98,7 +99,7 @@ public class ChatServiceTest {
 
   @Test
   void getChatById_NotFound() {
-    Optional<Chat> retrievedChat = chatService.getChatById(9999);
+    Optional<Chat> retrievedChat = chatService.getChatById(UUID.randomUUID());
 
     assertThat(retrievedChat).isEmpty();
   }
@@ -190,7 +191,7 @@ public class ChatServiceTest {
 
   @Test
   void deleteChatById() {
-    int chatId = testChat.getId();
+    UUID chatId = testChat.getId();
     assertThat(chatService.getChatById(chatId)).isPresent();
 
     chatService.deleteChatById(chatId);

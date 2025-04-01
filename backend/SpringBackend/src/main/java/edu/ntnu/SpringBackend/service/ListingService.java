@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -20,7 +21,7 @@ public class ListingService {
   private final ListingRepository listingRepository;
   private final Logger logger = LoggerFactory.getLogger(ListingService.class);
 
-  public Listing getListingById(int id) {
+  public Listing getListingById(UUID id) {
     logger.info("Getting listing by id: {}", id);
     return listingRepository.findById(id)
             .orElseThrow(() -> new NoSuchElementException("Listing with ID " + id + " not found."));
@@ -28,7 +29,7 @@ public class ListingService {
 
   public List<Listing> getListingBySeller(User seller) {
     logger.info("Getting listings by seller: {}", seller.getId());
-    if (seller.getId() == 0) {
+    if (seller.getId() == null) {
       throw new IllegalArgumentException("Invalid seller provided.");
     }
 
@@ -60,7 +61,7 @@ public class ListingService {
   }
 
   @Transactional
-  public Listing updateListing(int id, Listing updatedListing) {
+  public Listing updateListing(UUID id, Listing updatedListing) {
     logger.info("Updating listing with ID: {}", id);
     Listing existing = listingRepository.findById(id)
             .orElseThrow(() -> new NoSuchElementException("Listing with ID " + id + " not found."));
@@ -102,7 +103,7 @@ public class ListingService {
   }
 
   @Transactional
-  public void deleteListingById(int id) {
+  public void deleteListingById(UUID id) {
     logger.info("Deleting listing with ID: {}", id);
     if (!listingRepository.existsById(id)) {
       throw new NoSuchElementException("Listing with ID " + id + " does not exist.");
@@ -110,7 +111,7 @@ public class ListingService {
     listingRepository.deleteById(id);
   }
 
-  public Listing updateListingStatus(int id, ListingStatus status) {
+  public Listing updateListingStatus(UUID id, ListingStatus status) {
     logger.info("Updating listing status for ID: {}", id);
     if (status == null) {
       throw new IllegalArgumentException("Status must not be null.");

@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class MessageService {
@@ -23,7 +24,7 @@ public class MessageService {
     return messageRepository.findAll();
   }
 
-  public Optional<Message> getMessageById(int id) {
+  public Optional<Message> getMessageById(UUID id) {
     return messageRepository.findById(id);
   }
 
@@ -51,7 +52,7 @@ public class MessageService {
   }
 
   @Transactional
-  public Optional<Message> updateMessage(int id, String newContent) {
+  public Optional<Message> updateMessage(UUID id, String newContent) {
     return messageRepository.findById(id)
             .map(existingMessage -> {
               existingMessage.setContent(newContent);
@@ -60,7 +61,7 @@ public class MessageService {
   }
 
   @Transactional
-  public void deleteMessageById(int id) {
+  public void deleteMessageById(UUID id) {
     messageRepository.deleteById(id);
   }
 }
