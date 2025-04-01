@@ -24,7 +24,7 @@ const toggleFavorite = () => {
 
   <!-- Image container -->
   <div class="image-container">
-    <img class="image-item" :src="props.image">
+    <img class="image-item" :src="props.image" alt="Front image">
     <button class="favorite" :class="{ 'isFavorite': isFavorite }" @click="toggleFavorite">
       <Icon icon="material-symbols:favorite" width="40" height="40" />
     </button>
@@ -135,7 +135,7 @@ const toggleFavorite = () => {
   gap: 10px;
   width: 100%;
   max-height: 40px;
-  width: 400px;
+  max-width: 400px;
   margin-bottom: 10px;
 }
 

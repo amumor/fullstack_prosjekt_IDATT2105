@@ -12,13 +12,13 @@ const props = defineProps({
 
 <template>
 <button class="option-btn">
-  <div class="option-icon">
+  <span class="option-icon">
     <Icon :icon="props.iconString" width="40" height="40" />
-  </div>
-  <div class="option-text">
+  </span>
+  <span class="option-text">
     <h2>{{ props.title }}</h2>
     <p>{{ props.shortDescription }}</p>
-  </div>
+  </span>
 </button>
 </template>
 

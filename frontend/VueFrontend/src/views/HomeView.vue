@@ -49,20 +49,20 @@ const categories = [
 
   <!-- Categories -->
   <div class="category-container">
-    <li v-for="category in categories" :key="category.id">
+    <div v-for="category in categories" :key="category.id">
       <button id="category-btn">{{ category.name }}</button>
-    </li>
+    </div>
   </div>
 
   <!-- Listings -->
   <div class="listings">
-    <li v-for="listing in listings" :key="listing.id">
+    <div v-for="listing in listings" :key="listing.id">
       <ListingPreviewComponent
         :image="listing.image"
         :price="listing.price"
         :town="listing.town"
         :title="listing.title" />
-    </li>
+    </div>
   </div>
 </template>
 

@@ -16,15 +16,14 @@ const toListingView = () => {
 
 <template>
   <button class="listings" @click="toListingView">
-    <div class="image-container">
+    <span class="image-container">
       <img class="image-item" :src="props.image" alt="Boat">
-      <div class="price">{{ props.price }}</div>
-    </div>
-    <div class="description">
-      <div class="town">{{ props.town }}</div>
-      <div class="title">{{ props.title }}</div>
-    </div>
-
+      <span class="price">{{ props.price }}</span>
+    </span>
+    <span class="description">
+      <span class="town">{{ props.town }}</span>
+      <span class="title">{{ props.title }}</span>
+    </span>
   </button>
 </template>
 
@@ -84,6 +83,8 @@ const toListingView = () => {
 
 .description {
   margin: 10px;
-  text-align: left;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 </style>
