@@ -1,10 +1,8 @@
 package edu.ntnu.SpringBackend.dto;
 
-import lombok.Getter;
-import org.springframework.stereotype.Service;
+import lombok.Data;
 
-@Getter
-@Service
+@Data
 public class WebSocketMessage {
   private String content;
 }

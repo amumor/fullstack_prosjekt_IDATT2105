@@ -1,7 +1,6 @@
 package edu.ntnu.SpringBackend.service;
 
-import edu.ntnu.SpringBackend.dto.ChatDTO;
-import edu.ntnu.SpringBackend.dto.UserRequestDTO;
+import edu.ntnu.SpringBackend.dto.ChatRequestDTO;
 import edu.ntnu.SpringBackend.model.Chat;
 import edu.ntnu.SpringBackend.model.Listing;
 import edu.ntnu.SpringBackend.model.Message;
@@ -16,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -28,12 +26,9 @@ public class ChatService {
   private final ListingService listingService;
 
   @Transactional
-  public Chat createOrGetChat(UUID buyerId, UUID listingId) {
-    logger.info("Received request to create or get chat");
-    logger.info("> BuyerId: {} ", buyerId);
-    logger.info("> ListingId: {} ", listingId);
-    User buyer = userService.getUserById(buyerId);
-    Listing listing = listingService.getListingById(listingId);
+  public Chat createOrGetChat(ChatRequestDTO requestDTO) {
+    User buyer = userService.getUserByEmail(requestDTO.getEmail());
+    Listing listing = listingService.getListingById(requestDTO.getListingId());
 
     return chatRepository.findByBuyerAndListing(buyer, listing)
             .orElseGet(() -> chatRepository.save(Chat.builder()
@@ -42,6 +37,7 @@ public class ChatService {
                     .createdAt(LocalDateTime.now())
                     .build()));
   }
+
 
   @Transactional
   public Message addMessageToChat(UUID chatId, String senderEmail, String content) {

@@ -1,6 +1,6 @@
 package edu.ntnu.SpringBackend.mapper;
 
-import edu.ntnu.SpringBackend.dto.ChatDTO;
+import edu.ntnu.SpringBackend.dto.ChatResponseDTO;
 import edu.ntnu.SpringBackend.model.Chat;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -13,8 +13,8 @@ public class ChatMapper {
 
   private final MessageMapper messageMapper;
 
-  public ChatDTO toDto(Chat chat) {
-    return ChatDTO.builder()
+  public ChatResponseDTO toDto(Chat chat) {
+    return ChatResponseDTO.builder()
             .id(chat.getId())
             .buyerId(chat.getBuyer().getId())
             .sellerId(chat.getListing().getSeller().getId())

@@ -13,7 +13,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ChatDTO {
+public class ChatResponseDTO {
 
   private UUID id;
   private UUID buyerId;

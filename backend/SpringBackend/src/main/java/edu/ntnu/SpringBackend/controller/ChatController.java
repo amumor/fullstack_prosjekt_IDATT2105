@@ -1,23 +1,16 @@
 package edu.ntnu.SpringBackend.controller;
 
-import edu.ntnu.SpringBackend.dto.ChatDTO;
+import edu.ntnu.SpringBackend.dto.ChatRequestDTO;
+import edu.ntnu.SpringBackend.dto.ChatResponseDTO;
 import edu.ntnu.SpringBackend.dto.MessageDTO;
 import edu.ntnu.SpringBackend.mapper.ChatMapper;
 import edu.ntnu.SpringBackend.mapper.MessageMapper;
-import edu.ntnu.SpringBackend.model.Chat;
-import edu.ntnu.SpringBackend.model.Message;
-import edu.ntnu.SpringBackend.model.User;
 import edu.ntnu.SpringBackend.service.ChatService;
-import edu.ntnu.SpringBackend.service.ListingService;
-import edu.ntnu.SpringBackend.service.MessageService;
 import edu.ntnu.SpringBackend.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.security.core.Authentication;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,10 +28,11 @@ public class ChatController {
   private final UserService userService;
 
   @PostMapping("/listings/{listingId}")
-  public ResponseEntity<ChatDTO> createOrGetChat(
-          @PathVariable UUID listingId,
-          UUID userId) {
-    return ResponseEntity.ok(chatMapper.toDto(chatService.createOrGetChat(listingId, userId)));
+  public ResponseEntity<ChatResponseDTO> createOrGetChat(
+          @RequestBody ChatRequestDTO chatRequestDTO
+  ) {
+    logger.info("Received POST request to create or get chat");
+    return ResponseEntity.ok(chatMapper.toDto(chatService.createOrGetChat(chatRequestDTO)));
   }
 
   @GetMapping("/{chatId}/messages")
