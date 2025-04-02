@@ -15,4 +15,5 @@ public interface ListingRepository extends JpaRepository<Listing, UUID> {
   Optional<Listing> findById(UUID id);
   List<Listing> findByStatus(ListingStatus status);
   List<Listing> findByCategory(Category category);
+  List<Listing> findByCategoryIn(List<Category> categories);
 }
