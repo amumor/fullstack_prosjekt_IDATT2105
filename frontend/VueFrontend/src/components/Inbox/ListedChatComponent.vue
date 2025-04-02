@@ -1,13 +1,15 @@
 <script setup>
+import { defineProps } from 'vue'
+
 import InitialsDisplayComponent from '@/components/Profile/InitialsDisplayComponent.vue'
 
 const props = defineProps({
   listingTitle: String,
   image: String,
-  lastMessage: String,
   lastMessageTime: String,
   isMessageRead: Boolean,
   messengerName: String,
+  messages: Array
 })
 
 
@@ -26,7 +28,12 @@ const props = defineProps({
   <div class="chat-unread" :class="{ 'chat-read': props.isMessageRead }">
     <h3>{{ props.listingTitle }}</h3>
     <p>{{ props.lastMessageTime }}</p>
-    <p>{{ props.lastMessage }}</p>
+    <!-- Remove? -->
+    <p v-if="props.messages && props.messages.length > 0">
+      {{ props.messages.at(-1).message }}
+    </p>
+    <p v-else>No messages yet</p>
+
   </div>
 </div>
 </template>
@@ -46,7 +53,6 @@ const props = defineProps({
 
 .listed-chat-container:hover {
   background: #f5f5f5;
-  transform: scale(1.02);
 }
 
 /* Image container */
