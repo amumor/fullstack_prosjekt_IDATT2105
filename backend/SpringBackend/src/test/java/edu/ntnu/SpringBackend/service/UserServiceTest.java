@@ -1,7 +1,6 @@
 package edu.ntnu.SpringBackend.service;
 
 import edu.ntnu.SpringBackend.dto.UserRequestDTO;
-import edu.ntnu.SpringBackend.dto.UserResponseDTO;
 import edu.ntnu.SpringBackend.model.User;
 import edu.ntnu.SpringBackend.model.enums.Role;
 import edu.ntnu.SpringBackend.repository.UserRepository;
@@ -59,7 +58,7 @@ class UserServiceTest {
     when(userRepository.findAll()).thenReturn(List.of());
     when(userRepository.save(any(User.class))).thenReturn(savedUser);
 
-    UserResponseDTO response = userService.addUser(request);
+    User response = userService.addUser(request);
 
     assertEquals(id, response.getId());
     assertEquals("Jane", response.getFirstName());
@@ -83,7 +82,7 @@ class UserServiceTest {
 
     when(userRepository.findAll()).thenReturn(List.of(user));
 
-    List<UserResponseDTO> result = userService.getAllUsers();
+    List<User> result = userService.getAllUsers();
 
     assertEquals(1, result.size());
     assertEquals("John", result.getFirst().getFirstName());
@@ -108,7 +107,7 @@ class UserServiceTest {
 
     when(userRepository.findById(id)).thenReturn(Optional.of(user));
 
-    UserResponseDTO result = userService.getUserById(id);
+    User result = userService.getUserById(id);
 
     assertEquals(id, result.getId());
     assertEquals("Alice", result.getFirstName());

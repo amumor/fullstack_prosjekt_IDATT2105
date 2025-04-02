@@ -26,27 +26,25 @@ public class UserService {
   private final PasswordEncoder passwordEncoder;
   private final Logger logger = LoggerFactory.getLogger(UserService.class);
 
-  public List<UserResponseDTO> getAllUsers() {
+  public List<User> getAllUsers() {
     logger.info("Fetching all users...");
-    return userRepository.findAll().stream()
-            .map(UserMapper::toDto)
-            .collect(Collectors.toList());
+    return userRepository.findAll();
   }
 
-  public UserResponseDTO getUserById(UUID id) {
+  public User getUserById(UUID id) {
+    logger.info("Fetching user by id: {}", id);
     return userRepository.findById(id)
-            .map(UserMapper::toDto)
             .orElseThrow(() -> new NoSuchElementException("User with ID " + id + " not found"));
   }
 
-  public UserResponseDTO getUserByEmail(String email) {
+  public User getUserByEmail(String email) {
+    logger.info("Fetching user by email: {}", email);
     return userRepository.findByEmail(email)
-            .map(UserMapper::toDto)
             .orElseThrow(() -> new NoSuchElementException("User with email " + email + " not found"));
   }
 
   @Transactional
-  public UserResponseDTO addUser(UserRequestDTO userDTO) {
+  public User addUser(UserRequestDTO userDTO) {
     logger.info("Adding user: {}", userDTO.getEmail());
 
     validateEmail(userDTO.getEmail());
@@ -65,11 +63,13 @@ public class UserService {
 
     User user = UserMapper.toEntity(userDTO);
     user.setPassword(passwordEncoder.encode(user.getPassword()));
-    return UserMapper.toDto(userRepository.save(user));
+    return userRepository.save(user);
   }
 
   @Transactional
-  public UserResponseDTO updateUser(UUID id, UserRequestDTO userDTO) {
+  public User updateUser(UUID id, UserRequestDTO userDTO) {
+    logger.info("Handling update request...");
+    logger.info("> User with ID: {}", id.toString());
     User existingUser = userRepository.findById(id)
             .orElseThrow(() -> new NoSuchElementException("User with ID " + id + " not found"));
 
@@ -108,16 +108,19 @@ public class UserService {
       existingUser.setRole(userDTO.getRole());
     }
 
-    return UserMapper.toDto(userRepository.save(existingUser));
+    logger.info("> User updated successfully");
+    return userRepository.save(existingUser);
   }
 
 
   @Transactional
   public void deleteUserById(UUID id) {
-    logger.info("Deleting user with ID: {}", id);
+    logger.info("Handling delete request...");
+    logger.info("> User ID: {}", id);
     if (!userRepository.existsById(id)) {
       throw new NoSuchElementException("User with ID " + id + " does not exist");
     }
+    logger.info("> User deleted successfully");
     userRepository.deleteById(id);
   }
 
