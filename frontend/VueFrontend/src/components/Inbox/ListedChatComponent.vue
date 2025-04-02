@@ -19,8 +19,9 @@ const props = defineProps({
     <img :src="props.image" class="chat-image" alt="Chat Image" />
     <InitialsDisplayComponent
       :name=props.messengerName
-      :height=40
-      :width=40 />
+      :height=35
+      :width=35
+      class="initials"/>
   </div>
   <div class="chat-unread" :class="{ 'chat-read': props.isMessageRead }">
     <h3>{{ props.listingTitle }}</h3>
@@ -36,9 +37,7 @@ const props = defineProps({
   display: flex;
   align-items: center;
   background: white;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   padding: 15px;
-  border-radius: 10px;
   transition: background 0.3s ease, transform 0.2s ease;
   width: 100%;
   max-width: 600px;
@@ -65,8 +64,14 @@ const props = defineProps({
   margin-right: 15px;
 }
 
+.initials {
+  position: absolute;
+  bottom: -5px;
+  right: 5px;
+}
+
 /* Unread message styling */
-.chat-unread {
+.chat-unread, .chat-read {
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -76,18 +81,24 @@ const props = defineProps({
   font-size: 16px;
   color: #333;
   margin-bottom: 5px;
+  font-weight: 600;
 }
 
-.chat-unread p {
+.chat-read h3 {
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 5px;
+  font-weight: 400;
+}
+
+.chat-unread p, .chat-read p {
   font-size: 14px;
   color: #666;
   margin: 2px 0;
 }
 
 /* Styling for read messages */
-.chat-read p {
-  color: #999;
-}
+
 
 @media (max-width: 768px) {
   .listed-chat-container {
