@@ -2,7 +2,7 @@ package edu.ntnu.SpringBackend.controller;
 
 import edu.ntnu.SpringBackend.dto.ChatRequestDTO;
 import edu.ntnu.SpringBackend.dto.ChatResponseDTO;
-import edu.ntnu.SpringBackend.dto.MessageDTO;
+import edu.ntnu.SpringBackend.dto.MessageResponsetDTO;
 import edu.ntnu.SpringBackend.mapper.ChatMapper;
 import edu.ntnu.SpringBackend.mapper.MessageMapper;
 import edu.ntnu.SpringBackend.service.ChatService;
@@ -36,9 +36,9 @@ public class ChatController {
   }
 
   @GetMapping("/{chatId}/messages")
-  public ResponseEntity<List<MessageDTO>> getMessages(@PathVariable UUID chatId) {
+  public ResponseEntity<List<MessageResponsetDTO>> getMessages(@PathVariable UUID chatId) {
     logger.info("Received request to get messages for chat {}", chatId);
-    List<MessageDTO> messages = chatService.getMessages(chatId).stream()
+    List<MessageResponsetDTO> messages = chatService.getMessages(chatId).stream()
             .map(messageMapper::toDto)
             .collect(Collectors.toList());
     return ResponseEntity.ok(messages);

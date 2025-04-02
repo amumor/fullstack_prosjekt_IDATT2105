@@ -120,8 +120,8 @@ public class UserService {
     if (!userRepository.existsById(id)) {
       throw new NoSuchElementException("User with ID " + id + " does not exist");
     }
-    logger.info("> User deleted successfully");
     userRepository.deleteById(id);
+    logger.info("> User deleted successfully"); // TODO: fix SQL error, User is in other tables
   }
 
   public boolean verifyPassword(User user, String password) {

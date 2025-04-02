@@ -12,7 +12,7 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class MessageDTO {
+public class MessageResponsetDTO {
 
   private UUID id;
   private UUID senderId;

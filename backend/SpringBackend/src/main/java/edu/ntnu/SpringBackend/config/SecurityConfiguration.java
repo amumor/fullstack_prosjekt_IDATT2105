@@ -1,6 +1,5 @@
 package edu.ntnu.SpringBackend.config;
 
-import jakarta.servlet.Filter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,8 +30,7 @@ public class SecurityConfiguration {
                                 "/api/v1/auth/**",
                                 "/swagger-ui/**",
                                 "/v3/api-docs",
-                                "/v3/api-docs/**",
-                                "/ws-chat/**"  // Make sure WebSocket endpoint is permitted
+                                "/v3/api-docs/**"
                         )
                         .permitAll()
                         .anyRequest()

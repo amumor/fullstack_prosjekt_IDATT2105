@@ -20,5 +20,5 @@ public class ChatResponseDTO {
   private UUID sellerId;
   private UUID listingId;
   private LocalDateTime createdAt;
-  private List<MessageDTO> messages;
+  private List<MessageResponsetDTO> messages;
 }
