@@ -1,10 +1,11 @@
 package edu.ntnu.SpringBackend.service;
 
+import edu.ntnu.SpringBackend.model.Category;
 import edu.ntnu.SpringBackend.model.Listing;
 import edu.ntnu.SpringBackend.model.User;
-import edu.ntnu.SpringBackend.model.enums.Category;
 import edu.ntnu.SpringBackend.model.enums.ListingStatus;
 import edu.ntnu.SpringBackend.model.enums.Role;
+import edu.ntnu.SpringBackend.repository.CategoryRepository;
 import edu.ntnu.SpringBackend.repository.ListingRepository;
 import edu.ntnu.SpringBackend.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,8 +30,10 @@ class ListingServiceTest {
   @Autowired private ListingService listingService;
   @Autowired private ListingRepository listingRepository;
   @Autowired private UserRepository userRepository;
+  @Autowired private CategoryRepository categoryRepository;
 
   private User seller;
+  private Category testCategory;
 
   @BeforeEach
   void setup() {
@@ -42,14 +45,20 @@ class ListingServiceTest {
             .phoneNumber("12345678")
             .role(Role.USER)
             .build());
+
+    testCategory = categoryRepository.save(Category.builder()
+            .name("CLOTHES")
+            .build());
   }
+
+
 
   private Listing validListing() {
     return Listing.builder()
             .title("Test Title")
             .description("This is a valid description.")
             .price(100.0)
-            .category(Category.CLOTHES)
+            .category(testCategory)
             .latitude(59.9)
             .longitude(10.7)
             .seller(seller)
@@ -172,7 +181,7 @@ class ListingServiceTest {
             .title("Updated Title")
             .description("Updated valid description")
             .price(200.0)
-            .category(Category.ELECTRONICS)
+            .category(testCategory)
             .status(ListingStatus.INACTIVE)
             .build();
 

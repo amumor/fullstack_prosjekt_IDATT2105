@@ -1,16 +1,21 @@
 package edu.ntnu.SpringBackend.mapper;
 
 import edu.ntnu.SpringBackend.dto.ListingResponseDTO;
+import edu.ntnu.SpringBackend.model.Category;
 import edu.ntnu.SpringBackend.model.Listing;
+import edu.ntnu.SpringBackend.model.enums.ListingStatus;
+import edu.ntnu.SpringBackend.service.CategoryService;
 import edu.ntnu.SpringBackend.service.UserService;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 @Component
 public class ListingMapper {
     UserService userService;
+    CategoryService categoryService;
 
     public ListingResponseDTO toDto(Listing listing) {
         if (listing == null) {
@@ -22,7 +27,7 @@ public class ListingMapper {
         dto.setSellerId(listing.getSeller().getId());
         dto.setTitle(listing.getTitle());
         dto.setDescription(listing.getDescription());
-        dto.setCategoryName(listing.getCategory().name());
+        dto.setCategoryName(listing.getCategory().getName());
         dto.setListingStatus(listing.getStatus().name());
         dto.setPrice(listing.getPrice());
         dto.setLatitude(listing.getLatitude());
@@ -44,14 +49,14 @@ public class ListingMapper {
         listing.setSeller(userService.getUserById(dto.getSellerId()));
         listing.setTitle(dto.getTitle());
         listing.setDescription(dto.getDescription());
-        listing.setCategoryName(dto.getCategoryName());
-        listing.setListingStatus(dto.getListingStatus());
+        listing.setCategory(categoryService.getByName(dto.getCategoryName()));
+        listing.setStatus(ListingStatus.valueOf(dto.getListingStatus()));
         listing.setPrice(dto.getPrice());
         listing.setLatitude(dto.getLatitude());
         listing.setLongitude(dto.getLongitude());
-        listing.setCreatedAt(LocalDateTime.parse(dto.getCreatedAt()));
-        listing.setLastEdited(LocalDateTime.parse(dto.getLastEditedAt()));
-        listing.setChatId(dto.getChatId());
+        listing.setCreatedAt(LocalDateTime.parse(dto.getCreatedAt(), DateTimeFormatter.ISO_DATE_TIME));
+        listing.setLastEditedAt(LocalDateTime.parse(dto.getLastEditedAt(), DateTimeFormatter.ISO_DATE_TIME));
+        //listing.setChat(); TODO: implement when chat is implemented
 
         return listing;
     }

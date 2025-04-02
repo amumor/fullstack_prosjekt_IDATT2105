@@ -3,9 +3,10 @@ package edu.ntnu.SpringBackend.service;
 import edu.ntnu.SpringBackend.model.Chat;
 import edu.ntnu.SpringBackend.model.Listing;
 import edu.ntnu.SpringBackend.model.User;
-import edu.ntnu.SpringBackend.model.enums.Category;
+import edu.ntnu.SpringBackend.model.Category;
 import edu.ntnu.SpringBackend.model.enums.ListingStatus;
 import edu.ntnu.SpringBackend.model.enums.Role;
+import edu.ntnu.SpringBackend.repository.CategoryRepository;
 import edu.ntnu.SpringBackend.repository.ChatRepository;
 import edu.ntnu.SpringBackend.repository.ListingRepository;
 import edu.ntnu.SpringBackend.repository.UserRepository;
@@ -32,11 +33,13 @@ public class ChatServiceTest {
   @Autowired private UserRepository userRepository;
   @Autowired private ListingRepository listingRepository;
   @Autowired private ChatRepository chatRepository;
+  @Autowired private CategoryRepository categoryRepository;
 
   private User testBuyer;
   private User testSeller;
   private Listing testListing;
   private Chat testChat;
+  private Category testCategory;
 
   @BeforeEach
   void setUp() {
@@ -58,11 +61,15 @@ public class ChatServiceTest {
             .role(Role.USER)
             .build());
 
+    testCategory = categoryRepository.save(Category.builder()
+            .name("Test Category")
+            .build());
+
     testListing = listingRepository.save(Listing.builder()
             .title("Test Listing")
             .description("Test description")
             .price(100.0)
-            .category(Category.FURNITURE)
+            .category(testCategory)
             .status(ListingStatus.ACTIVE)
             .latitude(59.0)
             .longitude(10.0)
@@ -154,7 +161,7 @@ public class ChatServiceTest {
             .title("New Listing")
             .description("New description")
             .price(200.0)
-            .category(Category.FURNITURE)
+            .category(testCategory)
             .status(ListingStatus.ACTIVE)
             .build());
 
@@ -171,7 +178,7 @@ public class ChatServiceTest {
             .title("Another Listing")
             .description("Another description")
             .price(300.0)
-            .category(Category.CLOTHES)
+            .category(testCategory)
             .status(ListingStatus.ACTIVE)
             .seller(testSeller)
             .build());

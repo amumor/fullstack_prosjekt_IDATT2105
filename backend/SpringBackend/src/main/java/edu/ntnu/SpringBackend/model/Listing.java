@@ -1,7 +1,6 @@
 package edu.ntnu.SpringBackend.model;
 
-
-import edu.ntnu.SpringBackend.model.enums.Category;
+import edu.ntnu.SpringBackend.model.Category;
 import edu.ntnu.SpringBackend.model.enums.ListingStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -34,8 +33,8 @@ public class Listing {
   @Column(nullable = false)
   private String description;
 
-  @Enumerated(EnumType.STRING)
-  @Column(nullable = false)
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "category_id", nullable = false)
   private Category category;
 
   @Enumerated(EnumType.STRING)
