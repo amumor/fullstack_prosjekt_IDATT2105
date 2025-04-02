@@ -4,13 +4,10 @@ import edu.ntnu.SpringBackend.model.Chat;
 import edu.ntnu.SpringBackend.model.Listing;
 import edu.ntnu.SpringBackend.model.Message;
 import edu.ntnu.SpringBackend.model.User;
-import edu.ntnu.SpringBackend.model.enums.Category;
+import edu.ntnu.SpringBackend.model.Category;
 import edu.ntnu.SpringBackend.model.enums.ListingStatus;
 import edu.ntnu.SpringBackend.model.enums.Role;
-import edu.ntnu.SpringBackend.repository.ChatRepository;
-import edu.ntnu.SpringBackend.repository.ListingRepository;
-import edu.ntnu.SpringBackend.repository.MessageRepository;
-import edu.ntnu.SpringBackend.repository.UserRepository;
+import edu.ntnu.SpringBackend.repository.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,12 +31,14 @@ public class MessageServiceTest {
   @Autowired private UserRepository userRepository;
   @Autowired private ListingRepository listingRepository;
   @Autowired private ChatRepository chatRepository;
+  @Autowired private CategoryRepository categoryRepository;
 
   private User testBuyer;
   private User testSeller;
   private Listing testListing;
   private Chat testChat;
   private Message testMessage;
+  private Category testCategory;
 
   @BeforeEach
   void setUp() {
@@ -61,11 +60,15 @@ public class MessageServiceTest {
             .role(Role.USER)
             .build());
 
+    testCategory = categoryRepository.save(Category.builder()
+            .name("FURNITURE")
+            .build());
+
     testListing = listingRepository.save(Listing.builder()
             .title("Test Listing")
             .description("Test description")
             .price(40.0)
-            .category(Category.FURNITURE)
+            .category(testCategory)
             .status(ListingStatus.ACTIVE)
             .seller(testSeller)
             .build());

@@ -1,7 +1,7 @@
 package edu.ntnu.SpringBackend.controller;
 
-import edu.ntnu.SpringBackend.dto.AuthenticationRequest;
-import edu.ntnu.SpringBackend.dto.AuthenticationResponse;
+import edu.ntnu.SpringBackend.dto.AuthenticationRequestDTO;
+import edu.ntnu.SpringBackend.dto.TokenResponseDTO;
 import edu.ntnu.SpringBackend.dto.UserRequestDTO;
 import edu.ntnu.SpringBackend.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +22,7 @@ public class AuthenticationController {
     private final Logger logger = LoggerFactory.getLogger(AuthenticationController.class);
 
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponse> register(
+    public ResponseEntity<TokenResponseDTO> register(
             @RequestBody UserRequestDTO request
     ) {
         logger.info("Request recieved on [/api/v1/auth/register]");
@@ -30,8 +30,8 @@ public class AuthenticationController {
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<AuthenticationResponse> authenticate(
-            @RequestBody AuthenticationRequest request
+    public ResponseEntity<TokenResponseDTO> authenticate(
+            @RequestBody AuthenticationRequestDTO request
     ) {
         logger.info("Request recieved on [/api/v1/auth/authenticate]");
         return ResponseEntity.ok(service.authenticate(request));
