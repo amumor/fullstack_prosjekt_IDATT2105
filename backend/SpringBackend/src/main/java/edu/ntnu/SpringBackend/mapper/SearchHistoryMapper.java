@@ -18,8 +18,8 @@ public class SearchHistoryMapper {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private SearchHistoryService searchHistoryService;
+//    @Autowired
+//    private SearchHistoryService searchHistoryService; TODO Remove
 
     public SearchHistory toEntity(SearchHistoryDTO dto) {
         if (dto == null) {

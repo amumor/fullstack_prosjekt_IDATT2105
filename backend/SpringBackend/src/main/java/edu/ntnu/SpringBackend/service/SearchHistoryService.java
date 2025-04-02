@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -19,6 +20,7 @@ public class SearchHistoryService {
     private final SearchHistoryRepository searchHistoryRepository;
     private final Logger logger = LoggerFactory.getLogger(SearchHistoryService.class);
     private final SearchHistoryMapper searchHistoryMapper;
+    private final UserService userService;
 
     public List<SearchHistory> findByUserId(UUID userId) {
         logger.info("Getting search history to user id: {}", userId);
@@ -26,7 +28,12 @@ public class SearchHistoryService {
     }
 
     public SearchHistory add(SearchHistoryDTO requestDTO) {
-        SearchHistory searchHistory = searchHistoryMapper.toEntity(requestDTO);
+
+        // Cant use mapper beacuse it causes a circular dependency when autowiring
+        SearchHistory searchHistory = new SearchHistory();
+        searchHistory.setUser(userService.getUserById(requestDTO.getUserId()));
+        searchHistory.setSearchQuery(requestDTO.getSearchQuery());
+        searchHistory.setSearchedAt(LocalDateTime.parse(requestDTO.getSearchedAt()));
         return add(searchHistory);
     }
 
