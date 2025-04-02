@@ -1,11 +1,13 @@
 package edu.ntnu.SpringBackend.mapper;
 
+import edu.ntnu.SpringBackend.dto.ListingCreationRequestDTO;
 import edu.ntnu.SpringBackend.dto.ListingResponseDTO;
-import edu.ntnu.SpringBackend.model.Category;
 import edu.ntnu.SpringBackend.model.Listing;
 import edu.ntnu.SpringBackend.model.enums.ListingStatus;
+import edu.ntnu.SpringBackend.repository.CategoryRepository;
 import edu.ntnu.SpringBackend.service.CategoryService;
 import edu.ntnu.SpringBackend.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -14,8 +16,10 @@ import java.util.UUID;
 
 @Component
 public class ListingMapper {
-    UserService userService;
-    CategoryService categoryService;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private CategoryService categoryService;
 
     public ListingResponseDTO toDto(Listing listing) {
         if (listing == null) {
@@ -34,7 +38,7 @@ public class ListingMapper {
         dto.setLongitude(listing.getLongitude());
         dto.setCreatedAt(listing.getCreatedAt().format(DateTimeFormatter.ISO_DATE_TIME));
         dto.setLastEditedAt(listing.getLastEditedAt().format(DateTimeFormatter.ISO_DATE_TIME));
-        dto.setChatId(UUID.fromString("NotYetImplemented")); // TODO: implement when chat system is done
+        //dto.setChatId(UUID.fromString("NotYetImplemented")); // TODO: implement when chat system is done
 
         return dto;
     }
@@ -59,5 +63,26 @@ public class ListingMapper {
         //listing.setChat(); TODO: implement when chat is implemented
 
         return listing;
+    }
+
+    public Listing toEntity(ListingCreationRequestDTO dto){
+        if (dto == null) {
+            throw new IllegalArgumentException("dto argument can not be null");
+        }
+        Listing listing = new Listing();
+        listing.setSeller(userService.getUserById(dto.getOwnerId()));
+        listing.setTitle(dto.getTitle());
+        listing.setDescription(dto.getDescription());
+        listing.setCategory(categoryService.getByName(dto.getCategoryName()));
+        listing.setStatus(ListingStatus.valueOf(dto.getListingStatus()));
+        listing.setPrice(dto.getPrice());
+        listing.setLatitude(dto.getLatitude());
+        listing.setLongitude(dto.getLongitude());
+        listing.setCreatedAt(LocalDateTime.parse(dto.getCreatedAt(), DateTimeFormatter.ISO_DATE_TIME));
+        listing.setLastEditedAt(LocalDateTime.parse(dto.getLastEditedAt(), DateTimeFormatter.ISO_DATE_TIME));
+        //listing.setChat(); TODO: implement when chat is implemented
+
+        return listing;
+
     }
 }

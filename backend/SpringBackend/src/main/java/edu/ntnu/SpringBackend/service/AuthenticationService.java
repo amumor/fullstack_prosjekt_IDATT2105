@@ -50,7 +50,7 @@ public class AuthenticationService {
         logger.info("> Generating jwt token for user [" + request.getEmail() + "].");
         var jwtToken = jwtService.generateToken(user);
         logger.info("> User registered.");
-        return TokenResponseDTO.builder().token(jwtToken).build();
+        return TokenResponseDTO.builder().token(jwtToken).userId(user.getId()).build();
     }
 
     public TokenResponseDTO authenticate(AuthenticationRequestDTO request) {

@@ -1,5 +1,7 @@
 package edu.ntnu.SpringBackend.service;
 
+import edu.ntnu.SpringBackend.dto.ListingCreationRequestDTO;
+import edu.ntnu.SpringBackend.mapper.ListingMapper;
 import edu.ntnu.SpringBackend.model.Listing;
 import edu.ntnu.SpringBackend.model.User;
 import edu.ntnu.SpringBackend.model.enums.ListingStatus;
@@ -20,6 +22,7 @@ public class ListingService {
 
   private final ListingRepository listingRepository;
   private final Logger logger = LoggerFactory.getLogger(ListingService.class);
+  private final ListingMapper listingMapper;
 
   public Listing getListingById(UUID id) {
     logger.info("Getting listing by id: {}", id);
@@ -51,6 +54,18 @@ public class ListingService {
 
   public Listing createListing(Listing listing) {
     logger.info("Creating listing: {}", listing.getTitle());
+    validateListing(listing);
+
+    if (listing.getStatus() == null || listing.getStatus() == ListingStatus.SOLD) {
+      listing.setStatus(ListingStatus.ACTIVE);
+    }
+
+    return listingRepository.save(listing);
+  }
+
+  public Listing createListing(ListingCreationRequestDTO listingCreationRequestDTO) {
+    logger.info("Creating listing: {}", listingCreationRequestDTO.getTitle());
+    Listing listing = listingMapper.toEntity(listingCreationRequestDTO);
     validateListing(listing);
 
     if (listing.getStatus() == null || listing.getStatus() == ListingStatus.SOLD) {

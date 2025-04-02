@@ -33,14 +33,20 @@ public class CategoryService {
                 .orElseThrow(() -> new NoSuchElementException("Category with name " + name + " not found"));
     }
 
+    public Category getById(UUID id) {
+        logger.info("Fetching category by ID: {}", id);
+        return categoryRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Category with ID " + id + " not found"));
+    }
+
     @Transactional
-    public Category addCategory(Category category) {
+    public Category add(Category category) {
         logger.info("Adding new category: {}", category.getName());
         return categoryRepository.save(category);
     }
 
     @Transactional
-    public void deleteCategoryById(UUID id) {
+    public void delete(UUID id) {
         logger.info("Deleting category with ID: {}", id);
         if (!categoryRepository.existsById(id)) {
             throw new NoSuchElementException("Category with ID " + id + " does not exist");

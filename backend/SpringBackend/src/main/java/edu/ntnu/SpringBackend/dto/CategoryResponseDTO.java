@@ -11,8 +11,7 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class TokenResponseDTO {
-
-    private UUID userId;
-    private String token;
+public class CategoryResponseDTO {
+    private UUID id;
+    private String name;
 }
