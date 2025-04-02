@@ -2,8 +2,8 @@ package edu.ntnu.SpringBackend.service;
 
 import java.util.NoSuchElementException;
 
-import edu.ntnu.SpringBackend.dto.AuthenticationRequest;
-import edu.ntnu.SpringBackend.dto.AuthenticationResponse;
+import edu.ntnu.SpringBackend.dto.AuthenticationRequestDTO;
+import edu.ntnu.SpringBackend.dto.TokenResponseDTO;
 import edu.ntnu.SpringBackend.dto.UserRequestDTO;
 import edu.ntnu.SpringBackend.model.User;
 import edu.ntnu.SpringBackend.repository.UserRepository;
@@ -28,7 +28,7 @@ public class AuthenticationService {
         AuthenticationService.class
     );
 
-    public AuthenticationResponse register(UserRequestDTO request) { // TODO: protect ADMIN registration with JWT?
+    public TokenResponseDTO register(UserRequestDTO request) { // TODO: protect ADMIN registration with JWT?
         logger.info("Handling register request...");
 
         if (repository.findByEmail(request.getEmail()).isPresent()) {
@@ -50,10 +50,10 @@ public class AuthenticationService {
         logger.info("> Generating jwt token for user [" + request.getEmail() + "].");
         var jwtToken = jwtService.generateToken(user);
         logger.info("> User registered.");
-        return AuthenticationResponse.builder().token(jwtToken).build();
+        return TokenResponseDTO.builder().token(jwtToken).build();
     }
 
-    public AuthenticationResponse authenticate(AuthenticationRequest request) {
+    public TokenResponseDTO authenticate(AuthenticationRequestDTO request) {
         logger.info("Handling authentication request...");
         logger.info("> Email: " + request.getEmail());
 
@@ -73,7 +73,7 @@ public class AuthenticationService {
                 .orElseThrow(() -> new NoSuchElementException("---- User not found with email: " + request.getEmail()));
         logger.info("> User [" + user.getEmail() + "] has been successfully authenticated");
         var jwtToken = jwtService.generateToken(user);
-        return AuthenticationResponse.builder()
+        return TokenResponseDTO.builder()
                 .token(jwtToken)
                 .build();
     }

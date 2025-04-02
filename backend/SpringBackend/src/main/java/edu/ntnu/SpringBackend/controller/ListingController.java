@@ -9,8 +9,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/listing")
 @RequiredArgsConstructor
 public class ListingController {
     private final ListingService listingService;
@@ -25,5 +27,11 @@ public class ListingController {
         throw new NotImplementedException();
     }
 
-//    @GetMapping("/get-listing-by-id")
+    @GetMapping("/id/{id}")
+    public ResponseEntity<ListingResponseDTO> getById(
+            @PathVariable UUID id
+    ) {
+        logger.info("GET Request received on [/api/v1/listing/id/{}]", id);
+        return ResponseEntity.ok(listingService.getListingById(id));
+    }
 }
