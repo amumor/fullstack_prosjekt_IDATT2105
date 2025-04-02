@@ -2,6 +2,7 @@ package edu.ntnu.SpringBackend.controller;
 
 import edu.ntnu.SpringBackend.dto.UserRequestDTO;
 import edu.ntnu.SpringBackend.dto.UserResponseDTO;
+import edu.ntnu.SpringBackend.mapper.UserMapper;
 import edu.ntnu.SpringBackend.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,31 +17,25 @@ import java.util.UUID;
 public class UserController {
   private final UserService userService;
 
-  @GetMapping
-  public ResponseEntity<List<UserResponseDTO>> getAllUsers() {
-    return ResponseEntity.ok(userService.getAllUsers());
-  }
-
-  @GetMapping("/{id}")
+  @GetMapping("/id/{id}")
   public ResponseEntity<UserResponseDTO> getUserById(@PathVariable UUID id) {
-    return ResponseEntity.ok(userService.getUserById(id));
+    return ResponseEntity.ok(UserMapper.toDto(userService.getUserById(id)));
   }
 
-  // not necessary ?? AuthenticationController handles this
-  @PostMapping
-  public ResponseEntity<UserResponseDTO> createUser(@RequestBody UserRequestDTO user) {
-    return ResponseEntity.ok(userService.addUser(user));
+  @GetMapping("/email/{email}")
+  public ResponseEntity<UserResponseDTO> getUserByEmail(@PathVariable String email) {
+    return ResponseEntity.ok(UserMapper.toDto(userService.getUserByEmail(email)));
   }
 
   @PutMapping("/{id}")
   public ResponseEntity<UserResponseDTO> updateUser(@PathVariable UUID id, @RequestBody UserRequestDTO userRequestDTO) {
-    return ResponseEntity.ok(userService.updateUser(id, userRequestDTO));
+    return ResponseEntity.ok(UserMapper.toDto(userService.updateUser(id, userRequestDTO)));
   }
 
   @DeleteMapping("/{id}")
   public ResponseEntity<Void> deleteUser(@PathVariable UUID id) {
     userService.deleteUserById(id);
-    return ResponseEntity.noContent().build();
+    return ResponseEntity.ok().build();
   }
 
 

@@ -8,6 +8,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -24,6 +26,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(NoSuchElementException.class)
     public ResponseEntity<String> handleNoSuchElementException(NoSuchElementException ex, WebRequest request) {
         logger.error("User not found: {}", ex.getMessage());
+        return new ResponseEntity<>("User not found: " + ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(UsernameNotFoundException.class)
+    public ResponseEntity<String> handleUsernameNotFoundException(UsernameNotFoundException ex, WebRequest request) {
+        logger.error("Username not found: {}", ex.getMessage());
         return new ResponseEntity<>("User not found: " + ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 
@@ -52,9 +60,15 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>("Invalid input: An instance of this field already exists.", HttpStatus.CONFLICT);
     }
 
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<String> handleBadCredentialsException(BadCredentialsException ex, WebRequest request) {
+        logger.error("Bad credentials: {}", ex.getMessage());
+        return new ResponseEntity<>("Invalid email or password", HttpStatus.UNAUTHORIZED);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleGlobalException(Exception ex, WebRequest request) {
-        logger.error("Internal server error: {}", ex.getMessage());
+        logger.error("Internal server error: {}: exc: {}", ex.getMessage(), ex.getClass());
         return new ResponseEntity<>("Internal server error", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

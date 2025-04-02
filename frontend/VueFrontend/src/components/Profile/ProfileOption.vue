@@ -4,7 +4,7 @@ import { Icon } from '@iconify/vue';
 
 const props = defineProps({
   title: String,
-  description: String,
+  shortDescription: String,
   iconString: String
 });
 
@@ -12,13 +12,13 @@ const props = defineProps({
 
 <template>
 <button class="option-btn">
-  <div class="option-icon">
+  <span class="option-icon">
     <Icon :icon="props.iconString" width="40" height="40" />
-  </div>
-  <div class="option-text">
+  </span>
+  <span class="option-text">
     <h2>{{ props.title }}</h2>
-    <p>{{ props.description }}</p>
-  </div>
+    <p>{{ props.shortDescription }}</p>
+  </span>
 </button>
 </template>
 
@@ -46,7 +46,14 @@ const props = defineProps({
 .option-text {
   font-family: 'Inter', sans-serif;
   color: #333333;
-  padding: 10px;
+
+}
+
+/* Header */
+h2 {
+  font-size: 20px;
+  color: #333333;
+  font-weight: 500;
 }
 
 </style>
