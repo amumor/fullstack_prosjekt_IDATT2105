@@ -10,10 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.UUID;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -60,26 +57,43 @@ public class CategoryService {
     public List<Category> findBySearchHistory(List<SearchHistory> searchHistoryList) {
         logger.info("Finding categories by search history...");
         if (searchHistoryList == null || searchHistoryList.isEmpty()) {
-            throw new IllegalArgumentException("Search history list must not be null or empty.");
+            return new ArrayList<>();
         }
 
         List<String> searchQueries = searchHistoryList.stream()
                 .map(SearchHistory::getSearchQuery)
                 .collect(Collectors.toList());
 
-        String regex = searchQueries.stream()
-                .map(Pattern::quote)
-                .collect(Collectors.joining("|"));
-        Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
-
         List<Category> allCategories = categoryRepository.findAll();
-        List<Category> matchingCategories = allCategories.stream()
-                .filter(category -> {
-                    Matcher matcher = pattern.matcher(category.getName());
-                    return matcher.find();
-                })
-                .collect(Collectors.toList());
 
-        return matchingCategories;
+        return matchCategories(searchQueries, allCategories);
+    }
+
+
+    /**
+     * Matches search queries to a list of Category objects by checking if the category name
+     * is contained in the query string (case-insensitive).
+     *
+     * @param searchQueries List of past search query strings
+     * @param categories List of Category objects
+     * @return List of matched Category objects (alphabetically sorted by name, no duplicates)
+     */
+    public static List<Category> matchCategories(List<String> searchQueries, List<Category> categories) {
+        List<Category> matched = new ArrayList<>();
+
+        for (String query : searchQueries) {
+            String queryLower = query.toLowerCase();
+
+            for (Category category : categories) {
+                String categoryName = category.getName().toLowerCase();
+
+                if (queryLower.contains(categoryName) && !matched.contains(category)) {
+                    matched.add(category);
+                }
+            }
+        }
+
+        matched.sort(Comparator.comparing(Category::getName));
+        return matched;
     }
 }
