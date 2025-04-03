@@ -13,7 +13,7 @@ const messages = [
     isMessageRead: false,
     messengerName: 'Han Karen',
     messages: [{id: 1, message: 'Hello', sentAt:'09:05'}, {id: 4, message: 'How are you?', sentAt: '10:25'}, {id: 1, message: 'I am fine, thank you!', sentAt: '11:35'}],
-    selected: false
+    selected: true
   },
   {
     id: 2,
