@@ -31,10 +31,10 @@ public class Bookmark {
   private Listing listing;
 
   @Column(nullable = false)
-  private LocalDateTime createdAt;
+  private LocalDateTime savedAt;
 
   @PrePersist
   protected void onCreate() {
-    createdAt = LocalDateTime.now();
+    savedAt = LocalDateTime.now();
   }
 }

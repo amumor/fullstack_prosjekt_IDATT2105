@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+// Todo: Maybe delete this class and use the MessageRepository directly in chatService
 @Service
 public class MessageService {
   private final MessageRepository messageRepository;
