@@ -42,4 +42,15 @@ public class Chat {
   protected void onCreate() {
     createdAt = LocalDateTime.now();
   }
+
+  @Override
+  public String toString() {
+    return "Chat{" +
+            "id=" + id +
+            ", buyer=" + buyer +
+            ", listing=" + listing +
+            ", createdAt=" + createdAt +
+            ", messages=" + messages +
+            '}';
+  }
 }

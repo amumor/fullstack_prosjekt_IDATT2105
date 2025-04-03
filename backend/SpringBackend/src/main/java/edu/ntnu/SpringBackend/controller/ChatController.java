@@ -2,6 +2,7 @@ package edu.ntnu.SpringBackend.controller;
 
 import edu.ntnu.SpringBackend.dto.ChatRequestDTO;
 import edu.ntnu.SpringBackend.dto.ChatResponseDTO;
+import edu.ntnu.SpringBackend.dto.MessageRequestDTO;
 import edu.ntnu.SpringBackend.dto.MessageResponsetDTO;
 import edu.ntnu.SpringBackend.mapper.ChatMapper;
 import edu.ntnu.SpringBackend.mapper.MessageMapper;
@@ -25,7 +26,26 @@ public class ChatController {
   private final ChatService chatService;
   private final ChatMapper chatMapper;
   private final MessageMapper messageMapper;
-  private final UserService userService;
+
+  @GetMapping("/{chatId}")
+  public ResponseEntity<ChatResponseDTO> getChat(
+          @PathVariable UUID chatId
+  ) {
+    logger.info("> Received GET request to get chat {}", chatId);
+    return ResponseEntity.ok(chatMapper.toDto(chatService.getChat(chatId)));
+  }
+
+  @GetMapping("/{chatId}/messages")
+  public ResponseEntity<List<MessageResponsetDTO>> getMessages(
+          @PathVariable UUID chatId
+  ) {
+    logger.info("Received GET request to get messages for chat {}", chatId);
+    List<MessageResponsetDTO> messages =
+            chatService.getMessages(chatId).stream()
+                    .map(messageMapper::toDto)
+                    .collect(Collectors.toList());
+    return ResponseEntity.ok(messages);
+  }
 
   @PostMapping("/listings/{listingId}")
   public ResponseEntity<ChatResponseDTO> createOrGetChat(
@@ -35,14 +55,16 @@ public class ChatController {
     return ResponseEntity.ok(chatMapper.toDto(chatService.createOrGetChat(chatRequestDTO)));
   }
 
-  @GetMapping("/{chatId}/messages")
-  public ResponseEntity<List<MessageResponsetDTO>> getMessages(@PathVariable UUID chatId) {
-    logger.info("Received request to get messages for chat {}", chatId);
-    List<MessageResponsetDTO> messages = chatService.getMessages(chatId).stream()
-            .map(messageMapper::toDto)
-            .collect(Collectors.toList());
-    return ResponseEntity.ok(messages);
+  @PostMapping("/{chatId}/messages")
+  public ResponseEntity<MessageResponsetDTO> sendMessage(
+          @PathVariable UUID chatId,
+          @RequestBody MessageRequestDTO messageRequestDTO
+  ) {
+    logger.info("Received POST request to send message for chat {}", chatId);
+    return ResponseEntity.ok(messageMapper.toDto(chatService.addMessageToChat(
+                    chatId, messageRequestDTO.getSenderEmail(), messageRequestDTO.getContent()
+            ))
+    );
   }
-  
 }
 

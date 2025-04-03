@@ -27,9 +27,12 @@ public class ChatService {
 
   @Transactional
   public Chat createOrGetChat(ChatRequestDTO requestDTO) {
+    logger.info("> Creating chat");
     User buyer = userService.getUserByEmail(requestDTO.getEmail());
     Listing listing = listingService.getListingById(requestDTO.getListingId());
 
+    logger.info("> Listing: {}", listing);
+    logger.info("> Buyer: {}", buyer);
     return chatRepository.findByBuyerAndListing(buyer, listing)
             .orElseGet(() -> chatRepository.save(Chat.builder()
                     .buyer(buyer)
@@ -41,6 +44,7 @@ public class ChatService {
 
   @Transactional
   public Message addMessageToChat(UUID chatId, String senderEmail, String content) {
+    logger.info("> Adding message to chat");
     Chat chat = chatRepository.findById(chatId)
             .orElseThrow(() -> new NoSuchElementException("Chat not found"));
     User sender = userService.getUserByEmail(senderEmail);
@@ -52,16 +56,25 @@ public class ChatService {
             .sentAt(LocalDateTime.now())
             .build();
 
+    logger.info("> Message sent");
     return messageRepository.save(message);
   }
 
   @Transactional(readOnly=true)
   public List<Message> getMessages(UUID chatId) {
+    logger.info("> Fetching messages for chat {}", chatId);
     List<Message> messages = messageRepository.findByChatOrderBySentAtAsc(
             chatRepository.findById(chatId)
                     .orElseThrow(() -> new NoSuchElementException("Chat not found"))
     );
 
+    logger.info("> Messages found");
     return new ArrayList<>(messages);
+  }
+
+  public Chat getChat(UUID chatId) {
+    logger.info("> Fetching chat {}", chatId);
+    return chatRepository.findById(chatId)
+            .orElseThrow(() -> new NoSuchElementException("Chat not found"));
   }
 }

@@ -27,25 +27,25 @@ public class UserService {
   private final Logger logger = LoggerFactory.getLogger(UserService.class);
 
   public List<User> getAllUsers() {
-    logger.info("Fetching all users...");
+    logger.info("> Fetching all users");
     return userRepository.findAll();
   }
 
   public User getUserById(UUID id) {
-    logger.info("Fetching user by id: {}", id);
+    logger.info("> Fetching user by id: {}", id);
     return userRepository.findById(id)
             .orElseThrow(() -> new NoSuchElementException("User with ID " + id + " not found"));
   }
 
   public User getUserByEmail(String email) {
-    logger.info("Fetching user by email: {}", email);
+    logger.info("> Fetching user by email: {}", email);
     return userRepository.findByEmail(email)
             .orElseThrow(() -> new NoSuchElementException("User with email " + email + " not found"));
   }
 
   @Transactional
   public User addUser(UserRequestDTO userDTO) {
-    logger.info("Adding user: {}", userDTO.getEmail());
+    logger.info("> Adding user: {}", userDTO.getEmail());
 
     validateEmail(userDTO.getEmail());
     validatePassword(userDTO.getPassword());
@@ -68,7 +68,6 @@ public class UserService {
 
   @Transactional
   public User updateUser(UUID id, UserRequestDTO userDTO) {
-    logger.info("Handling update request...");
     logger.info("> User with ID: {}", id.toString());
     User existingUser = userRepository.findById(id)
             .orElseThrow(() -> new NoSuchElementException("User with ID " + id + " not found"));
@@ -115,7 +114,6 @@ public class UserService {
 
   @Transactional
   public void deleteUserById(UUID id) {
-    logger.info("Handling delete request...");
     logger.info("> User ID: {}", id);
     if (!userRepository.existsById(id)) {
       throw new NoSuchElementException("User with ID " + id + " does not exist");

@@ -39,4 +39,13 @@ public class Message {
   protected void onCreate() {
     sentAt = LocalDateTime.now();
   }
+
+  @Override
+  public String toString() {
+    return "Message{" +
+            "id=" + id +
+            ", content='" + content + '\'' +
+            ", sentAt=" + sentAt +
+            '}';
+  }
 }
