@@ -1,5 +1,8 @@
 package edu.ntnu.SpringBackend.service;
 
+import edu.ntnu.SpringBackend.dto.ListingCreationRequestDTO;
+import edu.ntnu.SpringBackend.mapper.ListingMapper;
+import edu.ntnu.SpringBackend.model.Category;
 import edu.ntnu.SpringBackend.model.Listing;
 import edu.ntnu.SpringBackend.model.User;
 import edu.ntnu.SpringBackend.model.enums.ListingStatus;
@@ -20,15 +23,16 @@ public class ListingService {
 
   private final ListingRepository listingRepository;
   private final Logger logger = LoggerFactory.getLogger(ListingService.class);
+  private final ListingMapper listingMapper;
 
   public Listing getListingById(UUID id) {
-    logger.info("Getting listing by id: {}", id);
+    logger.info("> Getting listing by id: {}", id);
     return listingRepository.findById(id)
             .orElseThrow(() -> new NoSuchElementException("Listing with ID " + id + " not found."));
   }
 
   public List<Listing> getListingBySeller(User seller) {
-    logger.info("Getting listings by seller: {}", seller.getId());
+    logger.info("> Getting listings by seller: {}", seller.getId());
     if (seller.getId() == null) {
       throw new IllegalArgumentException("Invalid seller provided.");
     }
@@ -41,7 +45,7 @@ public class ListingService {
   }
 
   public List<Listing> getAllListings() {
-    logger.info("Getting all listings...");
+    logger.info("> Getting all listings");
     List<Listing> all = listingRepository.findAll();
     if (all.isEmpty()) {
       throw new NoSuchElementException("No listings found.");
@@ -49,6 +53,7 @@ public class ListingService {
     return all;
   }
 
+  // TODO: delete ?? right method is under this method
   public Listing createListing(Listing listing) {
     logger.info("Creating listing: {}", listing.getTitle());
     validateListing(listing);
@@ -60,9 +65,21 @@ public class ListingService {
     return listingRepository.save(listing);
   }
 
+  public Listing createListing(ListingCreationRequestDTO listingCreationRequestDTO) {
+    logger.info("Creating listing: {}", listingCreationRequestDTO.getTitle());
+    Listing listing = listingMapper.toEntity(listingCreationRequestDTO);
+    validateListing(listing);
+
+    if (listing.getStatus() == null || listing.getStatus() == ListingStatus.SOLD) {
+      listing.setStatus(ListingStatus.ACTIVE);
+    }
+
+    return listingRepository.save(listing);
+  }
+
   @Transactional
   public Listing updateListing(UUID id, Listing updatedListing) {
-    logger.info("Updating listing with ID: {}", id);
+    logger.info("> Updating listing with ID: {}", id);
     Listing existing = listingRepository.findById(id)
             .orElseThrow(() -> new NoSuchElementException("Listing with ID " + id + " not found."));
 
@@ -104,7 +121,7 @@ public class ListingService {
 
   @Transactional
   public void deleteListingById(UUID id) {
-    logger.info("Deleting listing with ID: {}", id);
+    logger.info("> Deleting listing with ID: {}", id);
     if (!listingRepository.existsById(id)) {
       throw new NoSuchElementException("Listing with ID " + id + " does not exist.");
     }
@@ -112,7 +129,7 @@ public class ListingService {
   }
 
   public Listing updateListingStatus(UUID id, ListingStatus status) {
-    logger.info("Updating listing status for ID: {}", id);
+    logger.info("> Updating listing status for ID: {}", id);
     if (status == null) {
       throw new IllegalArgumentException("Status must not be null.");
     }
@@ -122,6 +139,14 @@ public class ListingService {
 
     listing.setStatus(status);
     return listingRepository.save(listing);
+  }
+
+  public List<Listing> findByCategories(List<Category> categoryList) {
+    logger.info("> Finding listings by categories: {}", categoryList);
+    if (categoryList == null || categoryList.isEmpty()) {
+      throw new IllegalArgumentException("Category list must not be null or empty.");
+    }
+    return listingRepository.findByCategoryIn(categoryList);
   }
   
   private void validateListing(Listing listing) {

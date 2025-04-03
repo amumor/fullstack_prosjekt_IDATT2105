@@ -12,5 +12,5 @@ import java.util.UUID;
 public interface ChatRepository extends JpaRepository<Chat, UUID> {
   List<Chat> findByBuyer(User buyer);
   List<Chat> findByListing(Listing listing);
-  Optional<Chat> findByBuyerAndListing(User firstUser, Listing listing);
+  Optional<Chat> findByBuyerAndListing(User user, Listing listing);
 }

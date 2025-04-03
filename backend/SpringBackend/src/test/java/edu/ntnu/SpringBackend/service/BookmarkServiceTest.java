@@ -3,9 +3,10 @@ package edu.ntnu.SpringBackend.service;
 import edu.ntnu.SpringBackend.model.Bookmark;
 import edu.ntnu.SpringBackend.model.Listing;
 import edu.ntnu.SpringBackend.model.User;
-import edu.ntnu.SpringBackend.model.enums.Category;
+import edu.ntnu.SpringBackend.model.Category;
 import edu.ntnu.SpringBackend.model.enums.ListingStatus;
 import edu.ntnu.SpringBackend.model.enums.Role;
+import edu.ntnu.SpringBackend.repository.CategoryRepository;
 import edu.ntnu.SpringBackend.repository.ListingRepository;
 import edu.ntnu.SpringBackend.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,9 +29,11 @@ class BookmarkServiceTest {
   @Autowired private BookmarkService bookmarkService;
   @Autowired private UserRepository userRepository;
   @Autowired private ListingRepository listingRepository;
+  @Autowired private CategoryRepository categoryRepository;
 
   private User testUser;
   private Listing testListing;
+  private Category testCategory;
 
   @BeforeEach
   void setup() {
@@ -43,11 +46,15 @@ class BookmarkServiceTest {
             .role(Role.ADMIN)
             .build());
 
+    testCategory = categoryRepository.save(Category.builder()
+            .name("Test Category")
+            .build());
+
     testListing = listingRepository.save(Listing.builder()
             .title("Original Title")
             .description("Original description")
             .price(100.0)
-            .category(Category.FURNITURE)
+            .category(testCategory)
             .status(ListingStatus.ACTIVE)
             .latitude(59.0)
             .longitude(10.0)
