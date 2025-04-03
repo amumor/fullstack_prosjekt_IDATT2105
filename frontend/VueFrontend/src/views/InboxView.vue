@@ -13,6 +13,7 @@ const messages = [
     isMessageRead: false,
     messengerName: 'Han Karen',
     messages: [{id: 1, message: 'Hello', sentAt:'09:05'}, {id: 4, message: 'How are you?', sentAt: '10:25'}, {id: 1, message: 'I am fine, thank you!', sentAt: '11:35'}],
+    selected: false
   },
   {
     id: 2,
@@ -20,9 +21,10 @@ const messages = [
     image: 'https://iqboatlifts.com/wp-content/uploads/2018/06/Yacht-vs-Boat-Whats-the-Difference-Between-the-Two-1024x571.jpg',
     lastMessage: 'Heieieieiei?',
     lastMessageTime: '22. apr',
-    isMessageRead: true,
+    isMessageRead: false,
     messengerName: 'Kar Kar',
     messages: [{id: 1, message: 'Hello', sentAt:'09:05'}, {id: 4, message: 'How are you?', sentAt: '10:25'}, {id: 1, message: 'I am fine, thank you!', sentAt: '11:35'}],
+    selected: false
   },
   {
     id: 3,
@@ -30,9 +32,10 @@ const messages = [
     image: 'https://iqboatlifts.com/wp-content/uploads/2018/06/Yacht-vs-Boat-Whats-the-Difference-Between-the-Two-1024x571.jpg',
     lastMessage: '30kr, yes?',
     lastMessageTime: '09. jan',
-    isMessageRead: true,
+    isMessageRead: false,
     messengerName: 'Han han',
     messages: [{id: 1, message: 'Hello', sentAt:'09:05'}, {id: 4, message: 'How are you?', sentAt: '10:25'}, {id: 1, message: 'I am fine, thank you!', sentAt: '11:35'}],
+    selected: false
   },
 ]
 
@@ -42,7 +45,10 @@ const newMessage = ref('')
 
 // Function to select a chat
 const openChat = (message) => {
+  selectedChat.value.selected = false
   selectedChat.value = message
+  selectedChat.value.isMessageRead = true // Mark as read when opened
+  selectedChat.value.selected = true
 }
 // Sort messages by read and last message time
 
@@ -74,6 +80,7 @@ const sendMessage = () => {
         :isMessageRead=message.isMessageRead
         :messengerName=message.messengerName
         :messages=message.messages
+        :selected=message.selected
         class="chat-item"
         @click="openChat(message)" />
     </div>
@@ -86,7 +93,7 @@ const sendMessage = () => {
         :height=120 />
       <h2>{{ selectedChat.messengerName }}</h2>
       <div class="messages" v-for="(message, index) in selectedChat.messages" :key="index">
-        <div class="sent-message" v-if="message.id == selectedChat.id">
+        <div class="sent-message" v-if="message.id === selectedChat.id">
           <p>{{ message.message }}</p>
           <p id="sent-timestamp">{{message.sentAt}}</p>
         </div>
@@ -166,44 +173,57 @@ h2 {
 /* Message display */
 .messages {
   font-family: 'Inter', sans-serif;
+
+  display: flex;
+  flex-direction: column;
   width: 100%;
-  margin-top: 20px;
+  overflow-y: auto;
+}
+
+.messages::-webkit-scrollbar {
+  width: 6px;
+}
+.messages::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 10px;
 }
 
 .sent-message {
   background: #1C64FF;
   color: white;
-  text-align: left;
-  padding: 5px;
+
+  align-self: flex-end;
+  text-align: right;
+  padding: 5px 10px;
   border-radius: 10px;
   margin-bottom: 10px;
-  max-width: 30%;
-  align-self: flex-end;
+  max-width: 70%;
 }
 
 .received-message {
   background: #e5e5ea;
   color: black;
-  text-align: right;
-  padding: 5px;
+
+  align-self: flex-start;
+  text-align: left;
+  padding: 5px 10px;
   border-radius: 10px;
   margin-bottom: 10px;
-  max-width: 30%;
-  align-self: flex-start;
+  max-width: 70%;
 }
 
 #sent-timestamp {
   font-size: 12px;
   color: #ddd;
   margin-top: 5px;
-  text-align: left;
+  text-align: right;
 }
 
 #received-timestamp {
   font-size: 12px;
   color: #666;
   margin-top: 5px;
-  text-align: right;
+  text-align: left;
 }
 
 /* Message input */

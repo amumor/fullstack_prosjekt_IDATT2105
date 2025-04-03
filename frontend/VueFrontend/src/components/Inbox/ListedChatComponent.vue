@@ -9,14 +9,15 @@ const props = defineProps({
   lastMessageTime: String,
   isMessageRead: Boolean,
   messengerName: String,
-  messages: Array
+  messages: Array,
+  selected: Boolean
 })
 
 
 </script>
 
 <template>
-<div class="listed-chat-container">
+<div :class="['listed-chat-container', { 'selected-chat': props.selected }]">
   <div class="chat-image-container">
     <img :src="props.image" class="chat-image" alt="Chat Image" />
     <InitialsDisplayComponent
@@ -52,6 +53,11 @@ const props = defineProps({
 }
 
 .listed-chat-container:hover {
+  background: #f5f5f5;
+}
+
+/* Grey background for selected chat */
+.selected-chat {
   background: #f5f5f5;
 }
 
