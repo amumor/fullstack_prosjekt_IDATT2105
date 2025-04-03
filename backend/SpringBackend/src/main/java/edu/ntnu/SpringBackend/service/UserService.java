@@ -68,7 +68,7 @@ public class UserService {
 
   @Transactional
   public User updateUser(UUID id, UserRequestDTO userDTO) {
-    logger.info("> User with ID: {}", id.toString());
+    logger.info("> Updating user with ID: {}", id.toString());
     User existingUser = userRepository.findById(id)
             .orElseThrow(() -> new NoSuchElementException("User with ID " + id + " not found"));
 
@@ -114,12 +114,12 @@ public class UserService {
 
   @Transactional
   public void deleteUserById(UUID id) {
-    logger.info("> User ID: {}", id);
+    logger.info("> Deleting user with ID: {}", id);
     if (!userRepository.existsById(id)) {
       throw new NoSuchElementException("User with ID " + id + " does not exist");
     }
     userRepository.deleteById(id);
-    logger.info("> User deleted successfully"); // TODO: fix SQL error, User is in other tables
+    logger.info("> User deleted successfully"); // TODO: fix SQL error, User is in other tables, serialisation issue
   }
 
   public boolean verifyPassword(User user, String password) {

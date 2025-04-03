@@ -25,7 +25,7 @@ public class AuthenticationController {
     public ResponseEntity<TokenResponseDTO> register(
             @RequestBody UserRequestDTO request
     ) {
-        logger.info("Request recieved on [/api/v1/auth/register]");
+        logger.info("POST request recieved on [/api/v1/auth/register]");
         return ResponseEntity.ok(service.register(request));
     }
 
@@ -33,7 +33,7 @@ public class AuthenticationController {
     public ResponseEntity<TokenResponseDTO> authenticate(
             @RequestBody AuthenticationRequestDTO request
     ) {
-        logger.info("Request recieved on [/api/v1/auth/authenticate]");
+        logger.info("POST request recieved on [/api/v1/auth/authenticate]");
         return ResponseEntity.ok(service.authenticate(request));
     }
 }

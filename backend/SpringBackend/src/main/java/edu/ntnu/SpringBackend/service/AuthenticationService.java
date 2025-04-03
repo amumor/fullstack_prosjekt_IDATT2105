@@ -29,8 +29,6 @@ public class AuthenticationService {
     );
 
     public TokenResponseDTO register(UserRequestDTO request) { // TODO: protect ADMIN registration with JWT?
-        logger.info("Handling register request...");
-
         if (repository.findByEmail(request.getEmail()).isPresent()) {
             logger.info("> Email already present in database.");
             throw new IllegalArgumentException("User with email " + request.getEmail() + " already exists.");
@@ -54,7 +52,6 @@ public class AuthenticationService {
     }
 
     public TokenResponseDTO authenticate(AuthenticationRequestDTO request) {
-        logger.info("Handling authentication request...");
         logger.info("> Email: " + request.getEmail());
 
         try {
@@ -70,7 +67,7 @@ public class AuthenticationService {
         }
 
         var user = repository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new NoSuchElementException("---- User not found with email: " + request.getEmail()));
+                .orElseThrow(() -> new NoSuchElementException("User not found with email: " + request.getEmail()));
         logger.info("> User [" + user.getEmail() + "] has been successfully authenticated");
         var jwtToken = jwtService.generateToken(user);
         return TokenResponseDTO.builder()
