@@ -1,6 +1,7 @@
 package edu.ntnu.SpringBackend.mapper;
 
 import edu.ntnu.SpringBackend.dto.ListingCreationRequestDTO;
+import edu.ntnu.SpringBackend.dto.ListingListResponseDTO;
 import edu.ntnu.SpringBackend.dto.ListingResponseDTO;
 import edu.ntnu.SpringBackend.model.Listing;
 import edu.ntnu.SpringBackend.model.enums.ListingStatus;
@@ -12,6 +13,8 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Component
@@ -41,6 +44,17 @@ public class ListingMapper {
         //dto.setChatId(UUID.fromString("NotYetImplemented")); // TODO: implement when chat system is done
 
         return dto;
+    }
+
+    public ListingListResponseDTO toDto(List<Listing> listings) {
+        List<ListingResponseDTO> dtoList = new ArrayList<>();
+        for (Listing listing : listings) {
+            ListingResponseDTO dto = this.toDto(listing);
+            dtoList.add(dto);
+        }
+        ListingListResponseDTO listingListResponseDTO = new ListingListResponseDTO();
+        listingListResponseDTO.setListings(dtoList);
+        return listingListResponseDTO;
     }
 
     public Listing toEntity(ListingResponseDTO dto) {

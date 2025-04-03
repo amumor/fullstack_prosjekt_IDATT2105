@@ -2,6 +2,7 @@ package edu.ntnu.SpringBackend.service;
 
 import edu.ntnu.SpringBackend.mapper.UserMapper;
 import edu.ntnu.SpringBackend.model.Category;
+import edu.ntnu.SpringBackend.model.SearchHistory;
 import edu.ntnu.SpringBackend.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -13,6 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
@@ -52,5 +55,31 @@ public class CategoryService {
             throw new NoSuchElementException("Category with ID " + id + " does not exist");
         }
         categoryRepository.deleteById(id);
+    }
+
+    public List<Category> findBySearchHistory(List<SearchHistory> searchHistoryList) {
+        logger.info("Finding categories by search history...");
+        if (searchHistoryList == null || searchHistoryList.isEmpty()) {
+            throw new IllegalArgumentException("Search history list must not be null or empty.");
+        }
+
+        List<String> searchQueries = searchHistoryList.stream()
+                .map(SearchHistory::getSearchQuery)
+                .collect(Collectors.toList());
+
+        String regex = searchQueries.stream()
+                .map(Pattern::quote)
+                .collect(Collectors.joining("|"));
+        Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+
+        List<Category> allCategories = categoryRepository.findAll();
+        List<Category> matchingCategories = allCategories.stream()
+                .filter(category -> {
+                    Matcher matcher = pattern.matcher(category.getName());
+                    return matcher.find();
+                })
+                .collect(Collectors.toList());
+
+        return matchingCategories;
     }
 }

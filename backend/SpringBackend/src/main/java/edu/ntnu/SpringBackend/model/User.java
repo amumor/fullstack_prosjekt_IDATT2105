@@ -52,6 +52,10 @@ public class User implements UserDetails {
   @Builder.Default
   private List<Bookmark> bookmarks = new ArrayList<>();
 
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+  @Builder.Default
+  private List<SearchHistory> searchHistoryList = new ArrayList<>();
+
   @Override
   public String getPassword() {
     return password;

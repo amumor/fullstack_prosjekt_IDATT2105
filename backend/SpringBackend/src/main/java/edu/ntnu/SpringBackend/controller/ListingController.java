@@ -1,9 +1,13 @@
 package edu.ntnu.SpringBackend.controller;
 
 import edu.ntnu.SpringBackend.dto.ListingCreationRequestDTO;
+import edu.ntnu.SpringBackend.dto.ListingListResponseDTO;
 import edu.ntnu.SpringBackend.dto.ListingResponseDTO;
 import edu.ntnu.SpringBackend.mapper.ListingMapper;
+import edu.ntnu.SpringBackend.service.CategoryService;
 import edu.ntnu.SpringBackend.service.ListingService;
+import edu.ntnu.SpringBackend.service.SearchHistoryService;
+import edu.ntnu.SpringBackend.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.NotImplementedException;
 import org.slf4j.Logger;
@@ -21,14 +25,24 @@ public class ListingController {
     private final ListingService listingService;
     private final Logger logger = LoggerFactory.getLogger(ListingController.class);
     private final ListingMapper listingMapper;
+    private final CategoryService categoryService;
+    private final UserService userService;
+    private final SearchHistoryService searchHistoryService;
 
-    @GetMapping("/get-suggestions")
-    public ResponseEntity<ListingResponseDTO> getSuggestions(
-            @RequestHeader("Authorization") String autherizationHeader
+    @GetMapping("/get-suggestions/{userId}")
+    public ResponseEntity<ListingListResponseDTO> getSuggestions(
+            @PathVariable UUID userId
     ) {
         logger.info("GET Request recieved on [/api/v1/get-suggestions]");
-        //return ResponseEntity.ok(listingService.getSuggestions(autherizationHeader));
-        throw new NotImplementedException();
+        return ResponseEntity.ok(
+                listingMapper.toDto(
+                        listingService.findByCategories(
+                                categoryService.findBySearchHistory(
+                                        searchHistoryService.findByUserId(userId)
+                                )
+                        )
+                )
+        );
     }
 
     @GetMapping("/id/{id}")
@@ -42,7 +56,7 @@ public class ListingController {
     @PostMapping("/create")
     public ResponseEntity<ListingResponseDTO> create(
             @RequestBody ListingCreationRequestDTO request
-            ) {
+    ) {
         logger.info("Request recieved on [/api/v1/listing/create]");
         return ResponseEntity.ok(listingMapper.toDto(listingService.createListing(request)));
     }

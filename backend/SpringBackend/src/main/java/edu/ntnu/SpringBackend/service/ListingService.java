@@ -2,6 +2,7 @@ package edu.ntnu.SpringBackend.service;
 
 import edu.ntnu.SpringBackend.dto.ListingCreationRequestDTO;
 import edu.ntnu.SpringBackend.mapper.ListingMapper;
+import edu.ntnu.SpringBackend.model.Category;
 import edu.ntnu.SpringBackend.model.Listing;
 import edu.ntnu.SpringBackend.model.User;
 import edu.ntnu.SpringBackend.model.enums.ListingStatus;
@@ -137,6 +138,14 @@ public class ListingService {
 
     listing.setStatus(status);
     return listingRepository.save(listing);
+  }
+
+  public List<Listing> findByCategories(List<Category> categoryList) {
+    logger.info("Finding listings by categories: {}", categoryList);
+    if (categoryList == null || categoryList.isEmpty()) {
+      throw new IllegalArgumentException("Category list must not be null or empty.");
+    }
+    return listingRepository.findByCategoryIn(categoryList);
   }
   
   private void validateListing(Listing listing) {
