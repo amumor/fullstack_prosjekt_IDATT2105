@@ -1,7 +1,6 @@
 package edu.ntnu.SpringBackend.service;
 
 import edu.ntnu.SpringBackend.dto.BookmarkRequestDTO;
-import edu.ntnu.SpringBackend.mapper.BookmarkMapper;
 import edu.ntnu.SpringBackend.model.Bookmark;
 import edu.ntnu.SpringBackend.model.Listing;
 import edu.ntnu.SpringBackend.model.User;
@@ -9,6 +8,7 @@ import edu.ntnu.SpringBackend.repository.BookmarkRepository;
 import edu.ntnu.SpringBackend.repository.ListingRepository;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.ObjectNotFoundException;
+import org.slf4j.Logger;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -18,12 +18,11 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.logging.Logger;
 
 @Service
 @RequiredArgsConstructor
 public class BookmarkService {
-  private final Logger logger = Logger.getLogger(BookmarkService.class.getName());
+  private final Logger logger = org.slf4j.LoggerFactory.getLogger(BookmarkService.class);
   private final BookmarkRepository bookmarkRepository;
   private final ListingRepository listingRepository;
 
@@ -52,7 +51,7 @@ public class BookmarkService {
    */
   @Transactional
   public Bookmark createBookmark(BookmarkRequestDTO bookmarkRequestDTO, User user) {
-    logger.info("> Handling bookmark creation for user: " + user.getEmail());
+    logger.info("> Handling bookmark creation for user: {}", user.getEmail());
 
     Listing listing = listingRepository.findById(bookmarkRequestDTO.getListingId())
             .orElseThrow(() -> new ObjectNotFoundException(bookmarkRequestDTO.getListingId(), "Listing not found"));
@@ -86,7 +85,7 @@ public class BookmarkService {
 
     User currentUser = getCurrentUser();
     if (!bookmark.getUser().getEmail().equals(currentUser.getEmail())) {
-      logger.warning("> User is not authorized to delete bookmark");
+      logger.warn("> User is not authorized to delete bookmark");
       throw new AccessDeniedException("User not authorized to delete this bookmark.");
     }
 
