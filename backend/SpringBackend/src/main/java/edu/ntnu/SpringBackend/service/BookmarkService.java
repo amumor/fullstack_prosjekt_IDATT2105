@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.hibernate.ObjectNotFoundException;
 import org.slf4j.Logger;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,11 +25,6 @@ public class BookmarkService {
   private final BookmarkRepository bookmarkRepository;
   private final ListingRepository listingRepository;
 
-  // TODO - make this a method in a utility class
-  private User getCurrentUser() {
-    return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-  }
-
   /**
    * Fetches all bookmarks for the current user.
    *
@@ -38,7 +32,7 @@ public class BookmarkService {
    * @return List of bookmarks for the current user.
    */
   public List<Bookmark> getBookmarksByUser(User user) {
-    logger.info("> Getting bookmarks for user: " + user.getEmail());
+    logger.info("> Getting bookmarks for user: {}", user.getEmail());
     return bookmarkRepository.findByUser(user);
   }
 
@@ -68,7 +62,7 @@ public class BookmarkService {
             .savedAt(LocalDateTime.now())
             .build();
 
-    logger.info("> Bookmark created for listing: " + listing.getTitle());
+    logger.info("> Bookmark created for listing: {}", listing.getTitle());
     return bookmarkRepository.save(bookmark);
   }
 
@@ -78,13 +72,12 @@ public class BookmarkService {
    * @param bookmarkId The ID of the bookmark to be deleted.
    */
   @Transactional
-  public void deleteBookmark(UUID bookmarkId) {
-    logger.info("> Received DELETE request to delete bookmark with ID: " + bookmarkId);
+  public void deleteBookmark(UUID bookmarkId, String email) {
+    logger.info("> Deleting bookmark with ID: {}", bookmarkId);
     Bookmark bookmark = bookmarkRepository.findById(bookmarkId)
             .orElseThrow(() -> new ObjectNotFoundException(bookmarkId, "Bookmark not found"));
 
-    User currentUser = getCurrentUser();
-    if (!bookmark.getUser().getEmail().equals(currentUser.getEmail())) {
+    if (!bookmark.getUser().getEmail().equals(email)) {
       logger.warn("> User is not authorized to delete bookmark");
       throw new AccessDeniedException("User not authorized to delete this bookmark.");
     }

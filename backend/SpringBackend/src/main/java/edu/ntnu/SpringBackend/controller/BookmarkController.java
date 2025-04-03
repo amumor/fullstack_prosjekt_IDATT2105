@@ -83,10 +83,12 @@ public class BookmarkController {
   @DeleteMapping("/{bookmarkId}")
   @Operation(summary = "Delete a bookmark", security = @SecurityRequirement(name = "bearerAuth"))
   public ResponseEntity<Void> deleteBookmark(
-          @PathVariable UUID bookmarkId
+          @PathVariable UUID bookmarkId,
+          Authentication authentication
   ) {
     logger.info("Received DELETE request to delete bookmark with ID: {}", bookmarkId);
-    bookmarkService.deleteBookmark(bookmarkId);
+    String email = authentication.getName();
+    bookmarkService.deleteBookmark(bookmarkId, email);
 
     return ResponseEntity.noContent().build();
   }

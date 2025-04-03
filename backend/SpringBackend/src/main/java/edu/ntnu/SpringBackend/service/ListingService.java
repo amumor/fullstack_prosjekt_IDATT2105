@@ -55,18 +55,6 @@ public class ListingService {
     return all;
   }
 
-  // TODO: delete ?? right method is under this method
-  public Listing createListing(Listing listing) {
-    logger.info("> Creating listing: {}", listing.getTitle());
-    validateListing(listing);
-
-    if (listing.getStatus() == null || listing.getStatus() == ListingStatus.SOLD) {
-      listing.setStatus(ListingStatus.ACTIVE);
-    }
-
-    return listingRepository.save(listing);
-  }
-
   public Listing createListing(ListingCreationRequestDTO listingCreationRequestDTO) {
     logger.info("> Creating listing: {}", listingCreationRequestDTO.getTitle());
     Listing listing = listingMapper.toEntity(listingCreationRequestDTO);
