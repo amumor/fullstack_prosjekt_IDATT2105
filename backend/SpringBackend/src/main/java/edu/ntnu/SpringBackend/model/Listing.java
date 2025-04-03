@@ -72,4 +72,13 @@ public class Listing {
   protected void onUpdate() {
     lastEditedAt = LocalDateTime.now();
   }
+
+  @Override
+  public String toString() {
+    return "Listing{" +
+            "id=" + id +
+            ", title='" + title + '\'' +
+            // other non-entity fields
+            '}';
+  }
 }
