@@ -10,13 +10,6 @@ const fullName = 'Fyfasan Ben Reddik';
 const email = 'fasan@reddik.ben'
 const router = useRouter()
 
-const getInitials = (name) => {
-  const nameArray = name.split(' ');
-  return nameArray
-    .map((word) => word.charAt(0).toUpperCase())
-    .join('');
-};
-
 const routeTo = (route) => {
   router.push('/profile'+ route);
 }
@@ -45,7 +38,8 @@ const routeTo = (route) => {
         class="profile-container"
         title="My Profile"
         shortDescription="Edit profile information"
-        :iconString="'material-symbols:person'"  />
+        :iconString="'material-symbols:person'"
+        @click="routeTo('/edit')" />
       <ProfileOption
         class="profile-container"
         title="Listings"
