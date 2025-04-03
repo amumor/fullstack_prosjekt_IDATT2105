@@ -2,6 +2,7 @@
 import { useRouter } from 'vue-router'
 import Navbar from '@/components/Navbar.vue'
 import ProfileOption from '@/components/Profile/ProfileOption.vue'
+import InitialsDisplayComponent from '@/components/Profile/InitialsDisplayComponent.vue'
 
 document.body.style.backgroundColor = "#ffffff";
 
@@ -27,7 +28,10 @@ const routeTo = (route) => {
     <div class="profile-info-container">
       <!-- Profile info -->
       <div class="profile-icon">
-        <span>{{ getInitials(fullName) }}</span>
+        <InitialsDisplayComponent
+          :name=fullName
+          :width=120
+          :height=120 />
       </div>
       <div class="profile-info">
         <h2>{{ fullName }}</h2>
@@ -59,23 +63,7 @@ const routeTo = (route) => {
 </template>
 
 <style scoped>
-
-/* Profile initials */
-.profile-icon {
-  background-color: #D9D9D9;
-  border-radius: 50%;
-  color: #333333;
-  font-size: 30px;
-  text-transform: uppercase;
-  font-family: 'Inter', sans-serif;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 120px;
-  height: 120px;
-}
-
+/* Page container */
 .profile-info-container {
   display: flex;
   margin: 30px 0 0 70px;

@@ -6,6 +6,7 @@ import ListingView from '@/views/ListingView.vue'
 import NewListingView from '@/views/NewListingView.vue'
 import MyListingsView from '@/views/MyListingsView.vue'
 import FavoritesView from '@/views/FavoritesView.vue'
+import InboxView from '@/views/InboxView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -44,6 +45,11 @@ const router = createRouter({
       path: '/profile/favorites',
       name: 'favorites',
       component: FavoritesView
+    },
+    {
+      path: '/inbox',
+      name: 'inbox',
+      component: InboxView
     }
   ],
 })
