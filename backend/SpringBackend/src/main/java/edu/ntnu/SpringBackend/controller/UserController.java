@@ -24,7 +24,7 @@ public class UserController {
   public ResponseEntity<UserResponseDTO> getUserById(
           @PathVariable UUID id
   ) {
-    logger.info("Received GET request to get user by id: {}", id);
+    logger.info("GET request received on [/api/v1/users/id/{}]", id);
     return ResponseEntity.ok(UserMapper.toDto(userService.getUserById(id)));
   }
 
@@ -32,7 +32,7 @@ public class UserController {
   public ResponseEntity<UserResponseDTO> getUserByEmail(
           @PathVariable String email
   ) {
-    logger.info("Received GET request to get user by email: {}", email);
+    logger.info("GET request received on [/api/v1/users/email/{}]", email);
     return ResponseEntity.ok(UserMapper.toDto(userService.getUserByEmail(email)));
   }
 
@@ -41,7 +41,7 @@ public class UserController {
           @PathVariable UUID id,
           @RequestBody UserRequestDTO userRequestDTO
   ) {
-    logger.info("Received PUT request to update user with id: {}", id);
+    logger.info("PUT request received on [/api/v1/users/{}]", id);
     return ResponseEntity.ok(UserMapper.toDto(userService.updateUser(id, userRequestDTO)));
   }
 
@@ -49,7 +49,7 @@ public class UserController {
   public ResponseEntity<Void> deleteUser(
           @PathVariable UUID id
   ) {
-    logger.info("Received DELETE request to delete user with id: {}", id);
+    logger.info("DELETE request received on [/api/v1/users/{}]", id);
     userService.deleteUserById(id);
     return ResponseEntity.ok().build();
   }

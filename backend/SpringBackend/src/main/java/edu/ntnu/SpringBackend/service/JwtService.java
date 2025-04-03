@@ -24,10 +24,12 @@ public class JwtService {
     private static final String SECRET_KEY = dotenv.get("SECRET_KEY");
 
     public String extractUsername(String token) {
+        logger.info("> Extracting username from JWT");
         return extractClaim(token, Claims::getSubject);
     }
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
+        logger.info("> Extracting claims from token: {}", token);
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
     }
@@ -37,6 +39,7 @@ public class JwtService {
     }
 
     public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
+        logger.info("> Generating JWT token for user: {}", userDetails.getUsername());
         return Jwts
                 .builder()
                 .setClaims(extraClaims)
@@ -48,6 +51,7 @@ public class JwtService {
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
+        logger.info("> Validating token for user: {}", userDetails.getUsername());
         final String username = extractUsername(token);
         return (username.equals(userDetails.getUsername())) && !isTokenExpried(token);
     }

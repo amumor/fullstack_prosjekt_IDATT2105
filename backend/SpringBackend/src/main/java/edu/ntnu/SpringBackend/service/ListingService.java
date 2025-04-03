@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import org.springframework.data.domain.Pageable;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
@@ -24,6 +25,7 @@ public class ListingService {
   private final ListingRepository listingRepository;
   private final Logger logger = LoggerFactory.getLogger(ListingService.class);
   private final ListingMapper listingMapper;
+  private final CategoryService categoryService;
 
   public Listing getListingById(UUID id) {
     logger.info("> Getting listing by id: {}", id);
@@ -55,7 +57,7 @@ public class ListingService {
 
   // TODO: delete ?? right method is under this method
   public Listing createListing(Listing listing) {
-    logger.info("Creating listing: {}", listing.getTitle());
+    logger.info("> Creating listing: {}", listing.getTitle());
     validateListing(listing);
 
     if (listing.getStatus() == null || listing.getStatus() == ListingStatus.SOLD) {
@@ -66,7 +68,7 @@ public class ListingService {
   }
 
   public Listing createListing(ListingCreationRequestDTO listingCreationRequestDTO) {
-    logger.info("Creating listing: {}", listingCreationRequestDTO.getTitle());
+    logger.info("> Creating listing: {}", listingCreationRequestDTO.getTitle());
     Listing listing = listingMapper.toEntity(listingCreationRequestDTO);
     validateListing(listing);
 
@@ -141,12 +143,12 @@ public class ListingService {
     return listingRepository.save(listing);
   }
 
-  public List<Listing> findByCategories(List<Category> categoryList) {
+  public List<Listing> findByCategories(List<Category> categoryList, Pageable pageable) {
     logger.info("> Finding listings by categories: {}", categoryList);
     if (categoryList == null || categoryList.isEmpty()) {
-      throw new IllegalArgumentException("Category list must not be null or empty.");
+      return listingRepository.findByCategoryIn(categoryService.getAllCategories(), pageable);
     }
-    return listingRepository.findByCategoryIn(categoryList);
+    return listingRepository.findByCategoryIn(categoryList, pageable);
   }
   
   private void validateListing(Listing listing) {

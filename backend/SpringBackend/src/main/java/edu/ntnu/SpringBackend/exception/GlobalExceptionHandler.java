@@ -28,13 +28,13 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(NoSuchElementException.class)
     public ResponseEntity<String> handleNoSuchElementException(NoSuchElementException ex, WebRequest request) {
-        logger.error("User not found: {}", ex.getMessage());
+        logger.error("!!! User not found: {}", ex.getMessage());
         return new ResponseEntity<>("User not found: " + ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(UsernameNotFoundException.class)
     public ResponseEntity<String> handleUsernameNotFoundException(UsernameNotFoundException ex, WebRequest request) {
-        logger.error("Username not found: {}", ex.getMessage());
+        logger.error("!!! Username not found: {}", ex.getMessage());
         return new ResponseEntity<>("User not found: " + ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 
@@ -46,32 +46,32 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException ex, WebRequest request) {
-        logger.error("Bad request: {}", ex.getMessage());
+        logger.error("!!! Bad request: {}", ex.getMessage());
         return new ResponseEntity<>("Bad request: " + ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<String> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex, WebRequest request) {
-        logger.error("Invalid input: {}", ex.getMessage());
+        logger.error("!!! Invalid input: {}", ex.getMessage());
         return ResponseEntity.badRequest().body("Invalid input: " + ex.getMessage());
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<String> handleConstraintViolationException(ConstraintViolationException ex, WebRequest request) {
-        logger.error("Database error: {}", ex.getMessage());
+        logger.error("!!! Database error: {}", ex.getMessage());
         return new ResponseEntity<>("Database constraint error", HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<String> handleDataIntegrityViolationException(DataIntegrityViolationException ex, WebRequest request) {
-        logger.error("Data integrity violation: {}", ex.getMessage());
+        logger.error("!!! Data integrity violation: {}", ex.getMessage());
         return new ResponseEntity<>("Invalid input: An instance of this field already exists.", HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<String> handleBadCredentialsException(BadCredentialsException ex, WebRequest request) {
-        logger.error("Bad credentials: {}", ex.getMessage());
+        logger.error("!!! Bad credentials: {}", ex.getMessage());
         return new ResponseEntity<>("Invalid email or password", HttpStatus.UNAUTHORIZED);
     }
 
@@ -82,7 +82,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleGlobalException(Exception ex, WebRequest request) {
-        logger.error("Internal server error: {}: exc: {}", ex.getMessage(), ex.getClass());
+        logger.error("!!! Internal server error: {}: exc: {}", ex.getMessage(), ex.getClass());
         return new ResponseEntity<>("Internal server error", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

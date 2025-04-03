@@ -13,9 +13,11 @@ import org.apache.commons.lang3.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.data.domain.Pageable;
 import java.util.UUID;
 
 @RestController
@@ -31,15 +33,22 @@ public class ListingController {
 
     @GetMapping("/get-suggestions/{userId}")
     public ResponseEntity<ListingListResponseDTO> getSuggestions(
-            @PathVariable UUID userId
+            @PathVariable UUID userId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
     ) {
-        logger.info("GET Request recieved on [/api/v1/get-suggestions]");
+        final int MAX_SIZE = 100;
+        if (size > MAX_SIZE) {
+            size = MAX_SIZE;
+        }
+        logger.info("GET Request recieved on [/api/v1/listing/get-suggestions/{}]", userId);
+        Pageable pageable = PageRequest.of(page, size);
         return ResponseEntity.ok(
                 listingMapper.toDto(
                         listingService.findByCategories(
                                 categoryService.findBySearchHistory(
                                         searchHistoryService.findByUserId(userId)
-                                )
+                                ), pageable
                         )
                 )
         );
@@ -57,7 +66,7 @@ public class ListingController {
     public ResponseEntity<ListingResponseDTO> create(
             @RequestBody ListingCreationRequestDTO request
     ) {
-        logger.info("Request recieved on [/api/v1/listing/create]");
+        logger.info("POST Request recieved on [/api/v1/listing/create]");
         return ResponseEntity.ok(listingMapper.toDto(listingService.createListing(request)));
     }
 }
