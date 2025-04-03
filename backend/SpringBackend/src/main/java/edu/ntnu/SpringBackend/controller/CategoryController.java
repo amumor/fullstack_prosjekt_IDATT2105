@@ -28,20 +28,20 @@ public class CategoryController {
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> delete(@PathVariable UUID id) {
-        logger.info("DELETE Request received on [/api/v1/category/delete/{}]", id);
+        logger.info("DELETE request received on [/api/v1/category/delete/{}]", id);
         categoryService.delete(id);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/name/{name}")
     public ResponseEntity<CategoryResponseDTO> getByName(@PathVariable String name) {
-        logger.info("GET Request received on [/api/v1/category/name/{}]", name);
+        logger.info("GET request received on [/api/v1/category/name/{}]", name);
         return ResponseEntity.ok(categoryMapper.toDto(categoryService.getByName(name)));
     }
 
     @GetMapping("/id/{id}")
     public ResponseEntity<CategoryResponseDTO> getById(@PathVariable UUID id) {
-        logger.info("GET Request received on [/api/v1/category/id/{}]", id);
+        logger.info("GET request received on [/api/v1/category/id/{}]", id);
         return ResponseEntity.ok(categoryMapper.toDto(categoryService.getById(id)));
     }
 }

@@ -66,7 +66,7 @@ public class ListingController {
     public ResponseEntity<ListingResponseDTO> create(
             @RequestBody ListingCreationRequestDTO request
     ) {
-        logger.info("Request recieved on [/api/v1/listing/create]");
+        logger.info("POST Request recieved on [/api/v1/listing/create]");
         return ResponseEntity.ok(listingMapper.toDto(listingService.createListing(request)));
     }
 }

@@ -23,7 +23,7 @@ public class SearchHistoryService {
     private final UserService userService;
 
     public List<SearchHistory> findByUserId(UUID userId) {
-        logger.info("Getting search history to user id: {}", userId);
+        logger.info("> Finding search history by user id: {}", userId);
         return searchHistoryRepository.findByUserIdOrderBySearchedAtDesc(userId);
     }
 
@@ -38,7 +38,7 @@ public class SearchHistoryService {
     }
 
     public SearchHistory add(SearchHistory searchHistory) {
-        logger.info("Adding SearchHistory with id: {}", searchHistory.getId());
+        logger.info("> Adding SearchHistory to user: {}", searchHistory.getUser().getId());
        return searchHistoryRepository.save(searchHistory);
     }
 }

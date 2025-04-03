@@ -57,7 +57,7 @@ public class ListingService {
 
   // TODO: delete ?? right method is under this method
   public Listing createListing(Listing listing) {
-    logger.info("Creating listing: {}", listing.getTitle());
+    logger.info("> Creating listing: {}", listing.getTitle());
     validateListing(listing);
 
     if (listing.getStatus() == null || listing.getStatus() == ListingStatus.SOLD) {
@@ -68,7 +68,7 @@ public class ListingService {
   }
 
   public Listing createListing(ListingCreationRequestDTO listingCreationRequestDTO) {
-    logger.info("Creating listing: {}", listingCreationRequestDTO.getTitle());
+    logger.info("> Creating listing: {}", listingCreationRequestDTO.getTitle());
     Listing listing = listingMapper.toEntity(listingCreationRequestDTO);
     validateListing(listing);
 

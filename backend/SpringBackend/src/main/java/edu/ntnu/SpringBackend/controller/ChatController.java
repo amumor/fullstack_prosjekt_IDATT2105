@@ -31,7 +31,7 @@ public class ChatController {
   public ResponseEntity<ChatResponseDTO> getChat(
           @PathVariable UUID chatId
   ) {
-    logger.info("> Received GET request to get chat {}", chatId);
+    logger.info("GET Request received on [/api/v1/chats/{}]", chatId);
     return ResponseEntity.ok(chatMapper.toDto(chatService.getChat(chatId)));
   }
 
@@ -39,7 +39,7 @@ public class ChatController {
   public ResponseEntity<List<MessageResponsetDTO>> getMessages(
           @PathVariable UUID chatId
   ) {
-    logger.info("Received GET request to get messages for chat {}", chatId);
+    logger.info("GET request received on [/api/v1/chats{}/messages]", chatId);
     List<MessageResponsetDTO> messages =
             chatService.getMessages(chatId).stream()
                     .map(messageMapper::toDto)
@@ -47,11 +47,11 @@ public class ChatController {
     return ResponseEntity.ok(messages);
   }
 
-  @PostMapping("/listings/{listingId}")
+  @PostMapping("/listings/{listingId}") // TODO: fix, use path var on listing ID
   public ResponseEntity<ChatResponseDTO> createOrGetChat(
           @RequestBody ChatRequestDTO chatRequestDTO
   ) {
-    logger.info("Received POST request to create or get chat");
+    logger.info("POST request received on [/api/v1/chats/listings/]"); // TODO: update path to final version after fix
     return ResponseEntity.ok(chatMapper.toDto(chatService.createOrGetChat(chatRequestDTO)));
   }
 
@@ -60,7 +60,7 @@ public class ChatController {
           @PathVariable UUID chatId,
           @RequestBody MessageRequestDTO messageRequestDTO
   ) {
-    logger.info("Received POST request to send message for chat {}", chatId);
+    logger.info("POST request received on [/api/v1/chats/{}/messages]", chatId);
     return ResponseEntity.ok(messageMapper.toDto(chatService.addMessageToChat(
                     chatId, messageRequestDTO.getSenderEmail(), messageRequestDTO.getContent()
             ))
