@@ -1,12 +1,11 @@
 package edu.ntnu.SpringBackend.mapper;
 
-import edu.ntnu.SpringBackend.dto.UserRequestDTO;
 import edu.ntnu.SpringBackend.dto.UserResponseDTO;
 import edu.ntnu.SpringBackend.model.User;
 
 public class UserMapper {
 
-  public static User toEntity(UserRequestDTO dto) {
+  /*public static User toEntity(UserRequestDTO dto) { TODO: remove / fix
     if (dto == null) return null;
 
     return User.builder()
@@ -17,13 +16,12 @@ public class UserMapper {
             .phoneNumber(dto.getPhoneNumber())
             .role(dto.getRole())
             .build();
-  }
+  }*/
 
   public static UserResponseDTO toDto(User user) {
     if (user == null) return null;
 
     return UserResponseDTO.builder()
-            .id(user.getId())
             .firstName(user.getFirstName())
             .lastName(user.getLastName())
             .email(user.getEmail())
