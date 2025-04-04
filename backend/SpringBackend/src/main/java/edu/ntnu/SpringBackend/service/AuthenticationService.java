@@ -27,12 +27,21 @@ public class AuthenticationService {
     private final Logger logger = LoggerFactory.getLogger(
         AuthenticationService.class
     );
+    private final UserService userService;
 
-    public TokenResponseDTO register(UserRequestDTO request) { // TODO: protect ADMIN registration with JWT?
+    public TokenResponseDTO register(UserRequestDTO request) {
         if (repository.findByEmail(request.getEmail()).isPresent()) {
             logger.info("> Email already present in database.");
             throw new IllegalArgumentException("User with email " + request.getEmail() + " already exists.");
         }
+
+        logger.info("> Validating user data.");
+        userService.validateName(request.getFirstName());
+        userService.validateName(request.getLastName());
+        userService.validatePhone(request.getPhoneNumber());
+        userService.validatePassword(request.getPassword());
+        userService.validateEmail(request.getEmail());
+        logger.info("> User data validated.");
 
         var user = User.builder()
                 .email(request.getEmail())
@@ -45,14 +54,13 @@ public class AuthenticationService {
 
         logger.info("> Saving user to the database.");
         repository.save(user);
-        logger.info("> Generating jwt token for user [" + request.getEmail() + "].");
         var jwtToken = jwtService.generateToken(user);
         logger.info("> User registered.");
-        return TokenResponseDTO.builder().token(jwtToken).userId(user.getId()).build();
+        return TokenResponseDTO.builder().token(jwtToken).build();
     }
 
     public TokenResponseDTO authenticate(AuthenticationRequestDTO request) {
-        logger.info("> Email: " + request.getEmail());
+        logger.info("> Authentication user with email: " + request.getEmail());
 
         try {
         authenticationManager.authenticate(
@@ -62,13 +70,13 @@ public class AuthenticationService {
                 )
         );
         } catch (AuthenticationException ae) {
-            logger.error("> Authentication failed for email: " + request.getEmail() + ", " + ae.getMessage());
+            logger.error("!!! Authentication failed for email: " + request.getEmail() + ", " + ae.getMessage());
             throw ae;
         }
 
         var user = repository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new NoSuchElementException("User not found with email: " + request.getEmail()));
-        logger.info("> User [" + user.getEmail() + "] has been successfully authenticated");
+        logger.info("> User [{}] has been successfully authenticated", user.getId());
         var jwtToken = jwtService.generateToken(user);
         return TokenResponseDTO.builder()
                 .token(jwtToken)

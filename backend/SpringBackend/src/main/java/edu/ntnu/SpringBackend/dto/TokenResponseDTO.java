@@ -13,6 +13,5 @@ import java.util.UUID;
 @NoArgsConstructor
 public class TokenResponseDTO {
 
-    private UUID userId;
     private String token;
 }
