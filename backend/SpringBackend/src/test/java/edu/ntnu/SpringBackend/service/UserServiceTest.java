@@ -39,7 +39,7 @@ class UserServiceTest {
             .email("jane@doe.com")
             .password("StrongPass123!")
             .phoneNumber("12345678")
-            .role(Role.USER)
+            .role(Role.ROLE_USER)
             .build();
 
     UUID id = UUID.randomUUID();
@@ -50,7 +50,7 @@ class UserServiceTest {
             .email("jane@doe.com")
             .password("encodedPass")
             .phoneNumber("12345678")
-            .role(Role.USER)
+            .role(Role.ROLE_USER)
             .build();
 
     when(passwordEncoder.encode(request.getPassword())).thenReturn("encodedPass");
@@ -77,7 +77,7 @@ class UserServiceTest {
             .email("john@smith.com")
             .password("secret")
             .phoneNumber("87654321")
-            .role(Role.ADMIN)
+            .role(Role.ROLE_ADMIN)
             .build();
 
     when(userRepository.findAll()).thenReturn(List.of(user));
@@ -89,7 +89,7 @@ class UserServiceTest {
     assertEquals("Smith", result.getFirst().getLastName());
     assertEquals("john@smith.com", result.getFirst().getEmail());
     assertEquals("87654321", result.getFirst().getPhoneNumber());
-    assertEquals("ADMIN", result.getFirst().getRole().toString());
+    assertEquals("ROLE_ADMIN", result.getFirst().getRole().toString());
   }
 
   @Test
@@ -102,7 +102,7 @@ class UserServiceTest {
             .email("alice@wonder.com")
             .password("pass")
             .phoneNumber("11112222")
-            .role(Role.USER)
+            .role(Role.ROLE_USER)
             .build();
 
     when(userRepository.findById(id)).thenReturn(Optional.of(user));

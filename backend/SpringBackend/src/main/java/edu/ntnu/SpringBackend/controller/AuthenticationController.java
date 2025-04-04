@@ -31,7 +31,7 @@ public class AuthenticationController {
     ) {
         logger.info("POST request recieved on [/api/v1/auth/register]");
 
-        if (request.getRole().equals(Role.ADMIN)) {
+        if (request.getRole().equals(Role.ROLE_ADMIN)) {
             logger.error("!!! User is trying to register as ADMIN without autherization.");
             throw new IllegalArgumentException("Unauthorized request to register as ADMIN.");
         }
@@ -39,13 +39,14 @@ public class AuthenticationController {
         return ResponseEntity.ok(service.register(request));
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/register/admin")
     public ResponseEntity<TokenResponseDTO> registerAdmin(
             @AuthenticationPrincipal User user,
             @RequestBody UserRequestDTO request
     ) {
         logger.info("POST request recieved on [/api/v1/auth/register/admin]");
+        logger.info("User role: {}", user.getRole().toString());
         return ResponseEntity.ok(service.register(request));
     }
 

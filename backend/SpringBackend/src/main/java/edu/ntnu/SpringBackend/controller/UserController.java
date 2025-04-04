@@ -23,7 +23,7 @@ public class UserController {
     private final Logger logger = LoggerFactory.getLogger(UserController.class);
     private final UserService userService;
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/id/{id}")
     public ResponseEntity<UserResponseDTO> getUserById(
             @AuthenticationPrincipal User user,
@@ -33,7 +33,7 @@ public class UserController {
         return ResponseEntity.ok(UserMapper.toDto(userService.getUserById(id)));
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/email/{email}")
     public ResponseEntity<UserResponseDTO> getUserByEmail(
             @AuthenticationPrincipal User user,
@@ -52,7 +52,7 @@ public class UserController {
     return ResponseEntity.ok(UserMapper.toDto(userService.updateUser(user, userRequestDTO)));
   }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(
             @AuthenticationPrincipal User user,
