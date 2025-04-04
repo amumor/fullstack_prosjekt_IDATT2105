@@ -18,6 +18,14 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * Service class for managing bookmarks.
+ * Handles operations related to bookmarks such as creating, deleting, and fetching bookmarks.
+ *
+ * @author Vetle Hodne
+ * @version 1.0
+ * @since 1.0
+ */
 @Service
 @RequiredArgsConstructor
 public class BookmarkService {
@@ -70,14 +78,15 @@ public class BookmarkService {
    * Deletes a bookmark by its UUID.
    *
    * @param bookmarkId The ID of the bookmark to be deleted.
+   * @param user      The user who is deleting the bookmark.
    */
   @Transactional
-  public void deleteBookmark(UUID bookmarkId, String email) {
+  public void deleteBookmark(UUID bookmarkId, User user) {
     logger.info("> Deleting bookmark with ID: {}", bookmarkId);
     Bookmark bookmark = bookmarkRepository.findById(bookmarkId)
             .orElseThrow(() -> new ObjectNotFoundException(bookmarkId, "Bookmark not found"));
 
-    if (!bookmark.getUser().getEmail().equals(email)) {
+    if (!bookmark.getUser().getEmail().equals(user.getEmail())) {
       logger.warn("> User is not authorized to delete bookmark");
       throw new AccessDeniedException("User not authorized to delete this bookmark.");
     }

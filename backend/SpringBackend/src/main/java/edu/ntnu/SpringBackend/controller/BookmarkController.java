@@ -5,14 +5,13 @@ import edu.ntnu.SpringBackend.dto.BookmarkResponseDTO;
 import edu.ntnu.SpringBackend.mapper.BookmarkMapper;
 import edu.ntnu.SpringBackend.model.User;
 import edu.ntnu.SpringBackend.service.BookmarkService;
-import edu.ntnu.SpringBackend.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,21 +33,19 @@ import java.util.stream.Collectors;
 public class BookmarkController {
   private final Logger logger = LoggerFactory.getLogger(BookmarkController.class);
   private final BookmarkService bookmarkService;
-  private final UserService userService;
 
   /**
    * Get all bookmarks for a user
    *
-   * @param authentication the authentication object containing user details
+   * @param user the authenticated user
    * @return a list of bookmark response DTOs
    */
   @GetMapping("/my-bookmarks")
   @Operation(summary = "Getting all bookmarks for a user", security = @SecurityRequirement(name = "bearerAuth"))
   public List<BookmarkResponseDTO> getUserBookmarks(
-          Authentication authentication
+         @AuthenticationPrincipal User user
   ) {
     logger.info("Received GET request to get users bookmarks");
-    User user = userService.getUserByEmail(authentication.getName());
 
     return bookmarkService.getBookmarksByUser(user).stream()
             .map(BookmarkMapper::toDto)
@@ -56,20 +53,19 @@ public class BookmarkController {
   }
 
   /**
-   * Create a bookmark for a listing.
+   * Create a new bookmark for a listing.
    *
-   * @param bookmarkRequestDTO the bookmark request DTO containing the listing ID
-   * @param authentication     the authentication object containing user details
+   * @param user the authenticated user creating the bookmark
+   * @param bookmarkRequestDTO the request DTO containing the listing ID
    * @return the created bookmark response DTO
    */
   @PostMapping("/create")
   @Operation(summary = "Create a bookmark for a listing", security = @SecurityRequirement(name = "bearerAuth"))
   public ResponseEntity<BookmarkResponseDTO> createBookmark(
-          @RequestBody BookmarkRequestDTO bookmarkRequestDTO,
-          Authentication authentication
+          @AuthenticationPrincipal User user,
+          @RequestBody BookmarkRequestDTO bookmarkRequestDTO
   ) {
     logger.info("Received POST request to create bookmark");
-    User user = userService.getUserByEmail(authentication.getName());
 
     return ResponseEntity.ok(BookmarkMapper.toDto(bookmarkService.createBookmark(bookmarkRequestDTO, user)));
   }
@@ -77,18 +73,18 @@ public class BookmarkController {
   /**
    * Delete a bookmark by its ID.
    *
+   * @param user the authenticated user deleting the bookmark
    * @param bookmarkId the ID of the bookmark to delete
    * @return a response entity with no content
    */
   @DeleteMapping("/{bookmarkId}")
   @Operation(summary = "Delete a bookmark", security = @SecurityRequirement(name = "bearerAuth"))
   public ResponseEntity<Void> deleteBookmark(
-          @PathVariable UUID bookmarkId,
-          Authentication authentication
+          @AuthenticationPrincipal User user,
+          @PathVariable UUID bookmarkId
   ) {
     logger.info("Received DELETE request to delete bookmark with ID: {}", bookmarkId);
-    String email = authentication.getName();
-    bookmarkService.deleteBookmark(bookmarkId, email);
+    bookmarkService.deleteBookmark(bookmarkId, user);
 
     return ResponseEntity.noContent().build();
   }

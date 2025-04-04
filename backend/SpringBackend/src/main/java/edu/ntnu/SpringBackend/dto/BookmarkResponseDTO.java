@@ -14,6 +14,5 @@ import java.util.UUID;
 public class BookmarkResponseDTO {
   private UUID id;
   private UUID listingId;
-  private String userEmail;
   private LocalDateTime savedAt;
 }
