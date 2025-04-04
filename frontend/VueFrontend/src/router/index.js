@@ -8,6 +8,7 @@ import MyListingsView from '@/views/Profile/MyListingsView.vue'
 import FavoritesView from '@/views/Profile/FavoritesView.vue'
 import InboxView from '@/views/Inbox/InboxView.vue'
 import EditProfileView from '@/views/Profile/EditProfileView.vue'
+import MapView from '@/views/MapView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -56,8 +57,15 @@ const router = createRouter({
       path: '/inbox',
       name: 'inbox',
       component: InboxView
+    },
+    {
+      path: '/map',
+      name: 'map',
+      component: MapView
     }
   ],
 })
 
 export default router
+
+

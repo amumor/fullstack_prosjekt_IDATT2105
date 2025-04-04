@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from 'vue'
+import { vInfiniteScroll } from '@vueuse/components'
 import Navbar from '@/components/Navbar.vue'
 import ListedChatComponent from '@/components/Inbox/ListedChatComponent.vue'
 import InitialsDisplayComponent from '@/components/Profile/InitialsDisplayComponent.vue'
@@ -86,6 +87,7 @@ const sendMessage = () => {
     </div>
   </div>
   <div class="display-right-container" v-if="selectedChat">
+    <!-- Fix scroll! -->
     <div class="message-info">
       <InitialsDisplayComponent
         :name=selectedChat.messengerName

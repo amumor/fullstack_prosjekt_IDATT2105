@@ -2,12 +2,13 @@
 import { ref, defineProps } from 'vue';
 import { useRouter } from 'vue-router';
 import { Icon } from '@iconify/vue'
+import ListingMapComponent from '@/components/Listing/ListingMapComponent.vue'
 
 const props = defineProps({
   title: String,
   description: String,
   price: String,
-  location: String,
+  location: Array,
   category: String,
   lastEdited: String,
   image: String,
@@ -15,7 +16,7 @@ const props = defineProps({
 })
 
 const router = useRouter();
-const isOwner = ref(true);
+const isOwner = ref(false);
 const isFavorite = ref(false);
 
 const toggleFavorite = () => {
@@ -68,7 +69,8 @@ const delListing = () => {
 
     <!-- Map -->
     <div class="map">
-
+      <ListingMapComponent
+        :location=props.location />
     </div>
 
 
@@ -184,6 +186,7 @@ const delListing = () => {
   font-size: 16px;
   cursor: pointer;
   transition: all 0.3s ease;
+  line-height: 10px;
 }
 
 .buy-btn,

@@ -1,4 +1,5 @@
 <script setup>
+import { ref } from 'vue'
 
 const categories = [
   { id: 1, name: 'Boats' },
@@ -7,9 +8,32 @@ const categories = [
   { id: 4, name: 'Real Estate' },
 ];
 
+const coordinates = ref([59.9139, 10.7522]); // Default coordinates (Oslo)
+
+const getCoordinates = async (address) => {
+  const encodedAddress = encodeURIComponent(address);
+  const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodedAddress}`;
+
+  try {
+    const response = await fetch(url, {
+      headers: {
+        'Accept': 'application/json'
+      }
+    });
+    const data = await response.json();
+    if (data.length > 0) {
+      coordinates.value = [parseFloat(data[0].lat), parseFloat(data[0].lon)];
+    }
+  } catch (error) {
+    console.error('Error fetching coordinates:', error);
+  }
+  return null;
+};
+
 const createListing = () => {
   // Logic to save the listing
 };
+
 </script>
 
 <template>

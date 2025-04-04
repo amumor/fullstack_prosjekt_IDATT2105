@@ -44,7 +44,9 @@ const categories = [
   <div class="search-container">
     <input type="text" class="search-input" placeholder="Search for listings..." id="searchInput">
     <button class="search-btn" @click="searchFunction">Search</button>
-    <button class="map-btn">Map</button>
+    <button class="map-btn">
+      <router-link to="/map" id="router-link">Map</router-link>
+    </button>
   </div>
 
   <!-- Categories -->
