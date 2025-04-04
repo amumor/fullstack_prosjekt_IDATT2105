@@ -147,7 +147,7 @@ public class ListingService {
   public List<Listing> findByCategories(List<Category> categoryList, Pageable pageable) {
     logger.info("> Finding listings by categories: {}", categoryList);
     if (categoryList == null || categoryList.isEmpty()) {
-      return listingRepository.findByCategoryIn(categoryService.getAllCategories(), pageable);
+      return listingRepository.findByCategoryIn(categoryService.getAll(), pageable);
     }
     return listingRepository.findByCategoryIn(categoryList, pageable);
   }
