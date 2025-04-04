@@ -12,7 +12,6 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ListingCreationRequestDTO {
-    private UUID ownerId;
     private String title;
     private String description;
     private String categoryName;

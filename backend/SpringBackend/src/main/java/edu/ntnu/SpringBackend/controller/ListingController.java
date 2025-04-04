@@ -4,17 +4,17 @@ import edu.ntnu.SpringBackend.dto.ListingCreationRequestDTO;
 import edu.ntnu.SpringBackend.dto.ListingListResponseDTO;
 import edu.ntnu.SpringBackend.dto.ListingResponseDTO;
 import edu.ntnu.SpringBackend.mapper.ListingMapper;
+import edu.ntnu.SpringBackend.model.User;
 import edu.ntnu.SpringBackend.service.CategoryService;
 import edu.ntnu.SpringBackend.service.ListingService;
 import edu.ntnu.SpringBackend.service.SearchHistoryService;
 import edu.ntnu.SpringBackend.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.data.domain.Pageable;
@@ -31,9 +31,9 @@ public class ListingController {
     private final UserService userService;
     private final SearchHistoryService searchHistoryService;
 
-    @GetMapping("/get-suggestions/{userId}")
+    @GetMapping("/get-suggestions")
     public ResponseEntity<ListingListResponseDTO> getSuggestions(
-            @PathVariable UUID userId,
+            @AuthenticationPrincipal User user,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
     ) {
@@ -41,13 +41,13 @@ public class ListingController {
         if (size > MAX_SIZE) {
             size = MAX_SIZE;
         }
-        logger.info("GET Request recieved on [/api/v1/listing/get-suggestions/{}]", userId);
+        logger.info("GET Request recieved on [/api/v1/listing/get-suggestions]");
         Pageable pageable = PageRequest.of(page, size);
         return ResponseEntity.ok(
                 listingMapper.toDto(
                         listingService.findByCategories(
                                 categoryService.findBySearchHistory(
-                                        searchHistoryService.findByUserId(userId)
+                                        searchHistoryService.findByUser(user)
                                 ), pageable
                         )
                 )
@@ -64,9 +64,10 @@ public class ListingController {
 
     @PostMapping("/create")
     public ResponseEntity<ListingResponseDTO> create(
+            @AuthenticationPrincipal User user,
             @RequestBody ListingCreationRequestDTO request
     ) {
         logger.info("POST Request recieved on [/api/v1/listing/create]");
-        return ResponseEntity.ok(listingMapper.toDto(listingService.createListing(request)));
+        return ResponseEntity.ok(listingMapper.toDto(listingService.createListing(request, user)));
     }
 }

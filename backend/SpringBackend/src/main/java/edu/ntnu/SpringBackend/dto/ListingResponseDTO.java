@@ -16,7 +16,8 @@ import java.util.UUID;
 @NoArgsConstructor
 public class ListingResponseDTO {
     private UUID id;
-    private UUID sellerId;
+    private String sellerFirstName;
+    private String sellerLastName;
     private String title;
     private String description;
     private String categoryName;
@@ -34,5 +35,4 @@ public class ListingResponseDTO {
      * Format ISO 8601, Date and time when this listing was last edited.
      */
     private String lastEditedAt;
-    private UUID chatId;
 }
