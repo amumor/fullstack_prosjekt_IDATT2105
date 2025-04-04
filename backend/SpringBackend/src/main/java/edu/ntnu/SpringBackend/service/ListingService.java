@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import org.springframework.data.domain.Pageable;
+
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
@@ -55,9 +57,20 @@ public class ListingService {
     return all;
   }
 
-  public Listing createListing(ListingCreationRequestDTO listingCreationRequestDTO) {
-    logger.info("> Creating listing: {}", listingCreationRequestDTO.getTitle());
-    Listing listing = listingMapper.toEntity(listingCreationRequestDTO);
+  public Listing createListing(ListingCreationRequestDTO dto, User seller) {
+    logger.info("> Creating listing: {}", dto.getTitle());
+    Listing listing = Listing.builder()
+                    .title(dto.getTitle())
+                    .description(dto.getDescription())
+                    .category(categoryService.getByName(dto.getCategoryName()))
+                    .status(ListingStatus.valueOf(dto.getListingStatus()))
+                    .price(dto.getPrice())
+                    .latitude(dto.getLatitude())
+                    .longitude(dto.getLongitude())
+                    .seller(seller)
+                    .createdAt(LocalDateTime.parse(dto.getCreatedAt()))
+                    .lastEditedAt(LocalDateTime.parse(dto.getLastEditedAt()))
+                    .build();
     validateListing(listing);
 
     if (listing.getStatus() == null || listing.getStatus() == ListingStatus.SOLD) {
