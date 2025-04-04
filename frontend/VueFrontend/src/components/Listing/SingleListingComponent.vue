@@ -36,7 +36,7 @@ const toEditListing = () => {
 </script>
 
 <template>
-<div class="listing">
+<div class="display-page-container">
 
   <!-- Image container -->
   <div class="image-container">
@@ -87,17 +87,13 @@ const toEditListing = () => {
 </template>
 
 <style scoped>
-.listing {
+.display-page-container {
   background-color: #fff;
-  font-family: 'Inter', sans-serif;
   border-radius: 10px;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
 
-  padding: 15px;
-  max-width: 1000px;
   width: 100%;
   display: flex;
-  gap: 15px;
 }
 
 /* Image container */
@@ -144,15 +140,12 @@ const toEditListing = () => {
 }
 
 /* Description */
+.sidebar {
+  margin: 10px 15px 15px 15px;
+}
 .description {
   width: 100%;
   padding: 5px 0;
-}
-
-.description h2 {
-  font-size: 24px;
-  font-weight: 500;
-  color: #333;
 }
 
 #price {
@@ -160,12 +153,7 @@ const toEditListing = () => {
   color: #333333;
 }
 
-#description {
-  font-size: 15px;
-  color: #777;
-}
-
-#categories {
+#description, #categories {
   font-size: 15px;
   color: #777;
 }
@@ -184,13 +172,14 @@ const toEditListing = () => {
 .buy-btn,
 .message-btn,
 .owner-btn {
+  font-size: 16px;
+  transition: all 0.3s ease;
+
   flex: 1;
   padding: 10px;
   border: none;
   border-radius: 5px;
-  font-size: 16px;
   cursor: pointer;
-  transition: all 0.3s ease;
   line-height: 10px;
 }
 
@@ -212,7 +201,7 @@ const toEditListing = () => {
 }
 
 .message-btn:hover {
-  background-color: #0066cc;
+  background-color: #0056b3;
 }
 
 #delete:hover {

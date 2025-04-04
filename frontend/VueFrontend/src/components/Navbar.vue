@@ -86,17 +86,18 @@ onMounted(() => {
 
 <style scoped>
 .navbar {
+  font-family: 'Inter', sans-serif;
+  background-color: #ffffff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 15px 20px;
-  background-color: #ffffff;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 #header {
   text-decoration: none;
-  font-family: 'Inter', sans-serif;
   color: #333;
   font-size: 24px;
   font-weight: bold;
@@ -104,7 +105,6 @@ onMounted(() => {
 
 #router-link {
   text-decoration: none;
-  font-family: 'Inter', sans-serif;
   color: #333;
   margin-right: 20px;
 }
@@ -124,7 +124,6 @@ onMounted(() => {
 
 .options a {
   color: white;
-  font-family: 'Inter', sans-serif;
   text-decoration: none;
   background-color: #D9D9D9;
 
@@ -135,7 +134,7 @@ onMounted(() => {
 
 .options a:hover {
   background-color: #f1f1f1;
-  transform: scale(1.05);
+  transform: scale(1.005);
 }
 
 /* Mobile Navbar */

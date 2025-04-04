@@ -1,5 +1,6 @@
 <script setup>
 import { ref, defineProps } from 'vue';
+import { useRouter } from 'vue-router';
 
 /**
  * @property {Boolean} hasUser - Indicates if the user is registered.
@@ -11,6 +12,7 @@ const props = defineProps({
   },
 });
 
+const router = useRouter();
 const isUserRegistered = ref(props.hasUser);
 
 const toggleForm = () => {
@@ -19,13 +21,14 @@ const toggleForm = () => {
 
 const login = () => {
   // Logic to handle login
+  router.push('/')
 };
 
 
 </script>
 
 <template>
-<div class="credentials-box">
+<div class="display-page-container">
   <h2 class="logo-header">FIND.no</h2>
   <template v-if="isUserRegistered">
     <div class="login">
@@ -33,7 +36,7 @@ const login = () => {
       <div class="fields">
         <input type="text" placeholder="E-mail" required />
         <input type="password" placeholder="Password" required />
-        <router-link to="/" @click="login">Log in</router-link>
+        <button class="basic-blue-btn" @click="login">Log in</button>
       </div>
       <div class="to-sign-up">
         <p>Don't have an account yet?</p>
@@ -51,7 +54,7 @@ const login = () => {
         <input type="text" placeholder="Phone number" required />
         <input type="password" placeholder="Password" required />
         <input type="password" placeholder="Confirm password" required />
-        <button type="submit" @click="toggleForm">Register</button>
+        <button class="basic-blue-btn" @click="toggleForm">Register</button>
       </div>
       <div class="to-login">
         <p>Already have an account?</p>
@@ -63,16 +66,14 @@ const login = () => {
 </template>
 
 <style scoped>
-.credentials-box {
+.display-page-container {
   background: white;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  font-family: 'Inter', sans-serif;
 
   width: 40%;
-  height: 70%;
   padding: 40px;
   border-radius: 10px;
-  margin: 70px auto;
+  margin: 20px auto;
   position: relative;
 }
 
@@ -88,51 +89,11 @@ const login = () => {
 
 /* Title */
 h2 {
-  font-size: 24px;
-  color: #333333;
-  font-weight: 500;
-
-  text-align: left;
-  margin-bottom: 20px;
-  margin-top: 60px;
+  margin-top: 40px;
 }
 
-/* Input fields */
-.fields input {
-  font-size: 16px;
-
-  width: 60%;
-  padding: 10px;
-  margin-bottom: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-/* Log in and register button */
-.fields a, .fields button {
-  background: #1C64FF;
-  color: white;
-  font-size: 16px;
-  transition: background 0.3s ease;
-
-  text-align: center;
-  width: 66%;
-  display: block;
-  padding: 10px;
-  border-radius: 5px;
-  margin-top: 10px;
-  border: none;
-}
-
-.fields a {
-  display: block;
-  text-decoration: none;
-  width: 60%;
-}
-
-
-.fields a:hover, .fields button:hover {
-  background: #0056b3;
+input {
+  width: 70%;
 }
 
 /* Router links */

@@ -87,7 +87,7 @@ const saveChanges = () => {
 </script>
 
 <template>
-  <div class="display-values-container">
+  <div class="display-page-container">
     <h2 class="display-values-title">Edit listing</h2>
     <div class="display-values-content">
       <div class="display-values-item">
@@ -106,33 +106,26 @@ const saveChanges = () => {
         <label for="location">Location:</label>
         <input type="text" id="location" v-model="newLocation" />
       </div>
-      <button @click="saveChanges">Save changes</button>
+      <button class="basic-blue-btn" @click="saveChanges">Save changes</button>
     </div>
   </div>
 </template>
 
 <style scoped>
-.display-values-container {
-  background: white;
+.display-page-container {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-  font-family: 'Inter', sans-serif;
 
   width: 40%;
   max-width: 600px;
   padding: 40px;
   border-radius: 10px;
-  margin: 70px auto;
+  margin: 20px auto;
   position: relative;
 }
 
 /* Header */
 h2 {
-  font-size: 24px;
-  color: #333333;
-  font-weight: 500;
-
-  text-align: left;
-  margin-bottom: 20px;
+  text-align: center;
 }
 
 /* Input fields */
@@ -154,44 +147,14 @@ label {
   margin-bottom: 5px;
 }
 
-input {
-  font-size: 16px;
-  transition: border-color 0.3s ease;
-
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-input:focus {
-  border-color: #1C64FF;
-  outline: none;
-}
-
 /* Save changes button */
-button {
-  background: #1C64FF;
-  color: white;
-  font-size: 16px;
-
-  padding: 12px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background 0.3s ease, transform 0.2s ease;
+.basic-blue-btn {
   width: 100%;
-  margin-top: 20px;
-}
-
-button:hover {
-  background: #0056b3;
-  transform: scale(1.05);
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .display-values-container {
+  .display-page-container {
     width: 80%;
     padding: 20px;
   }

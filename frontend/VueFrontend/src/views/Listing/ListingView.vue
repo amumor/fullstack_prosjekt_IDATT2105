@@ -20,11 +20,10 @@ const isLoggedIn = true;
 
 <template>
 
-  <!-- Navbar -->
   <Navbar :isLoggedIn=isLoggedIn />
 
   <!-- Listing component -->
-  <div class="listing-container">
+  <div class="display-page-container">
     <SingleListingComponent
       :id=id
       :title=title
@@ -39,12 +38,8 @@ const isLoggedIn = true;
 </template>
 
 <style scoped>
-.listing-container {
-  display: flex;
-  flex-direction: column;
+.display-page-container {
   justify-self: center;
-  align-items: center;
-  width: 100%;
   max-width: 800px;
   padding: 20px;
 }

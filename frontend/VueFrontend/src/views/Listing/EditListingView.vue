@@ -22,5 +22,4 @@ const location = [60.472024, 8.524123] // Oslo coordinates
 </template>
 
 <style scoped>
-
 </style>

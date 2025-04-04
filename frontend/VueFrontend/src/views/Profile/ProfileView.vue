@@ -63,12 +63,8 @@ const routeTo = (route) => {
   margin: 30px 0 0 70px;
 }
 
-/* Title */
+/* Name */
 h2 {
-  font-size: 24px;
-  font-family: 'Inter', sans-serif;
-  font-weight: 500;
-
   margin: 30px 0 0 30px;
 }
 
