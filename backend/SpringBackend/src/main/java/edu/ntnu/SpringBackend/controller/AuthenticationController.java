@@ -3,11 +3,15 @@ package edu.ntnu.SpringBackend.controller;
 import edu.ntnu.SpringBackend.dto.AuthenticationRequestDTO;
 import edu.ntnu.SpringBackend.dto.TokenResponseDTO;
 import edu.ntnu.SpringBackend.dto.UserRequestDTO;
+import edu.ntnu.SpringBackend.model.User;
+import edu.ntnu.SpringBackend.model.enums.Role;
 import edu.ntnu.SpringBackend.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,6 +30,22 @@ public class AuthenticationController {
             @RequestBody UserRequestDTO request
     ) {
         logger.info("POST request recieved on [/api/v1/auth/register]");
+
+        if (request.getRole().equals(Role.ADMIN)) {
+            logger.error("!!! User is trying to register as ADMIN without autherization.");
+            throw new IllegalArgumentException("Unauthorized request to register as ADMIN.");
+        }
+
+        return ResponseEntity.ok(service.register(request));
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/register/admin")
+    public ResponseEntity<TokenResponseDTO> registerAdmin(
+            @AuthenticationPrincipal User user,
+            @RequestBody UserRequestDTO request
+    ) {
+        logger.info("POST request recieved on [/api/v1/auth/register/admin]");
         return ResponseEntity.ok(service.register(request));
     }
 
