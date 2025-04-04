@@ -5,6 +5,7 @@ import Navbar from '@/components/Navbar.vue'
 document.body.style.backgroundColor = "#ffffff";
 
 // Dummy data for listing
+const id= "1";
 const title="BÅT MEGA";
 const description="Massemammssemamaasad oifdjvl uifhiiiififif jdjdjdjdj";
 const price="100kr";
@@ -19,12 +20,12 @@ const isLoggedIn = true;
 
 <template>
 
-  <!-- Navbar -->
   <Navbar :isLoggedIn=isLoggedIn />
 
   <!-- Listing component -->
-  <div class="listing-container">
+  <div class="display-page-container">
     <SingleListingComponent
+      :id=id
       :title=title
       :description=description
       :price=price
@@ -37,12 +38,8 @@ const isLoggedIn = true;
 </template>
 
 <style scoped>
-.listing-container {
-  display: flex;
-  flex-direction: column;
+.display-page-container {
   justify-self: center;
-  align-items: center;
-  width: 100%;
   max-width: 800px;
   padding: 20px;
 }

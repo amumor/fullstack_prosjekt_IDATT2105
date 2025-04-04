@@ -118,10 +118,8 @@ const sendMessage = () => {
 /* Page container */
 .display-page-container{
   display: flex;
-  justify-content: space-between;
-  gap: 20px;
-  margin: auto;
 }
+
 /* Left container */
 .display-left-container {
   flex: 1;
@@ -131,11 +129,12 @@ const sendMessage = () => {
 /* Right container */
 .display-right-container {
   flex: 1;
-  max-width: 55%;
+  max-width: 100%;
   background: #f5f5f5;
   padding: 20px;
-  margin-top: 67px;
-  border-radius: 8px;
+  margin-top: 56px;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
   text-align: center;
 }
 
@@ -153,17 +152,6 @@ const sendMessage = () => {
   cursor: pointer;
 }
 
-/* Header */
-h2 {
-  font-size: 24px;
-  color: #333333;
-  font-weight: 500;
-  font-family: 'Inter', sans-serif;
-
-  text-align: left;
-  margin-bottom: 20px;
-}
-
 /* Right side chat display */
 .message-info {
   display: flex;
@@ -174,8 +162,6 @@ h2 {
 
 /* Message display */
 .messages {
-  font-family: 'Inter', sans-serif;
-
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -236,7 +222,6 @@ h2 {
 }
 
 .message-input textarea {
-  font-family: 'Inter', sans-serif;
   flex: 1;
   padding: 10px;
   border-radius: 5px;

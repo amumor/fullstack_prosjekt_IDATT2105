@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import Navbar from '@/components/Navbar.vue'
 import { LMap, LTileLayer, LMarker, LPopup } from '@vue-leaflet/vue-leaflet';
 import { Icon } from "leaflet";
+import BackToComponent from '@/components/BackToComponent.vue'
 
 // Fix for missing Leaflet icons
 delete Icon.Default.prototype._getIconUrl;
@@ -24,6 +25,7 @@ const markers = ref([
 
 <template>
   <Navbar :isLoggedIn=true />
+  <BackToComponent />
   <div class="map-container">
     <LMap :zoom="10" :center="center">
       <!-- Map Background -->

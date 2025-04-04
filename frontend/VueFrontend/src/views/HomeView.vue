@@ -34,11 +34,8 @@ const categories = [
 </script>
 
 <template>
-  <div class="display-page-container">
-    <!-- fix login logic!! -->
-    <Navbar
-      :isLoggedIn=true />
-  </div>
+<Navbar :isLoggedIn=true />
+<div class="display-page-container">
 
   <!-- Search bar -->
   <div class="search-container">
@@ -67,6 +64,7 @@ const categories = [
         :title="listing.title" />
     </div>
   </div>
+</div>
 </template>
 
 <style scoped>

@@ -5,6 +5,7 @@ import { Icon } from '@iconify/vue'
 import ListingMapComponent from '@/components/Listing/ListingMapComponent.vue'
 
 const props = defineProps({
+  id: String,
   title: String,
   description: String,
   price: String,
@@ -16,7 +17,7 @@ const props = defineProps({
 })
 
 const router = useRouter();
-const isOwner = ref(false);
+const isOwner = ref(true);
 const isFavorite = ref(false);
 
 const toggleFavorite = () => {
@@ -25,13 +26,17 @@ const toggleFavorite = () => {
 
 const delListing = () => {
   // Logic to delete the listing
-  router.push('/myListings');
+  router.back()
+}
+
+const toEditListing = () => {
+  router.push('/listing/' + props.id + '/edit');
 }
 
 </script>
 
 <template>
-<div class="listing">
+<div class="display-page-container">
 
   <!-- Image container -->
   <div class="image-container">
@@ -61,7 +66,7 @@ const delListing = () => {
     <!-- Owner options -->
     <div class="owner-options">
       <template v-if="isOwner">
-        <button class="owner-btn">Edit</button>
+        <button class="owner-btn" @click="toEditListing">Edit</button>
         <button class="owner-btn">Archive</button>
         <button class="owner-btn" id="delete" @click=delListing>Delete</button>
       </template>
@@ -82,17 +87,13 @@ const delListing = () => {
 </template>
 
 <style scoped>
-.listing {
+.display-page-container {
   background-color: #fff;
-  font-family: 'Inter', sans-serif;
   border-radius: 10px;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
 
-  padding: 15px;
-  max-width: 1000px;
   width: 100%;
   display: flex;
-  gap: 15px;
 }
 
 /* Image container */
@@ -139,15 +140,12 @@ const delListing = () => {
 }
 
 /* Description */
+.sidebar {
+  margin: 10px 15px 15px 15px;
+}
 .description {
   width: 100%;
   padding: 5px 0;
-}
-
-.description h2 {
-  font-size: 24px;
-  font-weight: 500;
-  color: #333;
 }
 
 #price {
@@ -155,12 +153,7 @@ const delListing = () => {
   color: #333333;
 }
 
-#description {
-  font-size: 15px;
-  color: #777;
-}
-
-#categories {
+#description, #categories {
   font-size: 15px;
   color: #777;
 }
@@ -179,13 +172,14 @@ const delListing = () => {
 .buy-btn,
 .message-btn,
 .owner-btn {
+  font-size: 16px;
+  transition: all 0.3s ease;
+
   flex: 1;
   padding: 10px;
   border: none;
   border-radius: 5px;
-  font-size: 16px;
   cursor: pointer;
-  transition: all 0.3s ease;
   line-height: 10px;
 }
 
@@ -207,7 +201,7 @@ const delListing = () => {
 }
 
 .message-btn:hover {
-  background-color: #0066cc;
+  background-color: #0056b3;
 }
 
 #delete:hover {

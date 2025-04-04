@@ -8,6 +8,7 @@ const props = defineProps({
   iconString: String
 });
 
+
 </script>
 
 <template>
@@ -52,8 +53,6 @@ const props = defineProps({
 /* Header */
 h2 {
   font-size: 20px;
-  color: #333333;
-  font-weight: 500;
 }
 
 </style>

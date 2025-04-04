@@ -32,7 +32,7 @@ const saveChanges = () => {
 </script>
 
 <template>
-<div class="display-credentials-container">
+<div class="display-page-container">
   <h2 class="display-credentials-title">Edit Profile</h2>
   <div class="display-credentials-content">
     <div class="display-credentials-item">
@@ -57,27 +57,16 @@ const saveChanges = () => {
 </template>
 
 <style scoped>
-.display-credentials-container {
+.display-page-container {
   background: white;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-  font-family: 'Inter', sans-serif;
 
   width: 40%;
   max-width: 600px;
   padding: 40px;
   border-radius: 10px;
-  margin: 70px auto;
+  margin: 20px auto;
   position: relative;
-}
-
-/* Header */
-h2 {
-  font-size: 24px;
-  color: #333333;
-  font-weight: 500;
-
-  text-align: left;
-  margin-bottom: 20px;
 }
 
 /* Input fields */
@@ -97,21 +86,6 @@ label {
   font-weight: 500;
   color: #333333;
   margin-bottom: 5px;
-}
-
-input {
-  font-size: 16px;
-  transition: border-color 0.3s ease;
-
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-input:focus {
-  border-color: #1C64FF;
-  outline: none;
 }
 
 /* Save changes button */
@@ -136,7 +110,7 @@ button:hover {
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .display-credentials-container {
+  .display-page-container {
     width: 80%;
     padding: 20px;
   }

@@ -31,13 +31,13 @@ const getCoordinates = async (address) => {
 };
 
 const createListing = () => {
-  // Logic to save the listing
+  // Logic to save the listing (v-model?)
 };
 
 </script>
 
 <template>
-<div class="new-listing-container">
+<div class="display-page-container">
   <div class="fields">
     <h2>Create a new listing</h2>
     <div class="text-fields">
@@ -55,38 +55,30 @@ const createListing = () => {
       <form action="/upload" method="post" enctype="multipart/form-data">
         <label for="file">Upload image:</label>
         <input type="file" id="file" name="file" accept="image/*">
-        <button type="submit">Upload</button>
       </form>
     </div>
     <div class="submit-button">
-      <button type="submit" @click="createListing">Create</button>
+      <button type="submit" class="basic-blue-btn" @click="createListing">Create</button>
     </div>
   </div>
 </div>
 </template>
 
 <style scoped>
-.new-listing-container {
-  background: white;
+.display-page-container {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-  font-family: 'Inter', sans-serif;
 
   width: 40%;
   max-width: 600px;
   padding: 40px;
   border-radius: 10px;
-  margin: 70px auto;
+  margin: auto;
   position: relative;
 }
 
 /* Header */
 h2 {
-  font-size: 24px;
-  color: #333333;
-  font-weight: 500;
-
   text-align: center;
-  margin-bottom: 20px;
 }
 
 /* Input fields */
@@ -96,25 +88,9 @@ h2 {
   gap: 12px;
 }
 
-.text-fields input {
-  font-size: 16px;
-  transition: border-color 0.3s ease;
-
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-.text-fields input:focus {
-  border-color: #1C64FF;
-  outline: none;
-}
-
 #description {
   font-size: 16px;
   border: 1px solid #ccc;
-  font-family: 'Inter', sans-serif;
 
   width: 100%;
   height: 100px;
@@ -123,6 +99,11 @@ h2 {
   resize: vertical;
   text-align: left;
   vertical-align: top;
+}
+
+#description:focus {
+  border-color: #1C64FF;
+  outline: none;
 }
 
 /* Category selection */
@@ -163,6 +144,7 @@ h2 {
 
 .image-field input {
   margin-top: 5px;
+  border: none;
 }
 
 /* Submit button */
@@ -173,26 +155,12 @@ h2 {
 }
 
 .submit-button button {
-  background: #1C64FF;
-  color: white;
-  font-size: 16px;
-
-  padding: 12px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background 0.3s ease, transform 0.2s ease;
   width: 100%;
-}
-
-.submit-button button:hover {
-  background: #0056b3;
-  transform: scale(1.05);
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .new-listing-container {
+  .display-page-container {
     width: 80%;
     padding: 20px;
   }
