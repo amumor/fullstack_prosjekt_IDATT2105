@@ -3,9 +3,6 @@ package edu.ntnu.SpringBackend.mapper;
 import edu.ntnu.SpringBackend.dto.SearchHistoryDTO;
 import edu.ntnu.SpringBackend.dto.SearchHistoryListResponseDTO;
 import edu.ntnu.SpringBackend.model.SearchHistory;
-import edu.ntnu.SpringBackend.service.SearchHistoryService;
-import edu.ntnu.SpringBackend.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -15,13 +12,10 @@ import java.util.List;
 
 @Component
 public class SearchHistoryMapper {
-    @Autowired
-    private UserService userService;
-
 //    @Autowired
 //    private SearchHistoryService searchHistoryService; TODO Remove
 
-    public SearchHistory toEntity(SearchHistoryDTO dto) {
+    /*public SearchHistory toEntity(SearchHistoryDTO dto) {
         if (dto == null) {
             throw new IllegalArgumentException("dto argument can not be null");
         }
@@ -32,7 +26,7 @@ public class SearchHistoryMapper {
         searchHistory.setSearchedAt(LocalDateTime.parse(dto.getSearchedAt()));
 
         return searchHistory;
-    }
+    }*/
 
 
     public SearchHistoryListResponseDTO toDto(List<SearchHistory> searchHistoryList) {
@@ -46,7 +40,6 @@ public class SearchHistoryMapper {
         }
 
         SearchHistoryListResponseDTO dto = new SearchHistoryListResponseDTO();
-        dto.setUserId(searchHistoryList.getFirst().getId());
         dto.setSearchQueries(searchQueryList);
 
         return dto;
@@ -58,7 +51,6 @@ public class SearchHistoryMapper {
         }
 
         SearchHistoryDTO dto = new SearchHistoryDTO();
-        dto.setUserId(searchHistory.getUser().getId());
         dto.setSearchQuery(searchHistory.getSearchQuery());
         dto.setSearchedAt(searchHistory.getSearchedAt().format(DateTimeFormatter.ISO_DATE_TIME));
 

@@ -12,7 +12,6 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SearchHistoryDTO {
-    private UUID userId;
     private String searchQuery;
     /**
      * Format: ISO 8061

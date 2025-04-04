@@ -32,9 +32,10 @@ public class SearchHistoryController {
 
     @PostMapping("/add")
     public ResponseEntity<SearchHistoryDTO> add(
+            @AuthenticationPrincipal User user,
             @RequestBody SearchHistoryDTO request
     ) {
         logger.info("POST Request received on [/api/v1/search-history/add]");
-        return ResponseEntity.ok(searchHistoryMapper.toDto(searchHistoryService.add(request)));
+        return ResponseEntity.ok(searchHistoryMapper.toDto(searchHistoryService.add(request, user)));
     }
 }

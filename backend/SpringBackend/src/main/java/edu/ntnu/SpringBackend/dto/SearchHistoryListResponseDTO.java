@@ -13,6 +13,5 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SearchHistoryListResponseDTO {
-    private UUID userId;
     private List<String> SearchQueries;
 }
