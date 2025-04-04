@@ -42,7 +42,7 @@ public class CategoryService {
     @Transactional
     public Category add(Category category, @AuthenticationPrincipal User user) {
         logger.info("> Adding new category: {}", category.getName());
-        if (user == null || !user.getRole().equals(Role.ADMIN)) {
+        if (user == null || !user.getRole().equals(Role.ROLE_ADMIN)) {
             throw new SecurityException("User is not authorized to delete categories");
         }
 
@@ -52,7 +52,7 @@ public class CategoryService {
     @Transactional
     public void delete(UUID id, @AuthenticationPrincipal User user) {
         logger.info("> Deleting category with ID: {}", id);
-        if (user == null || !user.getRole().equals(Role.ADMIN)) {
+        if (user == null || !user.getRole().equals(Role.ROLE_ADMIN)) {
             throw new SecurityException("User is not authorized to delete categories");
         }
 
