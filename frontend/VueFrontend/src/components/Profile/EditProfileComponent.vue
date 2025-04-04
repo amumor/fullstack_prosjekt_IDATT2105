@@ -110,7 +110,7 @@ button:hover {
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .display-credentials-container {
+  .display-page-container {
     width: 80%;
     padding: 20px;
   }
