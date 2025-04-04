@@ -32,7 +32,7 @@ public class AuthenticationController {
         logger.info("POST request recieved on [/api/v1/auth/register]");
 
         if (request.getRole().equals(Role.ROLE_ADMIN)) {
-            logger.error("!!! User is trying to register as ADMIN without authorization.");
+            logger.error("!!! User is trying to register as ROLE_ADMIN without authorization.");
             throw new IllegalArgumentException("Unauthorized request to register as ADMIN.");
         }
 
