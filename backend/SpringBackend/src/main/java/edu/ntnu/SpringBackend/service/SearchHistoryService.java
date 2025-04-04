@@ -3,6 +3,7 @@ package edu.ntnu.SpringBackend.service;
 import edu.ntnu.SpringBackend.dto.SearchHistoryDTO;
 import edu.ntnu.SpringBackend.mapper.SearchHistoryMapper;
 import edu.ntnu.SpringBackend.model.SearchHistory;
+import edu.ntnu.SpringBackend.model.User;
 import edu.ntnu.SpringBackend.repository.SearchHistoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -22,9 +23,9 @@ public class SearchHistoryService {
     private final SearchHistoryMapper searchHistoryMapper;
     private final UserService userService;
 
-    public List<SearchHistory> findByUserId(UUID userId) {
-        logger.info("> Finding search history by user id: {}", userId);
-        return searchHistoryRepository.findByUserIdOrderBySearchedAtDesc(userId);
+    public List<SearchHistory> findByUser(User user) {
+        logger.info("> Finding search history by user id: {}", user.getId());
+        return searchHistoryRepository.findByUserIdOrderBySearchedAtDesc(user.getId());
     }
 
     public SearchHistory add(SearchHistoryDTO requestDTO) {
