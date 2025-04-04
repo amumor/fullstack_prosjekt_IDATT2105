@@ -91,7 +91,8 @@ h1 {
   background-color: #007bff;
   padding: 10px 15px;
   border-radius: 5px;
-  max-height: 20px;
+  max-height: 40px;
+  line-height: 20px;
 }
 
 .options-containers {

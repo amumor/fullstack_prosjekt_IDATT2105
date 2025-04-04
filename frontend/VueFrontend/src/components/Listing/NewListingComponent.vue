@@ -31,7 +31,7 @@ const getCoordinates = async (address) => {
 };
 
 const createListing = () => {
-  // Logic to save the listing
+  // Logic to save the listing (v-model?)
 };
 
 </script>

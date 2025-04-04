@@ -5,6 +5,7 @@ import { Icon } from '@iconify/vue'
 import ListingMapComponent from '@/components/Listing/ListingMapComponent.vue'
 
 const props = defineProps({
+  id: String,
   title: String,
   description: String,
   price: String,
@@ -16,7 +17,7 @@ const props = defineProps({
 })
 
 const router = useRouter();
-const isOwner = ref(false);
+const isOwner = ref(true);
 const isFavorite = ref(false);
 
 const toggleFavorite = () => {
@@ -25,7 +26,11 @@ const toggleFavorite = () => {
 
 const delListing = () => {
   // Logic to delete the listing
-  router.push('/myListings');
+  router.back()
+}
+
+const toEditListing = () => {
+  router.push('/listing/' + props.id + '/edit');
 }
 
 </script>
@@ -61,7 +66,7 @@ const delListing = () => {
     <!-- Owner options -->
     <div class="owner-options">
       <template v-if="isOwner">
-        <button class="owner-btn">Edit</button>
+        <button class="owner-btn" @click="toEditListing">Edit</button>
         <button class="owner-btn">Archive</button>
         <button class="owner-btn" id="delete" @click=delListing>Delete</button>
       </template>

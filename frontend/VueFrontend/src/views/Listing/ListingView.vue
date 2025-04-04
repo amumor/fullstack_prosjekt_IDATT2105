@@ -5,6 +5,7 @@ import Navbar from '@/components/Navbar.vue'
 document.body.style.backgroundColor = "#ffffff";
 
 // Dummy data for listing
+const id= "1";
 const title="BÅT MEGA";
 const description="Massemammssemamaasad oifdjvl uifhiiiififif jdjdjdjdj";
 const price="100kr";
@@ -25,6 +26,7 @@ const isLoggedIn = true;
   <!-- Listing component -->
   <div class="listing-container">
     <SingleListingComponent
+      :id=id
       :title=title
       :description=description
       :price=price
