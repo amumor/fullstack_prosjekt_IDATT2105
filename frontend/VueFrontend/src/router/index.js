@@ -9,6 +9,7 @@ import FavoritesView from '@/views/Profile/FavoritesView.vue'
 import InboxView from '@/views/Inbox/InboxView.vue'
 import EditProfileView from '@/views/Profile/EditProfileView.vue'
 import MapView from '@/views/MapView.vue'
+import EditListingView from '@/views/Listing/EditListingView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -62,6 +63,11 @@ const router = createRouter({
       path: '/map',
       name: 'map',
       component: MapView
+    },
+    {
+      path: '/listing/:id/edit',
+      name: 'editListing',
+      component: EditListingView,
     }
   ],
 })
