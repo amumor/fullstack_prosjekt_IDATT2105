@@ -48,7 +48,7 @@ public class MessageServiceTest {
             .firstName("Test")
             .lastName("Buyer")
             .phoneNumber("123456789")
-            .role(Role.USER)
+            .role(Role.ROLE_USER)
             .build());
 
     testSeller = userRepository.save(User.builder()
@@ -57,7 +57,7 @@ public class MessageServiceTest {
             .firstName("Test")
             .lastName("Seller")
             .phoneNumber("987654321")
-            .role(Role.USER)
+            .role(Role.ROLE_USER)
             .build());
 
     testCategory = categoryRepository.save(Category.builder()
