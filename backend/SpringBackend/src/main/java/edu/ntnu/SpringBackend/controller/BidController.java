@@ -23,10 +23,13 @@ public class BidController {
   private final BidMapper bidMapper;
 
   @PostMapping("/chat/{chatId}/bids")
-  public ResponseEntity<BidResponseDTO> placeBid(@PathVariable UUID chatId,
-                                                 @AuthenticationPrincipal User user,
-                                                 @RequestBody BidRequestDTO bidRequest) {
-    return ResponseEntity.ok(bidMapper.toDto(bidService.placeBid(chatId, user, bidRequest.getPrice())));
+  public ResponseEntity<BidResponseDTO> placeBid(
+          @PathVariable UUID chatId,
+          @AuthenticationPrincipal User user,
+          @RequestBody BidRequestDTO bidRequest
+  ) {
+    logger.info("Received POST request on [/api/v1/chat/{}/bids]", chatId);
+    return ResponseEntity.ok(bidMapper.toDto(bidService.placeBid(chatId, user, bidRequest)));
   }
 
 }
