@@ -1,5 +1,6 @@
 <script setup>
 import { ref, defineProps, onMounted } from 'vue';
+import { Icon } from '@iconify/vue'
 
 /**
  * @property {Boolean} isLoggedIn - Indicates if the user is logged in.
@@ -15,6 +16,7 @@ const props = defineProps({
 const isUserLoggedIn = ref(props.isLoggedIn);
 const isOpen = ref(false);
 const isMobile = ref(window.innerWidth <= 768);
+const isAdmin = ref(true);
 
 const toggleMenu = () => {
   isOpen.value = !isOpen.value;
@@ -47,6 +49,11 @@ onMounted(() => {
           <router-link to ="/profile/favorites" id="router-link">Favorites</router-link>
           <router-link to ="/inbox" id="router-link">Inbox</router-link>
           <router-link to ="/profile" id="router-link">Profile</router-link>
+
+          <!-- Admin settings -->
+          <router-link to="/admin" id="admin-settings" v-if="isAdmin">
+            <Icon :icon="'material-symbols:settings'" width="30" height="30" />
+          </router-link>
         </template>
 
         <!-- Logged out menu -->
@@ -70,6 +77,11 @@ onMounted(() => {
             <li><router-link to="/profile/favorites" @click="toggleMenu" id="router-link">Favorites</router-link></li>
             <li><router-link to="/inbox" @click="toggleMenu" id="router-link">Inbox</router-link></li>
             <li><router-link to="/profile" @click="toggleMenu" id="router-link">Profile</router-link></li>
+
+            <!-- Admin settings -->
+            <li><router-link to="/admin" @click="toggleMenu" id="admin-settings" v-if="isAdmin">
+              <Icon :icon="'material-symbols:settings'" width="30" height="30" />
+            </router-link></li>
           </template>
 
           <!-- Logged Out Menu -->
@@ -109,6 +121,12 @@ onMounted(() => {
   margin-right: 20px;
 }
 
+#admin-settings {
+  text-decoration: none;
+  color: #333;
+  margin-right: 20px;
+}
+
 .desktop-navbar {
   display: flex;
   align-items: center;
@@ -132,8 +150,14 @@ onMounted(() => {
   transition: background-color 0.3s, transform 0.3s;
 }
 
+.options #admin-settings {
+  text-decoration: none;
+  background-color: transparent;
+  padding: 7px 0 0 0;
+}
+
 .options a:hover {
-  background-color: #f1f1f1;
+  color: #f1f1f1;
   transform: scale(1.005);
 }
 
