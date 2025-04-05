@@ -16,9 +16,11 @@ public class ChatMapper {
   public ChatResponseDTO toDto(Chat chat) {
     return ChatResponseDTO.builder()
             .id(chat.getId())
-            .buyerId(chat.getBuyer().getId())
-            .sellerId(chat.getListing().getSeller().getId())
             .listingId(chat.getListing().getId())
+            .buyerFirstName(chat.getBuyer().getFirstName())
+            .buyerLastName(chat.getBuyer().getLastName())
+            .sellerFirstName(chat.getListing().getSeller().getFirstName())
+            .sellerLastName(chat.getListing().getSeller().getLastName())
             .createdAt(chat.getCreatedAt())
             .messages(chat.getMessages().stream()
                     .map(messageMapper::toDto)
