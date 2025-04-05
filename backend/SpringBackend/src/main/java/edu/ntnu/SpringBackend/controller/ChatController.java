@@ -39,7 +39,7 @@ public class ChatController {
           @PathVariable UUID listingId,
           @AuthenticationPrincipal User user
   ) {
-    logger.info("GET request received on [/api/v1/listings/{}/chats]", listingId);
+    logger.info("GET request received on [/api/v1/listings/{}/chat]", listingId);
     return ResponseEntity.ok(chatMapper.toDto(chatService.getChatFromBuyerAndListing(listingId, user)));
   }
 
@@ -54,7 +54,7 @@ public class ChatController {
           @PathVariable UUID listingId,
           @AuthenticationPrincipal User user
   ) {
-    logger.info("GET request received for seller to see chats for listing {}", listingId);
+    logger.info("GET request received on [/api/v1/listings/{}/chats]", listingId);
     return ResponseEntity.ok(chatService.getAllChatsForListing(listingId, user).stream()
             .map(chatMapper::toDto)
             .collect(Collectors.toList()));
@@ -70,7 +70,7 @@ public class ChatController {
   public ResponseEntity<List<ChatResponseDTO>> getAllChatsForUser(
           @AuthenticationPrincipal User user
   ) {
-    logger.info("GET request received for user to see all chats");
+    logger.info("GET request received on [/api/v1/user/my-chats]");
     return ResponseEntity.ok(chatService.getAllChatsForUser(user).stream()
             .map(chatMapper::toDto)
             .collect(Collectors.toList()));
@@ -90,7 +90,7 @@ public class ChatController {
           @PathVariable UUID listingId,
           @RequestBody MessageRequestDTO messageRequestDTO
   ) {
-    logger.info("POST request received to create chat");
+    logger.info("POST request received on [/api/v1/listings/{}/create]", listingId);
     logger.info("> {}", messageRequestDTO.getContent());
     return ResponseEntity.ok(chatMapper.toDto(chatService.createChat(buyer, listingId, messageRequestDTO)));
   }
@@ -109,7 +109,7 @@ public class ChatController {
           @AuthenticationPrincipal User user,
           @RequestBody MessageRequestDTO messageRequestDTO
   ) {
-    logger.info("POST request received to add message to chat {}", chatId);
+    logger.info("POST request received on [/api/v1/chat/{}/message]", chatId);
     return ResponseEntity.ok(messageMapper.toDto(chatService.sendMessageToChat(chatId, user, messageRequestDTO)));
   }
 }
