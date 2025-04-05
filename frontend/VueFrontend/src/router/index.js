@@ -10,6 +10,7 @@ import InboxView from '@/views/Inbox/InboxView.vue'
 import EditProfileView from '@/views/Profile/EditProfileView.vue'
 import MapView from '@/views/MapView.vue'
 import EditListingView from '@/views/Listing/EditListingView.vue'
+import AdminSettingsView from '@/views/Admin/AdminSettingsView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -68,6 +69,11 @@ const router = createRouter({
       path: '/listing/:id/edit',
       name: 'editListing',
       component: EditListingView,
+    },
+    {
+      path: '/admin',
+      name: 'admin',
+      component: AdminSettingsView,
     }
   ],
 })
