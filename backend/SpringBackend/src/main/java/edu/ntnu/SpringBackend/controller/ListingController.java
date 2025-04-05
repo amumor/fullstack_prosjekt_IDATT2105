@@ -41,7 +41,7 @@ public class ListingController {
         if (size > MAX_SIZE) {
             size = MAX_SIZE;
         }
-        logger.info("GET Request recieved on [/api/v1/listing/get-suggestions]");
+        logger.info("GET Request received on [/api/v1/listing/get-suggestions]");
         Pageable pageable = PageRequest.of(page, size);
         return ResponseEntity.ok(
                 listingMapper.toDto(
@@ -67,7 +67,7 @@ public class ListingController {
             @AuthenticationPrincipal User user,
             @RequestBody ListingCreationRequestDTO request
     ) {
-        logger.info("POST Request recieved on [/api/v1/listing/create]");
+        logger.info("POST Request received on [/api/v1/listing/create]");
         return ResponseEntity.ok(listingMapper.toDto(listingService.createListing(request, user)));
     }
 }

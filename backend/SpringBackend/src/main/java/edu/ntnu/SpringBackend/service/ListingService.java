@@ -57,6 +57,14 @@ public class ListingService {
     return all;
   }
 
+  public List<Listing> findByCategories(List<Category> categoryList, Pageable pageable) {
+    logger.info("> Finding listings by categories: {}", categoryList);
+    if (categoryList == null || categoryList.isEmpty()) {
+      return listingRepository.findByCategoryIn(categoryService.getAll(), pageable);
+    }
+    return listingRepository.findByCategoryIn(categoryList, pageable);
+  }
+
   public Listing createListing(ListingCreationRequestDTO dto, User seller) {
     logger.info("> Creating listing: {}", dto.getTitle());
     Listing listing = Listing.builder()
@@ -68,8 +76,6 @@ public class ListingService {
                     .latitude(dto.getLatitude())
                     .longitude(dto.getLongitude())
                     .seller(seller)
-                    .createdAt(LocalDateTime.parse(dto.getCreatedAt()))
-                    .lastEditedAt(LocalDateTime.parse(dto.getLastEditedAt()))
                     .build();
     validateListing(listing);
 
@@ -142,14 +148,6 @@ public class ListingService {
 
     listing.setStatus(status);
     return listingRepository.save(listing);
-  }
-
-  public List<Listing> findByCategories(List<Category> categoryList, Pageable pageable) {
-    logger.info("> Finding listings by categories: {}", categoryList);
-    if (categoryList == null || categoryList.isEmpty()) {
-      return listingRepository.findByCategoryIn(categoryService.getAll(), pageable);
-    }
-    return listingRepository.findByCategoryIn(categoryList, pageable);
   }
   
   private void validateListing(Listing listing) {

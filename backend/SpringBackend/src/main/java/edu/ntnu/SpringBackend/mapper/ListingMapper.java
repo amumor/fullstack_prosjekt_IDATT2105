@@ -27,8 +27,8 @@ public class ListingMapper {
                 .price(listing.getPrice())
                 .latitude(listing.getLatitude())
                 .longitude(listing.getLongitude())
-                .createdAt(listing.getCreatedAt().format(DateTimeFormatter.ISO_DATE_TIME))
-                .lastEditedAt(listing.getLastEditedAt().format(DateTimeFormatter.ISO_DATE_TIME))
+                .createdAt(listing.getCreatedAt())
+                .lastEditedAt(listing.getLastEditedAt())
                 .build();
     }
 
