@@ -1,5 +1,5 @@
 <script setup>
-import NewListingComponent from '@/components/Listing/NewListingComponent.vue'
+import NewListingComponent from '@/components/listing/NewListingComponent.vue'
 import Navbar from '@/components/Navbar.vue'
 
 </script>

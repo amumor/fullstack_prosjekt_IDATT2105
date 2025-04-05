@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 import Navbar from '@/components/Navbar.vue'
-import AdminCategoriesComponent from '@/components/Admin/AdminCategoriesComponent.vue'
+import AdminCategoriesComponent from '@/components/admin/AdminCategoriesComponent.vue'
 
 const isEditeMode = ref(false);
 

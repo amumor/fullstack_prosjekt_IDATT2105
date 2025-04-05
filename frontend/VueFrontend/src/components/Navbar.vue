@@ -36,7 +36,7 @@ onMounted(() => {
 
 <template>
 <div class="navbar">
-  <router-link to ="/" id="header">FIND.no</router-link>
+  <router-link to="/" id="header">FIND.no</router-link>
 
   <!-- Desktop Menu -->
   <template v-if="!isMobile">
@@ -45,10 +45,10 @@ onMounted(() => {
 
         <!-- Logged in menu -->
         <template v-if="isUserLoggedIn">
-          <router-link to ="/newListing" id="router-link">New listing</router-link>
-          <router-link to ="/profile/favorites" id="router-link">Favorites</router-link>
-          <router-link to ="/inbox" id="router-link">Inbox</router-link>
-          <router-link to ="/profile" id="router-link">Profile</router-link>
+          <router-link to="/newListing" id="router-link">New listing</router-link>
+          <router-link to="/profile/favorites" id="router-link">Favorites</router-link>
+          <router-link to="/inbox" id="router-link">Inbox</router-link>
+          <router-link to="/profile" id="router-link">Profile</router-link>
 
           <!-- Admin settings -->
           <router-link to="/admin" id="admin-settings" v-if="isAdmin">
@@ -58,7 +58,7 @@ onMounted(() => {
 
         <!-- Logged out menu -->
         <template v-else>
-          <router-link to ="/login" id="router-link">Log in</router-link>
+          <router-link to="/login" id="router-link">Log in</router-link>
         </template>
       </div>
     </div>

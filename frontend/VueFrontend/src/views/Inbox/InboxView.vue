@@ -2,8 +2,8 @@
 import { ref } from 'vue'
 import { vInfiniteScroll } from '@vueuse/components'
 import Navbar from '@/components/Navbar.vue'
-import ListedChatComponent from '@/components/Inbox/ListedChatComponent.vue'
-import InitialsDisplayComponent from '@/components/Profile/InitialsDisplayComponent.vue'
+import ListedChatComponent from '@/components/inbox/ListedChatComponent.vue'
+import InitialsDisplayComponent from '@/components/profile/InitialsDisplayComponent.vue'
 
 const messages = [
   {
@@ -107,7 +107,7 @@ const sendMessage = () => {
       </div>
     </div>
     <div class="message-input">
-      <textarea v-model="newMessage" placeholder="Type a message..."></textarea>
+      <textarea v-model="newMessage" placeholder="Type a message..." @keydown.enter.prevent="sendMessage"></textarea>
       <button class="send-button" @click="sendMessage">Send</button>
     </div>
   </div>
