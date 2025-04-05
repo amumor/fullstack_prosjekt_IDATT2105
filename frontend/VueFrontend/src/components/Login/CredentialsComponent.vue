@@ -12,19 +12,164 @@ const props = defineProps({
   },
 });
 
+/**
+ * Username for registration form
+ * @type {import('vue').Ref<string>}
+ */
+const firstName = ref('');
+
+/**
+ * Last name for registration form
+ * @type {import('vue').Ref<string>}
+ */
+const lastName = ref('');
+
+/**
+ * Email for registration form
+ * @type {import('vue').Ref<string>}
+ */
+const email = ref('');
+
+/**
+ * Phone number for registration form
+ * @type {import('vue').Ref<string>}
+ */
+const phoneNumber = ref('');
+
+/**
+ * Password for registration form
+ * @type {import('vue').Ref<string>}
+ */
+const password = ref('');
+
+/**
+ * Confirm password for registration form
+ * @type {import('vue').Ref<string>}
+ */
+const confirmPassword = ref('');
+
+const errorMsg = ref('');
+
+const nameRegex = /^[A-Za-zÆØÅæøå]+$/;
+
+const emailRegex = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/;
+
+const phoneRegex = /^\d{8}$/;
+
+const passwordRegex = /^(?=.[A-Z])(?=.\d)(?=.[!@#$%^&()_+\-={}:;"'|<>,.?]).{10,}$/;
+
+/**
+ * Function to handle login
+ * @returns {void}
+ */
+const login = async () => {
+  if(!email.value) {
+    errorMsg.value = 'Email is required';
+    return;
+  }
+  if(!password.value) {
+    errorMsg.value = 'Password is required';
+    return;
+  }
+  if(!emailRegex.test(email.value)) {
+    errorMsg.value = 'Invalid email';
+    return;
+  }
+  if(!passwordRegex.test(password.value)) {
+    errorMsg.value = 'Invalid password';
+    return;
+  }
+
+  try{
+
+    // Logic to handle login here
+
+    await router.push('/')
+  }catch(error){
+    console.error("Login failed:", error)
+    errorMsg.value = "Try again.";
+    return;
+  }
+
+};
+
+/**
+ * Function to handle registration
+ * @returns {void}
+ */
+const register = async () => {
+  if(!firstName.value) {
+    errorMsg.value = 'First name is required';
+    return;
+  }
+  if(!lastName.value) {
+    errorMsg.value = 'Last name is required';
+    return;
+  }
+  if(!email.value) {
+    errorMsg.value = 'Email is required';
+    return;
+  }
+  if(!phoneNumber.value) {
+    errorMsg.value = 'Phone number is required';
+    return;
+  }
+  if(!password.value) {
+    errorMsg.value = 'Password is required';
+    return;
+  }
+  if(!confirmPassword.value) {
+    errorMsg.value = 'Confirm password is required';
+    return;
+  }
+  if (!nameRegex.test(firstName.value)) {
+    errorMsg.value = 'Invalid first name';
+    return;
+  }
+  if (!nameRegex.test(lastName.value)) {
+    errorMsg.value = 'Invalid last name';
+    return;
+  }
+  if (!emailRegex.test(email.value)) {
+    errorMsg.value = 'Invalid email';
+    return;
+  }
+  if (!phoneRegex.test(phoneNumber.value)) {
+    errorMsg.value = 'Invalid phone number';
+    return;
+  }
+  if (!passwordRegex.test(password.value)) {
+    errorMsg.value = 'Invalid password';
+    return;
+  }
+  if (password.value !== confirmPassword.value) {
+    errorMsg.value = 'Passwords do not match';
+    return;
+  }
+
+  try{
+
+    // Logic to handle registration here
+
+    await router.push('/login')
+  }catch(error){
+    console.error("Registration failed:", error)
+    errorMsg.value = "Try again.";
+    return;
+  }
+};
+
+/**
+ * Vue Router instance
+ * @type {import('vue-router').Router}
+ */
 const router = useRouter();
+
 const isUserRegistered = ref(props.hasUser);
 
 const toggleForm = () => {
   isUserRegistered.value = !isUserRegistered.value;
 };
-
-const login = () => {
-  // Logic to handle login
-  router.push('/')
-};
-
-
 </script>
 
 <template>
@@ -34,8 +179,8 @@ const login = () => {
     <div class="login">
       <h2>Log in</h2>
       <div class="fields">
-        <input type="text" placeholder="E-mail" required />
-        <input type="password" placeholder="Password" required />
+        <input type="text" placeholder="E-mail" />
+        <input type="password" placeholder="Password" />
         <button class="basic-blue-btn" @click="login">Log in</button>
       </div>
       <div class="to-sign-up">
@@ -48,13 +193,13 @@ const login = () => {
     <div class="sign-up">
       <h2>Register</h2>
       <div class="fields">
-        <input type="text" placeholder="First name" required />
-        <input type="text" placeholder="Last name" required />
-        <input type="text" placeholder="E-mail" required />
-        <input type="text" placeholder="Phone number" required />
-        <input type="password" placeholder="Password" required />
-        <input type="password" placeholder="Confirm password" required />
-        <button class="basic-blue-btn" @click="toggleForm">Register</button>
+        <input v-model="firstName" type="text" placeholder="First name" />
+        <input v-model="lastName" type="text" placeholder="Last name" />
+        <input v-model="email" type="text" placeholder="E-mail" />
+        <input v-model="phoneNumber" type="text" placeholder="Phone number" />
+        <input v-model="password" type="password" placeholder="Password" />
+        <input v-model="confirmPassword" type="password" placeholder="Confirm password" />
+        <button class="basic-blue-btn" @click="toggleForm && register" >Register</button>
       </div>
       <div class="to-login">
         <p>Already have an account?</p>
