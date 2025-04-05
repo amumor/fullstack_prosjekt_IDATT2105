@@ -88,7 +88,6 @@ const login = async () => {
   }catch(error){
     console.error("Login failed:", error)
     errorMsg.value = "Try again.";
-    return;
   }
 
 };
@@ -155,7 +154,6 @@ const register = async () => {
   }catch(error){
     console.error("Registration failed:", error)
     errorMsg.value = "Try again.";
-    return;
   }
 };
 
