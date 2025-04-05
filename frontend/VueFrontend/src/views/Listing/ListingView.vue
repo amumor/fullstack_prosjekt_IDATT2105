@@ -1,5 +1,5 @@
 <script setup>
-import SingleListingComponent from '@/components/Listing/SingleListingComponent.vue'
+import SingleListingComponent from '@/components/listing/SingleListingComponent.vue'
 import Navbar from '@/components/Navbar.vue'
 
 document.body.style.backgroundColor = "#ffffff";

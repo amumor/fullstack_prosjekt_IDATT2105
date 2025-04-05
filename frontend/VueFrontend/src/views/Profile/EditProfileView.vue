@@ -1,6 +1,6 @@
 <script setup>
 import Navbar from '@/components/Navbar.vue'
-import EditProfileComponent from '@/components/Profile/EditProfileComponent.vue'
+import EditProfileComponent from '@/components/profile/EditProfileComponent.vue'
 
 const firstName = 'Fyfasan'
 const lastName = 'Ben Reddik'

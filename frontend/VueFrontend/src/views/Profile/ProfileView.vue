@@ -1,8 +1,8 @@
 <script setup>
 import { useRouter } from 'vue-router'
 import Navbar from '@/components/Navbar.vue'
-import ProfileOption from '@/components/Profile/ProfileOption.vue'
-import InitialsDisplayComponent from '@/components/Profile/InitialsDisplayComponent.vue'
+import ProfileOption from '@/components/profile/ProfileOption.vue'
+import InitialsDisplayComponent from '@/components/profile/InitialsDisplayComponent.vue'
 
 document.body.style.backgroundColor = "#ffffff";
 

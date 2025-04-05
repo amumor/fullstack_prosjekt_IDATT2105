@@ -1,5 +1,5 @@
 <script setup>
-import CredentialsComponent from '@/components/Login/CredentialsComponent.vue'
+import CredentialsComponent from '@/components/login/CredentialsComponent.vue'
 document.body.style.backgroundColor = "#D9D9D9";
 </script>
 
