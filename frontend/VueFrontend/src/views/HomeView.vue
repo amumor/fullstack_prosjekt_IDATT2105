@@ -1,8 +1,22 @@
 <script setup>
 import Navbar from '@/components/Navbar.vue'
 import ListingPreviewComponent from '@/components/listing/ListingPreviewComponent.vue'
+import * as OpenApiDocumentationFindNo from 'open_api_documentation_find_no';
+
 document.body.style.backgroundColor = "#ffffff";
 
+// var OpenApiDocumentationFindNo = require('open_api_documentation_find_no');
+console.log("debug: before api test")
+var api = new OpenApiDocumentationFindNo.AuthenticationControllerApi()
+var authenticationRequestDTO = new OpenApiDocumentationFindNo.AuthenticationRequestDTO(); // {AuthenticationRequestDTO}
+var callback = async function (error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+};
+api.authenticate(authenticationRequestDTO, callback);
 
 const searchFunction = () => {};
 
