@@ -193,3 +193,14 @@ xcuserdata/
 .env.secret.toml
 .env*
 # --- . ---
+
+.factorypath
+.project
+maven-wrapper.properties
+
+# intellij run-button generated file
+SpringBackend.iml
+
+.classpath
+.settings
+
