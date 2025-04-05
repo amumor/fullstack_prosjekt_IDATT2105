@@ -1,7 +1,6 @@
 package edu.ntnu.SpringBackend.service;
 
-import edu.ntnu.SpringBackend.dto.SearchHistoryDTO;
-import edu.ntnu.SpringBackend.mapper.SearchHistoryMapper;
+import edu.ntnu.SpringBackend.dto.SearchHistoryRequestDTO;
 import edu.ntnu.SpringBackend.model.SearchHistory;
 import edu.ntnu.SpringBackend.model.User;
 import edu.ntnu.SpringBackend.repository.SearchHistoryRepository;
@@ -25,11 +24,11 @@ public class SearchHistoryService {
         return searchHistoryRepository.findByUserIdOrderBySearchedAtDesc(user.getId());
     }
 
-    public SearchHistory add(SearchHistoryDTO requestDTO, User user) {
+    public SearchHistory add(SearchHistoryRequestDTO requestDTO, User user) {
         SearchHistory searchHistory = SearchHistory.builder()
                 .user(user)
                 .searchQuery(requestDTO.getSearchQuery())
-                .searchedAt(LocalDateTime.parse(requestDTO.getSearchedAt()))
+                .searchedAt(LocalDateTime.now())
                 .build();
 
         return this.add(searchHistory, user);

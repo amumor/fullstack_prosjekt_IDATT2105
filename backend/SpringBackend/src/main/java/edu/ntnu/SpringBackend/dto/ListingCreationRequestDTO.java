@@ -19,13 +19,4 @@ public class ListingCreationRequestDTO {
     private double price;
     private double latitude;
     private double longitude;
-    /**
-     * Format: ISO 8601, Date and time when this listing was created.
-     */
-    private String createdAt;
-
-    /**
-     * Format ISO 8601, Date and time when this listing was last edited.
-     */
-    private String lastEditedAt;
 }
