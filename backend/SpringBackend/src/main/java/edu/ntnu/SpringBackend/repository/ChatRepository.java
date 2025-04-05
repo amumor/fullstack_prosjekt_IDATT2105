@@ -10,7 +10,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface ChatRepository extends JpaRepository<Chat, UUID> {
-  List<Chat> findByBuyer(User buyer);
   List<Chat> findByListing(Listing listing);
   Optional<Chat> findByBuyerAndListing(User user, Listing listing);
+  List<Chat> findByBuyerOrListing_Seller(User buyer, User seller);
+  boolean existsByListingAndBuyer(Listing listing, User buyer);
 }

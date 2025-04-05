@@ -8,9 +8,9 @@ import org.springframework.stereotype.Component;
 public class MessageMapper {
   public MessageResponsetDTO toDto(Message message) {
     return MessageResponsetDTO.builder()
-            .id(message.getId())
             .chatId(message.getChat().getId())
-            .senderId(message.getSender().getId())
+            .senderFirstName(message.getSender().getFirstName())
+            .senderLastName(message.getSender().getLastName())
             .content(message.getContent())
             .sentAt(message.getSentAt())
             .build();

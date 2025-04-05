@@ -45,7 +45,7 @@ public class BookmarkController {
   public List<BookmarkResponseDTO> getUserBookmarks(
          @AuthenticationPrincipal User user
   ) {
-    logger.info("Received GET request to get users bookmarks");
+    logger.info("Received GET request on [/api/v1/bookmarks/my-bookmarks]");
 
     return bookmarkService.getBookmarksByUser(user).stream()
             .map(BookmarkMapper::toDto)
@@ -65,7 +65,7 @@ public class BookmarkController {
           @AuthenticationPrincipal User user,
           @RequestBody BookmarkRequestDTO bookmarkRequestDTO
   ) {
-    logger.info("Received POST request to create bookmark");
+    logger.info("Received POST request on [/api/v1/bookmarks/create] with body: {}", bookmarkRequestDTO);
 
     return ResponseEntity.ok(BookmarkMapper.toDto(bookmarkService.createBookmark(bookmarkRequestDTO, user)));
   }
@@ -83,7 +83,7 @@ public class BookmarkController {
           @AuthenticationPrincipal User user,
           @PathVariable UUID bookmarkId
   ) {
-    logger.info("Received DELETE request to delete bookmark with ID: {}", bookmarkId);
+    logger.info("Received DELETE request on [/api/v1/bookmarks/{}]", bookmarkId);
     bookmarkService.deleteBookmark(bookmarkId, user);
 
     return ResponseEntity.noContent().build();
