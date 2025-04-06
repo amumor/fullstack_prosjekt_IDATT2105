@@ -14,9 +14,12 @@
     "@vueuse/components": "^13.0.0",
     "leaflet": "^1.9.4",
     "pinia": "^3.0.1",
+    "superagent": "^10.2.0",
     "vue": "^3.5.13",
     "vue-map-ui": "^0.0.18",
-    "vue-router": "^4.5.0"
+    "vue-router": "^4.5.0",
+
+    "open_api_documentation_find_no": "file:./src/api"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.2.1",

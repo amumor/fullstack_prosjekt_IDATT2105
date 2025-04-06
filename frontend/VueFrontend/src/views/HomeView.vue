@@ -1,22 +1,20 @@
 <script setup>
 import Navbar from '@/components/Navbar.vue'
 import ListingPreviewComponent from '@/components/listing/ListingPreviewComponent.vue'
-import * as OpenApiDocumentationFindNo from 'open_api_documentation_find_no';
+import { authenticateUser } from '@/services/AuthenticationService'
 
 document.body.style.backgroundColor = "#ffffff";
 
-// var OpenApiDocumentationFindNo = require('open_api_documentation_find_no');
-console.log("debug: before api test")
-var api = new OpenApiDocumentationFindNo.AuthenticationControllerApi()
-var authenticationRequestDTO = new OpenApiDocumentationFindNo.AuthenticationRequestDTO(); // {AuthenticationRequestDTO}
-var callback = async function (error, data, response) {
-  if (error) {
-    console.error(error);
-  } else {
-    console.log('API called successfully. Returned data: ' + data);
-  }
-};
-api.authenticate(authenticationRequestDTO, callback);
+const email = 'user@example.com';
+const password = 'password123';
+
+authenticateUser(email, password)
+    .then(response => {
+      console.log('User authenticated successfully:', response);
+    })
+    .catch(error => {
+      console.error('Authentication failed:', error);
+    });
 
 const searchFunction = () => {};
 
