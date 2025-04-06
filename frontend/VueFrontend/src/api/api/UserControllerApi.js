@@ -12,9 +12,9 @@
  */
 
 
-import ApiClient from "../ApiClient";
-import UserRequestDTO from '../model/UserRequestDTO';
-import UserResponseDTO from '../model/UserResponseDTO';
+import ApiClient from "../ApiClient.js";
+import UserRequestDTO from '../model/UserRequestDTO.js';
+import UserResponseDTO from '../model/UserResponseDTO.js';
 
 /**
 * UserController service.
@@ -35,19 +35,12 @@ export default class UserControllerApi {
     }
 
 
-    /**
-     * Callback function to receive the result of the deleteUser operation.
-     * @callback module:api/UserControllerApi~deleteUserCallback
-     * @param {String} error Error message, if any.
-     * @param data This operation does not return a value.
-     * @param {String} response The complete HTTP response.
-     */
 
     /**
      * @param {String} id 
-     * @param {module:api/UserControllerApi~deleteUserCallback} callback The callback function, accepting three arguments: error, data, response
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing HTTP response
      */
-    deleteUser(id, callback) {
+    deleteUserWithHttpInfo(id) {
       let postBody = null;
       // verify the required parameter 'id' is set
       if (id === undefined || id === null) {
@@ -71,24 +64,27 @@ export default class UserControllerApi {
       return this.apiClient.callApi(
         '/api/v1/users/{id}', 'DELETE',
         pathParams, queryParams, headerParams, formParams, postBody,
-        authNames, contentTypes, accepts, returnType, null, callback
+        authNames, contentTypes, accepts, returnType, null
       );
     }
 
     /**
-     * Callback function to receive the result of the getUserByEmail operation.
-     * @callback module:api/UserControllerApi~getUserByEmailCallback
-     * @param {String} error Error message, if any.
-     * @param {module:model/UserResponseDTO} data The data returned by the service call.
-     * @param {String} response The complete HTTP response.
+     * @param {String} id 
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}
      */
+    deleteUser(id) {
+      return this.deleteUserWithHttpInfo(id)
+        .then(function(response_and_data) {
+          return response_and_data.data;
+        });
+    }
+
 
     /**
      * @param {String} email 
-     * @param {module:api/UserControllerApi~getUserByEmailCallback} callback The callback function, accepting three arguments: error, data, response
-     * data is of type: {@link module:model/UserResponseDTO}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/UserResponseDTO} and HTTP response
      */
-    getUserByEmail(email, callback) {
+    getUserByEmailWithHttpInfo(email) {
       let postBody = null;
       // verify the required parameter 'email' is set
       if (email === undefined || email === null) {
@@ -112,24 +108,27 @@ export default class UserControllerApi {
       return this.apiClient.callApi(
         '/api/v1/users/email/{email}', 'GET',
         pathParams, queryParams, headerParams, formParams, postBody,
-        authNames, contentTypes, accepts, returnType, null, callback
+        authNames, contentTypes, accepts, returnType, null
       );
     }
 
     /**
-     * Callback function to receive the result of the getUserById operation.
-     * @callback module:api/UserControllerApi~getUserByIdCallback
-     * @param {String} error Error message, if any.
-     * @param {module:model/UserResponseDTO} data The data returned by the service call.
-     * @param {String} response The complete HTTP response.
+     * @param {String} email 
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link module:model/UserResponseDTO}
      */
+    getUserByEmail(email) {
+      return this.getUserByEmailWithHttpInfo(email)
+        .then(function(response_and_data) {
+          return response_and_data.data;
+        });
+    }
+
 
     /**
      * @param {String} id 
-     * @param {module:api/UserControllerApi~getUserByIdCallback} callback The callback function, accepting three arguments: error, data, response
-     * data is of type: {@link module:model/UserResponseDTO}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/UserResponseDTO} and HTTP response
      */
-    getUserById(id, callback) {
+    getUserByIdWithHttpInfo(id) {
       let postBody = null;
       // verify the required parameter 'id' is set
       if (id === undefined || id === null) {
@@ -153,24 +152,27 @@ export default class UserControllerApi {
       return this.apiClient.callApi(
         '/api/v1/users/id/{id}', 'GET',
         pathParams, queryParams, headerParams, formParams, postBody,
-        authNames, contentTypes, accepts, returnType, null, callback
+        authNames, contentTypes, accepts, returnType, null
       );
     }
 
     /**
-     * Callback function to receive the result of the updateUser operation.
-     * @callback module:api/UserControllerApi~updateUserCallback
-     * @param {String} error Error message, if any.
-     * @param {module:model/UserResponseDTO} data The data returned by the service call.
-     * @param {String} response The complete HTTP response.
+     * @param {String} id 
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link module:model/UserResponseDTO}
      */
+    getUserById(id) {
+      return this.getUserByIdWithHttpInfo(id)
+        .then(function(response_and_data) {
+          return response_and_data.data;
+        });
+    }
+
 
     /**
      * @param {module:model/UserRequestDTO} userRequestDTO 
-     * @param {module:api/UserControllerApi~updateUserCallback} callback The callback function, accepting three arguments: error, data, response
-     * data is of type: {@link module:model/UserResponseDTO}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/UserResponseDTO} and HTTP response
      */
-    updateUser(userRequestDTO, callback) {
+    updateUserWithHttpInfo(userRequestDTO) {
       let postBody = userRequestDTO;
       // verify the required parameter 'userRequestDTO' is set
       if (userRequestDTO === undefined || userRequestDTO === null) {
@@ -193,8 +195,19 @@ export default class UserControllerApi {
       return this.apiClient.callApi(
         '/api/v1/users/update-my-profile', 'PUT',
         pathParams, queryParams, headerParams, formParams, postBody,
-        authNames, contentTypes, accepts, returnType, null, callback
+        authNames, contentTypes, accepts, returnType, null
       );
+    }
+
+    /**
+     * @param {module:model/UserRequestDTO} userRequestDTO 
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link module:model/UserResponseDTO}
+     */
+    updateUser(userRequestDTO) {
+      return this.updateUserWithHttpInfo(userRequestDTO)
+        .then(function(response_and_data) {
+          return response_and_data.data;
+        });
     }
 
 

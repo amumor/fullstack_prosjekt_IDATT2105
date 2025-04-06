@@ -1,20 +1,9 @@
 <script setup>
 import Navbar from '@/components/Navbar.vue'
 import ListingPreviewComponent from '@/components/listing/ListingPreviewComponent.vue'
-import { authenticateUser } from '@/services/AuthenticationService'
 
 document.body.style.backgroundColor = "#ffffff";
 
-const email = 'admin@find.no';
-const password = 'ChangeMe!123aefF223r';
-
-authenticateUser(email, password)
-    .then(response => {
-      console.log('User authenticated successfully:', response);
-    })
-    .catch(error => {
-      console.error('Authentication failed:', error);
-    });
 
 const searchFunction = () => {};
 

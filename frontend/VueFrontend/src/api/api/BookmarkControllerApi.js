@@ -12,9 +12,9 @@
  */
 
 
-import ApiClient from "../ApiClient";
-import BookmarkRequestDTO from '../model/BookmarkRequestDTO';
-import BookmarkResponseDTO from '../model/BookmarkResponseDTO';
+import ApiClient from "../ApiClient.js";
+import BookmarkRequestDTO from '../model/BookmarkRequestDTO.js';
+import BookmarkResponseDTO from '../model/BookmarkResponseDTO.js';
 
 /**
 * BookmarkController service.
@@ -35,21 +35,13 @@ export default class BookmarkControllerApi {
     }
 
 
-    /**
-     * Callback function to receive the result of the createBookmark operation.
-     * @callback module:api/BookmarkControllerApi~createBookmarkCallback
-     * @param {String} error Error message, if any.
-     * @param {module:model/BookmarkResponseDTO} data The data returned by the service call.
-     * @param {String} response The complete HTTP response.
-     */
 
     /**
      * Create a bookmark for a listing
      * @param {module:model/BookmarkRequestDTO} bookmarkRequestDTO 
-     * @param {module:api/BookmarkControllerApi~createBookmarkCallback} callback The callback function, accepting three arguments: error, data, response
-     * data is of type: {@link module:model/BookmarkResponseDTO}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/BookmarkResponseDTO} and HTTP response
      */
-    createBookmark(bookmarkRequestDTO, callback) {
+    createBookmarkWithHttpInfo(bookmarkRequestDTO) {
       let postBody = bookmarkRequestDTO;
       // verify the required parameter 'bookmarkRequestDTO' is set
       if (bookmarkRequestDTO === undefined || bookmarkRequestDTO === null) {
@@ -72,24 +64,29 @@ export default class BookmarkControllerApi {
       return this.apiClient.callApi(
         '/api/v1/bookmarks/create', 'POST',
         pathParams, queryParams, headerParams, formParams, postBody,
-        authNames, contentTypes, accepts, returnType, null, callback
+        authNames, contentTypes, accepts, returnType, null
       );
     }
 
     /**
-     * Callback function to receive the result of the deleteBookmark operation.
-     * @callback module:api/BookmarkControllerApi~deleteBookmarkCallback
-     * @param {String} error Error message, if any.
-     * @param data This operation does not return a value.
-     * @param {String} response The complete HTTP response.
+     * Create a bookmark for a listing
+     * @param {module:model/BookmarkRequestDTO} bookmarkRequestDTO 
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link module:model/BookmarkResponseDTO}
      */
+    createBookmark(bookmarkRequestDTO) {
+      return this.createBookmarkWithHttpInfo(bookmarkRequestDTO)
+        .then(function(response_and_data) {
+          return response_and_data.data;
+        });
+    }
+
 
     /**
      * Delete a bookmark
      * @param {String} bookmarkId 
-     * @param {module:api/BookmarkControllerApi~deleteBookmarkCallback} callback The callback function, accepting three arguments: error, data, response
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing HTTP response
      */
-    deleteBookmark(bookmarkId, callback) {
+    deleteBookmarkWithHttpInfo(bookmarkId) {
       let postBody = null;
       // verify the required parameter 'bookmarkId' is set
       if (bookmarkId === undefined || bookmarkId === null) {
@@ -113,24 +110,28 @@ export default class BookmarkControllerApi {
       return this.apiClient.callApi(
         '/api/v1/bookmarks/{bookmarkId}', 'DELETE',
         pathParams, queryParams, headerParams, formParams, postBody,
-        authNames, contentTypes, accepts, returnType, null, callback
+        authNames, contentTypes, accepts, returnType, null
       );
     }
 
     /**
-     * Callback function to receive the result of the getUserBookmarks operation.
-     * @callback module:api/BookmarkControllerApi~getUserBookmarksCallback
-     * @param {String} error Error message, if any.
-     * @param {Array.<module:model/BookmarkResponseDTO>} data The data returned by the service call.
-     * @param {String} response The complete HTTP response.
+     * Delete a bookmark
+     * @param {String} bookmarkId 
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}
      */
+    deleteBookmark(bookmarkId) {
+      return this.deleteBookmarkWithHttpInfo(bookmarkId)
+        .then(function(response_and_data) {
+          return response_and_data.data;
+        });
+    }
+
 
     /**
      * Getting all bookmarks for a user
-     * @param {module:api/BookmarkControllerApi~getUserBookmarksCallback} callback The callback function, accepting three arguments: error, data, response
-     * data is of type: {@link Array.<module:model/BookmarkResponseDTO>}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/BookmarkResponseDTO>} and HTTP response
      */
-    getUserBookmarks(callback) {
+    getUserBookmarksWithHttpInfo() {
       let postBody = null;
 
       let pathParams = {
@@ -149,8 +150,19 @@ export default class BookmarkControllerApi {
       return this.apiClient.callApi(
         '/api/v1/bookmarks/my-bookmarks', 'GET',
         pathParams, queryParams, headerParams, formParams, postBody,
-        authNames, contentTypes, accepts, returnType, null, callback
+        authNames, contentTypes, accepts, returnType, null
       );
+    }
+
+    /**
+     * Getting all bookmarks for a user
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/BookmarkResponseDTO>}
+     */
+    getUserBookmarks() {
+      return this.getUserBookmarksWithHttpInfo()
+        .then(function(response_and_data) {
+          return response_and_data.data;
+        });
     }
 
 

@@ -12,10 +12,10 @@
  */
 
 
-import ApiClient from "../ApiClient";
-import SearchHistoryListResponseDTO from '../model/SearchHistoryListResponseDTO';
-import SearchHistoryRequestDTO from '../model/SearchHistoryRequestDTO';
-import SearchHistoryResponseDTO from '../model/SearchHistoryResponseDTO';
+import ApiClient from "../ApiClient.js";
+import SearchHistoryListResponseDTO from '../model/SearchHistoryListResponseDTO.js';
+import SearchHistoryRequestDTO from '../model/SearchHistoryRequestDTO.js';
+import SearchHistoryResponseDTO from '../model/SearchHistoryResponseDTO.js';
 
 /**
 * SearchHistoryController service.
@@ -36,20 +36,12 @@ export default class SearchHistoryControllerApi {
     }
 
 
-    /**
-     * Callback function to receive the result of the add operation.
-     * @callback module:api/SearchHistoryControllerApi~addCallback
-     * @param {String} error Error message, if any.
-     * @param {module:model/SearchHistoryResponseDTO} data The data returned by the service call.
-     * @param {String} response The complete HTTP response.
-     */
 
     /**
      * @param {module:model/SearchHistoryRequestDTO} searchHistoryRequestDTO 
-     * @param {module:api/SearchHistoryControllerApi~addCallback} callback The callback function, accepting three arguments: error, data, response
-     * data is of type: {@link module:model/SearchHistoryResponseDTO}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/SearchHistoryResponseDTO} and HTTP response
      */
-    add(searchHistoryRequestDTO, callback) {
+    addWithHttpInfo(searchHistoryRequestDTO) {
       let postBody = searchHistoryRequestDTO;
       // verify the required parameter 'searchHistoryRequestDTO' is set
       if (searchHistoryRequestDTO === undefined || searchHistoryRequestDTO === null) {
@@ -72,23 +64,26 @@ export default class SearchHistoryControllerApi {
       return this.apiClient.callApi(
         '/api/v1/search-history/add', 'POST',
         pathParams, queryParams, headerParams, formParams, postBody,
-        authNames, contentTypes, accepts, returnType, null, callback
+        authNames, contentTypes, accepts, returnType, null
       );
     }
 
     /**
-     * Callback function to receive the result of the findByUserId operation.
-     * @callback module:api/SearchHistoryControllerApi~findByUserIdCallback
-     * @param {String} error Error message, if any.
-     * @param {module:model/SearchHistoryListResponseDTO} data The data returned by the service call.
-     * @param {String} response The complete HTTP response.
+     * @param {module:model/SearchHistoryRequestDTO} searchHistoryRequestDTO 
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link module:model/SearchHistoryResponseDTO}
      */
+    add(searchHistoryRequestDTO) {
+      return this.addWithHttpInfo(searchHistoryRequestDTO)
+        .then(function(response_and_data) {
+          return response_and_data.data;
+        });
+    }
+
 
     /**
-     * @param {module:api/SearchHistoryControllerApi~findByUserIdCallback} callback The callback function, accepting three arguments: error, data, response
-     * data is of type: {@link module:model/SearchHistoryListResponseDTO}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/SearchHistoryListResponseDTO} and HTTP response
      */
-    findByUserId(callback) {
+    findByUserIdWithHttpInfo() {
       let postBody = null;
 
       let pathParams = {
@@ -107,8 +102,18 @@ export default class SearchHistoryControllerApi {
       return this.apiClient.callApi(
         '/api/v1/search-history/get-my-history', 'GET',
         pathParams, queryParams, headerParams, formParams, postBody,
-        authNames, contentTypes, accepts, returnType, null, callback
+        authNames, contentTypes, accepts, returnType, null
       );
+    }
+
+    /**
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link module:model/SearchHistoryListResponseDTO}
+     */
+    findByUserId() {
+      return this.findByUserIdWithHttpInfo()
+        .then(function(response_and_data) {
+          return response_and_data.data;
+        });
     }
 
 

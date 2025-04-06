@@ -12,10 +12,10 @@
  */
 
 
-import ApiClient from "../ApiClient";
-import AuthenticationRequestDTO from '../model/AuthenticationRequestDTO';
-import TokenResponseDTO from '../model/TokenResponseDTO';
-import UserRequestDTO from '../model/UserRequestDTO';
+import ApiClient from "../ApiClient.js";
+import AuthenticationRequestDTO from '../model/AuthenticationRequestDTO.js';
+import TokenResponseDTO from '../model/TokenResponseDTO.js';
+import UserRequestDTO from '../model/UserRequestDTO.js';
 
 /**
 * AuthenticationController service.
@@ -36,20 +36,12 @@ export default class AuthenticationControllerApi {
     }
 
 
-    /**
-     * Callback function to receive the result of the authenticate operation.
-     * @callback module:api/AuthenticationControllerApi~authenticateCallback
-     * @param {String} error Error message, if any.
-     * @param {module:model/TokenResponseDTO} data The data returned by the service call.
-     * @param {String} response The complete HTTP response.
-     */
 
     /**
      * @param {module:model/AuthenticationRequestDTO} authenticationRequestDTO 
-     * @param {module:api/AuthenticationControllerApi~authenticateCallback} callback The callback function, accepting three arguments: error, data, response
-     * data is of type: {@link module:model/TokenResponseDTO}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/TokenResponseDTO} and HTTP response
      */
-    authenticate(authenticationRequestDTO, callback) {
+    authenticateWithHttpInfo(authenticationRequestDTO) {
       let postBody = authenticationRequestDTO;
       // verify the required parameter 'authenticationRequestDTO' is set
       if (authenticationRequestDTO === undefined || authenticationRequestDTO === null) {
@@ -72,24 +64,27 @@ export default class AuthenticationControllerApi {
       return this.apiClient.callApi(
         '/api/v1/auth/authenticate', 'POST',
         pathParams, queryParams, headerParams, formParams, postBody,
-        authNames, contentTypes, accepts, returnType, null, callback
+        authNames, contentTypes, accepts, returnType, null
       );
     }
 
     /**
-     * Callback function to receive the result of the register operation.
-     * @callback module:api/AuthenticationControllerApi~registerCallback
-     * @param {String} error Error message, if any.
-     * @param {module:model/TokenResponseDTO} data The data returned by the service call.
-     * @param {String} response The complete HTTP response.
+     * @param {module:model/AuthenticationRequestDTO} authenticationRequestDTO 
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link module:model/TokenResponseDTO}
      */
+    authenticate(authenticationRequestDTO) {
+      return this.authenticateWithHttpInfo(authenticationRequestDTO)
+        .then(function(response_and_data) {
+          return response_and_data.data;
+        });
+    }
+
 
     /**
      * @param {module:model/UserRequestDTO} userRequestDTO 
-     * @param {module:api/AuthenticationControllerApi~registerCallback} callback The callback function, accepting three arguments: error, data, response
-     * data is of type: {@link module:model/TokenResponseDTO}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/TokenResponseDTO} and HTTP response
      */
-    register(userRequestDTO, callback) {
+    registerWithHttpInfo(userRequestDTO) {
       let postBody = userRequestDTO;
       // verify the required parameter 'userRequestDTO' is set
       if (userRequestDTO === undefined || userRequestDTO === null) {
@@ -112,24 +107,27 @@ export default class AuthenticationControllerApi {
       return this.apiClient.callApi(
         '/api/v1/auth/register', 'POST',
         pathParams, queryParams, headerParams, formParams, postBody,
-        authNames, contentTypes, accepts, returnType, null, callback
+        authNames, contentTypes, accepts, returnType, null
       );
     }
 
     /**
-     * Callback function to receive the result of the registerAdmin operation.
-     * @callback module:api/AuthenticationControllerApi~registerAdminCallback
-     * @param {String} error Error message, if any.
-     * @param {module:model/TokenResponseDTO} data The data returned by the service call.
-     * @param {String} response The complete HTTP response.
+     * @param {module:model/UserRequestDTO} userRequestDTO 
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link module:model/TokenResponseDTO}
      */
+    register(userRequestDTO) {
+      return this.registerWithHttpInfo(userRequestDTO)
+        .then(function(response_and_data) {
+          return response_and_data.data;
+        });
+    }
+
 
     /**
      * @param {module:model/UserRequestDTO} userRequestDTO 
-     * @param {module:api/AuthenticationControllerApi~registerAdminCallback} callback The callback function, accepting three arguments: error, data, response
-     * data is of type: {@link module:model/TokenResponseDTO}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/TokenResponseDTO} and HTTP response
      */
-    registerAdmin(userRequestDTO, callback) {
+    registerAdminWithHttpInfo(userRequestDTO) {
       let postBody = userRequestDTO;
       // verify the required parameter 'userRequestDTO' is set
       if (userRequestDTO === undefined || userRequestDTO === null) {
@@ -152,8 +150,19 @@ export default class AuthenticationControllerApi {
       return this.apiClient.callApi(
         '/api/v1/auth/register/admin', 'POST',
         pathParams, queryParams, headerParams, formParams, postBody,
-        authNames, contentTypes, accepts, returnType, null, callback
+        authNames, contentTypes, accepts, returnType, null
       );
+    }
+
+    /**
+     * @param {module:model/UserRequestDTO} userRequestDTO 
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link module:model/TokenResponseDTO}
+     */
+    registerAdmin(userRequestDTO) {
+      return this.registerAdminWithHttpInfo(userRequestDTO)
+        .then(function(response_and_data) {
+          return response_and_data.data;
+        });
     }
 
 

@@ -12,10 +12,10 @@
  */
 
 
-import ApiClient from "../ApiClient";
-import ChatResponseDTO from '../model/ChatResponseDTO';
-import MessageRequestDTO from '../model/MessageRequestDTO';
-import MessageResponsetDTO from '../model/MessageResponsetDTO';
+import ApiClient from "../ApiClient.js";
+import ChatResponseDTO from '../model/ChatResponseDTO.js';
+import MessageRequestDTO from '../model/MessageRequestDTO.js';
+import MessageResponsetDTO from '../model/MessageResponsetDTO.js';
 
 /**
 * ChatController service.
@@ -36,21 +36,13 @@ export default class ChatControllerApi {
     }
 
 
-    /**
-     * Callback function to receive the result of the addMessageToChat operation.
-     * @callback module:api/ChatControllerApi~addMessageToChatCallback
-     * @param {String} error Error message, if any.
-     * @param {module:model/MessageResponsetDTO} data The data returned by the service call.
-     * @param {String} response The complete HTTP response.
-     */
 
     /**
      * @param {String} chatId 
      * @param {module:model/MessageRequestDTO} messageRequestDTO 
-     * @param {module:api/ChatControllerApi~addMessageToChatCallback} callback The callback function, accepting three arguments: error, data, response
-     * data is of type: {@link module:model/MessageResponsetDTO}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/MessageResponsetDTO} and HTTP response
      */
-    addMessageToChat(chatId, messageRequestDTO, callback) {
+    addMessageToChatWithHttpInfo(chatId, messageRequestDTO) {
       let postBody = messageRequestDTO;
       // verify the required parameter 'chatId' is set
       if (chatId === undefined || chatId === null) {
@@ -78,25 +70,29 @@ export default class ChatControllerApi {
       return this.apiClient.callApi(
         '/api/v1/chat/{chatId}/message', 'POST',
         pathParams, queryParams, headerParams, formParams, postBody,
-        authNames, contentTypes, accepts, returnType, null, callback
+        authNames, contentTypes, accepts, returnType, null
       );
     }
 
     /**
-     * Callback function to receive the result of the createChatFromBuyer operation.
-     * @callback module:api/ChatControllerApi~createChatFromBuyerCallback
-     * @param {String} error Error message, if any.
-     * @param {module:model/ChatResponseDTO} data The data returned by the service call.
-     * @param {String} response The complete HTTP response.
+     * @param {String} chatId 
+     * @param {module:model/MessageRequestDTO} messageRequestDTO 
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link module:model/MessageResponsetDTO}
      */
+    addMessageToChat(chatId, messageRequestDTO) {
+      return this.addMessageToChatWithHttpInfo(chatId, messageRequestDTO)
+        .then(function(response_and_data) {
+          return response_and_data.data;
+        });
+    }
+
 
     /**
      * @param {String} listingId 
      * @param {module:model/MessageRequestDTO} messageRequestDTO 
-     * @param {module:api/ChatControllerApi~createChatFromBuyerCallback} callback The callback function, accepting three arguments: error, data, response
-     * data is of type: {@link module:model/ChatResponseDTO}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/ChatResponseDTO} and HTTP response
      */
-    createChatFromBuyer(listingId, messageRequestDTO, callback) {
+    createChatFromBuyerWithHttpInfo(listingId, messageRequestDTO) {
       let postBody = messageRequestDTO;
       // verify the required parameter 'listingId' is set
       if (listingId === undefined || listingId === null) {
@@ -124,24 +120,28 @@ export default class ChatControllerApi {
       return this.apiClient.callApi(
         '/api/v1/listing/{listingId}/create', 'POST',
         pathParams, queryParams, headerParams, formParams, postBody,
-        authNames, contentTypes, accepts, returnType, null, callback
+        authNames, contentTypes, accepts, returnType, null
       );
     }
 
     /**
-     * Callback function to receive the result of the getAllChatsForListing operation.
-     * @callback module:api/ChatControllerApi~getAllChatsForListingCallback
-     * @param {String} error Error message, if any.
-     * @param {Array.<module:model/ChatResponseDTO>} data The data returned by the service call.
-     * @param {String} response The complete HTTP response.
+     * @param {String} listingId 
+     * @param {module:model/MessageRequestDTO} messageRequestDTO 
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link module:model/ChatResponseDTO}
      */
+    createChatFromBuyer(listingId, messageRequestDTO) {
+      return this.createChatFromBuyerWithHttpInfo(listingId, messageRequestDTO)
+        .then(function(response_and_data) {
+          return response_and_data.data;
+        });
+    }
+
 
     /**
      * @param {String} listingId 
-     * @param {module:api/ChatControllerApi~getAllChatsForListingCallback} callback The callback function, accepting three arguments: error, data, response
-     * data is of type: {@link Array.<module:model/ChatResponseDTO>}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/ChatResponseDTO>} and HTTP response
      */
-    getAllChatsForListing(listingId, callback) {
+    getAllChatsForListingWithHttpInfo(listingId) {
       let postBody = null;
       // verify the required parameter 'listingId' is set
       if (listingId === undefined || listingId === null) {
@@ -165,23 +165,26 @@ export default class ChatControllerApi {
       return this.apiClient.callApi(
         '/api/v1/listing/{listingId}/chats', 'GET',
         pathParams, queryParams, headerParams, formParams, postBody,
-        authNames, contentTypes, accepts, returnType, null, callback
+        authNames, contentTypes, accepts, returnType, null
       );
     }
 
     /**
-     * Callback function to receive the result of the getAllChatsForUser operation.
-     * @callback module:api/ChatControllerApi~getAllChatsForUserCallback
-     * @param {String} error Error message, if any.
-     * @param {Array.<module:model/ChatResponseDTO>} data The data returned by the service call.
-     * @param {String} response The complete HTTP response.
+     * @param {String} listingId 
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/ChatResponseDTO>}
      */
+    getAllChatsForListing(listingId) {
+      return this.getAllChatsForListingWithHttpInfo(listingId)
+        .then(function(response_and_data) {
+          return response_and_data.data;
+        });
+    }
+
 
     /**
-     * @param {module:api/ChatControllerApi~getAllChatsForUserCallback} callback The callback function, accepting three arguments: error, data, response
-     * data is of type: {@link Array.<module:model/ChatResponseDTO>}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/ChatResponseDTO>} and HTTP response
      */
-    getAllChatsForUser(callback) {
+    getAllChatsForUserWithHttpInfo() {
       let postBody = null;
 
       let pathParams = {
@@ -200,24 +203,26 @@ export default class ChatControllerApi {
       return this.apiClient.callApi(
         '/api/v1/user/my-chats', 'GET',
         pathParams, queryParams, headerParams, formParams, postBody,
-        authNames, contentTypes, accepts, returnType, null, callback
+        authNames, contentTypes, accepts, returnType, null
       );
     }
 
     /**
-     * Callback function to receive the result of the getChat operation.
-     * @callback module:api/ChatControllerApi~getChatCallback
-     * @param {String} error Error message, if any.
-     * @param {module:model/ChatResponseDTO} data The data returned by the service call.
-     * @param {String} response The complete HTTP response.
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/ChatResponseDTO>}
      */
+    getAllChatsForUser() {
+      return this.getAllChatsForUserWithHttpInfo()
+        .then(function(response_and_data) {
+          return response_and_data.data;
+        });
+    }
+
 
     /**
      * @param {String} listingId 
-     * @param {module:api/ChatControllerApi~getChatCallback} callback The callback function, accepting three arguments: error, data, response
-     * data is of type: {@link module:model/ChatResponseDTO}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/ChatResponseDTO} and HTTP response
      */
-    getChat(listingId, callback) {
+    getChatWithHttpInfo(listingId) {
       let postBody = null;
       // verify the required parameter 'listingId' is set
       if (listingId === undefined || listingId === null) {
@@ -241,8 +246,19 @@ export default class ChatControllerApi {
       return this.apiClient.callApi(
         '/api/v1/listing/{listingId}/chat', 'GET',
         pathParams, queryParams, headerParams, formParams, postBody,
-        authNames, contentTypes, accepts, returnType, null, callback
+        authNames, contentTypes, accepts, returnType, null
       );
+    }
+
+    /**
+     * @param {String} listingId 
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link module:model/ChatResponseDTO}
+     */
+    getChat(listingId) {
+      return this.getChatWithHttpInfo(listingId)
+        .then(function(response_and_data) {
+          return response_and_data.data;
+        });
     }
 
 

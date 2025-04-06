@@ -12,10 +12,10 @@
  */
 
 
-import ApiClient from "../ApiClient";
-import CategoryCreationRequestDTO from '../model/CategoryCreationRequestDTO';
-import CategoryListResponseDTO from '../model/CategoryListResponseDTO';
-import CategoryResponseDTO from '../model/CategoryResponseDTO';
+import ApiClient from "../ApiClient.js";
+import CategoryCreationRequestDTO from '../model/CategoryCreationRequestDTO.js';
+import CategoryListResponseDTO from '../model/CategoryListResponseDTO.js';
+import CategoryResponseDTO from '../model/CategoryResponseDTO.js';
 
 /**
 * CategoryController service.
@@ -36,19 +36,12 @@ export default class CategoryControllerApi {
     }
 
 
-    /**
-     * Callback function to receive the result of the callDelete operation.
-     * @callback module:api/CategoryControllerApi~callDeleteCallback
-     * @param {String} error Error message, if any.
-     * @param data This operation does not return a value.
-     * @param {String} response The complete HTTP response.
-     */
 
     /**
      * @param {String} id 
-     * @param {module:api/CategoryControllerApi~callDeleteCallback} callback The callback function, accepting three arguments: error, data, response
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing HTTP response
      */
-    callDelete(id, callback) {
+    callDeleteWithHttpInfo(id) {
       let postBody = null;
       // verify the required parameter 'id' is set
       if (id === undefined || id === null) {
@@ -72,24 +65,27 @@ export default class CategoryControllerApi {
       return this.apiClient.callApi(
         '/api/v1/category/delete/{id}', 'DELETE',
         pathParams, queryParams, headerParams, formParams, postBody,
-        authNames, contentTypes, accepts, returnType, null, callback
+        authNames, contentTypes, accepts, returnType, null
       );
     }
 
     /**
-     * Callback function to receive the result of the create1 operation.
-     * @callback module:api/CategoryControllerApi~create1Callback
-     * @param {String} error Error message, if any.
-     * @param {module:model/CategoryResponseDTO} data The data returned by the service call.
-     * @param {String} response The complete HTTP response.
+     * @param {String} id 
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}
      */
+    callDelete(id) {
+      return this.callDeleteWithHttpInfo(id)
+        .then(function(response_and_data) {
+          return response_and_data.data;
+        });
+    }
+
 
     /**
      * @param {module:model/CategoryCreationRequestDTO} categoryCreationRequestDTO 
-     * @param {module:api/CategoryControllerApi~create1Callback} callback The callback function, accepting three arguments: error, data, response
-     * data is of type: {@link module:model/CategoryResponseDTO}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/CategoryResponseDTO} and HTTP response
      */
-    create1(categoryCreationRequestDTO, callback) {
+    create1WithHttpInfo(categoryCreationRequestDTO) {
       let postBody = categoryCreationRequestDTO;
       // verify the required parameter 'categoryCreationRequestDTO' is set
       if (categoryCreationRequestDTO === undefined || categoryCreationRequestDTO === null) {
@@ -112,23 +108,26 @@ export default class CategoryControllerApi {
       return this.apiClient.callApi(
         '/api/v1/category/create', 'POST',
         pathParams, queryParams, headerParams, formParams, postBody,
-        authNames, contentTypes, accepts, returnType, null, callback
+        authNames, contentTypes, accepts, returnType, null
       );
     }
 
     /**
-     * Callback function to receive the result of the getAll operation.
-     * @callback module:api/CategoryControllerApi~getAllCallback
-     * @param {String} error Error message, if any.
-     * @param {module:model/CategoryListResponseDTO} data The data returned by the service call.
-     * @param {String} response The complete HTTP response.
+     * @param {module:model/CategoryCreationRequestDTO} categoryCreationRequestDTO 
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link module:model/CategoryResponseDTO}
      */
+    create1(categoryCreationRequestDTO) {
+      return this.create1WithHttpInfo(categoryCreationRequestDTO)
+        .then(function(response_and_data) {
+          return response_and_data.data;
+        });
+    }
+
 
     /**
-     * @param {module:api/CategoryControllerApi~getAllCallback} callback The callback function, accepting three arguments: error, data, response
-     * data is of type: {@link module:model/CategoryListResponseDTO}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/CategoryListResponseDTO} and HTTP response
      */
-    getAll(callback) {
+    getAllWithHttpInfo() {
       let postBody = null;
 
       let pathParams = {
@@ -147,24 +146,26 @@ export default class CategoryControllerApi {
       return this.apiClient.callApi(
         '/api/v1/category/all', 'GET',
         pathParams, queryParams, headerParams, formParams, postBody,
-        authNames, contentTypes, accepts, returnType, null, callback
+        authNames, contentTypes, accepts, returnType, null
       );
     }
 
     /**
-     * Callback function to receive the result of the getById1 operation.
-     * @callback module:api/CategoryControllerApi~getById1Callback
-     * @param {String} error Error message, if any.
-     * @param {module:model/CategoryResponseDTO} data The data returned by the service call.
-     * @param {String} response The complete HTTP response.
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link module:model/CategoryListResponseDTO}
      */
+    getAll() {
+      return this.getAllWithHttpInfo()
+        .then(function(response_and_data) {
+          return response_and_data.data;
+        });
+    }
+
 
     /**
      * @param {String} id 
-     * @param {module:api/CategoryControllerApi~getById1Callback} callback The callback function, accepting three arguments: error, data, response
-     * data is of type: {@link module:model/CategoryResponseDTO}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/CategoryResponseDTO} and HTTP response
      */
-    getById1(id, callback) {
+    getById1WithHttpInfo(id) {
       let postBody = null;
       // verify the required parameter 'id' is set
       if (id === undefined || id === null) {
@@ -188,24 +189,27 @@ export default class CategoryControllerApi {
       return this.apiClient.callApi(
         '/api/v1/category/id/{id}', 'GET',
         pathParams, queryParams, headerParams, formParams, postBody,
-        authNames, contentTypes, accepts, returnType, null, callback
+        authNames, contentTypes, accepts, returnType, null
       );
     }
 
     /**
-     * Callback function to receive the result of the getByName operation.
-     * @callback module:api/CategoryControllerApi~getByNameCallback
-     * @param {String} error Error message, if any.
-     * @param {module:model/CategoryResponseDTO} data The data returned by the service call.
-     * @param {String} response The complete HTTP response.
+     * @param {String} id 
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link module:model/CategoryResponseDTO}
      */
+    getById1(id) {
+      return this.getById1WithHttpInfo(id)
+        .then(function(response_and_data) {
+          return response_and_data.data;
+        });
+    }
+
 
     /**
      * @param {String} name 
-     * @param {module:api/CategoryControllerApi~getByNameCallback} callback The callback function, accepting three arguments: error, data, response
-     * data is of type: {@link module:model/CategoryResponseDTO}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/CategoryResponseDTO} and HTTP response
      */
-    getByName(name, callback) {
+    getByNameWithHttpInfo(name) {
       let postBody = null;
       // verify the required parameter 'name' is set
       if (name === undefined || name === null) {
@@ -229,8 +233,19 @@ export default class CategoryControllerApi {
       return this.apiClient.callApi(
         '/api/v1/category/name/{name}', 'GET',
         pathParams, queryParams, headerParams, formParams, postBody,
-        authNames, contentTypes, accepts, returnType, null, callback
+        authNames, contentTypes, accepts, returnType, null
       );
+    }
+
+    /**
+     * @param {String} name 
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link module:model/CategoryResponseDTO}
+     */
+    getByName(name) {
+      return this.getByNameWithHttpInfo(name)
+        .then(function(response_and_data) {
+          return response_and_data.data;
+        });
     }
 
 

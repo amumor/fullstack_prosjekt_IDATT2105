@@ -12,10 +12,10 @@
  */
 
 
-import ApiClient from "../ApiClient";
-import ListingCreationRequestDTO from '../model/ListingCreationRequestDTO';
-import ListingListResponseDTO from '../model/ListingListResponseDTO';
-import ListingResponseDTO from '../model/ListingResponseDTO';
+import ApiClient from "../ApiClient.js";
+import ListingCreationRequestDTO from '../model/ListingCreationRequestDTO.js';
+import ListingListResponseDTO from '../model/ListingListResponseDTO.js';
+import ListingResponseDTO from '../model/ListingResponseDTO.js';
 
 /**
 * ListingController service.
@@ -36,20 +36,12 @@ export default class ListingControllerApi {
     }
 
 
-    /**
-     * Callback function to receive the result of the create operation.
-     * @callback module:api/ListingControllerApi~createCallback
-     * @param {String} error Error message, if any.
-     * @param {module:model/ListingResponseDTO} data The data returned by the service call.
-     * @param {String} response The complete HTTP response.
-     */
 
     /**
      * @param {module:model/ListingCreationRequestDTO} listingCreationRequestDTO 
-     * @param {module:api/ListingControllerApi~createCallback} callback The callback function, accepting three arguments: error, data, response
-     * data is of type: {@link module:model/ListingResponseDTO}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/ListingResponseDTO} and HTTP response
      */
-    create(listingCreationRequestDTO, callback) {
+    createWithHttpInfo(listingCreationRequestDTO) {
       let postBody = listingCreationRequestDTO;
       // verify the required parameter 'listingCreationRequestDTO' is set
       if (listingCreationRequestDTO === undefined || listingCreationRequestDTO === null) {
@@ -72,24 +64,27 @@ export default class ListingControllerApi {
       return this.apiClient.callApi(
         '/api/v1/listing/create', 'POST',
         pathParams, queryParams, headerParams, formParams, postBody,
-        authNames, contentTypes, accepts, returnType, null, callback
+        authNames, contentTypes, accepts, returnType, null
       );
     }
 
     /**
-     * Callback function to receive the result of the getById operation.
-     * @callback module:api/ListingControllerApi~getByIdCallback
-     * @param {String} error Error message, if any.
-     * @param {module:model/ListingResponseDTO} data The data returned by the service call.
-     * @param {String} response The complete HTTP response.
+     * @param {module:model/ListingCreationRequestDTO} listingCreationRequestDTO 
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link module:model/ListingResponseDTO}
      */
+    create(listingCreationRequestDTO) {
+      return this.createWithHttpInfo(listingCreationRequestDTO)
+        .then(function(response_and_data) {
+          return response_and_data.data;
+        });
+    }
+
 
     /**
      * @param {String} id 
-     * @param {module:api/ListingControllerApi~getByIdCallback} callback The callback function, accepting three arguments: error, data, response
-     * data is of type: {@link module:model/ListingResponseDTO}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/ListingResponseDTO} and HTTP response
      */
-    getById(id, callback) {
+    getByIdWithHttpInfo(id) {
       let postBody = null;
       // verify the required parameter 'id' is set
       if (id === undefined || id === null) {
@@ -113,26 +108,29 @@ export default class ListingControllerApi {
       return this.apiClient.callApi(
         '/api/v1/listing/id/{id}', 'GET',
         pathParams, queryParams, headerParams, formParams, postBody,
-        authNames, contentTypes, accepts, returnType, null, callback
+        authNames, contentTypes, accepts, returnType, null
       );
     }
 
     /**
-     * Callback function to receive the result of the getSuggestions operation.
-     * @callback module:api/ListingControllerApi~getSuggestionsCallback
-     * @param {String} error Error message, if any.
-     * @param {module:model/ListingListResponseDTO} data The data returned by the service call.
-     * @param {String} response The complete HTTP response.
+     * @param {String} id 
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link module:model/ListingResponseDTO}
      */
+    getById(id) {
+      return this.getByIdWithHttpInfo(id)
+        .then(function(response_and_data) {
+          return response_and_data.data;
+        });
+    }
+
 
     /**
      * @param {Object} opts Optional parameters
      * @param {Number} [page = 0)] 
      * @param {Number} [size = 10)] 
-     * @param {module:api/ListingControllerApi~getSuggestionsCallback} callback The callback function, accepting three arguments: error, data, response
-     * data is of type: {@link module:model/ListingListResponseDTO}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/ListingListResponseDTO} and HTTP response
      */
-    getSuggestions(opts, callback) {
+    getSuggestionsWithHttpInfo(opts) {
       opts = opts || {};
       let postBody = null;
 
@@ -154,8 +152,21 @@ export default class ListingControllerApi {
       return this.apiClient.callApi(
         '/api/v1/listing/get-suggestions', 'GET',
         pathParams, queryParams, headerParams, formParams, postBody,
-        authNames, contentTypes, accepts, returnType, null, callback
+        authNames, contentTypes, accepts, returnType, null
       );
+    }
+
+    /**
+     * @param {Object} opts Optional parameters
+     * @param {Number} opts.page  (default to 0)
+     * @param {Number} opts.size  (default to 10)
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link module:model/ListingListResponseDTO}
+     */
+    getSuggestions(opts) {
+      return this.getSuggestionsWithHttpInfo(opts)
+        .then(function(response_and_data) {
+          return response_and_data.data;
+        });
     }
 
 
