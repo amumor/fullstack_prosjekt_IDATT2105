@@ -1,4 +1,6 @@
 spring:
+  jackson:
+    time-zone: UTC
   datasource:
     url: jdbc:h2:file:./data/marketplaceDB
     driver-class-name: org.h2.Driver
