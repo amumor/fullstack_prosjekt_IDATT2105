@@ -3,7 +3,6 @@ import Navbar from '@/components/Navbar.vue'
 import ListingPreviewComponent from '@/components/listing/ListingPreviewComponent.vue'
 document.body.style.backgroundColor = "#ffffff";
 
-
 const searchFunction = () => {};
 
 //Get images from backend
@@ -34,7 +33,7 @@ const categories = [
 </script>
 
 <template>
-<Navbar :isLoggedIn=true />
+<Navbar />
 <div class="display-page-container">
 
   <!-- Search bar -->

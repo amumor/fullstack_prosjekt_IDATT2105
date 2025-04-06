@@ -12,7 +12,7 @@ const toggleEditMode = () => {
 </script>
 
 <template>
-<Navbar :isLoggedIn=true />
+<Navbar />
 <div class="display-page-container">
   <div class="header-container">
     <h2>Admin settings</h2>

@@ -14,13 +14,11 @@ const category="Guitar";
 const lastEdited="1. april 2023";
 const image="https://iqboatlifts.com/wp-content/uploads/2018/06/Yacht-vs-Boat-Whats-the-Difference-Between-the-Two-1024x571.jpg";
 
-// Fix login logic
-const isLoggedIn = true;
 </script>
 
 <template>
 
-  <Navbar :isLoggedIn=isLoggedIn />
+  <Navbar />
 
   <!-- Listing component -->
   <div class="display-page-container">
@@ -32,8 +30,7 @@ const isLoggedIn = true;
       :location=location
       :category=category
       :lastEdited=lastEdited
-      :image=image
-      :isLoggedIn=isLoggedIn />
+      :image=image />
   </div>
 </template>
 

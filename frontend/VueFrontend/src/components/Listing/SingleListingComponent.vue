@@ -3,6 +3,9 @@ import { ref, defineProps } from 'vue';
 import { useRouter } from 'vue-router';
 import { Icon } from '@iconify/vue'
 import ListingMapComponent from '@/components/Listing/ListingMapComponent.vue'
+import { userStore } from '@/stores/userStore.js'
+
+const user = userStore()
 
 const props = defineProps({
   id: String,
@@ -58,7 +61,7 @@ const toEditListing = () => {
     </div>
 
     <!-- Buy item or message seller -->
-    <div class="btn" v-if="props.isLoggedIn && !isOwner">
+    <div class="btn" v-if="user.isLoggedIn && !isOwner">
       <button class="message-btn">Message seller</button>
       <button class="buy-btn">Buy</button>
     </div>

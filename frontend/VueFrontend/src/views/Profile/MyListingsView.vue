@@ -23,7 +23,7 @@ const listings = [
 
 <template>
 
-<Navbar :isLoggedIn="true" />
+<Navbar />
 
 <div class="display-page-container">
   <BackToComponent />

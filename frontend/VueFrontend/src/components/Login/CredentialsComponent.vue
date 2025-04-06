@@ -1,6 +1,9 @@
 <script setup>
 import { ref, defineProps } from 'vue';
 import { useRouter } from 'vue-router';
+import { userStore } from '@/stores/userStore.js';
+
+const user = userStore();
 
 /**
  * @property {Boolean} hasUser - Indicates if the user is registered.
@@ -56,7 +59,7 @@ const emailRegex = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/;
 
 const phoneRegex = /^\d{8}$/;
 
-const passwordRegex = /^(?=.[A-Z])(?=.\d)(?=.[!@#$%^&()_+\-={}:;"'|<>,.?]).{10,}$/;
+const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&()_+\-={}:;"'|<>,.?]).{10,}$/;
 
 /**
  * Function to handle login
@@ -83,7 +86,14 @@ const login = async () => {
   try{
 
     // Logic to handle login here
-
+    user.logout();
+    user.setUser({
+      firstName: firstName.value,
+      lastName: lastName.value,
+      email: email.value,
+      phoneNumber: phoneNumber.value,
+    });
+    user.login(email.value);
     await router.push('/')
   }catch(error){
     console.error("Login failed:", error)
@@ -99,58 +109,71 @@ const login = async () => {
 const register = async () => {
   if(!firstName.value) {
     errorMsg.value = 'First name is required';
+    console.log(errorMsg.value);
     return;
   }
   if(!lastName.value) {
     errorMsg.value = 'Last name is required';
+    console.log(errorMsg.value);
     return;
   }
   if(!email.value) {
     errorMsg.value = 'Email is required';
+    console.log(errorMsg.value);
     return;
   }
   if(!phoneNumber.value) {
     errorMsg.value = 'Phone number is required';
+    console.log(errorMsg.value);
     return;
   }
   if(!password.value) {
     errorMsg.value = 'Password is required';
+    console.log(errorMsg.value);
     return;
   }
   if(!confirmPassword.value) {
     errorMsg.value = 'Confirm password is required';
+    console.log(errorMsg.value);
     return;
   }
   if (!nameRegex.test(firstName.value)) {
     errorMsg.value = 'Invalid first name';
+    console.log(errorMsg.value);
     return;
   }
   if (!nameRegex.test(lastName.value)) {
     errorMsg.value = 'Invalid last name';
+    console.log(errorMsg.value);
     return;
   }
   if (!emailRegex.test(email.value)) {
     errorMsg.value = 'Invalid email';
+    console.log(errorMsg.value);
     return;
   }
   if (!phoneRegex.test(phoneNumber.value)) {
     errorMsg.value = 'Invalid phone number';
+    console.log(errorMsg.value);
     return;
   }
   if (!passwordRegex.test(password.value)) {
     errorMsg.value = 'Invalid password';
+    console.log(errorMsg.value);
     return;
   }
   if (password.value !== confirmPassword.value) {
     errorMsg.value = 'Passwords do not match';
+    console.log(errorMsg.value);
     return;
   }
 
   try{
 
     // Logic to handle registration here
-
-    await router.push('/login')
+    email.value = '';
+    password.value = '';
+    toggleForm();
   }catch(error){
     console.error("Registration failed:", error)
     errorMsg.value = "Try again.";
@@ -177,8 +200,8 @@ const toggleForm = () => {
     <div class="login">
       <h2>Log in</h2>
       <div class="fields">
-        <input type="text" placeholder="E-mail" />
-        <input type="password" placeholder="Password" />
+        <input v-model="email" type="text" placeholder="E-mail" />
+        <input v-model="password" type="password" placeholder="Password" />
         <button class="basic-blue-btn" @click="login">Log in</button>
       </div>
       <div class="to-sign-up">
@@ -197,7 +220,7 @@ const toggleForm = () => {
         <input v-model="phoneNumber" type="text" placeholder="Phone number" />
         <input v-model="password" type="password" placeholder="Password" />
         <input v-model="confirmPassword" type="password" placeholder="Confirm password" />
-        <button class="basic-blue-btn" @click="toggleForm && register" >Register</button>
+        <button class="basic-blue-btn" @click="register" >Register</button>
       </div>
       <div class="to-login">
         <p>Already have an account?</p>
