@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import org.springframework.data.domain.Pageable;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
@@ -121,10 +120,6 @@ public class ListingService {
       existing.setLongitude(updatedListing.getLongitude());
     }
 
-    if (updatedListing.getStatus() != null) {
-      existing.setStatus(updatedListing.getStatus());
-    }
-
     return listingRepository.save(existing);
   }
 
@@ -137,17 +132,18 @@ public class ListingService {
     listingRepository.deleteById(id);
   }
 
-  public Listing updateListingStatus(UUID id, ListingStatus status) {
+  @Transactional
+  public void updateListingStatus(UUID id, ListingStatus status) {
     logger.info("> Updating listing status for ID: {}", id);
-    if (status == null) {
-      throw new IllegalArgumentException("Status must not be null.");
-    }
-
     Listing listing = listingRepository.findById(id)
             .orElseThrow(() -> new NoSuchElementException("Listing with ID " + id + " not found."));
 
+    if (listing.getStatus() == ListingStatus.SOLD && status != ListingStatus.SOLD) {
+      throw new IllegalStateException("Sold listings cannot be reactivated or changed.");
+    }
+
     listing.setStatus(status);
-    return listingRepository.save(listing);
+    listingRepository.save(listing);
   }
   
   private void validateListing(Listing listing) {

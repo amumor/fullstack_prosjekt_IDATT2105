@@ -10,6 +10,12 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+/**
+ * Represents a bid made by a user in a chat.
+ * <p>
+ * The Bid entity contains information about the bid, including the chat it belongs to, the buyer who made the bid,
+ * the price of the bid, its status, and the timestamp when it was created.
+ */
 @Data
 @Builder
 @NoArgsConstructor
