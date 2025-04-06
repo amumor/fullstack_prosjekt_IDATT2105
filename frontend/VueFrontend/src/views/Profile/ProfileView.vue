@@ -3,6 +3,9 @@ import { useRouter } from 'vue-router'
 import Navbar from '@/components/Navbar.vue'
 import ProfileOption from '@/components/profile/ProfileOption.vue'
 import InitialsDisplayComponent from '@/components/profile/InitialsDisplayComponent.vue'
+import { userStore } from '@/stores/userStore.js'
+
+const user = userStore();
 
 document.body.style.backgroundColor = "#ffffff";
 
@@ -16,19 +19,19 @@ const routeTo = (route) => {
 </script>
 
 <template>
-  <Navbar :isLoggedIn=true />
+  <Navbar />
   <div class="display-page-container">
     <div class="profile-info-container">
       <!-- Profile info -->
       <div class="profile-icon">
         <InitialsDisplayComponent
-          :name=fullName
+          :name="user.firstName + ' ' + user.lastName"
           :width=120
           :height=120 />
       </div>
       <div class="profile-info">
-        <h2>{{ fullName }}</h2>
-        <h1>{{email}}</h1>
+        <h2>{{ user.firstName + ' ' + user.lastName }}</h2>
+        <h1>{{ user.email }}</h1>
       </div>
       <!-- Log out logic -->
       <router-link to="/login" id="router-link">Log out</router-link>

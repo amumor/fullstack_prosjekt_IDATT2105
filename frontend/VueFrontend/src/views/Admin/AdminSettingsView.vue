@@ -12,7 +12,7 @@ const toggleEditMode = () => {
 </script>
 
 <template>
-<Navbar :isLoggedIn=true />
+<Navbar />
 <div class="display-page-container">
   <h2>Admin settings</h2>
   <div class="edit-mode" v-if="isEditeMode">

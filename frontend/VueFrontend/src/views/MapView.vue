@@ -24,7 +24,7 @@ const markers = ref([
 </script>
 
 <template>
-  <Navbar :isLoggedIn=true />
+  <Navbar />
   <BackToComponent />
   <div class="map-container">
     <LMap :zoom="10" :center="center">

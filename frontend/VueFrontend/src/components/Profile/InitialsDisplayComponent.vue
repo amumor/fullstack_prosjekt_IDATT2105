@@ -1,5 +1,8 @@
 <script setup>
 import { defineProps } from 'vue';
+import { userStore } from '@/stores/userStore.js';
+
+const user = userStore();
 
 const props = defineProps({
   name: String,

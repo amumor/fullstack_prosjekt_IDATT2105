@@ -67,7 +67,7 @@ const sendMessage = () => {
 </script>
 
 <template>
-<Navbar :isLoggedIn=true />
+<Navbar />
 <div class="display-page-container">
   <div class="display-left-container">
     <h2>Messages</h2>

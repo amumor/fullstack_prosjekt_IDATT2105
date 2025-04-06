@@ -22,7 +22,7 @@ const listings = [
 </script>
 
 <template>
-<Navbar :isLoggedIn="true" />
+<Navbar />
 <div class="display-page-container">
   <BackToComponent />
   <h2>Favorites</h2>

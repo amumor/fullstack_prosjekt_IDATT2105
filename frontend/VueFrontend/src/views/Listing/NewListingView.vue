@@ -5,7 +5,7 @@ import Navbar from '@/components/Navbar.vue'
 </script>
 
 <template>
-  <Navbar :isLoggedIn="true"/>
+  <Navbar />
   <div class="display-page-container">
     <NewListingComponent />
   </div>

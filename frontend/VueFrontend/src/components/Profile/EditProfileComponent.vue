@@ -1,6 +1,9 @@
 <script setup>
 import { ref, defineProps } from 'vue';
 import { useRouter } from 'vue-router'
+import { userStore } from '@/stores/userStore.js';
+
+const user = userStore()
 
 const props = defineProps ({
   firstName: String,
@@ -9,24 +12,23 @@ const props = defineProps ({
   phoneNumber: String
 })
 
-const user = ref({
-  firstName: props.firstName,
-  lastName: props.lastName,
-  email: props.email,
-  phoneNumber: props.phoneNumber
-})
-const newFirstName = ref(props.firstName);
-const newLastName = ref(props.lastName);
-const newEmail = ref(props.email);
-const newPhoneNumber = ref(props.phoneNumber);
+const newFirstName = ref(user.firstName);
+const newLastName = ref(user.lastName);
+const newEmail = ref(user.email);
+const newPhoneNumber = ref(user.phoneNumber);
 
 const router = useRouter()
 
 const saveChanges = () => {
-  user.value.firstName = newFirstName.value;
-  user.value.lastName = newLastName.value;
-  user.value.email = newEmail.value;
-  user.value.phoneNumber = newPhoneNumber.value;
+
+  // Validate the input fields
+  
+  user.setProfile({
+    firstName: newFirstName.value,
+    lastName: newLastName.value,
+    email: newEmail.value,
+    phoneNumber: newPhoneNumber.value
+  })
   router.push('/profile');
 }
 </script>

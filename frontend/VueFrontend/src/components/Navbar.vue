@@ -1,19 +1,11 @@
 <script setup>
-import { ref, defineProps, onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
 import { Icon } from '@iconify/vue'
+import { userStore } from '@/stores/userStore.js';
 
-/**
- * @property {Boolean} isLoggedIn - Indicates if the user is logged in.
- */
-const props = defineProps({
-  isLoggedIn: {
-    type: Boolean,
-    default: false
-  },
-});
+const user = userStore();
 
 // Mobile menu state
-const isUserLoggedIn = ref(props.isLoggedIn);
 const isOpen = ref(false);
 const isMobile = ref(window.innerWidth <= 768);
 const isAdmin = ref(true);
@@ -44,7 +36,7 @@ onMounted(() => {
       <div class="options">
 
         <!-- Logged in menu -->
-        <template v-if="isUserLoggedIn">
+        <template v-if="user.isLoggedIn">
           <router-link to="/newListing" id="router-link">New listing</router-link>
           <router-link to="/profile/favorites" id="router-link">Favorites</router-link>
           <router-link to="/inbox" id="router-link">Inbox</router-link>
@@ -72,7 +64,7 @@ onMounted(() => {
 
         <ul v-show="isOpen" class="dropdown">
           <!-- Logged In Menu -->
-          <template v-if="isUserLoggedIn" v-show="isOpen">
+          <template v-if="user.isLoggedIn" v-show="isOpen">
             <li><router-link to="/newListing" @click="toggleMenu" id="router-link">New listing</router-link></li>
             <li><router-link to="/profile/favorites" @click="toggleMenu" id="router-link">Favorites</router-link></li>
             <li><router-link to="/inbox" @click="toggleMenu" id="router-link">Inbox</router-link></li>

@@ -10,13 +10,8 @@ const phoneNumber = '1234567890'
 </script>
 
 <template>
-<Navbar :isLoggedIn=true />
-<EditProfileComponent
-  :firstName=firstName
-  :lastName=lastName
-  :email=email
-  :phoneNumber=phoneNumber
-  />
+<Navbar />
+<EditProfileComponent />
 </template>
 
 <style scoped>
