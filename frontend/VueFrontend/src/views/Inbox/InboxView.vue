@@ -2,10 +2,12 @@
 import { ref } from 'vue'
 import { vInfiniteScroll } from '@vueuse/components'
 import Navbar from '@/components/Navbar.vue'
-import ListedChatComponent from '@/components/inbox/ListedChatComponent.vue'
-import InitialsDisplayComponent from '@/components/profile/InitialsDisplayComponent.vue'
 import { chatStore } from '@/stores/chat'
 import { storeToRefs } from 'pinia'
+
+import ListedChatComponent from '@/components/inbox/ListedChatComponent.vue'
+import InitialsDisplayComponent from '@/components/profile/InitialsDisplayComponent.vue'
+import BidBoxComponent from '@/components/inbox/BidBoxComponent.vue'
 
 // Dummy initial data
 const initialMessages = [
@@ -43,18 +45,19 @@ const initialMessages = [
 
 const chat = chatStore()
 const { chats, selectedChat } = storeToRefs(chat)
+
+// TODO: Get messages from DB later
 chat.setChats(initialMessages)
 
 const newMessage = ref('')
-const newBidMessage = ref('')
-const newBidPrice = ref('')
-
+const makingBid = ref(false)
 
 // Function to select a chat
 const openChat = (chatItem) => {
   chat.selectChat(chatItem) 
 }
-// Sort messages by read and last message time
+
+// TODO: Sort messages by read and last message time
 
 const sendMessage = () => {
   if (selectedChat) {
@@ -63,13 +66,10 @@ const sendMessage = () => {
   newMessage.value = ''
 }
 
-const sendBid = () => {
-  if (selectedChat) {
-    chat.postBid(newBidMessage.value, newBidPrice.value)
-  }
-  newBidMessage.value = ''
-  newBidPrice.value = ''
+const toggleBid = () => {
+  makingBid.value = !makingBid.value
 }
+
 </script>
 
 <template>
@@ -116,6 +116,10 @@ const sendBid = () => {
     <div class="message-input">
       <textarea v-model="newMessage" placeholder="Type a message..." @keydown.enter.prevent="sendMessage"></textarea>
       <button class="send-button" @click="sendMessage">Send</button>
+      <button class="send-button" @click="toggleBid">Make bid</button>
+    </div>
+    <div class="bid-box" v-if="makingBid">
+      <BidBoxComponent :isBidder="true" />
     </div>
   </div>
 </div>
