@@ -1,8 +1,5 @@
 <script setup>
 import { defineProps } from 'vue';
-import { userStore } from '@/stores/user.js';
-
-const user = userStore();
 
 const props = defineProps({
   name: String,
@@ -10,6 +7,7 @@ const props = defineProps({
   width: Number,
 });
 const getInitials = (name) => {
+  if (!props.name) return '';
   const nameArray = name.split(' ');
   return nameArray
     .map((word) => word.charAt(0).toUpperCase())

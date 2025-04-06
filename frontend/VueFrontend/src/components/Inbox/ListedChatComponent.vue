@@ -10,7 +10,8 @@ const props = defineProps({
   isMessageRead: Boolean,
   messengerName: String,
   messages: Array,
-  selected: Boolean
+  selected: Boolean,
+  chatId: Number,
 })
 
 // Access the chat store to update the selected chat
@@ -20,7 +21,7 @@ const useChat = chatStore()
 const selectChat = () => {
   const chat = useChat.chats.find(c => c.id === props.chatId)
   if (chat) {
-    chatStore.selectChat(chat)
+    useChat.selectChat(chat)
   }
 }
 </script>
@@ -107,18 +108,18 @@ const selectChat = () => {
   font-weight: 600;
 }
 
-.chat-unread p {
+.chat-unread p{
   font-size: 14px;
   color: #666;
   margin: 2px 0;
 }
 
-.chat-read h3 {
-  font-size: 16px;
-  color: #666;
-  margin-bottom: 5px;
+/* Read message styling */
+.chat-read h3{
   font-weight: 400;
+  color: #999;  
 }
+
 
 @media (max-width: 768px) {
   .listed-chat-container {

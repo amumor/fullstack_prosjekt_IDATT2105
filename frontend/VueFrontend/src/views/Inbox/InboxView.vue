@@ -7,86 +7,99 @@ import InitialsDisplayComponent from '@/components/profile/InitialsDisplayCompon
 import { chatStore } from '@/stores/chat'
 import { storeToRefs } from 'pinia'
 
-const chat = chatStore()
-const { chats, selectedChat } = storeToRefs(chat)
-const newMessage = ref('')
-
 // Dummy initial data
 const initialMessages = [
   {
     id: 1,
     listingTitle: 'Boat for sale',
     image: 'https://iqboatlifts.com/wp-content/uploads/2018/06/Yacht-vs-Boat-Whats-the-Difference-Between-the-Two-1024x571.jpg',
-    lastMessageTime: '03:30',
-    isMessageRead: false,
     messengerName: 'Han Karen',
-    messages: [{id: 1, message: 'Hello', sentAt:'09:05'}, {id: 4, message: 'How are you?', sentAt: '10:25'}, {id: 1, message: 'I am fine, thank you!', sentAt: '11:35'}],
+    messages: [{id: 1, message: 'Hello', sentAt:'09:05', type: 'MESSAGE'}, {id: 4, message: 'How are you?', sentAt: '10:25', type: 'MESSAGE'}, {id: 1, message: 'I am fine, thank you!', sentAt: '11:35', type: 'MESSAGE'}],
+    lastMessageTime: '11:35',
+    isMessageRead: true,
     selected: true
   },
   {
     id: 2,
     listingTitle: 'Car for sale',
     image: 'https://iqboatlifts.com/wp-content/uploads/2018/06/Yacht-vs-Boat-Whats-the-Difference-Between-the-Two-1024x571.jpg',
-    lastMessage: 'Heieieieiei?',
-    lastMessageTime: '22. apr',
-    isMessageRead: false,
     messengerName: 'Kar Kar',
-    messages: [{id: 1, message: 'Hello', sentAt:'09:05'}, {id: 4, message: 'How are you?', sentAt: '10:25'}, {id: 1, message: 'I am fine, thank you!', sentAt: '11:35'}],
+    messages: [{id: 1, message: 'Hello', sentAt:'09:05', type: 'MESSAGE'}, {id: 4, message: 'How are you?', sentAt: '10:25', type: 'MESSAGE'}, {id: 1, message: 'I am fine, thank you!', sentAt: '11:35', type: 'MESSAGE'}],
+    lastMessageTime: '11:35',
+    isMessageRead: false,
     selected: false
   },
   {
     id: 3,
     listingTitle: 'PC for sale',
     image: 'https://iqboatlifts.com/wp-content/uploads/2018/06/Yacht-vs-Boat-Whats-the-Difference-Between-the-Two-1024x571.jpg',
-    lastMessage: '30kr, yes?',
-    lastMessageTime: '09. jan',
-    isMessageRead: false,
     messengerName: 'Han han',
-    messages: [{id: 1, message: 'Hello', sentAt:'09:05'}, {id: 4, message: 'How are you?', sentAt: '10:25'}, {id: 1, message: 'I am fine, thank you!', sentAt: '11:35'}],
+    messages: [{id: 1, message: 'Hello', sentAt:'09:05', type: 'MESSAGE'}, {id: 4, message: 'How are you?', sentAt: '10:25', type: 'MESSAGE'}, {id: 1, message: 'I am fine, thank you!', sentAt: '11:35', type: 'MESSAGE'}],
+    lastMessageTime: '11:35',
+    isMessageRead: false,
     selected: false
   },
 ]
+
+const chat = chatStore()
+const { chats, selectedChat } = storeToRefs(chat)
 chat.setChats(initialMessages)
 
+const newMessage = ref('')
+const newBidMessage = ref('')
+const newBidPrice = ref('')
+
+
 // Function to select a chat
-const openChat = (message) => {
-  chat.selectChat(message) 
+const openChat = (chatItem) => {
+  chat.selectChat(chatItem) 
 }
 // Sort messages by read and last message time
 
 const sendMessage = () => {
-  chat.sendMessage(newMessage.value)
+  if (selectedChat) {
+    chat.postMessage(newMessage.value)
+  }
   newMessage.value = ''
+}
+
+const sendBid = () => {
+  if (selectedChat) {
+    chat.postBid(newBidMessage.value, newBidPrice.value)
+  }
+  newBidMessage.value = ''
+  newBidPrice.value = ''
 }
 </script>
 
 <template>
 <Navbar />
-<div class="display-page-container">
+<div class="display-page-container" >
   <div class="display-left-container">
     <h2>Messages</h2>
     <div class="chats-container">
       <ListedChatComponent
-        v-for="(message, index) in chats"
-        :key="index"
-        :listingTitle=message.listingTitle
-        :image=message.image
-        :lastMessageTime=message.lastMessageTime
-        :isMessageRead=message.isMessageRead
-        :messengerName=message.messengerName
-        :messages=message.messages
-        :selected=message.selected
+        v-for="(chatItem) in chats"
+        :key="chatItem.id"
+        :listingTitle="chatItem.listingTitle"
+        :image="chatItem.image"
+        :lastMessageTime="chatItem.lastMessageTime"
+        :isMessageRead="chatItem.isMessageRead"
+        :messengerName="chatItem.messengerName"
+        :messages="chatItem.messages"
+        :selected="chatItem.selected"
+        :chatId="chatItem.id"
         class="chat-item"
-        @click="openChat(message)" />
+        @click="openChat(chatItem)" />
     </div>
   </div>
   <div class="display-right-container" v-if="selectedChat">
     <!-- Fix scroll! -->
     <div class="message-info">
       <InitialsDisplayComponent
-        :name=selectedChat.messengerName
-        :width=120
-        :height=120 />
+        :name="selectedChat.messengerName"
+        :width="120"
+        :height="120" />
       <h2>{{ selectedChat.messengerName }}</h2>
       <div class="messages" v-for="(message, index) in selectedChat.messages" :key="index">
         <div class="sent-message" v-if="message.id === selectedChat.id">
