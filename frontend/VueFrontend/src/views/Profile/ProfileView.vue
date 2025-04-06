@@ -3,14 +3,12 @@ import { useRouter } from 'vue-router'
 import Navbar from '@/components/Navbar.vue'
 import ProfileOption from '@/components/profile/ProfileOption.vue'
 import InitialsDisplayComponent from '@/components/profile/InitialsDisplayComponent.vue'
-import { userStore } from '@/stores/userStore.js'
+import { userStore } from '@/stores/user.js'
 
 const user = userStore();
 
 document.body.style.backgroundColor = "#ffffff";
 
-const fullName = 'Fyfasan Ben Reddik';
-const email = 'fasan@reddik.ben'
 const router = useRouter()
 
 const routeTo = (route) => {

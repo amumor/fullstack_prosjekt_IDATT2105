@@ -4,8 +4,15 @@ import { vInfiniteScroll } from '@vueuse/components'
 import Navbar from '@/components/Navbar.vue'
 import ListedChatComponent from '@/components/inbox/ListedChatComponent.vue'
 import InitialsDisplayComponent from '@/components/profile/InitialsDisplayComponent.vue'
+import { chatStore } from '@/stores/chat'
+import { storeToRefs } from 'pinia'
 
-const messages = [
+const chat = chatStore()
+const { chats, selectedChat } = storeToRefs(chat)
+const newMessage = ref('')
+
+// Dummy initial data
+const initialMessages = [
   {
     id: 1,
     listingTitle: 'Boat for sale',
@@ -39,30 +46,17 @@ const messages = [
     selected: false
   },
 ]
-
-// Reactive variable for selected chat
-const selectedChat = ref(messages[0]) // Default to first message
-const newMessage = ref('')
+chat.setChats(initialMessages)
 
 // Function to select a chat
 const openChat = (message) => {
-  selectedChat.value.selected = false
-  selectedChat.value = message
-  selectedChat.value.isMessageRead = true // Mark as read when opened
-  selectedChat.value.selected = true
+  chat.selectChat(message) 
 }
 // Sort messages by read and last message time
 
 const sendMessage = () => {
-  // Logic to send a message
-  if (newMessage.value.trim() !== '') {
-    selectedChat.value.messages.push({
-      id: selectedChat.value.id,
-      message: newMessage.value,
-      sentAt: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-    })
-    newMessage.value = ''
-  }
+  chat.sendMessage(newMessage.value)
+  newMessage.value = ''
 }
 </script>
 
@@ -73,7 +67,7 @@ const sendMessage = () => {
     <h2>Messages</h2>
     <div class="chats-container">
       <ListedChatComponent
-        v-for="(message, index) in messages"
+        v-for="(message, index) in chats"
         :key="index"
         :listingTitle=message.listingTitle
         :image=message.image

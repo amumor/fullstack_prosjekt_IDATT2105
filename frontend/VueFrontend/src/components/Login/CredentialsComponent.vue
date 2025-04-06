@@ -1,7 +1,7 @@
 <script setup>
 import { ref, defineProps } from 'vue';
 import { useRouter } from 'vue-router';
-import { userStore } from '@/stores/userStore.js';
+import { userStore } from '@/stores/user.js';
 
 const user = userStore();
 

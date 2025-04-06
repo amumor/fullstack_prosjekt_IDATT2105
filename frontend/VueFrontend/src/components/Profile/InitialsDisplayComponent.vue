@@ -1,6 +1,6 @@
 <script setup>
 import { defineProps } from 'vue';
-import { userStore } from '@/stores/userStore.js';
+import { userStore } from '@/stores/user.js';
 
 const user = userStore();
 
