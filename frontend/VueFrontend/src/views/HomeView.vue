@@ -5,8 +5,8 @@ import { authenticateUser } from '@/services/AuthenticationService'
 
 document.body.style.backgroundColor = "#ffffff";
 
-const email = 'user@example.com';
-const password = 'password123';
+const email = 'admin@find.no';
+const password = 'ChangeMe!123aefF223r';
 
 authenticateUser(email, password)
     .then(response => {

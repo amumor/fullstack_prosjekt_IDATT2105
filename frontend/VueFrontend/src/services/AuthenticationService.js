@@ -3,7 +3,7 @@
 import {ApiClient, AuthenticationControllerApi, AuthenticationRequestDTO} from '@/api';
 
 
-export async function authenticateUser(email, password) {
+export function authenticateUser(email, password) {
     const myClient = new ApiClient('http://localhost:8080');
     myClient.timeout = 120000; // 2-minute timeout
 
@@ -13,12 +13,12 @@ export async function authenticateUser(email, password) {
     authenticationRequestDTO.email = email;
     authenticationRequestDTO.password = password;
 
-    const response = await authApi.authenticate(authenticationRequestDTO, (err, data, response) => {
+    const response = authApi.authenticate(authenticationRequestDTO, (err, data, response) => {
         if (err) {
             console.error('Auth failed:', err);
         } else {
             console.log('TokenResponseDTO:', data);
         }
     });
-    return response;
+    console.log(response);
 }
