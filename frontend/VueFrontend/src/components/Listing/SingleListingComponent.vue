@@ -2,7 +2,7 @@
 import { ref, defineProps } from 'vue';
 import { useRouter } from 'vue-router';
 import { Icon } from '@iconify/vue'
-import ListingMapComponent from '@/components/Listing/ListingMapComponent.vue'
+import ListingMapComponent from '@/components/listing/ListingMapComponent.vue'
 import { userStore } from '@/stores/userStore.js'
 
 const user = userStore()
