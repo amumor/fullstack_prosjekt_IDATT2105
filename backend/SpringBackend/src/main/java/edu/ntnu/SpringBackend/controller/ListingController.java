@@ -1,6 +1,5 @@
 package edu.ntnu.SpringBackend.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.ntnu.SpringBackend.dto.ListingCreationRequestDTO;
 import edu.ntnu.SpringBackend.dto.ListingListResponseDTO;
 import edu.ntnu.SpringBackend.dto.ListingResponseDTO;
@@ -9,12 +8,10 @@ import edu.ntnu.SpringBackend.model.User;
 import edu.ntnu.SpringBackend.service.CategoryService;
 import edu.ntnu.SpringBackend.service.ListingService;
 import edu.ntnu.SpringBackend.service.SearchHistoryService;
-import edu.ntnu.SpringBackend.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -81,6 +78,14 @@ public class ListingController {
         return ResponseEntity.ok(listingMapper.toDto(listingService.getListingById(id)));
     }
 
+    /**
+     * Get listings by title (search) with pagination.
+     *
+     * @param title the title or keyword to search for
+     * @param page  the page number (default 0)
+     * @param size  the page size (default 10)
+     * @return a list of listings matching the title search
+     */
     @GetMapping("/get-by-title")
     public ResponseEntity<ListingListResponseDTO> getByTitle(
             @RequestParam String title,
@@ -91,13 +96,63 @@ public class ListingController {
         if (size > MAX_SIZE) {
             size = MAX_SIZE;
         }
-        logger.info("GET Request received on [/api/v1/listing/get-by-title]");
+        logger.info("GET Request received on [/api/v1/listing/get-by-title] with title: {}", title);
         Pageable pageable = PageRequest.of(page, size);
         return ResponseEntity.ok(
                 listingMapper.toDto(
-                        listingService.getListingByTitle(title)
+                        listingService.getListingsByTitle(title, pageable)
                 )
         );
+    }
+
+    /**
+     * Get listings for the authenticated seller with pagination.
+     *
+     * @param user the authenticated seller
+     * @param page the page number (default 0)
+     * @param size the page size (default 10)
+     * @return a list of listings created by the seller
+     */
+    @GetMapping("/get-by-seller")
+    public ResponseEntity<ListingListResponseDTO> getBySeller(
+            @AuthenticationPrincipal User user,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        final int MAX_SIZE = 100;
+        if (size > MAX_SIZE) {
+            size = MAX_SIZE;
+        }
+        logger.info("GET Request received on [/api/v1/listing/get-by-seller] for seller: {}", user.getId());
+        Pageable pageable = PageRequest.of(page, size);
+        return ResponseEntity.ok(
+                listingMapper.toDto(
+                        listingService.getListingsBySeller(user, pageable)
+                )
+        );
+    }
+
+    /**
+     * Get listings by single category with pagination.
+     *
+     * @param categoryName the name of the category to filter by
+     * @param page         the page number (default 0)
+     * @param size         the page size (default 10)
+     * @return a list of listings in the specified category
+     */
+    @GetMapping("/get-by-category")
+    public ResponseEntity<ListingListResponseDTO> getByCategory(
+            @RequestParam String categoryName,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        final int MAX_SIZE = 100;
+        if (size > MAX_SIZE) {
+            size = MAX_SIZE;
+        }
+        logger.info("GET Request received on [/api/v1/listing/get-by-category] with categoryName: {}", categoryName);
+        Pageable pageable = PageRequest.of(page, size);
+        return ResponseEntity.ok(listingMapper.toDto(listingService.getListingsByCategory(categoryName, pageable)));
     }
 
 

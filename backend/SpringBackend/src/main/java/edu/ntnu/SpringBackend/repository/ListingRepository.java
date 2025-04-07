@@ -12,10 +12,10 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface ListingRepository extends JpaRepository<Listing, UUID> {
-  List<Listing> findBySeller(User user);
   Optional<Listing> findById(UUID id);
-  List<Listing> findByStatus(ListingStatus status);
-  List<Listing> findByCategory(Category category);
+  List<Listing> findByStatus(ListingStatus status, Pageable pageable);
+  List<Listing> findByCategory(Category category, Pageable pageable);
   List<Listing> findByCategoryIn(List<Category> categories, Pageable pageable);
-  List<Listing> findByTitleContainingIgnoreCase(String title);
+  List<Listing> findBySeller(User user, Pageable pageable);
+  List<Listing> findByTitleContainingIgnoreCase(String title, Pageable pageable);
 }
