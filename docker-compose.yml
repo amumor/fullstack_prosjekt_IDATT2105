@@ -5,7 +5,7 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - ./backend/uploads:/app/uploads
+      - ./backend/SpringBackend/uploads:/app/uploads
     environment:
       SPRING_DATASOURCE_URL: jdbc:h2:mem:testdb
       SPRING_H2_CONSOLE_ENABLED: "true"
