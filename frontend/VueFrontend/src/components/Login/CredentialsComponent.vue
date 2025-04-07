@@ -96,13 +96,14 @@ const login = async () => {
 
           await getUserByEmail(email.value, authToken)
               .then(async userResponse => {
-                const user = ({
+                console.log('user response:', userResponse);
+                const user = {
                   token: authToken,
-                  email: userResponse.data.email,
-                  firstName: userResponse.data.firstName,
-                  lastName: userResponse.data.lastName,
-                  phoneNumber: userResponse.data.phoneNumber,
-                })
+                  email: userResponse.email,
+                  firstName: userResponse.firstName,
+                  lastName: userResponse.lastName,
+                  phoneNumber: userResponse.phoneNumber,
+                };
                 userStorage.login(user);
                 await router.push('/')
               })
