@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { Icon } from '@iconify/vue'
-import { userStore } from '@/stores/userStore.js';
+import { userStore } from '@/stores/user.js';
 
 const user = userStore();
 
