@@ -6,8 +6,9 @@ import edu.ntnu.SpringBackend.dto.CategoryResponseDTO;
 import edu.ntnu.SpringBackend.mapper.CategoryMapper;
 import edu.ntnu.SpringBackend.model.Category;
 import edu.ntnu.SpringBackend.model.User;
-import edu.ntnu.SpringBackend.model.enums.Role;
 import edu.ntnu.SpringBackend.service.CategoryService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +29,7 @@ public class CategoryController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/create")
+    @Operation(summary = "Create a new category", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<CategoryResponseDTO> create(
             @AuthenticationPrincipal User user,
             @RequestBody CategoryCreationRequestDTO request
@@ -41,6 +43,7 @@ public class CategoryController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/delete/{id}")
+    @Operation(summary = "Delete a category", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<Void> delete(
             @AuthenticationPrincipal User user,
             @PathVariable UUID id
@@ -51,6 +54,7 @@ public class CategoryController {
     }
 
     @GetMapping("/name/{name}")
+    @Operation(summary = "Get a category by name")
     public ResponseEntity<CategoryResponseDTO> getByName(
             @PathVariable String name
     ) {
@@ -59,6 +63,7 @@ public class CategoryController {
     }
 
     @GetMapping("/id/{id}")
+    @Operation(summary = "Get a category by ID")
     public ResponseEntity<CategoryResponseDTO> getById(
             @PathVariable UUID id
     ) {
@@ -67,6 +72,7 @@ public class CategoryController {
     }
 
     @GetMapping("/all")
+    @Operation(summary = "Get all categories")
     public ResponseEntity<CategoryListResponseDTO> getAll() {
         logger.info("GET request received on [/api/v1/category/all]");
         return ResponseEntity.ok(categoryMapper.toDto(categoryService.getAll()));
