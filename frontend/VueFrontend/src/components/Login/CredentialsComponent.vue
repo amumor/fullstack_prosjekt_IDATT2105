@@ -87,13 +87,15 @@ const login = async () => {
 
     // Logic to handle login here
     user.logout();
-    user.setUser({
+    const newUser = ({
+      //TODO: generate id??
+      id: 1,
       firstName: firstName.value,
       lastName: lastName.value,
       email: email.value,
       phoneNumber: phoneNumber.value,
     });
-    user.login(email.value);
+    user.login(newUser);
     await router.push('/')
   }catch(error){
     console.error("Login failed:", error)

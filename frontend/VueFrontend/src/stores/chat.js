@@ -30,16 +30,18 @@ export const chatStore = defineStore('chat', () => {
   }
 
   function postBid(messageText, price) {
-    if(!selectedChat.value || !messageText.trim() || !price || !hasPendingBids.value) return
+    if(!selectedChat.value || !messageText.trim() || !price || !hasPendingBids) return
 
-    selectChat.value.bids.push({
+    const bid ={
       id: selectedChat.value.id,
       message: messageText,
       price: price,
       sentAt: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       type: 'BID',
       status: 'PENDING',
-    })
+    }
+    selectedChat.value.messages.push(bid)
+    
     hasPendingBids.value = true
   }
 

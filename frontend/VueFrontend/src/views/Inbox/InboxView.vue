@@ -1,9 +1,10 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { vInfiniteScroll } from '@vueuse/components'
 import Navbar from '@/components/Navbar.vue'
 import { chatStore } from '@/stores/chat'
 import { storeToRefs } from 'pinia'
+import { userStore } from '@/stores/user'
 
 import ListedChatComponent from '@/components/inbox/ListedChatComponent.vue'
 import InitialsDisplayComponent from '@/components/profile/InitialsDisplayComponent.vue'
@@ -15,7 +16,7 @@ const initialMessages = [
     id: 1,
     listingTitle: 'Boat for sale',
     image: 'https://iqboatlifts.com/wp-content/uploads/2018/06/Yacht-vs-Boat-Whats-the-Difference-Between-the-Two-1024x571.jpg',
-    messengerName: 'Han Karen',
+    messengerName: 'Han karen',
     messages: [{id: 1, message: 'Hello', sentAt:'09:05', type: 'MESSAGE'}, {id: 4, message: 'How are you?', sentAt: '10:25', type: 'MESSAGE'}, {id: 1, message: 'I am fine, thank you!', sentAt: '11:35', type: 'MESSAGE'}],
     lastMessageTime: '11:35',
     isMessageRead: true,
@@ -41,10 +42,22 @@ const initialMessages = [
     isMessageRead: false,
     selected: false
   },
+  {
+    id: 4,
+    listingTitle: 'Boat for sale',
+    image: 'https://iqboatlifts.com/wp-content/uploads/2018/06/Yacht-vs-Boat-Whats-the-Difference-Between-the-Two-1024x571.jpg',
+    messengerName: 'Han Karen',
+    messages: [{id: 1, message: 'Hello', price: '600', sentAt:'09:05', type: 'BID', status:'PENDING'}],
+    lastMessageTime: '11:35',
+    isMessageRead: true,
+    selected: false
+  }
 ]
 
 const chat = chatStore()
-const { chats, selectedChat } = storeToRefs(chat)
+const { chats, selectedChat, hasPendingBids } = storeToRefs(chat)
+
+const user = userStore()
 
 // TODO: Get messages from DB later
 chat.setChats(initialMessages)
@@ -57,13 +70,25 @@ const openChat = (chatItem) => {
   chat.selectChat(chatItem) 
 }
 
-// TODO: Sort messages by read and last message time
+const isOwner = computed(() => {
+  if (!selectedChat.value) return false
+  return selectedChat.value.id === user.id
+})
+
+// TODO: Sort messages last message time ???
 
 const sendMessage = () => {
   if (selectedChat) {
     chat.postMessage(newMessage.value)
   }
   newMessage.value = ''
+}
+
+const sendBid = (bid) => {
+  if (selectedChat) {
+    chat.postBid(bid.message, bid.price)
+  }
+  makingBid.value = false
 }
 
 const toggleBid = () => {
@@ -102,24 +127,61 @@ const toggleBid = () => {
         :height="120" />
       <h2>{{ selectedChat.messengerName }}</h2>
       <div class="messages" v-for="(message, index) in selectedChat.messages" :key="index">
+
+        <!-- Sent messages -->
         <div class="sent-message" v-if="message.id === selectedChat.id">
-          <p>{{ message.message }}</p>
-          <p id="sent-timestamp">{{message.sentAt}}</p>
+          <!-- Bids -->
+          <div v-if="message.type === 'BID'" class="bid-message">
+            <BidBoxComponent
+              :isBidder="true"
+              :inChat="true"
+              :bidMessage="message.message"
+              :bidPrice="message.price"
+              :bidStatus="message.status" />
+            <p id="sent-timestamp">{{message.sentAt}}</p>
+          </div>
+          <!-- Text messages -->
+          <div v-else-if="message.type === 'MESSAGE'" class="text-message">
+            <p>{{ message.message }}</p>
+            <p id="sent-timestamp">{{message.sentAt}}</p>
+          </div>
         </div>
-        <!-- Fix: receives messages from other users than sender id -->
+
+        <!-- Received messages -->
+        <!-- Fix: receives messages from other users than sender id??? -->
         <div class="received-message" v-else>
-          <p>{{ message.message }}</p>
-          <p id="received-timestamp">{{message.sentAt}}</p>
+          <!-- Bids -->
+          <div v-if="message.type === 'BID'" class="bid-message">
+            <BidBoxComponent
+              :isBidder="false"
+              :inChat="true"
+              :bidMessage="message.message"
+              :bidPrice="message.price"
+              :bidStatus="message.status" />
+            <p id="received-timestamp">{{message.sentAt}}</p>
+          </div>
+          <!-- Text messages -->
+          <div v-else-if="message.type === 'MESSAGE'" class="text-message">
+            <p>{{ message.message }}</p>
+            <p id="received-timestamp">{{message.sentAt}}</p>
+          </div>
         </div>
       </div>
     </div>
+
+    <!-- New message -->
     <div class="message-input">
       <textarea v-model="newMessage" placeholder="Type a message..." @keydown.enter.prevent="sendMessage"></textarea>
       <button class="send-button" @click="sendMessage">Send</button>
-      <button class="send-button" @click="toggleBid">Make bid</button>
+      <button class="send-button" v-if="!selectedChat.hasPendingBids && !isOwner" @click="toggleBid">Make bid</button>
     </div>
-    <div class="bid-box" v-if="makingBid">
-      <BidBoxComponent :isBidder="true" />
+    <div class="bid-box" v-if="makingBid"> 
+      <BidBoxComponent 
+        :isBidder="true"
+        :inChat="false"
+        :bidStatus="'PENDING'"
+        @submit-bid="sendBid"
+        @close-bid-box="makingBid = false" />
     </div>
   </div>
 </div>

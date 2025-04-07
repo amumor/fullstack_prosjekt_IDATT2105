@@ -9,24 +9,29 @@ const { selectedChat } = storeToRefs(chat)
 
 const props = defineProps({
     isBidder: Boolean,
+		inChat: Boolean,
     bidMessage: String,
     bidPrice: String,
+		bidStatus: String,
 })
+
+const emit = defineEmits(['close-bid-box', 'submit-bid'])
 
 const message = ref('')
 const price = ref('')
 
 const isVisible = ref(true)
 
-const toggleBox = () => {
-	isVisible.value = !isVisible.value
-}
+const submitBid = () => {
+	if (!message.value.trim() || !price.value.trim()) return
 
-const sendBid = () => {
-  if (selectedChat) {
-    chat.postBid(message.value, price.value)
-  }
-	toggleBox()
+  emit('submit-bid', {
+    message: message.value,
+    price: price.value
+  })
+	message.value = ''
+	price.value = ''
+	emit('close-bid-box')
 }
 
 const acceptBid = () => {
@@ -44,12 +49,19 @@ const rejectBid = () => {
 
 <template>
 <div class="bid-box-container" v-if="isVisible">
-	<div class="send-bid-box" v-if="isBidder">
+	<div class="inchat-bid-box" v-if="props.inChat">
+		<h3>Bid</h3>
+		<p>Price: {{ props.bidPrice }}</p>
+		<p>Message: {{ props.bidMessage }}</p>
+		<button v-if="!props.isBidder && props.bidStatus === 'PENDING'" @click="acceptBid">Accept</button>
+		<button v-if="!props.isBidder && props.bidStatus === 'PENDING'" @click="rejectBid">Reject</button>
+	</div>
+	<div class="send-bid-box" v-if="props.isBidder">
 			<h3>Make a bid</h3>
-			<button @click="toggleBox">X</button>
+			<button @click="emit('close-bid-box')">X</button>
 			<input v-model="price" type="text" placeholder="Price" />
 			<input v-model="message" type="text" placeholder="Message" />
-			<button @click="sendBid">Send</button>
+			<button @click="submitBid">Send</button>
 	</div>
 	<div class="get-bid-box" v-else>
 			<h3>Bid</h3>

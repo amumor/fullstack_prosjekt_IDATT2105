@@ -25,9 +25,9 @@ export const userStore = defineStore('user', {
         this.email = ''
         this.phoneNumber = ''
     },
-    login(email) {
+    login(user) {
         this.isLoggedIn = true
-        this.email = email
+        this.setUser(user)
     },
     logout() {
         this.isLoggedIn = false
