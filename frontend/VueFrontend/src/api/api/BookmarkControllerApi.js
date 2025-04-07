@@ -12,9 +12,9 @@
  */
 
 
-import ApiClient from "../ApiClient.js";
-import BookmarkRequestDTO from '../model/BookmarkRequestDTO.js';
-import BookmarkResponseDTO from '../model/BookmarkResponseDTO.js';
+import ApiClient from "../ApiClient";
+import BookmarkRequestDTO from '../model/BookmarkRequestDTO';
+import BookmarkResponseDTO from '../model/BookmarkResponseDTO';
 
 /**
 * BookmarkController service.
@@ -57,7 +57,7 @@ export default class BookmarkControllerApi {
       let formParams = {
       };
 
-      let authNames = [];
+      let authNames = ['bearerAuth'];
       let contentTypes = ['application/json'];
       let accepts = ['*/*'];
       let returnType = BookmarkResponseDTO;
@@ -103,7 +103,7 @@ export default class BookmarkControllerApi {
       let formParams = {
       };
 
-      let authNames = [];
+      let authNames = ['bearerAuth'];
       let contentTypes = [];
       let accepts = ['*/*'];
       let returnType = null;
@@ -143,7 +143,7 @@ export default class BookmarkControllerApi {
       let formParams = {
       };
 
-      let authNames = [];
+      let authNames = ['bearerAuth'];
       let contentTypes = [];
       let accepts = ['*/*'];
       let returnType = [BookmarkResponseDTO];

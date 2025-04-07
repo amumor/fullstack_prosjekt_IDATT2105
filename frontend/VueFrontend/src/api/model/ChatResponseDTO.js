@@ -11,8 +11,8 @@
  *
  */
 
-import ApiClient from '../ApiClient.js';
-import MessageResponsetDTO from './MessageResponsetDTO.js';
+import ApiClient from '../ApiClient';
+import MessageResponsetDTO from './MessageResponsetDTO';
 
 /**
  * The ChatResponseDTO model module.

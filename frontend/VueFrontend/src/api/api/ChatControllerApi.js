@@ -12,10 +12,10 @@
  */
 
 
-import ApiClient from "../ApiClient.js";
-import ChatResponseDTO from '../model/ChatResponseDTO.js';
-import MessageRequestDTO from '../model/MessageRequestDTO.js';
-import MessageResponsetDTO from '../model/MessageResponsetDTO.js';
+import ApiClient from "../ApiClient";
+import ChatResponseDTO from '../model/ChatResponseDTO';
+import MessageRequestDTO from '../model/MessageRequestDTO';
+import MessageResponsetDTO from '../model/MessageResponsetDTO';
 
 /**
 * ChatController service.

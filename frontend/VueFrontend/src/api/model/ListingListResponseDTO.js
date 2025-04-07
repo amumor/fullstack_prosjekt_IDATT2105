@@ -11,8 +11,8 @@
  *
  */
 
-import ApiClient from '../ApiClient.js';
-import ListingResponseDTO from './ListingResponseDTO.js';
+import ApiClient from '../ApiClient';
+import ListingResponseDTO from './ListingResponseDTO';
 
 /**
  * The ListingListResponseDTO model module.

@@ -12,10 +12,10 @@
  */
 
 
-import ApiClient from "../ApiClient.js";
-import SearchHistoryListResponseDTO from '../model/SearchHistoryListResponseDTO.js';
-import SearchHistoryRequestDTO from '../model/SearchHistoryRequestDTO.js';
-import SearchHistoryResponseDTO from '../model/SearchHistoryResponseDTO.js';
+import ApiClient from "../ApiClient";
+import SearchHistoryListResponseDTO from '../model/SearchHistoryListResponseDTO';
+import SearchHistoryRequestDTO from '../model/SearchHistoryRequestDTO';
+import SearchHistoryResponseDTO from '../model/SearchHistoryResponseDTO';
 
 /**
 * SearchHistoryController service.

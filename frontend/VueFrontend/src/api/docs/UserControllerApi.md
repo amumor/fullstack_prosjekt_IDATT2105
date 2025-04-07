@@ -4,10 +4,10 @@ All URIs are relative to *http://localhost:8080*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**deleteUser**](UserControllerApi.md#deleteUser) | **DELETE** /api/v1/users/{id} | 
-[**getUserByEmail**](UserControllerApi.md#getUserByEmail) | **GET** /api/v1/users/email/{email} | 
-[**getUserById**](UserControllerApi.md#getUserById) | **GET** /api/v1/users/id/{id} | 
-[**updateUser**](UserControllerApi.md#updateUser) | **PUT** /api/v1/users/update-my-profile | 
+[**deleteUser**](UserControllerApi.md#deleteUser) | **DELETE** /api/v1/users/{id} | Delete user by id
+[**getUserByEmail**](UserControllerApi.md#getUserByEmail) | **GET** /api/v1/users/email/{email} | Getting user info by email
+[**getUserById**](UserControllerApi.md#getUserById) | **GET** /api/v1/users/id/{id} | Getting user info by user id
+[**updateUser**](UserControllerApi.md#updateUser) | **PUT** /api/v1/users/update-my-profile | Update user info
 
 
 
@@ -15,12 +15,16 @@ Method | HTTP request | Description
 
 > deleteUser(id)
 
-
+Delete user by id
 
 ### Example
 
 ```javascript
 import OpenApiDocumentationFindNo from 'open_api_documentation_find_no';
+let defaultClient = OpenApiDocumentationFindNo.ApiClient.instance;
+// Configure Bearer (JWT) access token for authorization: bearerAuth
+let bearerAuth = defaultClient.authentications['bearerAuth'];
+bearerAuth.accessToken = "YOUR ACCESS TOKEN"
 
 let apiInstance = new OpenApiDocumentationFindNo.UserControllerApi();
 let id = "id_example"; // String | 
@@ -45,7 +49,7 @@ null (empty response body)
 
 ### Authorization
 
-No authorization required
+[bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
@@ -57,12 +61,16 @@ No authorization required
 
 > UserResponseDTO getUserByEmail(email)
 
-
+Getting user info by email
 
 ### Example
 
 ```javascript
 import OpenApiDocumentationFindNo from 'open_api_documentation_find_no';
+let defaultClient = OpenApiDocumentationFindNo.ApiClient.instance;
+// Configure Bearer (JWT) access token for authorization: bearerAuth
+let bearerAuth = defaultClient.authentications['bearerAuth'];
+bearerAuth.accessToken = "YOUR ACCESS TOKEN"
 
 let apiInstance = new OpenApiDocumentationFindNo.UserControllerApi();
 let email = "email_example"; // String | 
@@ -87,7 +95,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
@@ -99,12 +107,16 @@ No authorization required
 
 > UserResponseDTO getUserById(id)
 
-
+Getting user info by user id
 
 ### Example
 
 ```javascript
 import OpenApiDocumentationFindNo from 'open_api_documentation_find_no';
+let defaultClient = OpenApiDocumentationFindNo.ApiClient.instance;
+// Configure Bearer (JWT) access token for authorization: bearerAuth
+let bearerAuth = defaultClient.authentications['bearerAuth'];
+bearerAuth.accessToken = "YOUR ACCESS TOKEN"
 
 let apiInstance = new OpenApiDocumentationFindNo.UserControllerApi();
 let id = "id_example"; // String | 
@@ -129,7 +141,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
@@ -141,12 +153,16 @@ No authorization required
 
 > UserResponseDTO updateUser(userRequestDTO)
 
-
+Update user info
 
 ### Example
 
 ```javascript
 import OpenApiDocumentationFindNo from 'open_api_documentation_find_no';
+let defaultClient = OpenApiDocumentationFindNo.ApiClient.instance;
+// Configure Bearer (JWT) access token for authorization: bearerAuth
+let bearerAuth = defaultClient.authentications['bearerAuth'];
+bearerAuth.accessToken = "YOUR ACCESS TOKEN"
 
 let apiInstance = new OpenApiDocumentationFindNo.UserControllerApi();
 let userRequestDTO = new OpenApiDocumentationFindNo.UserRequestDTO(); // UserRequestDTO | 
@@ -171,7 +187,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 

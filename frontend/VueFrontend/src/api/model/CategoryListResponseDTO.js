@@ -11,8 +11,8 @@
  *
  */
 
-import ApiClient from '../ApiClient.js';
-import CategoryResponseDTO from './CategoryResponseDTO.js';
+import ApiClient from '../ApiClient';
+import CategoryResponseDTO from './CategoryResponseDTO';
 
 /**
  * The CategoryListResponseDTO model module.

@@ -6,9 +6,9 @@ import {
     AuthenticationRequestDTO,
     UserRequestDTO
 } from '@/api';
+import {serviceConfigParams} from "@/services/ServiceSetup.js";
 
-const timeout = 1000 * 60 * 2; // 2 min timeout
-const baseURL = 'http://localhost:8080';
+const {timeout, baseURL} = serviceConfigParams();
 
 /**
  * Authenticates a user with the given email and password.
@@ -28,10 +28,10 @@ const baseURL = 'http://localhost:8080';
  *   });
  */
 export function authenticateUser(email, password) {
-    const myClient = new ApiClient(baseURL);
-    myClient.timeout = timeout;
+    const Client = new ApiClient(baseURL);
+    Client.timeout = timeout;
 
-    const authApi = new AuthenticationControllerApi(myClient);
+    const authApi = new AuthenticationControllerApi(Client);
 
     const authenticationRequestDTO = new AuthenticationRequestDTO();
     authenticationRequestDTO.email = email;
@@ -105,6 +105,7 @@ export function registerUser(user) {
  * @param {string} user.email - The email.
  * @param {string} user.password - The password.
  * @param {string} [user.phoneNumber] - The phone number (optional).
+ * @param {string} token - JWT token
  * @returns {Promise<Object>} A promise that resolves to the token response.
  * @throws {Error} If admin registration fails.
  *
@@ -115,15 +116,20 @@ export function registerUser(user) {
  *   email: 'admin@example.com',
  *   password: 'adminSecret',
  *   phoneNumber: '55555555'
- * })
+ * }, 'jwt.tok.en')
  *   .then(response => console.log('Admin registered successfully:', response))
  *   .catch(error => console.error('Admin registration failed:', error));
  */
-export function registerAdminUser(user) {
-    const myClient = new ApiClient('http://localhost:8080');
-    myClient.timeout = 120000;
+export function registerAdminUser(user, token) {
+    const client = new ApiClient('http://localhost:8080');
+    client.timeout = 120000;
+    client.authentications = {
+        type: 'bearer',
+        accessToken: token,
+    };
 
-    const authApi = new AuthenticationControllerApi(myClient);
+
+    const authApi = new AuthenticationControllerApi(client);
 
     const userRequestDTO = new UserRequestDTO();
     userRequestDTO.firstName = user.firstName;
