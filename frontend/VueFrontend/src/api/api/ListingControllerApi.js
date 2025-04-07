@@ -12,10 +12,10 @@
  */
 
 
-import ApiClient from "../ApiClient.js";
-import ListingCreationRequestDTO from '../model/ListingCreationRequestDTO.js';
-import ListingListResponseDTO from '../model/ListingListResponseDTO.js';
-import ListingResponseDTO from '../model/ListingResponseDTO.js';
+import ApiClient from "../ApiClient";
+import ListingCreationRequestDTO from '../model/ListingCreationRequestDTO';
+import ListingListResponseDTO from '../model/ListingListResponseDTO';
+import ListingResponseDTO from '../model/ListingResponseDTO';
 
 /**
 * ListingController service.

@@ -12,10 +12,10 @@
  */
 
 
-import ApiClient from "../ApiClient.js";
-import CategoryCreationRequestDTO from '../model/CategoryCreationRequestDTO.js';
-import CategoryListResponseDTO from '../model/CategoryListResponseDTO.js';
-import CategoryResponseDTO from '../model/CategoryResponseDTO.js';
+import ApiClient from "../ApiClient";
+import CategoryCreationRequestDTO from '../model/CategoryCreationRequestDTO';
+import CategoryListResponseDTO from '../model/CategoryListResponseDTO';
+import CategoryResponseDTO from '../model/CategoryResponseDTO';
 
 /**
 * CategoryController service.

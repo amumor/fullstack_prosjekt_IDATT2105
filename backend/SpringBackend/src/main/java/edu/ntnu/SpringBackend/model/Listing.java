@@ -9,6 +9,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -53,8 +55,8 @@ public class Listing {
 
   private LocalDateTime lastEditedAt;
 
-  @Column()
-  private String imageUrl;
+  @OneToMany(mappedBy = "listing", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+  private List<ListingImage> images;
 
 
   @PrePersist
@@ -65,8 +67,8 @@ public class Listing {
     if (status == null || status == ListingStatus.SOLD) {
       status = ListingStatus.ACTIVE;
     }
+    images = new ArrayList<>();
   }
-
 
   @PreUpdate
   protected void onUpdate() {

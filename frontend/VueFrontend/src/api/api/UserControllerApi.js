@@ -12,9 +12,9 @@
  */
 
 
-import ApiClient from "../ApiClient.js";
-import UserRequestDTO from '../model/UserRequestDTO.js';
-import UserResponseDTO from '../model/UserResponseDTO.js';
+import ApiClient from "../ApiClient";
+import UserRequestDTO from '../model/UserRequestDTO';
+import UserResponseDTO from '../model/UserResponseDTO';
 
 /**
 * UserController service.
@@ -37,6 +37,7 @@ export default class UserControllerApi {
 
 
     /**
+     * Delete user by id
      * @param {String} id 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing HTTP response
      */
@@ -57,7 +58,7 @@ export default class UserControllerApi {
       let formParams = {
       };
 
-      let authNames = [];
+      let authNames = ['bearerAuth'];
       let contentTypes = [];
       let accepts = ['*/*'];
       let returnType = null;
@@ -69,6 +70,7 @@ export default class UserControllerApi {
     }
 
     /**
+     * Delete user by id
      * @param {String} id 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}
      */
@@ -81,6 +83,7 @@ export default class UserControllerApi {
 
 
     /**
+     * Getting user info by email
      * @param {String} email 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/UserResponseDTO} and HTTP response
      */
@@ -101,7 +104,7 @@ export default class UserControllerApi {
       let formParams = {
       };
 
-      let authNames = [];
+      let authNames = ['bearerAuth'];
       let contentTypes = [];
       let accepts = ['*/*'];
       let returnType = UserResponseDTO;
@@ -113,6 +116,7 @@ export default class UserControllerApi {
     }
 
     /**
+     * Getting user info by email
      * @param {String} email 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link module:model/UserResponseDTO}
      */
@@ -125,6 +129,7 @@ export default class UserControllerApi {
 
 
     /**
+     * Getting user info by user id
      * @param {String} id 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/UserResponseDTO} and HTTP response
      */
@@ -145,7 +150,7 @@ export default class UserControllerApi {
       let formParams = {
       };
 
-      let authNames = [];
+      let authNames = ['bearerAuth'];
       let contentTypes = [];
       let accepts = ['*/*'];
       let returnType = UserResponseDTO;
@@ -157,6 +162,7 @@ export default class UserControllerApi {
     }
 
     /**
+     * Getting user info by user id
      * @param {String} id 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link module:model/UserResponseDTO}
      */
@@ -169,6 +175,7 @@ export default class UserControllerApi {
 
 
     /**
+     * Update user info
      * @param {module:model/UserRequestDTO} userRequestDTO 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/UserResponseDTO} and HTTP response
      */
@@ -188,7 +195,7 @@ export default class UserControllerApi {
       let formParams = {
       };
 
-      let authNames = [];
+      let authNames = ['bearerAuth'];
       let contentTypes = ['application/json'];
       let accepts = ['*/*'];
       let returnType = UserResponseDTO;
@@ -200,6 +207,7 @@ export default class UserControllerApi {
     }
 
     /**
+     * Update user info
      * @param {module:model/UserRequestDTO} userRequestDTO 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link module:model/UserResponseDTO}
      */

@@ -12,10 +12,10 @@
  */
 
 
-import ApiClient from "../ApiClient.js";
-import AuthenticationRequestDTO from '../model/AuthenticationRequestDTO.js';
-import TokenResponseDTO from '../model/TokenResponseDTO.js';
-import UserRequestDTO from '../model/UserRequestDTO.js';
+import ApiClient from "../ApiClient";
+import AuthenticationRequestDTO from '../model/AuthenticationRequestDTO';
+import TokenResponseDTO from '../model/TokenResponseDTO';
+import UserRequestDTO from '../model/UserRequestDTO';
 
 /**
 * AuthenticationController service.

@@ -16,7 +16,7 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class MessageResponsetDTO {
+public class MessageResponseDTO {
   private UUID chatId;
   private String senderFirstName;
   private String senderLastName;

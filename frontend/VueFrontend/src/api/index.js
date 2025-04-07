@@ -12,32 +12,35 @@
  */
 
 
-import ApiClient from './ApiClient.js';
-import AuthenticationRequestDTO from './model/AuthenticationRequestDTO.js';
-import BookmarkRequestDTO from './model/BookmarkRequestDTO.js';
-import BookmarkResponseDTO from './model/BookmarkResponseDTO.js';
-import CategoryCreationRequestDTO from './model/CategoryCreationRequestDTO.js';
-import CategoryListResponseDTO from './model/CategoryListResponseDTO.js';
-import CategoryResponseDTO from './model/CategoryResponseDTO.js';
-import ChatResponseDTO from './model/ChatResponseDTO.js';
-import ListingCreationRequestDTO from './model/ListingCreationRequestDTO.js';
-import ListingListResponseDTO from './model/ListingListResponseDTO.js';
-import ListingResponseDTO from './model/ListingResponseDTO.js';
-import MessageRequestDTO from './model/MessageRequestDTO.js';
-import MessageResponsetDTO from './model/MessageResponsetDTO.js';
-import SearchHistoryListResponseDTO from './model/SearchHistoryListResponseDTO.js';
-import SearchHistoryRequestDTO from './model/SearchHistoryRequestDTO.js';
-import SearchHistoryResponseDTO from './model/SearchHistoryResponseDTO.js';
-import TokenResponseDTO from './model/TokenResponseDTO.js';
-import UserRequestDTO from './model/UserRequestDTO.js';
-import UserResponseDTO from './model/UserResponseDTO.js';
-import AuthenticationControllerApi from './api/AuthenticationControllerApi.js';
-import BookmarkControllerApi from './api/BookmarkControllerApi.js';
-import CategoryControllerApi from './api/CategoryControllerApi.js';
-import ChatControllerApi from './api/ChatControllerApi.js';
-import ListingControllerApi from './api/ListingControllerApi.js';
-import SearchHistoryControllerApi from './api/SearchHistoryControllerApi.js';
-import UserControllerApi from './api/UserControllerApi.js';
+import ApiClient from './ApiClient';
+import AuthenticationRequestDTO from './model/AuthenticationRequestDTO';
+import BidRequestDTO from './model/BidRequestDTO';
+import BidResponseDTO from './model/BidResponseDTO';
+import BookmarkRequestDTO from './model/BookmarkRequestDTO';
+import BookmarkResponseDTO from './model/BookmarkResponseDTO';
+import CategoryCreationRequestDTO from './model/CategoryCreationRequestDTO';
+import CategoryListResponseDTO from './model/CategoryListResponseDTO';
+import CategoryResponseDTO from './model/CategoryResponseDTO';
+import ChatResponseDTO from './model/ChatResponseDTO';
+import ListingCreationRequestDTO from './model/ListingCreationRequestDTO';
+import ListingListResponseDTO from './model/ListingListResponseDTO';
+import ListingResponseDTO from './model/ListingResponseDTO';
+import MessageRequestDTO from './model/MessageRequestDTO';
+import MessageResponsetDTO from './model/MessageResponsetDTO';
+import SearchHistoryListResponseDTO from './model/SearchHistoryListResponseDTO';
+import SearchHistoryRequestDTO from './model/SearchHistoryRequestDTO';
+import SearchHistoryResponseDTO from './model/SearchHistoryResponseDTO';
+import TokenResponseDTO from './model/TokenResponseDTO';
+import UserRequestDTO from './model/UserRequestDTO';
+import UserResponseDTO from './model/UserResponseDTO';
+import AuthenticationControllerApi from './api/AuthenticationControllerApi';
+import BidControllerApi from './api/BidControllerApi';
+import BookmarkControllerApi from './api/BookmarkControllerApi';
+import CategoryControllerApi from './api/CategoryControllerApi';
+import ChatControllerApi from './api/ChatControllerApi';
+import ListingControllerApi from './api/ListingControllerApi';
+import SearchHistoryControllerApi from './api/SearchHistoryControllerApi';
+import UserControllerApi from './api/UserControllerApi';
 
 
 /**
@@ -83,6 +86,18 @@ export {
      * @property {module:model/AuthenticationRequestDTO}
      */
     AuthenticationRequestDTO,
+
+    /**
+     * The BidRequestDTO model constructor.
+     * @property {module:model/BidRequestDTO}
+     */
+    BidRequestDTO,
+
+    /**
+     * The BidResponseDTO model constructor.
+     * @property {module:model/BidResponseDTO}
+     */
+    BidResponseDTO,
 
     /**
      * The BookmarkRequestDTO model constructor.
@@ -191,6 +206,12 @@ export {
     * @property {module:api/AuthenticationControllerApi}
     */
     AuthenticationControllerApi,
+
+    /**
+    * The BidControllerApi service constructor.
+    * @property {module:api/BidControllerApi}
+    */
+    BidControllerApi,
 
     /**
     * The BookmarkControllerApi service constructor.

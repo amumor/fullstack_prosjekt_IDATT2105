@@ -20,6 +20,10 @@ Create a bookmark for a listing
 
 ```javascript
 import OpenApiDocumentationFindNo from 'open_api_documentation_find_no';
+let defaultClient = OpenApiDocumentationFindNo.ApiClient.instance;
+// Configure Bearer (JWT) access token for authorization: bearerAuth
+let bearerAuth = defaultClient.authentications['bearerAuth'];
+bearerAuth.accessToken = "YOUR ACCESS TOKEN"
 
 let apiInstance = new OpenApiDocumentationFindNo.BookmarkControllerApi();
 let bookmarkRequestDTO = new OpenApiDocumentationFindNo.BookmarkRequestDTO(); // BookmarkRequestDTO | 
@@ -44,7 +48,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
@@ -62,6 +66,10 @@ Delete a bookmark
 
 ```javascript
 import OpenApiDocumentationFindNo from 'open_api_documentation_find_no';
+let defaultClient = OpenApiDocumentationFindNo.ApiClient.instance;
+// Configure Bearer (JWT) access token for authorization: bearerAuth
+let bearerAuth = defaultClient.authentications['bearerAuth'];
+bearerAuth.accessToken = "YOUR ACCESS TOKEN"
 
 let apiInstance = new OpenApiDocumentationFindNo.BookmarkControllerApi();
 let bookmarkId = "bookmarkId_example"; // String | 
@@ -86,7 +94,7 @@ null (empty response body)
 
 ### Authorization
 
-No authorization required
+[bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
@@ -104,6 +112,10 @@ Getting all bookmarks for a user
 
 ```javascript
 import OpenApiDocumentationFindNo from 'open_api_documentation_find_no';
+let defaultClient = OpenApiDocumentationFindNo.ApiClient.instance;
+// Configure Bearer (JWT) access token for authorization: bearerAuth
+let bearerAuth = defaultClient.authentications['bearerAuth'];
+bearerAuth.accessToken = "YOUR ACCESS TOKEN"
 
 let apiInstance = new OpenApiDocumentationFindNo.BookmarkControllerApi();
 apiInstance.getUserBookmarks().then((data) => {
@@ -124,7 +136,7 @@ This endpoint does not need any parameter.
 
 ### Authorization
 
-No authorization required
+[bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
