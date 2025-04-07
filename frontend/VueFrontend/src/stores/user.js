@@ -1,37 +1,38 @@
 // stores/user.js
-import { defineStore } from 'pinia'
+import {defineStore} from 'pinia'
 
 export const userStore = defineStore('user', {
-  state: () => ({
-    id: null,
-    firstName: '',
-    lastName: '',
-    email: '',
-    phoneNumber: '',
-    isLoggedIn: false,
-  }),
-  actions: {
-    setUser(user) {
-        this.id = user.id
-        this.firstName = user.firstName
-        this.lastName = user.lastName
-        this.email = user.email
-        this.phoneNumber = user.phoneNumber
-    },
-    clearUser() {
-        this.id = null
-        this.firstName = ''
-        this.lastName = ''
-        this.email = ''
-        this.phoneNumber = ''
-    },
-    login(user) {
-        this.isLoggedIn = true
-        this.setUser(user)
-    },
-    logout() {
-        this.isLoggedIn = false
-        this.clearUser()
+    state: () => ({
+        token: '',
+        firstName: '',
+        lastName: '',
+        email: '',
+        phoneNumber: '',
+        isLoggedIn: false,
+    }),
+    actions: {
+        setUser(user) {
+            this.token = user.token;
+            this.firstName = user.firstName
+            this.lastName = user.lastName
+            this.email = user.email
+            this.phoneNumber = user.phoneNumber
+        },
+        clearUser() {
+            this.token = ''
+            this.firstName = ''
+            this.lastName = ''
+            this.email = ''
+            this.phoneNumber = ''
+        },
+        login(user) {
+            this.token = user.token;
+            this.isLoggedIn = true
+            this.setUser(user) // TODO remove? set user manually on login?
+        },
+        logout() {
+            this.isLoggedIn = false
+            this.clearUser()
+        }
     }
-  }
 })
