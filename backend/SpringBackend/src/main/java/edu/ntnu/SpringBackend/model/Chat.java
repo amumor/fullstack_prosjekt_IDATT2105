@@ -38,6 +38,9 @@ public class Chat {
   @Builder.Default
   private List<Message> messages = new ArrayList<>();
 
+  @OneToMany(mappedBy="chat")
+  private List<Bid> bids;
+
   @PrePersist
   protected void onCreate() {
     createdAt = LocalDateTime.now();

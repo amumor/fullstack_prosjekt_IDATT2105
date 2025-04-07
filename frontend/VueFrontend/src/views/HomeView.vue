@@ -1,6 +1,7 @@
 <script setup>
 import Navbar from '@/components/Navbar.vue'
 import ListingPreviewComponent from '@/components/listing/ListingPreviewComponent.vue'
+
 document.body.style.backgroundColor = "#ffffff";
 
 const searchFunction = () => {};

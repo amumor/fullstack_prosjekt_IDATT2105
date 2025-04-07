@@ -1,7 +1,7 @@
 <script setup>
 import { defineProps } from 'vue'
 import { useChatStore } from '@/stores/chat.js'
-import InitialsDisplayComponent from '@/components/Profile/InitialsDisplayComponent.vue'
+import InitialsDisplayComponent from '@/components/profile/InitialsDisplayComponent.vue'
 
 const props = defineProps({
   listingTitle: String,
