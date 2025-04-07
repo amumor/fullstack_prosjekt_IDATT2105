@@ -7,13 +7,14 @@ import {
 } from '@/api';
 import {serviceConfigParams} from "@/services/ServiceSetup.js";
 
-const { bearerTokenAuth, timeout, baseURL } = serviceConfigParams();
+const {timeout, baseURL} = serviceConfigParams();
 
 /**
  * Creates a new category with the given details.
  *
  * @param {Object} category - An object containing category details.
  * @param {string} category.name - The name of the category.
+ * @param {string} token - JWT token
  * @returns {Promise<Object>} A promise that resolves to the created CategoryResponseDTO.
  * @throws {Error} If category creation fails.
  *
@@ -26,12 +27,15 @@ const { bearerTokenAuth, timeout, baseURL } = serviceConfigParams();
  *     console.error('Category creation failed:', error);
  *   });
  */
-export function createCategory(category) {
-    const Client = new ApiClient(baseURL);
-    Client.timeout = timeout;
-    Client.authenticationRequestDTO = bearerTokenAuth;
+export function createCategory(category, token) {
+    const client = new ApiClient(baseURL);
+    client.timeout = timeout;
+    client.authentications = {
+        type: 'bearer',
+        accessToken: token,
+    };
 
-    const categoryApi = new CategoryControllerApi(Client);
+    const categoryApi = new CategoryControllerApi(client);
     const categoryCreationRequestDTO = new CategoryCreationRequestDTO();
     categoryCreationRequestDTO.name = category.name;
 
@@ -50,6 +54,7 @@ export function createCategory(category) {
  * Deletes a category by its ID.
  *
  * @param {string} id - The ID of the category to delete.
+ * @param {string} token - JWT token
  * @returns {Promise<void>} A promise that resolves if deletion is successful.
  * @throws {Error} If deletion fails.
  *
@@ -62,11 +67,15 @@ export function createCategory(category) {
  *     console.error('Failed to delete category:', error);
  *   });
  */
-export function deleteCategory(id) {
-    const myClient = new ApiClient(baseURL);
-    myClient.timeout = timeout;
+export function deleteCategory(id, token) {
+    const client = new ApiClient(baseURL);
+    client.timeout = timeout;
+    client.authentications = {
+        type: 'bearer',
+        accessToken: token,
+    };
 
-    const categoryApi = new CategoryControllerApi(myClient);
+    const categoryApi = new CategoryControllerApi(client);
 
     return categoryApi.callDelete(id)
         .then(() => {
@@ -94,10 +103,10 @@ export function deleteCategory(id) {
  *   });
  */
 export function getAllCategories() {
-    const myClient = new ApiClient(baseURL);
-    myClient.timeout = timeout;
+    const client = new ApiClient(baseURL);
+    client.timeout = timeout;
 
-    const categoryApi = new CategoryControllerApi(myClient);
+    const categoryApi = new CategoryControllerApi(client);
 
     return categoryApi.getAll()
         .then(categoryListResponseDTO => {
@@ -127,10 +136,10 @@ export function getAllCategories() {
  *   });
  */
 export function getCategoryById(id) {
-    const myClient = new ApiClient(baseURL);
-    myClient.timeout = timeout;
+    const client = new ApiClient(baseURL);
+    client.timeout = timeout;
 
-    const categoryApi = new CategoryControllerApi(myClient);
+    const categoryApi = new CategoryControllerApi(client);
 
     return categoryApi.getById1(id)
         .then(categoryResponseDTO => {
@@ -160,10 +169,10 @@ export function getCategoryById(id) {
  *   });
  */
 export function getCategoryByName(name) {
-    const myClient = new ApiClient(baseURL);
-    myClient.timeout = timeout;
+    const client = new ApiClient(baseURL);
+    client.timeout = timeout;
 
-    const categoryApi = new CategoryControllerApi(myClient);
+    const categoryApi = new CategoryControllerApi(client);
 
     return categoryApi.getByName(name)
         .then(categoryResponseDTO => {

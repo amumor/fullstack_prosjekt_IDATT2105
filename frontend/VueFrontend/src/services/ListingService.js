@@ -7,7 +7,7 @@ import {
 } from '@/api';
 import {serviceConfigParams} from "@/services/ServiceSetup.js";
 
-const { bearerTokenAuth, timeout, baseURL } = serviceConfigParams();
+const { timeout, baseURL } = serviceConfigParams();
 
 /**
  * Creates a new listing with the provided details.
@@ -20,6 +20,7 @@ const { bearerTokenAuth, timeout, baseURL } = serviceConfigParams();
  * @param {number} listing.price - The price of the listing.
  * @param {number} listing.latitude - The latitude coordinate.
  * @param {number} listing.longitude - The longitude coordinate.
+ * @param {string} token - JWT token
  * @returns {Promise<Object>} A promise that resolves to the created ListingResponseDTO.
  * @throws {Error} If listing creation fails.
  *
@@ -36,12 +37,15 @@ const { bearerTokenAuth, timeout, baseURL } = serviceConfigParams();
  *   .then(response => console.log('Listing created:', response))
  *   .catch(error => console.error('Creation failed:', error));
  */
-export function createListing(listing) {
-    const Client = new ApiClient(baseURL);
-    Client.timeout = timeout;
-    Client.authenticationRequestDTO = bearerTokenAuth;
+export function createListing(listing, token) {
+    const client = new ApiClient(baseURL);
+    client.timeout = timeout;
+    client.authentications = {
+        type: 'bearer',
+        accessToken: token,
+    };
 
-    const listingApi = new ListingControllerApi(Client);
+    const listingApi = new ListingControllerApi(client);
     const listingCreationRequestDTO = new ListingCreationRequestDTO();
     listingCreationRequestDTO.title = listing.title;
     listingCreationRequestDTO.description = listing.description;
@@ -95,6 +99,7 @@ export function getListingById(id) {
  * @param {Object} [opts] - Optional parameters.
  * @param {number} [opts.page=0] - The page number (default 0).
  * @param {number} [opts.size=10] - The number of listings per page (default 10).
+ * @param {string} token - JWT token
  * @returns {Promise<Object>} A promise that resolves to a ListingListResponseDTO.
  * @throws {Error} If fetching listing suggestions fails.
  *
@@ -103,11 +108,15 @@ export function getListingById(id) {
  *   .then(listings => console.log('Listing suggestions:', listings))
  *   .catch(error => console.error('Failed to retrieve suggestions:', error));
  */
-export function getListingSuggestions(opts = { page: 0, size: 10 }) {
-    const myClient = new ApiClient(baseURL);
-    myClient.timeout = timeout;
+export function getListingSuggestions(opts = { page: 0, size: 10 }, token) {
+    const client = new ApiClient(baseURL);
+    client.timeout = timeout;
+    client.authentications = {
+        type: 'bearer',
+        accessToken: token,
+    };
 
-    const listingApi = new ListingControllerApi(myClient);
+    const listingApi = new ListingControllerApi(client);
 
     return listingApi.getSuggestions(opts)
         .then(listingListResponseDTO => {

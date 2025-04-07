@@ -7,13 +7,14 @@ import {
 } from '@/api';
 import {serviceConfigParams} from "@/services/ServiceSetup.js";
 
-const { bearerTokenAuth, timeout, baseURL } = serviceConfigParams();
+const {timeout, baseURL} = serviceConfigParams();
 
 /**
  * Adds a message to an existing chat.
  *
  * @param {string} chatId - The ID of the chat.
  * @param {string} messageContent - The content of the message to add.
+ * @param {string} token - JWT token
  * @returns {Promise<Object>} A promise that resolves to the MessageResponsetDTO.
  * @throws {Error} If adding the message fails.
  *
@@ -22,11 +23,15 @@ const { bearerTokenAuth, timeout, baseURL } = serviceConfigParams();
  *   .then(response => console.log('Message added:', response))
  *   .catch(error => console.error('Failed to add message:', error));
  */
-export function addMessageToChat(chatId, messageContent) {
-    const Client = new ApiClient(baseURL);
-    Client.timeout = timeout;
-    Client.authenticationRequestDTO = bearerTokenAuth;
-    const chatApi = new ChatControllerApi(Client);
+export function addMessageToChat(chatId, messageContent, token) {
+    const client = new ApiClient(baseURL);
+    client.timeout = timeout;
+    client.authentications = {
+        type: 'bearer',
+        accessToken: token,
+    };
+
+    const chatApi = new ChatControllerApi(client);
 
     const messageRequestDTO = new MessageRequestDTO();
     messageRequestDTO.content = messageContent;
@@ -46,6 +51,7 @@ export function addMessageToChat(chatId, messageContent) {
  *
  * @param {string} listingId - The ID of the listing.
  * @param {string} messageContent - The initial message content.
+ * @param {string} token - JWT token
  * @returns {Promise<Object>} A promise that resolves to the ChatResponseDTO.
  * @throws {Error} If chat creation fails.
  *
@@ -54,10 +60,15 @@ export function addMessageToChat(chatId, messageContent) {
  *   .then(chat => console.log('Chat created:', chat))
  *   .catch(error => console.error('Failed to create chat:', error));
  */
-export function createChatFromBuyer(listingId, messageContent) {
-    const myClient = new ApiClient(baseURL);
-    myClient.timeout = timeout;
-    const chatApi = new ChatControllerApi(myClient);
+export function createChatFromBuyer(listingId, messageContent, token) {
+    const client = new ApiClient(baseURL);
+    client.timeout = timeout;
+    client.authentications = {
+        type: 'bearer',
+        accessToken: token,
+    };
+
+    const chatApi = new ChatControllerApi(client);
 
     const messageRequestDTO = new MessageRequestDTO();
     messageRequestDTO.content = messageContent;
@@ -76,6 +87,7 @@ export function createChatFromBuyer(listingId, messageContent) {
  * Retrieves all chats for a given listing.
  *
  * @param {string} listingId - The ID of the listing.
+ * @param {string} token - JWT token
  * @returns {Promise<Array>} A promise that resolves to an array of ChatResponseDTO objects.
  * @throws {Error} If fetching chats fails.
  *
@@ -84,10 +96,15 @@ export function createChatFromBuyer(listingId, messageContent) {
  *   .then(chats => console.log('Chats for listing:', chats))
  *   .catch(error => console.error('Failed to fetch chats:', error));
  */
-export function getAllChatsForListing(listingId) {
-    const myClient = new ApiClient(baseURL);
-    myClient.timeout = timeout;
-    const chatApi = new ChatControllerApi(myClient);
+export function getAllChatsForListing(listingId, token) {
+    const client = new ApiClient(baseURL);
+    client.timeout = timeout;
+    client.authentications = {
+        type: 'bearer',
+        accessToken: token,
+    };
+
+    const chatApi = new ChatControllerApi(client);
 
     return chatApi.getAllChatsForListing(listingId)
         .then(chats => {
@@ -102,6 +119,7 @@ export function getAllChatsForListing(listingId) {
 /**
  * Retrieves all chats for the authenticated user.
  *
+ * @param {string} token - JWT token
  * @returns {Promise<Array>} A promise that resolves to an array of ChatResponseDTO objects.
  * @throws {Error} If fetching the user's chats fails.
  *
@@ -110,10 +128,15 @@ export function getAllChatsForListing(listingId) {
  *   .then(chats => console.log('User chats:', chats))
  *   .catch(error => console.error('Failed to fetch user chats:', error));
  */
-export function getAllChatsForUser() {
-    const myClient = new ApiClient(baseURL);
-    myClient.timeout = timeout;
-    const chatApi = new ChatControllerApi(myClient);
+export function getAllChatsForUser(token) {
+    const client = new ApiClient(baseURL);
+    client.timeout = timeout;
+    client.authentications = {
+        type: 'bearer',
+        accessToken: token,
+    };
+
+    const chatApi = new ChatControllerApi(client);
 
     return chatApi.getAllChatsForUser()
         .then(chats => {
@@ -129,6 +152,7 @@ export function getAllChatsForUser() {
  * Retrieves a chat for a given listing.
  *
  * @param {string} listingId - The ID of the listing associated with the chat.
+ * @param {string} token -JWT token
  * @returns {Promise<Object>} A promise that resolves to a ChatResponseDTO.
  * @throws {Error} If fetching the chat fails.
  *
@@ -137,10 +161,15 @@ export function getAllChatsForUser() {
  *   .then(chat => console.log('Chat:', chat))
  *   .catch(error => console.error('Failed to retrieve chat:', error));
  */
-export function getChat(listingId) {
-    const myClient = new ApiClient(baseURL);
-    myClient.timeout = timeout;
-    const chatApi = new ChatControllerApi(myClient);
+export function getChat(listingId, token) {
+    const client = new ApiClient(baseURL);
+    client.timeout = timeout;
+    client.authentications = {
+        type: 'bearer',
+        accessToken: token,
+    };
+
+    const chatApi = new ChatControllerApi(client);
 
     return chatApi.getChat(listingId)
         .then(chatResponseDTO => {

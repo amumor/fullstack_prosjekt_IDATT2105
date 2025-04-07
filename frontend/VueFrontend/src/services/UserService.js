@@ -13,20 +13,24 @@ const { bearerTokenAuth, timeout, baseURL } = serviceConfigParams();
  * Deletes a user by their ID.
  *
  * @param {string} id - The ID of the user to delete.
+ * @param {string} token - JWT token
  * @returns {Promise<void>} A promise that resolves if deletion is successful.
  * @throws {Error} If deletion fails.
  *
  * @example
- * deleteUser('user123')
+ * deleteUser('user123', 'token')
  *   .then(() => console.log('User deleted successfully'))
  *   .catch(error => console.error('Deletion failed:', error));
  */
-export function deleteUser(id) {
-    const Client = new ApiClient(baseURL);
-    Client.timeout = timeout;
-    Client.authenticationRequestDTO = bearerTokenAuth;
+export function deleteUser(id, token) {
+    const client = new ApiClient(baseURL);
+    client.timeout = timeout;
+    client.authentications = {
+        type: 'bearer',
+        accessToken: token,
+    };
 
-    const userApi = new UserControllerApi(Client);
+    const userApi = new UserControllerApi(client);
 
     return userApi.deleteUser(id)
         .then(() => {
@@ -42,19 +46,24 @@ export function deleteUser(id) {
  * Retrieves a user by their email.
  *
  * @param {string} email - The email of the user.
+ * @param {string} token - JWT token
  * @returns {Promise<Object>} A promise that resolves to a UserResponseDTO.
  * @throws {Error} If fetching the user fails.
  *
  * @example
- * getUserByEmail('user@example.com')
+ * getUserByEmail('user@example.com', 'token')
  *   .then(user => console.log('User retrieved:', user))
  *   .catch(error => console.error('Failed to get user:', error));
  */
-export function getUserByEmail(email) {
-    const myClient = new ApiClient(baseURL);
-    myClient.timeout = timeout;
+export function getUserByEmail(email, token) {
+    const client = new ApiClient(baseURL);
+    client.timeout = timeout;
+    client.authentications = {
+        type: 'bearer',
+        accessToken: token,
+    };
 
-    const userApi = new UserControllerApi(myClient);
+    const userApi = new UserControllerApi(client);
 
     return userApi.getUserByEmail(email)
         .then(userResponseDTO => {
@@ -70,19 +79,24 @@ export function getUserByEmail(email) {
  * Retrieves a user by their ID.
  *
  * @param {string} id - The ID of the user.
+ * @param {string} token - JWT token
  * @returns {Promise<Object>} A promise that resolves to a UserResponseDTO.
  * @throws {Error} If fetching the user fails.
  *
  * @example
- * getUserById('user123')
+ * getUserById('user123', 'jwt.tok.en')
  *   .then(user => console.log('User retrieved:', user))
  *   .catch(error => console.error('Failed to get user:', error));
  */
-export function getUserById(id) {
-    const myClient = new ApiClient(baseURL);
-    myClient.timeout = timeout;
+export function getUserById(id, token) {
+    const client = new ApiClient(baseURL);
+    client.timeout = timeout;
+    client.authentications = {
+        type: 'bearer',
+        accessToken: token,
+    };
 
-    const userApi = new UserControllerApi(myClient);
+    const userApi = new UserControllerApi(client);
 
     return userApi.getUserById(id)
         .then(userResponseDTO => {
@@ -104,6 +118,7 @@ export function getUserById(id) {
  * @param {string} [user.phoneNumber] - The phone number (optional).
  * @param {string} [user.password] - The new password (optional).
  * @param {string} [user.role] - The role (optional).
+ * @param {string} token - JWT token
  * @returns {Promise<Object>} A promise that resolves to the updated UserResponseDTO.
  * @throws {Error} If updating the user fails.
  *
@@ -113,16 +128,20 @@ export function getUserById(id) {
  *   lastName: 'Doe',
  *   email: 'john@example.com',
  *   phoneNumber: '1234567890',
- *   password: 'newPassword'
- * })
+ *   password: 'newPassword',
+ * }, 'jwt.tok.en')
  *   .then(updatedUser => console.log('User updated:', updatedUser))
  *   .catch(error => console.error('Update failed:', error));
  */
-export function updateUser(user) {
-    const myClient = new ApiClient(baseURL);
-    myClient.timeout = timeout;
+export function updateUser(user, token) {
+    const client = new ApiClient(baseURL);
+    client.timeout = timeout;
+    client.authentications = {
+        type: 'bearer',
+        accessToken: token,
+    };
 
-    const userApi = new UserControllerApi(myClient);
+    const userApi = new UserControllerApi(client);
 
     const userRequestDTO = new UserRequestDTO();
     userRequestDTO.firstName = user.firstName;
