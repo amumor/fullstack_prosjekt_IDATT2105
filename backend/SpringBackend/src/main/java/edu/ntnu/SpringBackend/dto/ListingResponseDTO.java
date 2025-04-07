@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -28,5 +29,5 @@ public class ListingResponseDTO {
     private double longitude;
     private LocalDateTime createdAt;
     private LocalDateTime lastEditedAt;
-    // url for the image(s)
+    private List<String> imageUrls;
 }

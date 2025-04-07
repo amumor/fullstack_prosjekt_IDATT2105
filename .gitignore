@@ -204,3 +204,6 @@ SpringBackend.iml
 .classpath
 .settings
 
+# Ignore everything in uploads
+/backend/SpringBackend/uploads/*
+!/backend/SpringBackend/uploads/.keep

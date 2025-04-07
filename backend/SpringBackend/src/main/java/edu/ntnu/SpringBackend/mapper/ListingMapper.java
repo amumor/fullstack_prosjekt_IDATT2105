@@ -3,14 +3,29 @@ package edu.ntnu.SpringBackend.mapper;
 import edu.ntnu.SpringBackend.dto.ListingListResponseDTO;
 import edu.ntnu.SpringBackend.dto.ListingResponseDTO;
 import edu.ntnu.SpringBackend.model.Listing;
+import edu.ntnu.SpringBackend.model.ListingImage;
 import org.springframework.stereotype.Component;
 
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Mapper class for converting Listing entities to DTOs and vice versa.
+ * This class is responsible for transforming the data between the entity and DTO layers.
+ *
+ * It contains methods to convert a single Listing entity to a ListingResponseDTO,
+ * as well as a method to convert a list of Listing entities to a ListingListResponseDTO.
+ */
 @Component
 public class ListingMapper {
+
+    /**
+     * Converts a Listing entity to a ListingResponseDTO.
+     *
+     * @param listing the Listing entity to convert
+     * @return the converted ListingResponseDTO
+     * @throws IllegalArgumentException if the listing argument is null
+     */
     public ListingResponseDTO toDto(Listing listing) {
         if (listing == null) {
             throw new IllegalArgumentException("listing argument can not be null");
@@ -29,9 +44,18 @@ public class ListingMapper {
                 .longitude(listing.getLongitude())
                 .createdAt(listing.getCreatedAt())
                 .lastEditedAt(listing.getLastEditedAt())
+                .imageUrls(listing.getImages().stream()
+                    .map(ListingImage::getImageUrl)
+                    .toList())
                 .build();
     }
 
+    /**
+     * Converts a list of Listing entities to a ListingListResponseDTO.
+     *
+     * @param listings the list of Listing entities to convert
+     * @return the converted ListingListResponseDTO
+     */
     public ListingListResponseDTO toDto(List<Listing> listings) {
         List<ListingResponseDTO> dtoList = new ArrayList<>();
         for (Listing listing : listings) {
@@ -42,46 +66,4 @@ public class ListingMapper {
         listingListResponseDTO.setListings(dtoList);
         return listingListResponseDTO;
     }
-
-    /*public Listing toEntity(ListingResponseDTO dto) { TODO: remove / fix
-        if (dto == null) {
-            throw new IllegalArgumentException("dto argument can not be null");
-        }
-
-        Listing listing = new Listing();
-        listing.setId(dto.getId());
-        listing.setSeller(userService.getUserById(dto.getSellerId()));
-        listing.setTitle(dto.getTitle());
-        listing.setDescription(dto.getDescription());
-        listing.setCategory(categoryService.getByName(dto.getCategoryName()));
-        listing.setStatus(ListingStatus.valueOf(dto.getListingStatus()));
-        listing.setPrice(dto.getPrice());
-        listing.setLatitude(dto.getLatitude());
-        listing.setLongitude(dto.getLongitude());
-        listing.setCreatedAt(LocalDateTime.parse(dto.getCreatedAt(), DateTimeFormatter.ISO_DATE_TIME));
-        listing.setLastEditedAt(LocalDateTime.parse(dto.getLastEditedAt(), DateTimeFormatter.ISO_DATE_TIME));
-
-        return listing;
-    }*/
-
-    /*public Listing toEntity(ListingCreationRequestDTO dto){ TODO: remove / fix
-        if (dto == null) {
-            throw new IllegalArgumentException("dto argument can not be null");
-        }
-        Listing listing = new Listing();
-        listing.setSeller(userService.getUserById(dto.getOwnerId()));
-        listing.setTitle(dto.getTitle());
-        listing.setDescription(dto.getDescription());
-        listing.setCategory(categoryService.getByName(dto.getCategoryName()));
-        listing.setStatus(ListingStatus.valueOf(dto.getListingStatus()));
-        listing.setPrice(dto.getPrice());
-        listing.setLatitude(dto.getLatitude());
-        listing.setLongitude(dto.getLongitude());
-        listing.setCreatedAt(LocalDateTime.parse(dto.getCreatedAt(), DateTimeFormatter.ISO_DATE_TIME));
-        listing.setLastEditedAt(LocalDateTime.parse(dto.getLastEditedAt(), DateTimeFormatter.ISO_DATE_TIME));
-        //listing.setChat();
-
-        return listing;
-
-    }*/
 }
