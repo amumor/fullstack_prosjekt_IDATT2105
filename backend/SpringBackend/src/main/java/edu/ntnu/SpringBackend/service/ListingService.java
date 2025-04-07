@@ -49,42 +49,73 @@ public class ListingService {
             .orElseThrow(() -> new NoSuchElementException("Listing with ID " + id + " not found."));
   }
 
-  public List<Listing> getListingByTitle(String title) {
-    logger.info("> Getting listing by title: {}", title);
-    List<Listing> listings = listingRepository.findByTitleContainingIgnoreCase(title);
+  /**
+   * Retrieves listings by their title.
+   * This method checks if the listing exists in the database and returns it.
+   *
+   * @param title the title of the listing to retrieve
+   * @param pageable pagination information
+   * @return a list of listings with the specified title
+   */
+  public List<Listing> getListingsByTitle(String title, Pageable pageable) {
+    logger.info("> Getting listings by title: {}", title);
+    List<Listing> listings = listingRepository.findByTitleContainingIgnoreCaseAndStatus(title, ListingStatus.ACTIVE, pageable);
     if (listings.isEmpty()) {
       throw new NoSuchElementException("No listings found with title " + title);
     }
     return listings;
   }
 
-  public List<Listing> getListingBySeller(User seller) {
+  /**
+   * Retrieves listings by their seller.
+   * This method checks if the listing exists in the database and returns it.
+   *
+   * @param seller the seller of the listings to retrieve
+   * @param pageable pagination information
+   * @return a list of listings by the specified seller
+   */
+  public List<Listing> getListingsBySeller(User seller, Pageable pageable) {
     logger.info("> Getting listings by seller: {}", seller.getId());
-
-
-    List<Listing> listings = listingRepository.findBySeller(seller);
+    List<Listing> listings = listingRepository.findBySeller(seller, pageable);
     if (listings.isEmpty()) {
       throw new NoSuchElementException("No listings found for seller with ID " + seller.getId());
     }
     return listings;
   }
 
-  public List<Listing> getAllListings() {
-    logger.info("> Getting all listings");
-    List<Listing> all = listingRepository.findAll();
-    if (all.isEmpty()) {
-      throw new NoSuchElementException("No listings found.");
-    }
-    return all;
-  }
-
+  /**
+   * Retrieves listings by their categories.
+   * This method checks if the listing exists in the database and returns it.
+   * Mainly used for filtering listings based on user search history.
+   *
+   * @param categoryList the list of categories to filter listings
+   * @param pageable pagination information
+   * @return a list of listings by the specified categories
+   */
   public List<Listing> findByCategories(List<Category> categoryList, Pageable pageable) {
     logger.info("> Finding listings by categories: {}", categoryList);
     if (categoryList == null || categoryList.isEmpty()) {
-      return listingRepository.findByCategoryIn(categoryService.getAll(), pageable);
+      return listingRepository.findByCategoryInAndStatus(categoryService.getAll(), ListingStatus.ACTIVE, pageable);
     }
-    return listingRepository.findByCategoryIn(categoryList, pageable);
+    return listingRepository.findByCategoryInAndStatus(categoryList, ListingStatus.ACTIVE, pageable);
   }
+
+  /**
+   * Retrieves listings by their category name.
+   * This method checks if the listing exists in the database and returns it.
+   *
+   * @param categoryName the name of the category to filter listings
+   * @param pageable pagination information
+   * @return a list of listings by the specified category
+   */
+  public List<Listing> getListingsBySingleCategory(String categoryName, Pageable pageable) {
+    if (categoryName == null || categoryName.trim().isEmpty()) {
+      throw new IllegalArgumentException("Category name must be provided.");
+    }
+    Category category = categoryService.findByName(categoryName);
+    return listingRepository.findByCategoryAndStatus(category, ListingStatus.ACTIVE, pageable);
+  }
+
 
   /**
    * Creates a new listing.
@@ -117,7 +148,6 @@ public class ListingService {
 
     return listing;
   }
-
 
   /**
    * Updates an existing listing.
