@@ -25,9 +25,9 @@ const { bearerTokenAuth, timeout, baseURL } = serviceConfigParams();
 export function deleteUser(id, token) {
     const client = new ApiClient(baseURL);
     client.timeout = timeout;
-    client.authentications = {
+    client.authentications.bearerAuth = {
         type: 'bearer',
-        accessToken: token,
+        accessToken: token
     };
 
     const userApi = new UserControllerApi(client);
@@ -58,9 +58,9 @@ export function deleteUser(id, token) {
 export function getUserByEmail(email, token) {
     const client = new ApiClient(baseURL);
     client.timeout = timeout;
-    client.authentications = {
+    client.authentications.bearerAuth = {
         type: 'bearer',
-        accessToken: token,
+        accessToken: token
     };
 
     const userApi = new UserControllerApi(client);
@@ -91,9 +91,9 @@ export function getUserByEmail(email, token) {
 export function getUserById(id, token) {
     const client = new ApiClient(baseURL);
     client.timeout = timeout;
-    client.authentications = {
+    client.authentications.bearerAuth = {
         type: 'bearer',
-        accessToken: token,
+        accessToken: token
     };
 
     const userApi = new UserControllerApi(client);
@@ -136,9 +136,9 @@ export function getUserById(id, token) {
 export function updateUser(user, token) {
     const client = new ApiClient(baseURL);
     client.timeout = timeout;
-    client.authentications = {
+    client.authentications.bearerAuth = {
         type: 'bearer',
-        accessToken: token,
+        accessToken: token
     };
 
     const userApi = new UserControllerApi(client);
