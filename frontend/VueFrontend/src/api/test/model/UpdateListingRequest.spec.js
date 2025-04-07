@@ -28,7 +28,7 @@
   var instance;
 
   beforeEach(function() {
-    instance = new OpenApiDocumentationFindNo.UserControllerApi();
+    instance = new OpenApiDocumentationFindNo.UpdateListingRequest();
   });
 
   var getProperty = function(object, getter, property) {
@@ -47,47 +47,25 @@
       object[property] = value;
   }
 
-  describe('UserControllerApi', function() {
-    describe('deleteUser', function() {
-      it('should call deleteUser successfully', function(done) {
-        //uncomment below and update the code to test deleteUser
-        //instance.deleteUser(function(error) {
-        //  if (error) throw error;
-        //expect().to.be();
-        //});
-        done();
-      });
+  describe('UpdateListingRequest', function() {
+    it('should create an instance of UpdateListingRequest', function() {
+      // uncomment below and update the code to test UpdateListingRequest
+      //var instance = new OpenApiDocumentationFindNo.UpdateListingRequest();
+      //expect(instance).to.be.a(OpenApiDocumentationFindNo.UpdateListingRequest);
     });
-    describe('getUserByEmail', function() {
-      it('should call getUserByEmail successfully', function(done) {
-        //uncomment below and update the code to test getUserByEmail
-        //instance.getUserByEmail(function(error) {
-        //  if (error) throw error;
-        //expect().to.be();
-        //});
-        done();
-      });
+
+    it('should have the property listing (base name: "listing")', function() {
+      // uncomment below and update the code to test the property listing
+      //var instance = new OpenApiDocumentationFindNo.UpdateListingRequest();
+      //expect(instance).to.be();
     });
-    describe('getUserById', function() {
-      it('should call getUserById successfully', function(done) {
-        //uncomment below and update the code to test getUserById
-        //instance.getUserById(function(error) {
-        //  if (error) throw error;
-        //expect().to.be();
-        //});
-        done();
-      });
+
+    it('should have the property images (base name: "images")', function() {
+      // uncomment below and update the code to test the property images
+      //var instance = new OpenApiDocumentationFindNo.UpdateListingRequest();
+      //expect(instance).to.be();
     });
-    describe('updateUser', function() {
-      it('should call updateUser successfully', function(done) {
-        //uncomment below and update the code to test updateUser
-        //instance.updateUser(function(error) {
-        //  if (error) throw error;
-        //expect().to.be();
-        //});
-        done();
-      });
-    });
+
   });
 
 }));

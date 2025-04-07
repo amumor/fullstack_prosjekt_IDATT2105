@@ -1,4 +1,4 @@
-# OpenApiDocumentationFindNo.MessageResponsetDTO
+# OpenApiDocumentationFindNo.MessageResponseDTO
 
 ## Properties
 

@@ -14,18 +14,18 @@
 import ApiClient from '../ApiClient';
 
 /**
- * The MessageResponsetDTO model module.
- * @module model/MessageResponsetDTO
+ * The MessageResponseDTO model module.
+ * @module model/MessageResponseDTO
  * @version 1.0
  */
-class MessageResponsetDTO {
+class MessageResponseDTO {
     /**
-     * Constructs a new <code>MessageResponsetDTO</code>.
-     * @alias module:model/MessageResponsetDTO
+     * Constructs a new <code>MessageResponseDTO</code>.
+     * @alias module:model/MessageResponseDTO
      */
     constructor() { 
         
-        MessageResponsetDTO.initialize(this);
+        MessageResponseDTO.initialize(this);
     }
 
     /**
@@ -37,15 +37,15 @@ class MessageResponsetDTO {
     }
 
     /**
-     * Constructs a <code>MessageResponsetDTO</code> from a plain JavaScript object, optionally creating a new instance.
+     * Constructs a <code>MessageResponseDTO</code> from a plain JavaScript object, optionally creating a new instance.
      * Copies all relevant properties from <code>data</code> to <code>obj</code> if supplied or a new instance if not.
      * @param {Object} data The plain JavaScript object bearing properties of interest.
-     * @param {module:model/MessageResponsetDTO} obj Optional instance to populate.
-     * @return {module:model/MessageResponsetDTO} The populated <code>MessageResponsetDTO</code> instance.
+     * @param {module:model/MessageResponseDTO} obj Optional instance to populate.
+     * @return {module:model/MessageResponseDTO} The populated <code>MessageResponseDTO</code> instance.
      */
     static constructFromObject(data, obj) {
         if (data) {
-            obj = obj || new MessageResponsetDTO();
+            obj = obj || new MessageResponseDTO();
 
             if (data.hasOwnProperty('chatId')) {
                 obj['chatId'] = ApiClient.convertToType(data['chatId'], 'String');
@@ -67,9 +67,9 @@ class MessageResponsetDTO {
     }
 
     /**
-     * Validates the JSON data with respect to <code>MessageResponsetDTO</code>.
+     * Validates the JSON data with respect to <code>MessageResponseDTO</code>.
      * @param {Object} data The plain JavaScript object bearing properties of interest.
-     * @return {boolean} to indicate whether the JSON data is valid with respect to <code>MessageResponsetDTO</code>.
+     * @return {boolean} to indicate whether the JSON data is valid with respect to <code>MessageResponseDTO</code>.
      */
     static validateJSON(data) {
         // ensure the json data is a string
@@ -100,32 +100,32 @@ class MessageResponsetDTO {
 /**
  * @member {String} chatId
  */
-MessageResponsetDTO.prototype['chatId'] = undefined;
+MessageResponseDTO.prototype['chatId'] = undefined;
 
 /**
  * @member {String} senderFirstName
  */
-MessageResponsetDTO.prototype['senderFirstName'] = undefined;
+MessageResponseDTO.prototype['senderFirstName'] = undefined;
 
 /**
  * @member {String} senderLastName
  */
-MessageResponsetDTO.prototype['senderLastName'] = undefined;
+MessageResponseDTO.prototype['senderLastName'] = undefined;
 
 /**
  * @member {String} content
  */
-MessageResponsetDTO.prototype['content'] = undefined;
+MessageResponseDTO.prototype['content'] = undefined;
 
 /**
  * @member {Date} sentAt
  */
-MessageResponsetDTO.prototype['sentAt'] = undefined;
+MessageResponseDTO.prototype['sentAt'] = undefined;
 
 
 
 
 
 
-export default MessageResponsetDTO;
+export default MessageResponseDTO;
 

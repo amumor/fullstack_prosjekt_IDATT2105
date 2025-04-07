@@ -28,7 +28,7 @@
   var instance;
 
   beforeEach(function() {
-    instance = new OpenApiDocumentationFindNo.MessageResponsetDTO();
+    instance = new OpenApiDocumentationFindNo.MessageResponseDTO();
   });
 
   var getProperty = function(object, getter, property) {
@@ -47,40 +47,40 @@
       object[property] = value;
   }
 
-  describe('MessageResponsetDTO', function() {
-    it('should create an instance of MessageResponsetDTO', function() {
-      // uncomment below and update the code to test MessageResponsetDTO
-      //var instance = new OpenApiDocumentationFindNo.MessageResponsetDTO();
-      //expect(instance).to.be.a(OpenApiDocumentationFindNo.MessageResponsetDTO);
+  describe('MessageResponseDTO', function() {
+    it('should create an instance of MessageResponseDTO', function() {
+      // uncomment below and update the code to test MessageResponseDTO
+      //var instance = new OpenApiDocumentationFindNo.MessageResponseDTO();
+      //expect(instance).to.be.a(OpenApiDocumentationFindNo.MessageResponseDTO);
     });
 
     it('should have the property chatId (base name: "chatId")', function() {
       // uncomment below and update the code to test the property chatId
-      //var instance = new OpenApiDocumentationFindNo.MessageResponsetDTO();
+      //var instance = new OpenApiDocumentationFindNo.MessageResponseDTO();
       //expect(instance).to.be();
     });
 
     it('should have the property senderFirstName (base name: "senderFirstName")', function() {
       // uncomment below and update the code to test the property senderFirstName
-      //var instance = new OpenApiDocumentationFindNo.MessageResponsetDTO();
+      //var instance = new OpenApiDocumentationFindNo.MessageResponseDTO();
       //expect(instance).to.be();
     });
 
     it('should have the property senderLastName (base name: "senderLastName")', function() {
       // uncomment below and update the code to test the property senderLastName
-      //var instance = new OpenApiDocumentationFindNo.MessageResponsetDTO();
+      //var instance = new OpenApiDocumentationFindNo.MessageResponseDTO();
       //expect(instance).to.be();
     });
 
     it('should have the property content (base name: "content")', function() {
       // uncomment below and update the code to test the property content
-      //var instance = new OpenApiDocumentationFindNo.MessageResponsetDTO();
+      //var instance = new OpenApiDocumentationFindNo.MessageResponseDTO();
       //expect(instance).to.be();
     });
 
     it('should have the property sentAt (base name: "sentAt")', function() {
       // uncomment below and update the code to test the property sentAt
-      //var instance = new OpenApiDocumentationFindNo.MessageResponsetDTO();
+      //var instance = new OpenApiDocumentationFindNo.MessageResponseDTO();
       //expect(instance).to.be();
     });
 
