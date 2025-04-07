@@ -7,6 +7,10 @@ import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
+/**
+ * Data Transfer Object for creating a new listing.
+ * This class is used to transfer data from the client to the server when creating a new listing.
+ */
 @Data
 @Builder
 @AllArgsConstructor

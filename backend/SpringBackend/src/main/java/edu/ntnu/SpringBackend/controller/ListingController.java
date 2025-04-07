@@ -1,5 +1,6 @@
 package edu.ntnu.SpringBackend.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.ntnu.SpringBackend.dto.ListingCreationRequestDTO;
 import edu.ntnu.SpringBackend.dto.ListingListResponseDTO;
 import edu.ntnu.SpringBackend.dto.ListingResponseDTO;
@@ -13,11 +14,15 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 import java.util.UUID;
 
 @RestController
@@ -28,7 +33,6 @@ public class ListingController {
     private final Logger logger = LoggerFactory.getLogger(ListingController.class);
     private final ListingMapper listingMapper;
     private final CategoryService categoryService;
-    private final UserService userService;
     private final SearchHistoryService searchHistoryService;
 
     @GetMapping("/get-suggestions")
@@ -62,12 +66,14 @@ public class ListingController {
         return ResponseEntity.ok(listingMapper.toDto(listingService.getListingById(id)));
     }
 
-    @PostMapping("/create")
+    @PostMapping(value = "/create", consumes = {"multipart/form-data"})
     public ResponseEntity<ListingResponseDTO> create(
             @AuthenticationPrincipal User user,
-            @RequestBody ListingCreationRequestDTO request
-    ) {
+            @RequestPart("listing") ListingCreationRequestDTO request,
+            @RequestPart(value = "images", required = false) MultipartFile[] images
+    ) throws IOException {
         logger.info("POST Request received on [/api/v1/listing/create]");
-        return ResponseEntity.ok(listingMapper.toDto(listingService.createListing(request, user)));
+        logger.info("> Received {} image(s)", images != null ? images.length : 0);
+        return ResponseEntity.ok(listingMapper.toDto(listingService.createListing(request, user, images)));
     }
 }

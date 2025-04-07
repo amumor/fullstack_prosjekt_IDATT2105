@@ -1,11 +1,12 @@
 package edu.ntnu.SpringBackend.service;
 
 import edu.ntnu.SpringBackend.dto.ListingCreationRequestDTO;
-import edu.ntnu.SpringBackend.mapper.ListingMapper;
 import edu.ntnu.SpringBackend.model.Category;
 import edu.ntnu.SpringBackend.model.Listing;
+import edu.ntnu.SpringBackend.model.ListingImage;
 import edu.ntnu.SpringBackend.model.User;
 import edu.ntnu.SpringBackend.model.enums.ListingStatus;
+import edu.ntnu.SpringBackend.repository.ListingImageRepository;
 import edu.ntnu.SpringBackend.repository.ListingRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -14,19 +15,25 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import org.springframework.data.domain.Pageable;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.awt.*;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class ListingService {
 
-  private final ListingRepository listingRepository;
   private final Logger logger = LoggerFactory.getLogger(ListingService.class);
-  private final ListingMapper listingMapper;
   private final CategoryService categoryService;
+  private final ListingRepository listingRepository;
+  private final ListingImageRepository listingImageRepository;
 
   public Listing getListingById(UUID id) {
     logger.info("> Getting listing by id: {}", id);
@@ -64,7 +71,8 @@ public class ListingService {
     return listingRepository.findByCategoryIn(categoryList, pageable);
   }
 
-  public Listing createListing(ListingCreationRequestDTO dto, User seller) {
+  @Transactional
+  public Listing createListing(ListingCreationRequestDTO dto, User seller, MultipartFile[] images) throws IOException {
     logger.info("> Creating listing: {}", dto.getTitle());
     Listing listing = Listing.builder()
                     .title(dto.getTitle())
@@ -77,13 +85,56 @@ public class ListingService {
                     .seller(seller)
                     .build();
     validateListing(listing);
+    logger.info("> Creating listing without images");
 
     if (listing.getStatus() == null || listing.getStatus() == ListingStatus.SOLD) {
       listing.setStatus(ListingStatus.ACTIVE);
     }
+    listing = listingRepository.save(listing);
+    addImagesToListing(listing.getId(), images);
 
-    return listingRepository.save(listing);
+    return listing;
   }
+
+  public void addImagesToListing(UUID listingId, MultipartFile[] images) throws IOException {
+    logger.info("> Saving image for listing");
+
+    Listing listing = listingRepository.findById(listingId)
+            .orElseThrow(() -> new NoSuchElementException("Listing with ID " + listingId + " not found."));
+
+    if (images == null || images.length == 0) {
+      logger.info("> No images to add.");
+      return;
+    }
+
+    List<ListingImage> listingImages = new ArrayList<>();
+    logger.info("> Created {} images", images.length);
+
+    for (MultipartFile image : images) {
+      if (image.isEmpty()) continue;
+
+      String fileName = StringUtils.cleanPath(Objects.requireNonNull(image.getOriginalFilename()));
+      Path imageDir = Paths.get("/app/uploads", listingId.toString());
+      Files.createDirectories(imageDir); // ensure directory exists
+
+      Path imagePath = imageDir.resolve(fileName);
+      image.transferTo(imagePath.toFile());
+
+      String imageUrl = "/images/" + listingId + "/" + fileName;
+      logger.info("> Saving image to: {}", imageUrl);
+
+      ListingImage listingImage = ListingImage.builder()
+              .listing(listing)
+              .imageUrl(imageUrl)
+              .build();
+
+      listingImages.add(listingImage);
+    }
+
+    listingImageRepository.saveAll(listingImages);
+    listing.getImages().addAll(listingImages);
+  }
+
 
   @Transactional
   public Listing updateListing(UUID id, Listing updatedListing) {
@@ -145,6 +196,8 @@ public class ListingService {
     listing.setStatus(status);
     listingRepository.save(listing);
   }
+
+  public void saveImagesForListing(UUID listingId) {}
   
   private void validateListing(Listing listing) {
     validateTitle(listing.getTitle());
