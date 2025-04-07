@@ -13,10 +13,10 @@ export const userStore = defineStore('user', {
     actions: {
         setUser(user) {
             this.token = user.token;
-            this.firstName = user.firstName
-            this.lastName = user.lastName
-            this.email = user.email
-            this.phoneNumber = user.phoneNumber
+            this.firstName = user.firstName;
+            this.lastName = user.lastName;
+            this.email = user.email;
+            this.phoneNumber = user.phoneNumber;
         },
         clearUser() {
             this.token = ''
@@ -26,9 +26,8 @@ export const userStore = defineStore('user', {
             this.phoneNumber = ''
         },
         login(user) {
-            this.token = user.token;
             this.isLoggedIn = true
-            this.setUser(user) // TODO remove? set user manually on login?
+            this.setUser(user)
         },
         logout() {
             this.isLoggedIn = false
