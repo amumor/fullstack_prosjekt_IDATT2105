@@ -152,7 +152,7 @@ public class ListingController {
         }
         logger.info("GET Request received on [/api/v1/listing/get-by-category] with categoryName: {}", categoryName);
         Pageable pageable = PageRequest.of(page, size);
-        return ResponseEntity.ok(listingMapper.toDto(listingService.getListingsByCategory(categoryName, pageable)));
+        return ResponseEntity.ok(listingMapper.toDto(listingService.getListingsBySingleCategory(categoryName, pageable)));
     }
 
 

@@ -59,7 +59,7 @@ public class ListingService {
    */
   public List<Listing> getListingsByTitle(String title, Pageable pageable) {
     logger.info("> Getting listings by title: {}", title);
-    List<Listing> listings = listingRepository.findByTitleContainingIgnoreCase(title, pageable);
+    List<Listing> listings = listingRepository.findByTitleContainingIgnoreCaseAndStatus(title, ListingStatus.ACTIVE, pageable);
     if (listings.isEmpty()) {
       throw new NoSuchElementException("No listings found with title " + title);
     }
@@ -95,9 +95,9 @@ public class ListingService {
   public List<Listing> findByCategories(List<Category> categoryList, Pageable pageable) {
     logger.info("> Finding listings by categories: {}", categoryList);
     if (categoryList == null || categoryList.isEmpty()) {
-      return listingRepository.findByCategoryIn(categoryService.getAll(), pageable);
+      return listingRepository.findByCategoryInAndStatus(categoryService.getAll(), ListingStatus.ACTIVE, pageable);
     }
-    return listingRepository.findByCategoryIn(categoryList, pageable);
+    return listingRepository.findByCategoryInAndStatus(categoryList, ListingStatus.ACTIVE, pageable);
   }
 
   /**
@@ -108,12 +108,12 @@ public class ListingService {
    * @param pageable pagination information
    * @return a list of listings by the specified category
    */
-  public List<Listing> getListingsByCategory(String categoryName, Pageable pageable) {
+  public List<Listing> getListingsBySingleCategory(String categoryName, Pageable pageable) {
     if (categoryName == null || categoryName.trim().isEmpty()) {
       throw new IllegalArgumentException("Category name must be provided.");
     }
     Category category = categoryService.findByName(categoryName);
-    return listingRepository.findByCategory(category, pageable);
+    return listingRepository.findByCategoryAndStatus(category, ListingStatus.ACTIVE, pageable);
   }
 
 
@@ -148,7 +148,6 @@ public class ListingService {
 
     return listing;
   }
-
 
   /**
    * Updates an existing listing.
