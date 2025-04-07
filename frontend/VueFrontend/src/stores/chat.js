@@ -4,11 +4,14 @@ import { ref } from 'vue'
 export const chatStore = defineStore('chat', () => {
   const chats = ref([]) // All chats
   const bids = ref([]) // All bids
-  const hasPendingBids = ref(false) // Flag to check if there are pending bids
+  const hasPendingBids = ref(false) 
   const selectedChat = ref(null)
 
   function setChats(newChats) {
-    chats.value = newChats
+    chats.value = newChats.map(chat => ({
+      ...chat,
+      bids: chat.bids || [],
+    }))
     selectedChat.value = chats.value[0] || null
   }
 
@@ -41,22 +44,53 @@ export const chatStore = defineStore('chat', () => {
       status: 'PENDING',
     }
     selectedChat.value.messages.push(bid)
-    
-    hasPendingBids.value = true
+    selectedChat.value.bids.push(bid)
+    selectedChat.value.hasPendingBids = true
   }
 
   function acceptBid(bidId) {
-    const bid = selectedChat.value.bids.find(b => b.id === bidId)
-    if (bid) {
-      bid.status = 'ACCEPTED'
-      hasPendingBids.value = false
+    const chat = selectedChat.value
+    console.log(selectChat.value)
+    const bidMessage = chat.messages.find(msg => msg.id === bidId && msg.type === 'BID')
+    if (bidMessage) {
+      bidMessage.status = 'ACCEPTED'
+      chat.hasPendingBids = false
+
+      const bid = chat.bids.find(b => b.id === bidId)
+      if (bid !== -1) {
+        bid.status = 'ACCEPTED'
+      }
+      console.log(`Bid ${bidId} accepted in chat ${chat.id}`)
     }
   }
+
   function rejectBid(bidId) {
-    const bid = selectedChat.value.bids.find(b => b.id === bidId)
-    if (bid) {
-      bid.status = 'REJECTED'
-      hasPendingBids.value = false
+    const chat = selectedChat.value
+    const bidMessage = chat.messages.find(msg => msg.id === bidId && msg.type === 'BID')
+    if (bidMessage) {
+      bidMessage.status = 'REJECTED'
+      chat.hasPendingBids = false
+
+      const bid = chat.bids.find(b => b.id === bidId)
+      if (bid !== -1) {
+        bid.status = 'REJECTED'
+      }
+      console.log(`Bid ${bidId} rejected in chat ${chat.id}`)
+    }
+  }
+
+  function cancelBid(bidId) {
+    const chat = selectedChat.value
+    const bidMessage = chat.messages.find(msg => msg.id === bidId && msg.type === 'BID')
+    if (bidMessage) {
+      bidMessage.status = 'CANCELLED'
+      chat.hasPendingBids = false
+
+      const bid = chat.bids.findIndex(b => b.id === bidId)
+      if (bid !== -1) {
+        bid.status = 'CANCELLED'
+      }
+      console.log(`Bid ${bidId} cancelled in chat ${chat.id}`)
     }
   }
 
@@ -71,5 +105,6 @@ export const chatStore = defineStore('chat', () => {
     postBid,
     acceptBid,
     rejectBid,
+    cancelBid,
   }
 })

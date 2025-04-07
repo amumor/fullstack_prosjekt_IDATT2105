@@ -1,6 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue'
-import { vInfiniteScroll } from '@vueuse/components'
+import { ref, computed, nextTick, watch, onUpdated } from 'vue'
 import Navbar from '@/components/Navbar.vue'
 import { chatStore } from '@/stores/chat'
 import { storeToRefs } from 'pinia'
@@ -17,7 +16,8 @@ const initialMessages = [
     listingTitle: 'Boat for sale',
     image: 'https://iqboatlifts.com/wp-content/uploads/2018/06/Yacht-vs-Boat-Whats-the-Difference-Between-the-Two-1024x571.jpg',
     messengerName: 'Han karen',
-    messages: [{id: 1, message: 'Hello', sentAt:'09:05', type: 'MESSAGE'}, {id: 4, message: 'How are you?', sentAt: '10:25', type: 'MESSAGE'}, {id: 1, message: 'I am fine, thank you!', sentAt: '11:35', type: 'MESSAGE'}],
+    messages: [{id: 1, message: 'Hello', sentAt:'09:05', type: 'MESSAGE'}, {id: 4, message: 'How are you?', sentAt: '10:25', type: 'MESSAGE'}, {id: 1, message: 'I am fine, thank you!', sentAt: '11:35', type: 'MESSAGE'}, {id: 2, message: 'accept please', price: '600', sentAt: '11:35', type: 'BID', status: 'PENDING'}],
+    bids: [{id: 2, message: 'accept please', price: '600', sentAt: '11:35', type: 'BID', status: 'PENDING'}],
     lastMessageTime: '11:35',
     isMessageRead: true,
     selected: true
@@ -27,7 +27,8 @@ const initialMessages = [
     listingTitle: 'Car for sale',
     image: 'https://iqboatlifts.com/wp-content/uploads/2018/06/Yacht-vs-Boat-Whats-the-Difference-Between-the-Two-1024x571.jpg',
     messengerName: 'Kar Kar',
-    messages: [{id: 1, message: 'Hello', sentAt:'09:05', type: 'MESSAGE'}, {id: 4, message: 'How are you?', sentAt: '10:25', type: 'MESSAGE'}, {id: 1, message: 'I am fine, thank you!', sentAt: '11:35', type: 'MESSAGE'}],
+    messages: [{id: 1, message: 'Hello', sentAt:'09:05', type: 'MESSAGE'}, {id: 4, message: 'How are you?', sentAt: '10:25', type: 'MESSAGE'}],
+    bids: [],
     lastMessageTime: '11:35',
     isMessageRead: false,
     selected: false
@@ -38,62 +39,98 @@ const initialMessages = [
     image: 'https://iqboatlifts.com/wp-content/uploads/2018/06/Yacht-vs-Boat-Whats-the-Difference-Between-the-Two-1024x571.jpg',
     messengerName: 'Han han',
     messages: [{id: 1, message: 'Hello', sentAt:'09:05', type: 'MESSAGE'}, {id: 4, message: 'How are you?', sentAt: '10:25', type: 'MESSAGE'}, {id: 1, message: 'I am fine, thank you!', sentAt: '11:35', type: 'MESSAGE'}],
+    bids: [],
     lastMessageTime: '11:35',
     isMessageRead: false,
     selected: false
   },
-  {
-    id: 4,
-    listingTitle: 'Boat for sale',
-    image: 'https://iqboatlifts.com/wp-content/uploads/2018/06/Yacht-vs-Boat-Whats-the-Difference-Between-the-Two-1024x571.jpg',
-    messengerName: 'Han Karen',
-    messages: [{id: 1, message: 'Hello', price: '600', sentAt:'09:05', type: 'BID', status:'PENDING'}],
-    lastMessageTime: '11:35',
-    isMessageRead: true,
-    selected: false
-  }
 ]
 
-const chat = chatStore()
-const { chats, selectedChat, hasPendingBids } = storeToRefs(chat)
+const useChatStore = chatStore()
+const { chats, selectedChat } = storeToRefs(useChatStore)
 
-const user = userStore()
+const useUserStore = userStore()
 
 // TODO: Get messages from DB later
-chat.setChats(initialMessages)
+useChatStore.setChats(initialMessages)
 
 const newMessage = ref('')
-const makingBid = ref(false)
+const makingBid = ref({})
 
 // Function to select a chat
 const openChat = (chatItem) => {
-  chat.selectChat(chatItem) 
+  useChatStore.selectChat(chatItem) 
 }
 
 const isOwner = computed(() => {
   if (!selectedChat.value) return false
-  return selectedChat.value.id === user.id
+  return selectedChat.value.id === useUserStore.id
 })
 
 // TODO: Sort messages last message time ???
 
 const sendMessage = () => {
   if (selectedChat) {
-    chat.postMessage(newMessage.value)
+    useChatStore.postMessage(newMessage.value)
   }
   newMessage.value = ''
 }
 
 const sendBid = (bid) => {
   if (selectedChat) {
-    chat.postBid(bid.message, bid.price)
+    useChatStore.postBid(bid.message, bid.price)
   }
-  makingBid.value = false
+  makingBid.value[selectedChat.value.id] = false
 }
 
-const toggleBid = () => {
-  makingBid.value = !makingBid.value
+const acceptBid = async (message) => {
+  if (!message || !message.id) return
+  await useChatStore.acceptBid(message.id)
+  await nextTick()
 }
+
+const rejectBid = async (message) => {
+  if (!message || !message.id) return
+  await useChatStore.rejectBid(message.id)
+  await nextTick()
+}
+
+const cancelBid = async (message) => {
+  if (!message || !message.id) return
+  await useChatStore.cancelBid(message.id)
+  await nextTick() 
+}
+
+const toggleBid = (chatId) => {
+  makingBid.value[chatId] = !makingBid.value[chatId]
+}
+
+// Watch for changes in selectedChat and update the makingBid state
+const scrollToBottom = () => {
+  nextTick(() => {
+    const container = document.querySelector('.message-info')
+    if (container) {
+      container.scrollTop = container.scrollHeight
+    }
+  })
+}
+
+watch(() => selectedChat.value?.messages.length, () => {
+  scrollToBottom()
+})
+
+onUpdated(() => {
+  scrollToBottom()
+})
+
+watch(
+  () => selectedChat.value?.messages,
+  () => {
+    scrollToBottom()
+  },
+  { deep: true }
+)
+
 
 </script>
 
@@ -121,11 +158,13 @@ const toggleBid = () => {
   <div class="display-right-container" v-if="selectedChat">
     <!-- Fix scroll! -->
     <div class="message-info">
-      <InitialsDisplayComponent
+      <div class="initials">
+        <InitialsDisplayComponent
         :name="selectedChat.messengerName"
         :width="120"
         :height="120" />
-      <h2>{{ selectedChat.messengerName }}</h2>
+        <h2>{{ selectedChat.messengerName }}</h2>
+      </div>
       <div class="messages" v-for="(message, index) in selectedChat.messages" :key="index">
 
         <!-- Sent messages -->
@@ -138,6 +177,13 @@ const toggleBid = () => {
               :bidMessage="message.message"
               :bidPrice="message.price"
               :bidStatus="message.status" />
+            <!-- Cancel bid -->
+            <button 
+              class="basic-blue-btn" 
+              id="cancel-btn" 
+              v-if="message.status === 'PENDING'" 
+              @click="cancelBid(message)">Cancel</button>
+            <p id="cancelled" v-if="message.status === 'CANCELLED'">Cancelled</p>
             <p id="sent-timestamp">{{message.sentAt}}</p>
           </div>
           <!-- Text messages -->
@@ -157,7 +203,9 @@ const toggleBid = () => {
               :inChat="true"
               :bidMessage="message.message"
               :bidPrice="message.price"
-              :bidStatus="message.status" />
+              :bidStatus="message.status"
+              @accept-bid="acceptBid(message)"
+              @reject-bid="rejectBid(message)" />
             <p id="received-timestamp">{{message.sentAt}}</p>
           </div>
           <!-- Text messages -->
@@ -167,22 +215,31 @@ const toggleBid = () => {
           </div>
         </div>
       </div>
+      <!-- New bid -->
+      <div class="bid-box" v-if="makingBid[selectedChat.id]"> 
+        <BidBoxComponent 
+          :isBidder="true"
+          :inChat="false"
+          :bidStatus="'PENDING'"
+          @submit-bid="sendBid"
+          @close-bid-box="makingBid[selectedChat.id] = false" />
+      </div>
     </div>
 
+    
     <!-- New message -->
     <div class="message-input">
       <textarea v-model="newMessage" placeholder="Type a message..." @keydown.enter.prevent="sendMessage"></textarea>
-      <button class="send-button" @click="sendMessage">Send</button>
-      <button class="send-button" v-if="!selectedChat.hasPendingBids && !isOwner" @click="toggleBid">Make bid</button>
+      <button class="basic-blue-btn" @click="sendMessage">Send</button>
+      <button 
+        class="basic-blue-btn"  
+        :id="selectedChat.hasPendingBids ? 'pending-bid-button' : 'make-bid-button'" 
+        :disabled="selectedChat.hasPendingBids"
+        v-if="!isOwner" 
+        @click="toggleBid(selectedChat.id)"
+        >Make bid</button>
     </div>
-    <div class="bid-box" v-if="makingBid"> 
-      <BidBoxComponent 
-        :isBidder="true"
-        :inChat="false"
-        :bidStatus="'PENDING'"
-        @submit-bid="sendBid"
-        @close-bid-box="makingBid = false" />
-    </div>
+    
   </div>
 </div>
 </template>
@@ -204,11 +261,11 @@ const toggleBid = () => {
   flex: 1;
   max-width: 100%;
   background: #f5f5f5;
-  padding: 20px;
-  margin-top: 56px;
-  border-bottom-left-radius: 8px;
-  border-bottom-right-radius: 8px;
   text-align: center;
+  border-radius: 2%;
+  display: flex;
+  flex-direction: column;
+  height: calc(94vh - 56px); 
 }
 
 /* Messages container */
@@ -227,10 +284,20 @@ const toggleBid = () => {
 
 /* Right side chat display */
 .message-info {
+  flex-direction: column;
+  align-items: center;
+  overflow-y: auto;
+  
+  padding: 20px;
+  gap: 10px;
+}
+
+.initials {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px;
+  justify-content: center;
+  margin: 0 auto; 
 }
 
 /* Message display */
@@ -238,7 +305,7 @@ const toggleBid = () => {
   display: flex;
   flex-direction: column;
   width: 100%;
-  overflow-y: auto;
+  
 }
 
 .messages::-webkit-scrollbar {
@@ -273,25 +340,19 @@ const toggleBid = () => {
   max-width: 70%;
 }
 
-#sent-timestamp {
-  font-size: 12px;
-  color: #ddd;
-  margin-top: 5px;
-  text-align: right;
-}
-
+/* Timestamp styling */
+#sent-timestamp,
 #received-timestamp {
   font-size: 12px;
-  color: #666;
   margin-top: 5px;
-  text-align: left;
+  opacity: 0.7;
 }
+
 
 /* Message input */
 .message-input {
   display: flex;
   align-items: center;
-  margin-top: 20px;
 }
 
 .message-input textarea {
@@ -315,4 +376,23 @@ const toggleBid = () => {
 .message-input button:hover {
   background-color: #155ab6;
 }
+
+/* buttons */
+.basic-blue-btn {
+  width: 15%;
+}
+
+#pending-bid-button {
+  background-color: #ccc;
+  color: white;
+}
+
+#cancel-btn {
+  background-color: #e5e5ea;
+  color: #333;
+
+  width:auto;
+}
+
+
 </style>
