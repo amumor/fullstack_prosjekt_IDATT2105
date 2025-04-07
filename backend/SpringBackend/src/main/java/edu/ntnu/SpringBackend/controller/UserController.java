@@ -47,15 +47,24 @@ public class UserController {
         return ResponseEntity.ok(UserMapper.toDto(userService.getUserByEmail(email)));
     }
 
-  @PutMapping("/update-my-profile")
-  @Operation(summary = "Update user info", security = @SecurityRequirement(name = "bearerAuth"))
-  public ResponseEntity<UserResponseDTO> updateUser(
-          @AuthenticationPrincipal User user,
-          @RequestBody UserRequestDTO userRequestDTO
-  ) {
-    logger.info("PUT request received on [/api/v1/users/update-my-profile] by: {}", user.getId());
-    return ResponseEntity.ok(UserMapper.toDto(userService.updateUser(user, userRequestDTO)));
-  }
+    @PutMapping("/update-my-profile")
+    @Operation(summary = "Update user info", security = @SecurityRequirement(name = "bearerAuth"))
+    public ResponseEntity<UserResponseDTO> updateUser(
+            @AuthenticationPrincipal User user,
+            @RequestBody UserRequestDTO userRequestDTO
+    ) {
+        logger.info("PUT request received on [/api/v1/users/update-my-profile] by: {}", user.getId());
+        return ResponseEntity.ok(UserMapper.toDto(userService.updateUser(user, userRequestDTO)));
+    }
+
+    @GetMapping("/get-my-profile")
+    @Operation(summary = "Getting user info by email", security = @SecurityRequirement(name = "bearerAuth"))
+    public ResponseEntity<UserResponseDTO> getMyProfile(
+            @AuthenticationPrincipal User user
+    ) {
+        logger.info("GET request received on [/api/v1/users/get-my-profile], requested by: {}", user.getId());
+        return ResponseEntity.ok(UserMapper.toDto(userService.getUserByEmail(user.getEmail())));
+    }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
