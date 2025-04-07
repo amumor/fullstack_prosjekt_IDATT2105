@@ -27,11 +27,27 @@ export const userStore = defineStore('user', {
         },
         login(user) {
             this.isLoggedIn = true
+            localStorage.setItem("user", JSON.stringify(user));
             this.setUser(user)
         },
         logout() {
             this.isLoggedIn = false
+            localStorage.removeItem('user');
             this.clearUser()
+        },
+        restoreUser() {
+            const storedUser = localStorage.getItem('user');
+            if (storedUser) {
+                try {
+                    const user = JSON.parse(storedUser);
+                    console.log(user);
+                    this.login(user);
+
+                } catch (e) {
+                    console.error('Failed to parse user from localStorage:', e);
+                    localStorage.removeItem('user');
+                }
+            }
         }
     }
-})
+});
