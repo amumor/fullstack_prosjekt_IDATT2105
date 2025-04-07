@@ -52,7 +52,6 @@ export function createListing(listing) {
 
     return listingApi.create(listingCreationRequestDTO)
         .then(listingResponseDTO => {
-            // Optionally log or process the response
             return listingResponseDTO;
         })
         .catch(error => {
