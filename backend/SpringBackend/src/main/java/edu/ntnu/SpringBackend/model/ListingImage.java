@@ -24,6 +24,9 @@ public class ListingImage {
   @GeneratedValue(strategy = GenerationType.UUID)
   private UUID id;
 
+  @Column(name = "original_file_name", nullable = false)
+  private String originalFileName;
+
   @ManyToOne
   @JoinColumn(name = "listing_id", nullable = false)
   private Listing listing;

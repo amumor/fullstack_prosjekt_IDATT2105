@@ -70,7 +70,6 @@ public class Listing {
     images = new ArrayList<>();
   }
 
-
   @PreUpdate
   protected void onUpdate() {
     lastEditedAt = LocalDateTime.now();

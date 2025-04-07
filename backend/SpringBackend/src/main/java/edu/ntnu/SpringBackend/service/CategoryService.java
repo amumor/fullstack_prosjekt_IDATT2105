@@ -29,7 +29,7 @@ public class CategoryService {
 
     public Category getByName(String name) {
         logger.info("> Fetching category by name: {}", name);
-        return categoryRepository.findByName(name)
+        return categoryRepository.findByNameIgnoreCase(name)
                 .orElseThrow(() -> new NoSuchElementException("Category with name " + name + " not found"));
     }
 
@@ -103,4 +103,10 @@ public class CategoryService {
         matched.sort(Comparator.comparing(Category::getName));
         return matched;
     }
+
+  public Category findByName(String categoryName) {
+        return categoryRepository.findByNameIgnoreCase(categoryName).
+                orElseThrow(() -> new NoSuchElementException("Category with name " + categoryName + " not found")
+        );
+  }
 }

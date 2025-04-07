@@ -2,7 +2,7 @@ package edu.ntnu.SpringBackend.controller;
 
 import edu.ntnu.SpringBackend.dto.ChatResponseDTO;
 import edu.ntnu.SpringBackend.dto.MessageRequestDTO;
-import edu.ntnu.SpringBackend.dto.MessageResponsetDTO;
+import edu.ntnu.SpringBackend.dto.MessageResponseDTO;
 import edu.ntnu.SpringBackend.mapper.ChatMapper;
 import edu.ntnu.SpringBackend.mapper.MessageMapper;
 import edu.ntnu.SpringBackend.model.User;
@@ -104,7 +104,7 @@ public class ChatController {
    * @return the message response dto
    */
   @PostMapping("/chat/{chatId}/message")
-  public ResponseEntity<MessageResponsetDTO> addMessageToChat(
+  public ResponseEntity<MessageResponseDTO> addMessageToChat(
           @PathVariable UUID chatId,
           @AuthenticationPrincipal User user,
           @RequestBody MessageRequestDTO messageRequestDTO

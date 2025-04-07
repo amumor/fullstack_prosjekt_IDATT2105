@@ -1,10 +1,12 @@
 package edu.ntnu.SpringBackend.dto;
 
+import edu.ntnu.SpringBackend.model.enums.ListingStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -19,8 +21,9 @@ public class ListingCreationRequestDTO {
     private String title;
     private String description;
     private String categoryName;
-    private String listingStatus;
+    private ListingStatus listingStatus;
     private double price;
     private double latitude;
     private double longitude;
+    private List<String> imagesToDelete;
 }
