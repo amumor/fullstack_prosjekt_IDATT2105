@@ -21,6 +21,8 @@ npx @openapitools/openapi-generator-cli generate \
 - ApiClient.js
 - index.js
 
+and move the content of the src/ folder out into root of the generated folder, beside the generated README.md
+
 ### 3. Comment out / remove user-Agent in ApiClient.js
 As shown below:
 
