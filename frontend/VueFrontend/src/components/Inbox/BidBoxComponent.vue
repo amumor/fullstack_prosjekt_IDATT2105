@@ -5,10 +5,6 @@ import { defineProps } from 'vue'
 const props = defineProps({
     isBidder: Boolean,
 		inChat: Boolean,
-    bidMessage: {
-			type: String,
-			default: ''
-		},
     bidPrice: {
 			type: String,
 			default: ''
@@ -21,35 +17,23 @@ const props = defineProps({
 
 const emit = defineEmits(['close-bid-box', 'submit-bid', 'accept-bid', 'reject-bid'])
 
-// Bid message and price
-const message = ref(props.bidMessage)
+// Bid price
 const price = ref(props.bidPrice)
-
-watch(() => props.bidMessage, (newVal) => {
-  message.value = newVal
-})
 watch(() => props.bidPrice, (newVal) => {
   price.value = newVal
 })
 
-// Validation regex for message and price
-const messageRegex = /^[A-Za-z0-9\s.,!?]+$/
+// Validation regex for price
 const priceRegex = /^\d+(\.\d{1,2})?$/
 
 // Bid options
 const submitBid = () => {
-	if (!messageRegex.test(message.value)) {
-    console.error('Invalid message format')
-    return
-  }
-
   if (!priceRegex.test(price.value)) {
     console.error('Invalid price format')
     return
   }
 
-  emit('submit-bid', { message: message.value, price: price.value })
-  message.value = ''
+  emit('submit-bid', { price: price.value })
   price.value = ''
 }
 
@@ -74,7 +58,6 @@ const rejectBid = () => {
 	<div class="inchat-bid-box" v-if="props.inChat">
 		<h3>Bid</h3>
 		<p>Price: {{ props.bidPrice }}</p>
-		<p>Message: {{ props.bidMessage }}</p>
 
 		<!-- Options for bid receiver on pending bids -->
 		<div v-if="!isBidder && bidStatus === 'PENDING'" class="action-buttons">
@@ -92,7 +75,6 @@ const rejectBid = () => {
 			<h3>Make a bid</h3>
 			<button class="close-btn" @click="closeBidBox">✕</button>
 			<input v-model="price" type="text" placeholder="Price" />
-			<input v-model="message" type="text" placeholder="Message" />
 			<button class="submit-btn" @click="submitBid">Send</button>
 	</div>
 </div>

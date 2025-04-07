@@ -33,5 +33,6 @@ export const userStore = defineStore('user', {
         this.isLoggedIn = false
         this.clearUser()
     }
+
   }
 })
