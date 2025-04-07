@@ -1,0 +1,152 @@
+// src/services/ChatService.js
+
+import {
+    ApiClient,
+    ChatControllerApi,
+    MessageRequestDTO
+} from '@/api';
+
+const timeout = 1000 * 60 * 2; // 2-minute timeout
+const baseURL = 'http://localhost:8080';
+
+/**
+ * Adds a message to an existing chat.
+ *
+ * @param {string} chatId - The ID of the chat.
+ * @param {string} messageContent - The content of the message to add.
+ * @returns {Promise<Object>} A promise that resolves to the MessageResponsetDTO.
+ * @throws {Error} If adding the message fails.
+ *
+ * @example
+ * addMessageToChat('chat123', 'Hello, how are you?')
+ *   .then(response => console.log('Message added:', response))
+ *   .catch(error => console.error('Failed to add message:', error));
+ */
+export function addMessageToChat(chatId, messageContent) {
+    const myClient = new ApiClient(baseURL);
+    myClient.timeout = timeout;
+    const chatApi = new ChatControllerApi(myClient);
+
+    const messageRequestDTO = new MessageRequestDTO();
+    messageRequestDTO.content = messageContent;
+
+    return chatApi.addMessageToChat(chatId, messageRequestDTO)
+        .then(messageResponseDTO => {
+            return messageResponseDTO;
+        })
+        .catch(error => {
+            console.error('Failed to add message to chat:', error);
+            throw error;
+        });
+}
+
+/**
+ * Creates a new chat from the buyer for a given listing with an initial message.
+ *
+ * @param {string} listingId - The ID of the listing.
+ * @param {string} messageContent - The initial message content.
+ * @returns {Promise<Object>} A promise that resolves to the ChatResponseDTO.
+ * @throws {Error} If chat creation fails.
+ *
+ * @example
+ * createChatFromBuyer('listing123', 'Is this still available?')
+ *   .then(chat => console.log('Chat created:', chat))
+ *   .catch(error => console.error('Failed to create chat:', error));
+ */
+export function createChatFromBuyer(listingId, messageContent) {
+    const myClient = new ApiClient(baseURL);
+    myClient.timeout = timeout;
+    const chatApi = new ChatControllerApi(myClient);
+
+    const messageRequestDTO = new MessageRequestDTO();
+    messageRequestDTO.content = messageContent;
+
+    return chatApi.createChatFromBuyer(listingId, messageRequestDTO)
+        .then(chatResponseDTO => {
+            return chatResponseDTO;
+        })
+        .catch(error => {
+            console.error('Failed to create chat from buyer:', error);
+            throw error;
+        });
+}
+
+/**
+ * Retrieves all chats for a given listing.
+ *
+ * @param {string} listingId - The ID of the listing.
+ * @returns {Promise<Array>} A promise that resolves to an array of ChatResponseDTO objects.
+ * @throws {Error} If fetching chats fails.
+ *
+ * @example
+ * getAllChatsForListing('listing123')
+ *   .then(chats => console.log('Chats for listing:', chats))
+ *   .catch(error => console.error('Failed to fetch chats:', error));
+ */
+export function getAllChatsForListing(listingId) {
+    const myClient = new ApiClient(baseURL);
+    myClient.timeout = timeout;
+    const chatApi = new ChatControllerApi(myClient);
+
+    return chatApi.getAllChatsForListing(listingId)
+        .then(chats => {
+            return chats;
+        })
+        .catch(error => {
+            console.error('Failed to retrieve chats for listing:', error);
+            throw error;
+        });
+}
+
+/**
+ * Retrieves all chats for the authenticated user.
+ *
+ * @returns {Promise<Array>} A promise that resolves to an array of ChatResponseDTO objects.
+ * @throws {Error} If fetching the user's chats fails.
+ *
+ * @example
+ * getAllChatsForUser()
+ *   .then(chats => console.log('User chats:', chats))
+ *   .catch(error => console.error('Failed to fetch user chats:', error));
+ */
+export function getAllChatsForUser() {
+    const myClient = new ApiClient(baseURL);
+    myClient.timeout = timeout;
+    const chatApi = new ChatControllerApi(myClient);
+
+    return chatApi.getAllChatsForUser()
+        .then(chats => {
+            return chats;
+        })
+        .catch(error => {
+            console.error('Failed to retrieve user chats:', error);
+            throw error;
+        });
+}
+
+/**
+ * Retrieves a chat for a given listing.
+ *
+ * @param {string} listingId - The ID of the listing associated with the chat.
+ * @returns {Promise<Object>} A promise that resolves to a ChatResponseDTO.
+ * @throws {Error} If fetching the chat fails.
+ *
+ * @example
+ * getChat('listing123')
+ *   .then(chat => console.log('Chat:', chat))
+ *   .catch(error => console.error('Failed to retrieve chat:', error));
+ */
+export function getChat(listingId) {
+    const myClient = new ApiClient(baseURL);
+    myClient.timeout = timeout;
+    const chatApi = new ChatControllerApi(myClient);
+
+    return chatApi.getChat(listingId)
+        .then(chatResponseDTO => {
+            return chatResponseDTO;
+        })
+        .catch(error => {
+            console.error('Failed to retrieve chat:', error);
+            throw error;
+        });
+}

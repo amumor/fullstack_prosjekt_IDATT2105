@@ -1,0 +1,12 @@
+# Ignore compiled files and local build artifacts
+uploads/      # You mount this via volume, so no need to copy it
+*.log
+*.class
+
+# IDE/editor files
+.idea/
+*.iml
+.vscode/
+
+# OS-specific junk
+.DS_Store
