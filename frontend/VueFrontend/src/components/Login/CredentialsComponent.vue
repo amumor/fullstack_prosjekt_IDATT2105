@@ -2,7 +2,7 @@
 import {ref, defineProps} from 'vue';
 import {useRouter} from 'vue-router';
 import {userStore} from '@/stores/user.js';
-import {authenticateUser} from "@/services/AuthenticationService.js";
+import {authenticateUser, registerUser} from "@/services/AuthenticationService.js";
 import {getUserByEmail} from "@/services/UserService.js";
 import {TokenResponseDTO} from "@/api/index.js";
 
@@ -90,11 +90,10 @@ const login = async () => {
 
     await authenticateUser(email.value, password.value)
         .then(async authResponse => {
-          console.log('User authenticated successfully:', authResponse);
+          console.debug('User authenticated successfully:', authResponse);
           const authToken = authResponse.token;
-          console.log('auth token:', authToken);
 
-          await getUserByEmail(email.value, authToken)
+          await getUserByEmail(email.value, authToken) // TODO: change to getMyProfile() when implemented
               .then(async userResponse => {
                 console.log('user response:', userResponse);
                 const user = {
@@ -190,7 +189,36 @@ const register = async () => {
 
   try {
 
-    // Logic to handle registration here
+    await registerUser({
+      firstName: firstName.value,
+      lastName: lastName.value,
+      email: email.value,
+      password: password.value,
+      phoneNumber: phoneNumber.value,
+    })
+        .then(async authResponse => {
+          console.debug('User authenticated successfully:', authResponse);
+          const authToken = authResponse.token;
+          const user = {
+            token: authToken,
+            email: email.value,
+            firstName: firstName.value,
+            lastName: lastName.value,
+            phoneNumber: phoneNumber.value,
+          };
+          userStorage.login(user);
+          await router.push('/')
+              .catch(error => {
+                console.error('Fetching user by email failed: ', error);
+                errorMsg.value = "Try again.";
+              })
+
+        })
+        .catch(error => {
+          console.error('Registration failed:', error);
+        })
+
+
     email.value = '';
     password.value = '';
     toggleForm();
