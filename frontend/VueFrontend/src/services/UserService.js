@@ -160,3 +160,35 @@ export function updateUser(user, token) {
             throw error;
         });
 }
+
+/**
+ * Retrieves the profile of the currently authenticated user.
+ *
+ * @param {string} token - JWT token
+ * @returns {Promise<Object>} A promise that resolves to a UserResponseDTO containing the user's profile.
+ * @throws {Error} If fetching the profile fails.
+ *
+ * @example
+ * getMyProfile()
+ *   .then(profile => console.log('My profile:', profile))
+ *   .catch(error => console.error('Failed to retrieve my profile:', error));
+ */
+export function getMyProfile(token) {
+    const client = new ApiClient(baseURL);
+    client.timeout = timeout;
+    client.authentications.bearerAuth = {
+        type: 'bearer',
+        accessToken: token
+    };
+
+    const userApi = new UserControllerApi(client);
+
+    return userApi.getMyProfile()
+        .then(userResponseDTO => {
+            return userResponseDTO;
+        })
+        .catch(error => {
+            console.error('Failed to retrieve my profile:', error);
+            throw error;
+        });
+}
