@@ -40,9 +40,9 @@ const { timeout, baseURL } = serviceConfigParams();
 export function createListing(listing, token) {
     const client = new ApiClient(baseURL);
     client.timeout = timeout;
-    client.authentications = {
+    client.authentications.bearerAuth = {
         type: 'bearer',
-        accessToken: token,
+        accessToken: token
     };
 
     const listingApi = new ListingControllerApi(client);
@@ -111,9 +111,9 @@ export function getListingById(id) {
 export function getListingSuggestions(opts = { page: 0, size: 10 }, token) {
     const client = new ApiClient(baseURL);
     client.timeout = timeout;
-    client.authentications = {
+    client.authentications.bearerAuth = {
         type: 'bearer',
-        accessToken: token,
+        accessToken: token
     };
 
     const listingApi = new ListingControllerApi(client);

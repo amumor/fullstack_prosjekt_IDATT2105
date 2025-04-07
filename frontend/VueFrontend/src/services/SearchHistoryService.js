@@ -25,9 +25,9 @@ const { timeout, baseURL } = serviceConfigParams();
 export function addSearchHistory(searchQuery, token) {
     const client = new ApiClient(baseURL);
     client.timeout = timeout;
-    client.authentications = {
+    client.authentications.bearerAuth = {
         type: 'bearer',
-        accessToken: token,
+        accessToken: token
     };
 
     const searchHistoryApi = new SearchHistoryControllerApi(client);
@@ -61,9 +61,9 @@ export function addSearchHistory(searchQuery, token) {
 export function getSearchHistory(token) {
     const client = new ApiClient(baseURL);
     client.timeout = timeout;
-    client.authentications = {
+    client.authentications.bearerAuth = {
         type: 'bearer',
-        accessToken: token,
+        accessToken: token
     };
 
     const searchHistoryApi = new SearchHistoryControllerApi(client);

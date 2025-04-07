@@ -30,9 +30,9 @@ const {timeout, baseURL} = serviceConfigParams();
 export function createCategory(category, token) {
     const client = new ApiClient(baseURL);
     client.timeout = timeout;
-    client.authentications = {
+    client.authentications.bearerAuth = {
         type: 'bearer',
-        accessToken: token,
+        accessToken: token
     };
 
     const categoryApi = new CategoryControllerApi(client);
@@ -70,9 +70,9 @@ export function createCategory(category, token) {
 export function deleteCategory(id, token) {
     const client = new ApiClient(baseURL);
     client.timeout = timeout;
-    client.authentications = {
+    client.authentications.bearerAuth = {
         type: 'bearer',
-        accessToken: token,
+        accessToken: token
     };
 
     const categoryApi = new CategoryControllerApi(client);

@@ -30,9 +30,9 @@ const {timeout, baseURL} = serviceConfigParams();
 export function createBookmark(bookmarkData, token) {
     const client = new ApiClient(baseURL);
     client.timeout = timeout;
-    client.authentications = {
+    client.authentications.bearerAuth = {
         type: 'bearer',
-        accessToken: token,
+        accessToken: token
     };
 
     const bookmarkApi = new BookmarkControllerApi(client);
@@ -71,9 +71,9 @@ export function createBookmark(bookmarkData, token) {
 export function deleteBookmark(bookmarkId, token) {
     const client = new ApiClient(baseURL);
     client.timeout = timeout;
-    client.authentications = {
+    client.authentications.bearerAuth = {
         type: 'bearer',
-        accessToken: token,
+        accessToken: token
     };
 
     const bookmarkApi = new BookmarkControllerApi(client);
@@ -107,9 +107,9 @@ export function deleteBookmark(bookmarkId, token) {
 export function getUserBookmarks(token) {
     const client = new ApiClient(baseURL);
     client.timeout = timeout;
-    client.authentications = {
+    client.authentications.bearerAuth = {
         type: 'bearer',
-        accessToken: token,
+        accessToken: token
     };
 
     const bookmarkApi = new BookmarkControllerApi(client);

@@ -26,9 +26,9 @@ const {timeout, baseURL} = serviceConfigParams();
 export function addMessageToChat(chatId, messageContent, token) {
     const client = new ApiClient(baseURL);
     client.timeout = timeout;
-    client.authentications = {
+    client.authentications.bearerAuth = {
         type: 'bearer',
-        accessToken: token,
+        accessToken: token
     };
 
     const chatApi = new ChatControllerApi(client);
@@ -63,9 +63,9 @@ export function addMessageToChat(chatId, messageContent, token) {
 export function createChatFromBuyer(listingId, messageContent, token) {
     const client = new ApiClient(baseURL);
     client.timeout = timeout;
-    client.authentications = {
+    client.authentications.bearerAuth = {
         type: 'bearer',
-        accessToken: token,
+        accessToken: token
     };
 
     const chatApi = new ChatControllerApi(client);
@@ -99,9 +99,9 @@ export function createChatFromBuyer(listingId, messageContent, token) {
 export function getAllChatsForListing(listingId, token) {
     const client = new ApiClient(baseURL);
     client.timeout = timeout;
-    client.authentications = {
+    client.authentications.bearerAuth = {
         type: 'bearer',
-        accessToken: token,
+        accessToken: token
     };
 
     const chatApi = new ChatControllerApi(client);
@@ -131,9 +131,9 @@ export function getAllChatsForListing(listingId, token) {
 export function getAllChatsForUser(token) {
     const client = new ApiClient(baseURL);
     client.timeout = timeout;
-    client.authentications = {
+    client.authentications.bearerAuth = {
         type: 'bearer',
-        accessToken: token,
+        accessToken: token
     };
 
     const chatApi = new ChatControllerApi(client);
@@ -164,9 +164,9 @@ export function getAllChatsForUser(token) {
 export function getChat(listingId, token) {
     const client = new ApiClient(baseURL);
     client.timeout = timeout;
-    client.authentications = {
+    client.authentications.bearerAuth = {
         type: 'bearer',
-        accessToken: token,
+        accessToken: token
     };
 
     const chatApi = new ChatControllerApi(client);
