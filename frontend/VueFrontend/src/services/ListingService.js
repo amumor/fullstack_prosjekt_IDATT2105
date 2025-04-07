@@ -5,9 +5,9 @@ import {
     ListingControllerApi,
     ListingCreationRequestDTO
 } from '@/api';
+import {serviceConfigParams} from "@/services/ServiceSetup.js";
 
-const timeout = 1000 * 60 * 2; // 2-minute timeout
-const baseURL = 'http://localhost:8080';
+const { bearerTokenAuth, timeout, baseURL } = serviceConfigParams();
 
 /**
  * Creates a new listing with the provided details.
@@ -37,10 +37,11 @@ const baseURL = 'http://localhost:8080';
  *   .catch(error => console.error('Creation failed:', error));
  */
 export function createListing(listing) {
-    const myClient = new ApiClient(baseURL);
-    myClient.timeout = timeout;
+    const Client = new ApiClient(baseURL);
+    Client.timeout = timeout;
+    Client.authenticationRequestDTO = bearerTokenAuth;
 
-    const listingApi = new ListingControllerApi(myClient);
+    const listingApi = new ListingControllerApi(Client);
     const listingCreationRequestDTO = new ListingCreationRequestDTO();
     listingCreationRequestDTO.title = listing.title;
     listingCreationRequestDTO.description = listing.description;

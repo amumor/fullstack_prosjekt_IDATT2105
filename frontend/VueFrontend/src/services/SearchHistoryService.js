@@ -5,9 +5,9 @@ import {
     SearchHistoryControllerApi,
     SearchHistoryRequestDTO
 } from '@/api';
+import {serviceConfigParams} from "@/services/ServiceSetup.js";
 
-const timeout = 1000 * 60 * 2; // 2-minute timeout
-const baseURL = 'http://localhost:8080';
+const { bearerTokenAuth, timeout, baseURL } = serviceConfigParams();
 
 /**
  * Adds a new search history entry for the user.
@@ -22,10 +22,11 @@ const baseURL = 'http://localhost:8080';
  *   .catch(error => console.error('Failed to add search history:', error));
  */
 export function addSearchHistory(searchQuery) {
-    const myClient = new ApiClient(baseURL);
-    myClient.timeout = timeout;
+    const Client = new ApiClient(baseURL);
+    Client.timeout = timeout;
+    Client.authenticationRequestDTO = bearerTokenAuth;
 
-    const searchHistoryApi = new SearchHistoryControllerApi(myClient);
+    const searchHistoryApi = new SearchHistoryControllerApi(Client);
 
     const searchHistoryRequestDTO = new SearchHistoryRequestDTO();
     searchHistoryRequestDTO.searchQuery = searchQuery;

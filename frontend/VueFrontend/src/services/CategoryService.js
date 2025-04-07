@@ -5,9 +5,9 @@ import {
     CategoryControllerApi,
     CategoryCreationRequestDTO
 } from '@/api';
+import {serviceConfigParams} from "@/services/ServiceSetup.js";
 
-const timeout = 1000 * 60 * 2; // 2-minute timeout
-const baseURL = 'http://localhost:8080';
+const { bearerTokenAuth, timeout, baseURL } = serviceConfigParams();
 
 /**
  * Creates a new category with the given details.
@@ -27,10 +27,11 @@ const baseURL = 'http://localhost:8080';
  *   });
  */
 export function createCategory(category) {
-    const myClient = new ApiClient(baseURL);
-    myClient.timeout = timeout;
+    const Client = new ApiClient(baseURL);
+    Client.timeout = timeout;
+    Client.authenticationRequestDTO = bearerTokenAuth;
 
-    const categoryApi = new CategoryControllerApi(myClient);
+    const categoryApi = new CategoryControllerApi(Client);
     const categoryCreationRequestDTO = new CategoryCreationRequestDTO();
     categoryCreationRequestDTO.name = category.name;
 

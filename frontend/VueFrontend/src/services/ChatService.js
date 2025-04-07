@@ -5,9 +5,9 @@ import {
     ChatControllerApi,
     MessageRequestDTO
 } from '@/api';
+import {serviceConfigParams} from "@/services/ServiceSetup.js";
 
-const timeout = 1000 * 60 * 2; // 2-minute timeout
-const baseURL = 'http://localhost:8080';
+const { bearerTokenAuth, timeout, baseURL } = serviceConfigParams();
 
 /**
  * Adds a message to an existing chat.
@@ -23,9 +23,10 @@ const baseURL = 'http://localhost:8080';
  *   .catch(error => console.error('Failed to add message:', error));
  */
 export function addMessageToChat(chatId, messageContent) {
-    const myClient = new ApiClient(baseURL);
-    myClient.timeout = timeout;
-    const chatApi = new ChatControllerApi(myClient);
+    const Client = new ApiClient(baseURL);
+    Client.timeout = timeout;
+    Client.authenticationRequestDTO = bearerTokenAuth;
+    const chatApi = new ChatControllerApi(Client);
 
     const messageRequestDTO = new MessageRequestDTO();
     messageRequestDTO.content = messageContent;

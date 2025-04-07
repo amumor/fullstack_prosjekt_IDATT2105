@@ -5,9 +5,9 @@ import {
     UserControllerApi,
     UserRequestDTO
 } from '@/api';
+import {serviceConfigParams} from "@/services/ServiceSetup.js";
 
-const timeout = 1000 * 60 * 2; // 2-minute timeout
-const baseURL = 'http://localhost:8080';
+const { bearerTokenAuth, timeout, baseURL } = serviceConfigParams();
 
 /**
  * Deletes a user by their ID.
@@ -22,10 +22,11 @@ const baseURL = 'http://localhost:8080';
  *   .catch(error => console.error('Deletion failed:', error));
  */
 export function deleteUser(id) {
-    const myClient = new ApiClient(baseURL);
-    myClient.timeout = timeout;
+    const Client = new ApiClient(baseURL);
+    Client.timeout = timeout;
+    Client.authenticationRequestDTO = bearerTokenAuth;
 
-    const userApi = new UserControllerApi(myClient);
+    const userApi = new UserControllerApi(Client);
 
     return userApi.deleteUser(id)
         .then(() => {

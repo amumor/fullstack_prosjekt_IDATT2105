@@ -6,9 +6,9 @@ import {
     AuthenticationRequestDTO,
     UserRequestDTO
 } from '@/api';
+import {serviceConfigParams} from "@/services/ServiceSetup.js";
 
-const timeout = 1000 * 60 * 2; // 2 min timeout
-const baseURL = 'http://localhost:8080';
+const { bearerTokenAuth, timeout, baseURL } = serviceConfigParams();
 
 /**
  * Authenticates a user with the given email and password.
@@ -28,10 +28,11 @@ const baseURL = 'http://localhost:8080';
  *   });
  */
 export function authenticateUser(email, password) {
-    const myClient = new ApiClient(baseURL);
-    myClient.timeout = timeout;
+    const Client = new ApiClient(baseURL);
+    Client.timeout = timeout;
+    Client.authenticationRequestDTO = bearerTokenAuth;
 
-    const authApi = new AuthenticationControllerApi(myClient);
+    const authApi = new AuthenticationControllerApi(Client);
 
     const authenticationRequestDTO = new AuthenticationRequestDTO();
     authenticationRequestDTO.email = email;
