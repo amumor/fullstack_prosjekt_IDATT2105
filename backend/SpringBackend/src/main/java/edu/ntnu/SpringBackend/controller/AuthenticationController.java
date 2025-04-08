@@ -6,6 +6,8 @@ import edu.ntnu.SpringBackend.dto.UserRequestDTO;
 import edu.ntnu.SpringBackend.model.User;
 import edu.ntnu.SpringBackend.model.enums.Role;
 import edu.ntnu.SpringBackend.service.AuthenticationService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,6 +43,7 @@ public class AuthenticationController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/register/admin")
+    @Operation(summary = ("Register a new admin user"), security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<TokenResponseDTO> registerAdmin(
             @AuthenticationPrincipal User user,
             @RequestBody UserRequestDTO request
