@@ -1,6 +1,5 @@
 package edu.ntnu.SpringBackend.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.ntnu.SpringBackend.dto.ListingCreationRequestDTO;
 import edu.ntnu.SpringBackend.dto.ListingListResponseDTO;
 import edu.ntnu.SpringBackend.dto.ListingResponseDTO;
@@ -9,12 +8,12 @@ import edu.ntnu.SpringBackend.model.User;
 import edu.ntnu.SpringBackend.service.CategoryService;
 import edu.ntnu.SpringBackend.service.ListingService;
 import edu.ntnu.SpringBackend.service.SearchHistoryService;
-import edu.ntnu.SpringBackend.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -44,6 +43,7 @@ public class ListingController {
      * @return a list of listing response DTOs
      */
     @GetMapping("/get-suggestions")
+    @Operation(summary = "Get suggestions for listings based on search history", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<ListingListResponseDTO> getSuggestions(
             @AuthenticationPrincipal User user,
             @RequestParam(defaultValue = "0") int page,
@@ -74,6 +74,7 @@ public class ListingController {
      * @return the listing response DTO
      */
     @GetMapping("/id/{id}")
+    @Operation(summary = "Get a listing by ID")
     public ResponseEntity<ListingResponseDTO> getById(
             @PathVariable UUID id
     ) {
@@ -81,7 +82,16 @@ public class ListingController {
         return ResponseEntity.ok(listingMapper.toDto(listingService.getListingById(id)));
     }
 
+    /**
+     * Get listings by title (search) with pagination.
+     *
+     * @param title the title or keyword to search for
+     * @param page  the page number (default 0)
+     * @param size  the page size (default 10)
+     * @return a list of listings matching the title search
+     */
     @GetMapping("/get-by-title")
+    @Operation(summary = "Get listings by title (search)")
     public ResponseEntity<ListingListResponseDTO> getByTitle(
             @RequestParam String title,
             @RequestParam(defaultValue = "0") int page,
@@ -91,13 +101,65 @@ public class ListingController {
         if (size > MAX_SIZE) {
             size = MAX_SIZE;
         }
-        logger.info("GET Request received on [/api/v1/listing/get-by-title]");
+        logger.info("GET Request received on [/api/v1/listing/get-by-title] with title: {}", title);
         Pageable pageable = PageRequest.of(page, size);
         return ResponseEntity.ok(
                 listingMapper.toDto(
-                        listingService.getListingByTitle(title)
+                        listingService.getListingsByTitle(title, pageable)
                 )
         );
+    }
+
+    /**
+     * Get listings for the authenticated seller with pagination.
+     *
+     * @param user the authenticated seller
+     * @param page the page number (default 0)
+     * @param size the page size (default 10)
+     * @return a list of listings created by the seller
+     */
+    @GetMapping("/get-by-seller")
+    @Operation(summary = "Get listings by seller", security = @SecurityRequirement(name = "bearerAuth"))
+    public ResponseEntity<ListingListResponseDTO> getBySeller(
+            @AuthenticationPrincipal User user,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        final int MAX_SIZE = 100;
+        if (size > MAX_SIZE) {
+            size = MAX_SIZE;
+        }
+        logger.info("GET Request received on [/api/v1/listing/get-by-seller] for seller: {}", user.getId());
+        Pageable pageable = PageRequest.of(page, size);
+        return ResponseEntity.ok(
+                listingMapper.toDto(
+                        listingService.getListingsBySeller(user, pageable)
+                )
+        );
+    }
+
+    /**
+     * Get listings by single category with pagination.
+     *
+     * @param categoryName the name of the category to filter by
+     * @param page         the page number (default 0)
+     * @param size         the page size (default 10)
+     * @return a list of listings in the specified category
+     */
+    @GetMapping("/get-by-category")
+    @Operation(summary = "Get listings by category")
+    public ResponseEntity<ListingListResponseDTO> getByCategory(
+            @RequestParam String categoryName,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        final int MAX_SIZE = 100;
+        if (size > MAX_SIZE) {
+            size = MAX_SIZE;
+        }
+        logger.info("GET Request received on [/api/v1/listing/get-by-category] with categoryName: {}", categoryName);
+        Pageable pageable = PageRequest.of(page, size);
+        return ResponseEntity.ok(listingMapper.toDto(listingService.getListingsBySingleCategory(categoryName, pageable)));
     }
 
 
@@ -111,6 +173,7 @@ public class ListingController {
      * @return the created listing response DTO
      */
     @PostMapping(value = "/create", consumes = {"multipart/form-data"})
+    @Operation(summary = "Create a new listing", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<ListingResponseDTO> create(
             @AuthenticationPrincipal User user,
             @RequestPart("listing") ListingCreationRequestDTO request,
@@ -129,6 +192,7 @@ public class ListingController {
      * @return a list of listing response DTOs
      */
     @PutMapping("/update/{id}")
+    @Operation(summary = "Update a listing", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<ListingResponseDTO> updateListing(
             @PathVariable UUID id,
             @AuthenticationPrincipal User user,
@@ -150,6 +214,7 @@ public class ListingController {
      * @return a response entity with no content
      */
     @DeleteMapping("/delete/{id}")
+    @Operation(summary = "Delete a listing", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<Void> deleteListing(
             @AuthenticationPrincipal User user,
             @PathVariable UUID id
@@ -158,5 +223,4 @@ public class ListingController {
         listingService.deleteListingById(id, user);
         return ResponseEntity.noContent().build();
     }
-
 }

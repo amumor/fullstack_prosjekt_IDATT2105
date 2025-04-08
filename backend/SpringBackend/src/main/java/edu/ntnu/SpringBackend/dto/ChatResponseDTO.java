@@ -26,4 +26,5 @@ public class ChatResponseDTO {
   private String sellerLastName;
   private LocalDateTime createdAt;
   private List<MessageResponseDTO> messages;
+  private List<BidResponseDTO> bids;
 }

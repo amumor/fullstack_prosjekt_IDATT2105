@@ -1,9 +1,7 @@
 <script setup>
 import { defineProps } from 'vue'
-import { chatStore } from '@/stores/chat.js'
-
+import { useChatStore } from '@/stores/chat.js'
 import InitialsDisplayComponent from '@/components/profile/InitialsDisplayComponent.vue'
-
 
 const props = defineProps({
   listingTitle: String,
@@ -17,13 +15,13 @@ const props = defineProps({
 })
 
 // Access the chat store to update the selected chat
-const useChat = chatStore()
+const chatStore = useChatStore()
 
 // Function to handle chat selection
 const selectChat = () => {
-  const chat = useChat.chats.find(c => c.id === props.chatId)
+  const chat = chatStore.chats.find(c => c.id === props.chatId)
   if (chat) {
-    useChat.selectChat(chat)
+    chatStore.selectChat(chat)
   }
 }
 </script>

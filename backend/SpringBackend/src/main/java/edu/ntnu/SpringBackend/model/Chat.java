@@ -38,8 +38,9 @@ public class Chat {
   @Builder.Default
   private List<Message> messages = new ArrayList<>();
 
-  @OneToMany(mappedBy="chat")
-  private List<Bid> bids;
+  @OneToMany(mappedBy = "chat", cascade = CascadeType.ALL, orphanRemoval = true)
+  @Builder.Default
+  private List<Bid> bids = new ArrayList<>();
 
   @PrePersist
   protected void onCreate() {
@@ -54,6 +55,7 @@ public class Chat {
             ", listing=" + listing +
             ", createdAt=" + createdAt +
             ", messages=" + messages +
+            ", bids=" + bids +
             '}';
   }
 }

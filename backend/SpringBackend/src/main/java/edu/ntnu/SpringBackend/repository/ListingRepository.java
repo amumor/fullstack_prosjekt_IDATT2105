@@ -11,11 +11,15 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * Repository interface for managing listings in the database.
+ * This interface extends JpaRepository to provide CRUD operations for Listing entities.
+ *
+ */
 public interface ListingRepository extends JpaRepository<Listing, UUID> {
-  List<Listing> findBySeller(User user);
   Optional<Listing> findById(UUID id);
-  List<Listing> findByStatus(ListingStatus status);
-  List<Listing> findByCategory(Category category);
-  List<Listing> findByCategoryIn(List<Category> categories, Pageable pageable);
-  List<Listing> findByTitleContainingIgnoreCase(String title);
+  List<Listing> findBySeller(User user, Pageable pageable);
+  List<Listing> findByTitleContainingIgnoreCaseAndStatus(String title, ListingStatus listingStatus, Pageable pageable);
+  List<Listing> findByCategoryInAndStatus(List<Category> all, ListingStatus listingStatus, Pageable pageable);
+  List<Listing> findByCategoryAndStatus(Category category, ListingStatus listingStatus, Pageable pageable);
 }

@@ -5,6 +5,8 @@ import edu.ntnu.SpringBackend.dto.BidResponseDTO;
 import edu.ntnu.SpringBackend.mapper.BidMapper;
 import edu.ntnu.SpringBackend.model.User;
 import edu.ntnu.SpringBackend.service.BidService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -40,6 +42,7 @@ public class BidController {
    * @return the list of bids
    */
   @GetMapping("/bids/accepted")
+  @Operation(summary = "Get all accepted bids for a user", security = @SecurityRequirement(name = "bearerAuth"))
   public ResponseEntity<List<BidResponseDTO>> getAcceptedBids(
           @AuthenticationPrincipal User user
   ) {
@@ -58,6 +61,7 @@ public class BidController {
    * @return the bid response
    */
   @PostMapping("/chat/{chatId}/bids")
+  @Operation(summary = "Place a bid on a chat", security = @SecurityRequirement(name = "bearerAuth"))
   public ResponseEntity<BidResponseDTO> placeBid(
           @PathVariable UUID chatId,
           @AuthenticationPrincipal User user,
@@ -76,6 +80,7 @@ public class BidController {
    * @return the bid response
    */
   @PostMapping("/bids/{bidId}/accept")
+  @Operation(summary = "Accept a bid", security = @SecurityRequirement(name = "bearerAuth"))
   public ResponseEntity<BidResponseDTO> acceptBid(
           @PathVariable UUID bidId,
           @AuthenticationPrincipal User user
@@ -93,6 +98,7 @@ public class BidController {
    * @return the bid response
    */
   @PostMapping("/bids/{bidId}/reject")
+  @Operation(summary = "Reject a bid", security = @SecurityRequirement(name = "bearerAuth"))
   public ResponseEntity<BidResponseDTO> rejectBid(
           @PathVariable UUID bidId,
           @AuthenticationPrincipal User user
@@ -110,6 +116,7 @@ public class BidController {
    * @return the bid response
    */
   @PostMapping("/bids/{bidId}/cancel")
+  @Operation(summary = "Cancel a bid", security = @SecurityRequirement(name = "bearerAuth"))
   public ResponseEntity<BidResponseDTO> cancelBid(
           @PathVariable UUID bidId,
           @AuthenticationPrincipal User user

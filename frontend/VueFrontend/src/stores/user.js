@@ -50,4 +50,4 @@ export const userStore = defineStore('user', {
             }
         }
     }
-});
+})

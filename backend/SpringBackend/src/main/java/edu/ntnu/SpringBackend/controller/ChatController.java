@@ -7,6 +7,8 @@ import edu.ntnu.SpringBackend.mapper.ChatMapper;
 import edu.ntnu.SpringBackend.mapper.MessageMapper;
 import edu.ntnu.SpringBackend.model.User;
 import edu.ntnu.SpringBackend.service.ChatService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +37,7 @@ public class ChatController {
    * @return the chat between the buyer and the listing
    */
   @GetMapping("/listing/{listingId}/chat")
+  @Operation(summary = "Get a chat between a buyer and a listing", security = @SecurityRequirement(name = "bearerAuth"))
   public ResponseEntity<ChatResponseDTO> getChat(
           @PathVariable UUID listingId,
           @AuthenticationPrincipal User user
@@ -50,6 +53,7 @@ public class ChatController {
    * @return all chats for the user
    */
   @GetMapping("/listing/{listingId}/chats")
+  @Operation(summary = "Get all chats for a listing for a seller", security = @SecurityRequirement(name = "bearerAuth"))
   public ResponseEntity<List<ChatResponseDTO>> getAllChatsForListing(
           @PathVariable UUID listingId,
           @AuthenticationPrincipal User user
@@ -67,6 +71,7 @@ public class ChatController {
    * @return all chats for the user
    */
   @GetMapping("/user/my-chats")
+  @Operation(summary = "Get all chats for a user", security = @SecurityRequirement(name = "bearerAuth"))
   public ResponseEntity<List<ChatResponseDTO>> getAllChatsForUser(
           @AuthenticationPrincipal User user
   ) {
@@ -85,6 +90,7 @@ public class ChatController {
    * @return the chat between the buyer and the listing
    */
   @PostMapping("/listing/{listingId}/create")
+  @Operation(summary = "Create a chat between a buyer and a listing", security = @SecurityRequirement(name = "bearerAuth"))
   public ResponseEntity<ChatResponseDTO> createChatFromBuyer(
           @AuthenticationPrincipal User buyer,
           @PathVariable UUID listingId,
@@ -104,6 +110,7 @@ public class ChatController {
    * @return the message response dto
    */
   @PostMapping("/chat/{chatId}/message")
+  @Operation(summary = "Add a message to a chat", security = @SecurityRequirement(name = "bearerAuth"))
   public ResponseEntity<MessageResponseDTO> addMessageToChat(
           @PathVariable UUID chatId,
           @AuthenticationPrincipal User user,
