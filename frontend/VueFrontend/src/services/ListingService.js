@@ -16,10 +16,11 @@ const { timeout, baseURL } = serviceConfigParams();
  * @param {string} listing.title - The title of the listing.
  * @param {string} listing.description - The description of the listing.
  * @param {string} listing.categoryName - The category name.
- * @param {string} listing.listingStatus - The status of the listing.
+ * @param {string} listing.listingStatus - The status of the listing. Enum: ACTIVE, INACTIVE or SOLD
  * @param {number} listing.price - The price of the listing.
  * @param {number} listing.latitude - The latitude coordinate.
  * @param {number} listing.longitude - The longitude coordinate.
+ * @param {Array.<string>} listing.imagesToDelete - Array of images to delete, if empty no images are deleted
  * @param {Array.<File>} [images] - Optional array of image files to upload.
  * @param {string} token - JWT token.
  * @returns {Promise<Object>} A promise that resolves to the created ListingResponseDTO.
@@ -41,26 +42,33 @@ const { timeout, baseURL } = serviceConfigParams();
 export function createListing(listing, images = [], token) {
     const client = new ApiClient(baseURL);
     client.timeout = timeout;
+    // Set up bearer authentication using the provided token.
     client.authentications.bearerAuth = {
         type: 'bearer',
         accessToken: token,
     };
 
+    // Create an instance of the ListingControllerApi.
     const listingApi = new ListingControllerApi(client);
+
+    // Set up the ListingCreationRequestDTO with the listing details.
     const listingCreationRequestDTO = new ListingCreationRequestDTO();
     listingCreationRequestDTO.title = listing.title;
     listingCreationRequestDTO.description = listing.description;
     listingCreationRequestDTO.categoryName = listing.categoryName;
-    listingCreationRequestDTO.listingStatus = listing.listingStatus;
+    listingCreationRequestDTO.listingStatus = ListingCreationRequestDTO.ListingStatusEnum[listing.listingStatus];
     listingCreationRequestDTO.price = listing.price;
     listingCreationRequestDTO.latitude = listing.latitude;
     listingCreationRequestDTO.longitude = listing.longitude;
-    // Optionally, if needed, you could set imagesToDelete here
+    listingCreationRequestDTO.imagesToDelete = listing.imagesToDelete || [];
 
+    // Pass the optional images via opts.
     const opts = { images };
 
     return listingApi.create(listingCreationRequestDTO, opts)
-        .then(listingResponseDTO => listingResponseDTO)
+        .then(listingResponseDTO => {
+            return listingResponseDTO;
+        })
         .catch(error => {
             console.error('Listing creation failed:', error);
             throw error;
@@ -89,8 +97,8 @@ export function getListingById(id, token) {
             accessToken: token,
         };
     }
-    const listingApi = new ListingControllerApi(client);
 
+    const listingApi = new ListingControllerApi(client);
     return listingApi.getById(id)
         .then(listingResponseDTO => listingResponseDTO)
         .catch(error => {
@@ -123,7 +131,6 @@ export function getListingSuggestions(opts = { page: 0, size: 10 }, token) {
     };
 
     const listingApi = new ListingControllerApi(client);
-
     return listingApi.getSuggestions(opts)
         .then(listingListResponseDTO => listingListResponseDTO)
         .catch(error => {
@@ -169,12 +176,8 @@ export function updateListing(id, updateData, token) {
     };
 
     const listingApi = new ListingControllerApi(client);
-
-    // We assume updateData already matches the expected structure
-    // for updateListingRequest as defined in the generated API.
-    const opts = {
-        updateListingRequest: updateData
-    };
+    // Pass the update data in the opts parameter under updateListingRequest.
+    const opts = { updateListingRequest: updateData };
 
     return listingApi.updateListing(id, opts)
         .then(listingResponseDTO => listingResponseDTO)

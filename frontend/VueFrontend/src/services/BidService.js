@@ -18,7 +18,7 @@ const { timeout, baseURL } = serviceConfigParams();
  * @throws {Error} If accepting the bid fails.
  *
  * @example
- * acceptBid('bid123', 'token')
+ * acceptBid('bid123', 'jwt-token')
  *   .then(response => console.log('Bid accepted:', response))
  *   .catch(error => console.error('Accept bid failed:', error));
  */
@@ -48,7 +48,7 @@ export function acceptBid(bidId, token) {
  * @throws {Error} If cancelling the bid fails.
  *
  * @example
- * cancelBid('bid123', 'token')
+ * cancelBid('bid123', 'jwt-token')
  *   .then(response => console.log('Bid cancelled:', response))
  *   .catch(error => console.error('Cancel bid failed:', error));
  */
@@ -77,7 +77,7 @@ export function cancelBid(bidId, token) {
  * @throws {Error} If fetching accepted bids fails.
  *
  * @example
- * getAcceptedBids('token')
+ * getAcceptedBids('jwt-token')
  *   .then(bids => console.log('Accepted bids:', bids))
  *   .catch(error => console.error('Failed to get accepted bids:', error));
  */
@@ -108,7 +108,7 @@ export function getAcceptedBids(token) {
  * @throws {Error} If placing the bid fails.
  *
  * @example
- * placeBid('chat123', 250, 'token')
+ * placeBid('chat123', 250, 'jwt-token')
  *   .then(response => console.log('Bid placed:', response))
  *   .catch(error => console.error('Failed to place bid:', error));
  */
@@ -139,7 +139,7 @@ export function placeBid(chatId, price, token) {
  * @throws {Error} If rejecting the bid fails.
  *
  * @example
- * rejectBid('bid123', 'token')
+ * rejectBid('bid123', 'jwt-token')
  *   .then(response => console.log('Bid rejected:', response))
  *   .catch(error => console.error('Failed to reject bid:', error));
  */

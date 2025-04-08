@@ -5,7 +5,7 @@ import {
     UserControllerApi,
     UserRequestDTO
 } from '@/api';
-import {serviceConfigParams} from "@/services/ServiceSetup.js";
+import { serviceConfigParams } from '@/services/ServiceSetup.js';
 
 const { bearerTokenAuth, timeout, baseURL } = serviceConfigParams();
 
@@ -13,7 +13,7 @@ const { bearerTokenAuth, timeout, baseURL } = serviceConfigParams();
  * Deletes a user by their ID.
  *
  * @param {string} id - The ID of the user to delete.
- * @param {string} token - JWT token
+ * @param {string} token - JWT token.
  * @returns {Promise<void>} A promise that resolves if deletion is successful.
  * @throws {Error} If deletion fails.
  *
@@ -25,16 +25,12 @@ const { bearerTokenAuth, timeout, baseURL } = serviceConfigParams();
 export function deleteUser(id, token) {
     const client = new ApiClient(baseURL);
     client.timeout = timeout;
-    client.authentications.bearerAuth = {
-        type: 'bearer',
-        accessToken: token
-    };
+    client.authentications.bearerAuth = { type: 'bearer', accessToken: token };
 
     const userApi = new UserControllerApi(client);
-
     return userApi.deleteUser(id)
         .then(() => {
-            // No data is returned on successful deletion. TODO: how to handle 204?
+            // Optional: Return a message or an empty object if needed.
         })
         .catch(error => {
             console.error('Failed to delete user:', error);
@@ -46,7 +42,7 @@ export function deleteUser(id, token) {
  * Retrieves a user by their email.
  *
  * @param {string} email - The email of the user.
- * @param {string} token - JWT token
+ * @param {string} token - JWT token.
  * @returns {Promise<Object>} A promise that resolves to a UserResponseDTO.
  * @throws {Error} If fetching the user fails.
  *
@@ -58,17 +54,11 @@ export function deleteUser(id, token) {
 export function getUserByEmail(email, token) {
     const client = new ApiClient(baseURL);
     client.timeout = timeout;
-    client.authentications.bearerAuth = {
-        type: 'bearer',
-        accessToken: token
-    };
+    client.authentications.bearerAuth = { type: 'bearer', accessToken: token };
 
     const userApi = new UserControllerApi(client);
-
     return userApi.getUserByEmail(email)
-        .then(userResponseDTO => {
-            return userResponseDTO;
-        })
+        .then(response_and_data => response_and_data.data)
         .catch(error => {
             console.error('Failed to get user by email:', error);
             throw error;
@@ -79,7 +69,7 @@ export function getUserByEmail(email, token) {
  * Retrieves a user by their ID.
  *
  * @param {string} id - The ID of the user.
- * @param {string} token - JWT token
+ * @param {string} token - JWT token.
  * @returns {Promise<Object>} A promise that resolves to a UserResponseDTO.
  * @throws {Error} If fetching the user fails.
  *
@@ -91,17 +81,11 @@ export function getUserByEmail(email, token) {
 export function getUserById(id, token) {
     const client = new ApiClient(baseURL);
     client.timeout = timeout;
-    client.authentications.bearerAuth = {
-        type: 'bearer',
-        accessToken: token
-    };
+    client.authentications.bearerAuth = { type: 'bearer', accessToken: token };
 
     const userApi = new UserControllerApi(client);
-
     return userApi.getUserById(id)
-        .then(userResponseDTO => {
-            return userResponseDTO;
-        })
+        .then(response_and_data => response_and_data.data)
         .catch(error => {
             console.error('Failed to get user by ID:', error);
             throw error;
@@ -118,7 +102,7 @@ export function getUserById(id, token) {
  * @param {string} [user.phoneNumber] - The phone number (optional).
  * @param {string} [user.password] - The new password (optional).
  * @param {string} [user.role] - The role (optional).
- * @param {string} token - JWT token
+ * @param {string} token - JWT token.
  * @returns {Promise<Object>} A promise that resolves to the updated UserResponseDTO.
  * @throws {Error} If updating the user fails.
  *
@@ -136,13 +120,9 @@ export function getUserById(id, token) {
 export function updateUser(user, token) {
     const client = new ApiClient(baseURL);
     client.timeout = timeout;
-    client.authentications.bearerAuth = {
-        type: 'bearer',
-        accessToken: token
-    };
+    client.authentications.bearerAuth = { type: 'bearer', accessToken: token };
 
     const userApi = new UserControllerApi(client);
-
     const userRequestDTO = new UserRequestDTO();
     userRequestDTO.firstName = user.firstName;
     userRequestDTO.lastName = user.lastName;
@@ -152,9 +132,7 @@ export function updateUser(user, token) {
     userRequestDTO.role = user.role || null;
 
     return userApi.updateUser(userRequestDTO)
-        .then(userResponseDTO => {
-            return userResponseDTO;
-        })
+        .then(response_and_data => response_and_data.data)
         .catch(error => {
             console.error('Failed to update user:', error);
             throw error;
@@ -164,29 +142,23 @@ export function updateUser(user, token) {
 /**
  * Retrieves the profile of the currently authenticated user.
  *
- * @param {string} token - JWT token
+ * @param {string} token - JWT token.
  * @returns {Promise<Object>} A promise that resolves to a UserResponseDTO containing the user's profile.
  * @throws {Error} If fetching the profile fails.
  *
  * @example
- * getMyProfile()
+ * getMyProfile('jwt-token')
  *   .then(profile => console.log('My profile:', profile))
  *   .catch(error => console.error('Failed to retrieve my profile:', error));
  */
 export function getMyProfile(token) {
     const client = new ApiClient(baseURL);
     client.timeout = timeout;
-    client.authentications.bearerAuth = {
-        type: 'bearer',
-        accessToken: token
-    };
+    client.authentications.bearerAuth = { type: 'bearer', accessToken: token };
 
     const userApi = new UserControllerApi(client);
-
     return userApi.getMyProfile()
-        .then(userResponseDTO => {
-            return userResponseDTO;
-        })
+        .then(response_and_data => response_and_data.data)
         .catch(error => {
             console.error('Failed to retrieve my profile:', error);
             throw error;
