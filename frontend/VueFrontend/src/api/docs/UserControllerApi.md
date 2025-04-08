@@ -5,6 +5,7 @@ All URIs are relative to *http://localhost:8080*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**deleteUser**](UserControllerApi.md#deleteUser) | **DELETE** /api/v1/users/{id} | Delete user by id
+[**getMyProfile**](UserControllerApi.md#getMyProfile) | **GET** /api/v1/users/get-my-profile | Getting user info by email
 [**getUserByEmail**](UserControllerApi.md#getUserByEmail) | **GET** /api/v1/users/email/{email} | Getting user info by email
 [**getUserById**](UserControllerApi.md#getUserById) | **GET** /api/v1/users/id/{id} | Getting user info by user id
 [**updateUser**](UserControllerApi.md#updateUser) | **PUT** /api/v1/users/update-my-profile | Update user info
@@ -46,6 +47,48 @@ Name | Type | Description  | Notes
 ### Return type
 
 null (empty response body)
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: */*
+
+
+## getMyProfile
+
+> UserResponseDTO getMyProfile()
+
+Getting user info by email
+
+### Example
+
+```javascript
+import OpenApiDocumentationFindNo from 'open_api_documentation_find_no';
+let defaultClient = OpenApiDocumentationFindNo.ApiClient.instance;
+// Configure Bearer (JWT) access token for authorization: bearerAuth
+let bearerAuth = defaultClient.authentications['bearerAuth'];
+bearerAuth.accessToken = "YOUR ACCESS TOKEN"
+
+let apiInstance = new OpenApiDocumentationFindNo.UserControllerApi();
+apiInstance.getMyProfile().then((data) => {
+  console.log('API called successfully. Returned data: ' + data);
+}, (error) => {
+  console.error(error);
+});
+
+```
+
+### Parameters
+
+This endpoint does not need any parameter.
+
+### Return type
+
+[**UserResponseDTO**](UserResponseDTO.md)
 
 ### Authorization
 

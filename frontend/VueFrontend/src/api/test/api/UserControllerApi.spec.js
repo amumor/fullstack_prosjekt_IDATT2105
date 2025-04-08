@@ -58,6 +58,16 @@
         done();
       });
     });
+    describe('getMyProfile', function() {
+      it('should call getMyProfile successfully', function(done) {
+        //uncomment below and update the code to test getMyProfile
+        //instance.getMyProfile(function(error) {
+        //  if (error) throw error;
+        //expect().to.be();
+        //});
+        done();
+      });
+    });
     describe('getUserByEmail', function() {
       it('should call getUserByEmail successfully', function(done) {
         //uncomment below and update the code to test getUserByEmail

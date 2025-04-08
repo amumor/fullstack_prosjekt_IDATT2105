@@ -6,9 +6,9 @@ import {
     AuthenticationRequestDTO,
     UserRequestDTO
 } from '@/api';
-import {serviceConfigParams} from "@/services/ServiceSetup.js";
+import { serviceConfigParams } from '@/services/ServiceSetup.js';
 
-const {timeout, baseURL} = serviceConfigParams();
+const { timeout, baseURL } = serviceConfigParams();
 
 /**
  * Authenticates a user with the given email and password.
@@ -28,20 +28,17 @@ const {timeout, baseURL} = serviceConfigParams();
  *   });
  */
 export function authenticateUser(email, password) {
-    const Client = new ApiClient(baseURL);
-    Client.timeout = timeout;
+    const client = new ApiClient(baseURL);
+    client.timeout = timeout;
 
-    const authApi = new AuthenticationControllerApi(Client);
+    const authApi = new AuthenticationControllerApi(client);
 
     const authenticationRequestDTO = new AuthenticationRequestDTO();
     authenticationRequestDTO.email = email;
     authenticationRequestDTO.password = password;
 
     return authApi.authenticate(authenticationRequestDTO)
-        .then(tokenResponseDTO => {
-            // console.log('TokenResponseDTO:', tokenResponseDTO);
-            return tokenResponseDTO;
-        })
+        .then(tokenResponseDTO => tokenResponseDTO)
         .catch(error => {
             console.error('Auth failed:', error);
             throw error;
@@ -72,10 +69,10 @@ export function authenticateUser(email, password) {
  *   .catch(error => console.error('Registration failed:', error));
  */
 export function registerUser(user) {
-    const myClient = new ApiClient(baseURL);
-    myClient.timeout = timeout;
+    const client = new ApiClient(baseURL);
+    client.timeout = timeout;
 
-    const authApi = new AuthenticationControllerApi(myClient);
+    const authApi = new AuthenticationControllerApi(client);
 
     const userRequestDTO = new UserRequestDTO();
     userRequestDTO.firstName = user.firstName;
@@ -86,10 +83,7 @@ export function registerUser(user) {
     userRequestDTO.role = UserRequestDTO.RoleEnum.ROLE_USER;
 
     return authApi.register(userRequestDTO)
-        .then(tokenResponseDTO => {
-            // console.log('TokenResponseDTO:', tokenResponseDTO);
-            return tokenResponseDTO;
-        })
+        .then(tokenResponseDTO => tokenResponseDTO)
         .catch(error => {
             console.error('User registration failed:', error);
             throw error;
@@ -105,7 +99,7 @@ export function registerUser(user) {
  * @param {string} user.email - The email.
  * @param {string} user.password - The password.
  * @param {string} [user.phoneNumber] - The phone number (optional).
- * @param {string} token - JWT token
+ * @param {string} token - JWT token.
  * @returns {Promise<Object>} A promise that resolves to the token response.
  * @throws {Error} If admin registration fails.
  *
@@ -121,13 +115,12 @@ export function registerUser(user) {
  *   .catch(error => console.error('Admin registration failed:', error));
  */
 export function registerAdminUser(user, token) {
-    const client = new ApiClient('http://localhost:8080');
-    client.timeout = 120000;
-    client.authentications = {
+    const client = new ApiClient(baseURL);
+    client.timeout = timeout;
+    client.authentications.bearerAuth = {
         type: 'bearer',
-        accessToken: token,
+        accessToken: token
     };
-
 
     const authApi = new AuthenticationControllerApi(client);
 
@@ -140,10 +133,7 @@ export function registerAdminUser(user, token) {
     userRequestDTO.role = UserRequestDTO.RoleEnum.ROLE_ADMIN;
 
     return authApi.registerAdmin(userRequestDTO)
-        .then(tokenResponseDTO => {
-            // console.log('TokenResponseDTO:', tokenResponseDTO);
-            return tokenResponseDTO;
-        })
+        .then(tokenResponseDTO => tokenResponseDTO)
         .catch(error => {
             console.error('Admin registration failed:', error);
             throw error;

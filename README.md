@@ -5,6 +5,7 @@
 ## Update Frontend services if Backend endpoints are updated
 
 ### 1. Generate OpenAPI functions using this command:
+Remember to have backend running and check that Swagger outputs a JSON description of the endpoints on this **http://localhost:8080/v3/api-docs **
 
 ```sh
 npx @openapitools/openapi-generator-cli generate \
@@ -37,12 +38,7 @@ this.defaultHeaders = {
 ```
 
 ### 4. Run npm install
-First remove the old **node_modules** and **package-lock.json**, run this command in the project root dir containing **package.json**, **node_modules** folder and **package-lock.json** file
-```sh
-rm -rf node_modules package-lock.json
-```
 
-Run npm install in the same folder
 ```sh
 npm install
 ```

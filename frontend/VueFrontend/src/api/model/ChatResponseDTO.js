@@ -12,7 +12,8 @@
  */
 
 import ApiClient from '../ApiClient';
-import MessageResponsetDTO from './MessageResponsetDTO';
+import BidResponseDTO from './BidResponseDTO';
+import MessageResponseDTO from './MessageResponseDTO';
 
 /**
  * The ChatResponseDTO model module.
@@ -70,7 +71,10 @@ class ChatResponseDTO {
                 obj['createdAt'] = ApiClient.convertToType(data['createdAt'], 'Date');
             }
             if (data.hasOwnProperty('messages')) {
-                obj['messages'] = ApiClient.convertToType(data['messages'], [MessageResponsetDTO]);
+                obj['messages'] = ApiClient.convertToType(data['messages'], [MessageResponseDTO]);
+            }
+            if (data.hasOwnProperty('bids')) {
+                obj['bids'] = ApiClient.convertToType(data['bids'], [BidResponseDTO]);
             }
         }
         return obj;
@@ -113,7 +117,17 @@ class ChatResponseDTO {
             }
             // validate the optional field `messages` (array)
             for (const item of data['messages']) {
-                MessageResponsetDTO.validateJSON(item);
+                MessageResponseDTO.validateJSON(item);
+            };
+        }
+        if (data['bids']) { // data not null
+            // ensure the json data is an array
+            if (!Array.isArray(data['bids'])) {
+                throw new Error("Expected the field `bids` to be an array in the JSON data but got " + data['bids']);
+            }
+            // validate the optional field `bids` (array)
+            for (const item of data['bids']) {
+                BidResponseDTO.validateJSON(item);
             };
         }
 
@@ -161,9 +175,14 @@ ChatResponseDTO.prototype['sellerLastName'] = undefined;
 ChatResponseDTO.prototype['createdAt'] = undefined;
 
 /**
- * @member {Array.<module:model/MessageResponsetDTO>} messages
+ * @member {Array.<module:model/MessageResponseDTO>} messages
  */
 ChatResponseDTO.prototype['messages'] = undefined;
+
+/**
+ * @member {Array.<module:model/BidResponseDTO>} bids
+ */
+ChatResponseDTO.prototype['bids'] = undefined;
 
 
 

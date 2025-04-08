@@ -102,6 +102,12 @@
       //expect(instance).to.be();
     });
 
+    it('should have the property bids (base name: "bids")', function() {
+      // uncomment below and update the code to test the property bids
+      //var instance = new OpenApiDocumentationFindNo.ChatResponseDTO();
+      //expect(instance).to.be();
+    });
+
   });
 
 }));

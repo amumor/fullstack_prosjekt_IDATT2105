@@ -4,11 +4,11 @@ All URIs are relative to *http://localhost:8080*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**callDelete**](CategoryControllerApi.md#callDelete) | **DELETE** /api/v1/category/delete/{id} | 
-[**create1**](CategoryControllerApi.md#create1) | **POST** /api/v1/category/create | 
-[**getAll**](CategoryControllerApi.md#getAll) | **GET** /api/v1/category/all | 
-[**getById1**](CategoryControllerApi.md#getById1) | **GET** /api/v1/category/id/{id} | 
-[**getByName**](CategoryControllerApi.md#getByName) | **GET** /api/v1/category/name/{name} | 
+[**callDelete**](CategoryControllerApi.md#callDelete) | **DELETE** /api/v1/category/delete/{id} | Delete a category
+[**create1**](CategoryControllerApi.md#create1) | **POST** /api/v1/category/create | Create a new category
+[**getAll**](CategoryControllerApi.md#getAll) | **GET** /api/v1/category/all | Get all categories
+[**getById1**](CategoryControllerApi.md#getById1) | **GET** /api/v1/category/id/{id} | Get a category by ID
+[**getByName**](CategoryControllerApi.md#getByName) | **GET** /api/v1/category/name/{name} | Get a category by name
 
 
 
@@ -16,12 +16,16 @@ Method | HTTP request | Description
 
 > callDelete(id)
 
-
+Delete a category
 
 ### Example
 
 ```javascript
 import OpenApiDocumentationFindNo from 'open_api_documentation_find_no';
+let defaultClient = OpenApiDocumentationFindNo.ApiClient.instance;
+// Configure Bearer (JWT) access token for authorization: bearerAuth
+let bearerAuth = defaultClient.authentications['bearerAuth'];
+bearerAuth.accessToken = "YOUR ACCESS TOKEN"
 
 let apiInstance = new OpenApiDocumentationFindNo.CategoryControllerApi();
 let id = "id_example"; // String | 
@@ -46,7 +50,7 @@ null (empty response body)
 
 ### Authorization
 
-No authorization required
+[bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
@@ -58,12 +62,16 @@ No authorization required
 
 > CategoryResponseDTO create1(categoryCreationRequestDTO)
 
-
+Create a new category
 
 ### Example
 
 ```javascript
 import OpenApiDocumentationFindNo from 'open_api_documentation_find_no';
+let defaultClient = OpenApiDocumentationFindNo.ApiClient.instance;
+// Configure Bearer (JWT) access token for authorization: bearerAuth
+let bearerAuth = defaultClient.authentications['bearerAuth'];
+bearerAuth.accessToken = "YOUR ACCESS TOKEN"
 
 let apiInstance = new OpenApiDocumentationFindNo.CategoryControllerApi();
 let categoryCreationRequestDTO = new OpenApiDocumentationFindNo.CategoryCreationRequestDTO(); // CategoryCreationRequestDTO | 
@@ -88,7 +96,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
@@ -100,7 +108,7 @@ No authorization required
 
 > CategoryListResponseDTO getAll()
 
-
+Get all categories
 
 ### Example
 
@@ -138,7 +146,7 @@ No authorization required
 
 > CategoryResponseDTO getById1(id)
 
-
+Get a category by ID
 
 ### Example
 
@@ -180,7 +188,7 @@ No authorization required
 
 > CategoryResponseDTO getByName(name)
 
-
+Get a category by name
 
 ### Example
 

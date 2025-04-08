@@ -3,7 +3,7 @@ import {ref, defineProps} from 'vue';
 import {useRouter} from 'vue-router';
 import {userStore} from '@/stores/user.js';
 import {authenticateUser, registerUser} from "@/services/AuthenticationService.js";
-import {getUserByEmail} from "@/services/UserService.js";
+import {getMyProfile, getUserByEmail} from "@/services/UserService.js";
 import {TokenResponseDTO} from "@/api/index.js";
 
 const userStorage = userStore();
@@ -93,7 +93,7 @@ const login = async () => {
           console.debug('User authenticated successfully:', authResponse);
           const authToken = authResponse.token;
 
-          await getUserByEmail(email.value, authToken) // TODO: change to getMyProfile() when implemented
+          await getMyProfile(authToken)
               .then(async userResponse => {
                 console.log('user response:', userResponse);
                 const user = {

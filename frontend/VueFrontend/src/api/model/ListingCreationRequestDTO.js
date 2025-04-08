@@ -68,6 +68,9 @@ class ListingCreationRequestDTO {
             if (data.hasOwnProperty('longitude')) {
                 obj['longitude'] = ApiClient.convertToType(data['longitude'], 'Number');
             }
+            if (data.hasOwnProperty('imagesToDelete')) {
+                obj['imagesToDelete'] = ApiClient.convertToType(data['imagesToDelete'], ['String']);
+            }
         }
         return obj;
     }
@@ -94,6 +97,10 @@ class ListingCreationRequestDTO {
         if (data['listingStatus'] && !(typeof data['listingStatus'] === 'string' || data['listingStatus'] instanceof String)) {
             throw new Error("Expected the field `listingStatus` to be a primitive type in the JSON string but got " + data['listingStatus']);
         }
+        // ensure the json data is an array
+        if (!Array.isArray(data['imagesToDelete'])) {
+            throw new Error("Expected the field `imagesToDelete` to be an array in the JSON data but got " + data['imagesToDelete']);
+        }
 
         return true;
     }
@@ -119,7 +126,7 @@ ListingCreationRequestDTO.prototype['description'] = undefined;
 ListingCreationRequestDTO.prototype['categoryName'] = undefined;
 
 /**
- * @member {String} listingStatus
+ * @member {module:model/ListingCreationRequestDTO.ListingStatusEnum} listingStatus
  */
 ListingCreationRequestDTO.prototype['listingStatus'] = undefined;
 
@@ -138,8 +145,40 @@ ListingCreationRequestDTO.prototype['latitude'] = undefined;
  */
 ListingCreationRequestDTO.prototype['longitude'] = undefined;
 
+/**
+ * @member {Array.<String>} imagesToDelete
+ */
+ListingCreationRequestDTO.prototype['imagesToDelete'] = undefined;
 
 
+
+
+
+/**
+ * Allowed values for the <code>listingStatus</code> property.
+ * @enum {String}
+ * @readonly
+ */
+ListingCreationRequestDTO['ListingStatusEnum'] = {
+
+    /**
+     * value: "ACTIVE"
+     * @const
+     */
+    "ACTIVE": "ACTIVE",
+
+    /**
+     * value: "INACTIVE"
+     * @const
+     */
+    "INACTIVE": "INACTIVE",
+
+    /**
+     * value: "SOLD"
+     * @const
+     */
+    "SOLD": "SOLD"
+};
 
 
 

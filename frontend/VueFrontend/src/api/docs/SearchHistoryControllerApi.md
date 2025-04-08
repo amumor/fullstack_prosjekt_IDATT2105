@@ -4,8 +4,8 @@ All URIs are relative to *http://localhost:8080*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**add**](SearchHistoryControllerApi.md#add) | **POST** /api/v1/search-history/add | 
-[**findByUserId**](SearchHistoryControllerApi.md#findByUserId) | **GET** /api/v1/search-history/get-my-history | 
+[**add**](SearchHistoryControllerApi.md#add) | **POST** /api/v1/search-history/add | Add a new search history entry for the authenticated user
+[**findByUserId**](SearchHistoryControllerApi.md#findByUserId) | **GET** /api/v1/search-history/get-my-history | Get search history for the authenticated user
 
 
 
@@ -13,12 +13,16 @@ Method | HTTP request | Description
 
 > SearchHistoryResponseDTO add(searchHistoryRequestDTO)
 
-
+Add a new search history entry for the authenticated user
 
 ### Example
 
 ```javascript
 import OpenApiDocumentationFindNo from 'open_api_documentation_find_no';
+let defaultClient = OpenApiDocumentationFindNo.ApiClient.instance;
+// Configure Bearer (JWT) access token for authorization: bearerAuth
+let bearerAuth = defaultClient.authentications['bearerAuth'];
+bearerAuth.accessToken = "YOUR ACCESS TOKEN"
 
 let apiInstance = new OpenApiDocumentationFindNo.SearchHistoryControllerApi();
 let searchHistoryRequestDTO = new OpenApiDocumentationFindNo.SearchHistoryRequestDTO(); // SearchHistoryRequestDTO | 
@@ -43,7 +47,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
@@ -55,12 +59,16 @@ No authorization required
 
 > SearchHistoryListResponseDTO findByUserId()
 
-
+Get search history for the authenticated user
 
 ### Example
 
 ```javascript
 import OpenApiDocumentationFindNo from 'open_api_documentation_find_no';
+let defaultClient = OpenApiDocumentationFindNo.ApiClient.instance;
+// Configure Bearer (JWT) access token for authorization: bearerAuth
+let bearerAuth = defaultClient.authentications['bearerAuth'];
+bearerAuth.accessToken = "YOUR ACCESS TOKEN"
 
 let apiInstance = new OpenApiDocumentationFindNo.SearchHistoryControllerApi();
 apiInstance.findByUserId().then((data) => {
@@ -81,7 +89,7 @@ This endpoint does not need any parameter.
 
 ### Authorization
 
-No authorization required
+[bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 

@@ -37,6 +37,7 @@ export default class BidControllerApi {
 
 
     /**
+     * Accept a bid
      * @param {String} bidId 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/BidResponseDTO} and HTTP response
      */
@@ -57,7 +58,7 @@ export default class BidControllerApi {
       let formParams = {
       };
 
-      let authNames = [];
+      let authNames = ['bearerAuth'];
       let contentTypes = [];
       let accepts = ['*/*'];
       let returnType = BidResponseDTO;
@@ -69,6 +70,7 @@ export default class BidControllerApi {
     }
 
     /**
+     * Accept a bid
      * @param {String} bidId 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link module:model/BidResponseDTO}
      */
@@ -81,6 +83,7 @@ export default class BidControllerApi {
 
 
     /**
+     * Cancel a bid
      * @param {String} bidId 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/BidResponseDTO} and HTTP response
      */
@@ -101,7 +104,7 @@ export default class BidControllerApi {
       let formParams = {
       };
 
-      let authNames = [];
+      let authNames = ['bearerAuth'];
       let contentTypes = [];
       let accepts = ['*/*'];
       let returnType = BidResponseDTO;
@@ -113,6 +116,7 @@ export default class BidControllerApi {
     }
 
     /**
+     * Cancel a bid
      * @param {String} bidId 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link module:model/BidResponseDTO}
      */
@@ -125,6 +129,7 @@ export default class BidControllerApi {
 
 
     /**
+     * Get all accepted bids for a user
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/BidResponseDTO>} and HTTP response
      */
     getAcceptedBidsWithHttpInfo() {
@@ -139,7 +144,7 @@ export default class BidControllerApi {
       let formParams = {
       };
 
-      let authNames = [];
+      let authNames = ['bearerAuth'];
       let contentTypes = [];
       let accepts = ['*/*'];
       let returnType = [BidResponseDTO];
@@ -151,6 +156,7 @@ export default class BidControllerApi {
     }
 
     /**
+     * Get all accepted bids for a user
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/BidResponseDTO>}
      */
     getAcceptedBids() {
@@ -162,6 +168,7 @@ export default class BidControllerApi {
 
 
     /**
+     * Place a bid on a chat
      * @param {String} chatId 
      * @param {module:model/BidRequestDTO} bidRequestDTO 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/BidResponseDTO} and HTTP response
@@ -187,7 +194,7 @@ export default class BidControllerApi {
       let formParams = {
       };
 
-      let authNames = [];
+      let authNames = ['bearerAuth'];
       let contentTypes = ['application/json'];
       let accepts = ['*/*'];
       let returnType = BidResponseDTO;
@@ -199,6 +206,7 @@ export default class BidControllerApi {
     }
 
     /**
+     * Place a bid on a chat
      * @param {String} chatId 
      * @param {module:model/BidRequestDTO} bidRequestDTO 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link module:model/BidResponseDTO}
@@ -212,6 +220,7 @@ export default class BidControllerApi {
 
 
     /**
+     * Reject a bid
      * @param {String} bidId 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/BidResponseDTO} and HTTP response
      */
@@ -232,7 +241,7 @@ export default class BidControllerApi {
       let formParams = {
       };
 
-      let authNames = [];
+      let authNames = ['bearerAuth'];
       let contentTypes = [];
       let accepts = ['*/*'];
       let returnType = BidResponseDTO;
@@ -244,6 +253,7 @@ export default class BidControllerApi {
     }
 
     /**
+     * Reject a bid
      * @param {String} bidId 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link module:model/BidResponseDTO}
      */

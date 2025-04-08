@@ -124,6 +124,7 @@ export default class AuthenticationControllerApi {
 
 
     /**
+     * Register a new admin user
      * @param {module:model/UserRequestDTO} userRequestDTO 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/TokenResponseDTO} and HTTP response
      */
@@ -143,7 +144,7 @@ export default class AuthenticationControllerApi {
       let formParams = {
       };
 
-      let authNames = [];
+      let authNames = ['bearerAuth'];
       let contentTypes = ['application/json'];
       let accepts = ['*/*'];
       let returnType = TokenResponseDTO;
@@ -155,6 +156,7 @@ export default class AuthenticationControllerApi {
     }
 
     /**
+     * Register a new admin user
      * @param {module:model/UserRequestDTO} userRequestDTO 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link module:model/TokenResponseDTO}
      */

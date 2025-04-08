@@ -16,5 +16,6 @@ Name | Type | Description | Notes
 **longitude** | **Number** |  | [optional] 
 **createdAt** | **Date** |  | [optional] 
 **lastEditedAt** | **Date** |  | [optional] 
+**imageUrls** | **[String]** |  | [optional] 
 
 

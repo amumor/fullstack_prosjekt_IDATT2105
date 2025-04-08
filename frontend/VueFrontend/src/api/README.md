@@ -121,31 +121,37 @@ Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
 *OpenApiDocumentationFindNo.AuthenticationControllerApi* | [**authenticate**](docs/AuthenticationControllerApi.md#authenticate) | **POST** /api/v1/auth/authenticate | 
 *OpenApiDocumentationFindNo.AuthenticationControllerApi* | [**register**](docs/AuthenticationControllerApi.md#register) | **POST** /api/v1/auth/register | 
-*OpenApiDocumentationFindNo.AuthenticationControllerApi* | [**registerAdmin**](docs/AuthenticationControllerApi.md#registerAdmin) | **POST** /api/v1/auth/register/admin | 
-*OpenApiDocumentationFindNo.BidControllerApi* | [**acceptBid**](docs/BidControllerApi.md#acceptBid) | **POST** /api/v1/bids/{bidId}/accept | 
-*OpenApiDocumentationFindNo.BidControllerApi* | [**cancelBid**](docs/BidControllerApi.md#cancelBid) | **POST** /api/v1/bids/{bidId}/cancel | 
-*OpenApiDocumentationFindNo.BidControllerApi* | [**getAcceptedBids**](docs/BidControllerApi.md#getAcceptedBids) | **GET** /api/v1/bids/accepted | 
-*OpenApiDocumentationFindNo.BidControllerApi* | [**placeBid**](docs/BidControllerApi.md#placeBid) | **POST** /api/v1/chat/{chatId}/bids | 
-*OpenApiDocumentationFindNo.BidControllerApi* | [**rejectBid**](docs/BidControllerApi.md#rejectBid) | **POST** /api/v1/bids/{bidId}/reject | 
+*OpenApiDocumentationFindNo.AuthenticationControllerApi* | [**registerAdmin**](docs/AuthenticationControllerApi.md#registerAdmin) | **POST** /api/v1/auth/register/admin | Register a new admin user
+*OpenApiDocumentationFindNo.BidControllerApi* | [**acceptBid**](docs/BidControllerApi.md#acceptBid) | **POST** /api/v1/bids/{bidId}/accept | Accept a bid
+*OpenApiDocumentationFindNo.BidControllerApi* | [**cancelBid**](docs/BidControllerApi.md#cancelBid) | **POST** /api/v1/bids/{bidId}/cancel | Cancel a bid
+*OpenApiDocumentationFindNo.BidControllerApi* | [**getAcceptedBids**](docs/BidControllerApi.md#getAcceptedBids) | **GET** /api/v1/bids/accepted | Get all accepted bids for a user
+*OpenApiDocumentationFindNo.BidControllerApi* | [**placeBid**](docs/BidControllerApi.md#placeBid) | **POST** /api/v1/chat/{chatId}/bids | Place a bid on a chat
+*OpenApiDocumentationFindNo.BidControllerApi* | [**rejectBid**](docs/BidControllerApi.md#rejectBid) | **POST** /api/v1/bids/{bidId}/reject | Reject a bid
 *OpenApiDocumentationFindNo.BookmarkControllerApi* | [**createBookmark**](docs/BookmarkControllerApi.md#createBookmark) | **POST** /api/v1/bookmarks/create | Create a bookmark for a listing
 *OpenApiDocumentationFindNo.BookmarkControllerApi* | [**deleteBookmark**](docs/BookmarkControllerApi.md#deleteBookmark) | **DELETE** /api/v1/bookmarks/{bookmarkId} | Delete a bookmark
 *OpenApiDocumentationFindNo.BookmarkControllerApi* | [**getUserBookmarks**](docs/BookmarkControllerApi.md#getUserBookmarks) | **GET** /api/v1/bookmarks/my-bookmarks | Getting all bookmarks for a user
-*OpenApiDocumentationFindNo.CategoryControllerApi* | [**callDelete**](docs/CategoryControllerApi.md#callDelete) | **DELETE** /api/v1/category/delete/{id} | 
-*OpenApiDocumentationFindNo.CategoryControllerApi* | [**create1**](docs/CategoryControllerApi.md#create1) | **POST** /api/v1/category/create | 
-*OpenApiDocumentationFindNo.CategoryControllerApi* | [**getAll**](docs/CategoryControllerApi.md#getAll) | **GET** /api/v1/category/all | 
-*OpenApiDocumentationFindNo.CategoryControllerApi* | [**getById1**](docs/CategoryControllerApi.md#getById1) | **GET** /api/v1/category/id/{id} | 
-*OpenApiDocumentationFindNo.CategoryControllerApi* | [**getByName**](docs/CategoryControllerApi.md#getByName) | **GET** /api/v1/category/name/{name} | 
-*OpenApiDocumentationFindNo.ChatControllerApi* | [**addMessageToChat**](docs/ChatControllerApi.md#addMessageToChat) | **POST** /api/v1/chat/{chatId}/message | 
-*OpenApiDocumentationFindNo.ChatControllerApi* | [**createChatFromBuyer**](docs/ChatControllerApi.md#createChatFromBuyer) | **POST** /api/v1/listing/{listingId}/create | 
-*OpenApiDocumentationFindNo.ChatControllerApi* | [**getAllChatsForListing**](docs/ChatControllerApi.md#getAllChatsForListing) | **GET** /api/v1/listing/{listingId}/chats | 
-*OpenApiDocumentationFindNo.ChatControllerApi* | [**getAllChatsForUser**](docs/ChatControllerApi.md#getAllChatsForUser) | **GET** /api/v1/user/my-chats | 
-*OpenApiDocumentationFindNo.ChatControllerApi* | [**getChat**](docs/ChatControllerApi.md#getChat) | **GET** /api/v1/listing/{listingId}/chat | 
-*OpenApiDocumentationFindNo.ListingControllerApi* | [**create**](docs/ListingControllerApi.md#create) | **POST** /api/v1/listing/create | 
-*OpenApiDocumentationFindNo.ListingControllerApi* | [**getById**](docs/ListingControllerApi.md#getById) | **GET** /api/v1/listing/id/{id} | 
-*OpenApiDocumentationFindNo.ListingControllerApi* | [**getSuggestions**](docs/ListingControllerApi.md#getSuggestions) | **GET** /api/v1/listing/get-suggestions | 
-*OpenApiDocumentationFindNo.SearchHistoryControllerApi* | [**add**](docs/SearchHistoryControllerApi.md#add) | **POST** /api/v1/search-history/add | 
-*OpenApiDocumentationFindNo.SearchHistoryControllerApi* | [**findByUserId**](docs/SearchHistoryControllerApi.md#findByUserId) | **GET** /api/v1/search-history/get-my-history | 
+*OpenApiDocumentationFindNo.CategoryControllerApi* | [**callDelete**](docs/CategoryControllerApi.md#callDelete) | **DELETE** /api/v1/category/delete/{id} | Delete a category
+*OpenApiDocumentationFindNo.CategoryControllerApi* | [**create1**](docs/CategoryControllerApi.md#create1) | **POST** /api/v1/category/create | Create a new category
+*OpenApiDocumentationFindNo.CategoryControllerApi* | [**getAll**](docs/CategoryControllerApi.md#getAll) | **GET** /api/v1/category/all | Get all categories
+*OpenApiDocumentationFindNo.CategoryControllerApi* | [**getById1**](docs/CategoryControllerApi.md#getById1) | **GET** /api/v1/category/id/{id} | Get a category by ID
+*OpenApiDocumentationFindNo.CategoryControllerApi* | [**getByName**](docs/CategoryControllerApi.md#getByName) | **GET** /api/v1/category/name/{name} | Get a category by name
+*OpenApiDocumentationFindNo.ChatControllerApi* | [**addMessageToChat**](docs/ChatControllerApi.md#addMessageToChat) | **POST** /api/v1/chat/{chatId}/message | Add a message to a chat
+*OpenApiDocumentationFindNo.ChatControllerApi* | [**createChatFromBuyer**](docs/ChatControllerApi.md#createChatFromBuyer) | **POST** /api/v1/listing/{listingId}/create | Create a chat between a buyer and a listing
+*OpenApiDocumentationFindNo.ChatControllerApi* | [**getAllChatsForListing**](docs/ChatControllerApi.md#getAllChatsForListing) | **GET** /api/v1/listing/{listingId}/chats | Get all chats for a listing for a seller
+*OpenApiDocumentationFindNo.ChatControllerApi* | [**getAllChatsForUser**](docs/ChatControllerApi.md#getAllChatsForUser) | **GET** /api/v1/user/my-chats | Get all chats for a user
+*OpenApiDocumentationFindNo.ChatControllerApi* | [**getChat**](docs/ChatControllerApi.md#getChat) | **GET** /api/v1/listing/{listingId}/chat | Get a chat between a buyer and a listing
+*OpenApiDocumentationFindNo.ListingControllerApi* | [**create**](docs/ListingControllerApi.md#create) | **POST** /api/v1/listing/create | Create a new listing
+*OpenApiDocumentationFindNo.ListingControllerApi* | [**deleteListing**](docs/ListingControllerApi.md#deleteListing) | **DELETE** /api/v1/listing/delete/{id} | Delete a listing
+*OpenApiDocumentationFindNo.ListingControllerApi* | [**getByCategory**](docs/ListingControllerApi.md#getByCategory) | **GET** /api/v1/listing/get-by-category | Get listings by category
+*OpenApiDocumentationFindNo.ListingControllerApi* | [**getById**](docs/ListingControllerApi.md#getById) | **GET** /api/v1/listing/id/{id} | Get a listing by ID
+*OpenApiDocumentationFindNo.ListingControllerApi* | [**getBySeller**](docs/ListingControllerApi.md#getBySeller) | **GET** /api/v1/listing/get-by-seller | Get listings by seller
+*OpenApiDocumentationFindNo.ListingControllerApi* | [**getByTitle**](docs/ListingControllerApi.md#getByTitle) | **GET** /api/v1/listing/get-by-title | Get listings by title (search)
+*OpenApiDocumentationFindNo.ListingControllerApi* | [**getSuggestions**](docs/ListingControllerApi.md#getSuggestions) | **GET** /api/v1/listing/get-suggestions | Get suggestions for listings based on search history
+*OpenApiDocumentationFindNo.ListingControllerApi* | [**updateListing**](docs/ListingControllerApi.md#updateListing) | **PUT** /api/v1/listing/update/{id} | Update a listing
+*OpenApiDocumentationFindNo.SearchHistoryControllerApi* | [**add**](docs/SearchHistoryControllerApi.md#add) | **POST** /api/v1/search-history/add | Add a new search history entry for the authenticated user
+*OpenApiDocumentationFindNo.SearchHistoryControllerApi* | [**findByUserId**](docs/SearchHistoryControllerApi.md#findByUserId) | **GET** /api/v1/search-history/get-my-history | Get search history for the authenticated user
 *OpenApiDocumentationFindNo.UserControllerApi* | [**deleteUser**](docs/UserControllerApi.md#deleteUser) | **DELETE** /api/v1/users/{id} | Delete user by id
+*OpenApiDocumentationFindNo.UserControllerApi* | [**getMyProfile**](docs/UserControllerApi.md#getMyProfile) | **GET** /api/v1/users/get-my-profile | Getting user info by email
 *OpenApiDocumentationFindNo.UserControllerApi* | [**getUserByEmail**](docs/UserControllerApi.md#getUserByEmail) | **GET** /api/v1/users/email/{email} | Getting user info by email
 *OpenApiDocumentationFindNo.UserControllerApi* | [**getUserById**](docs/UserControllerApi.md#getUserById) | **GET** /api/v1/users/id/{id} | Getting user info by user id
 *OpenApiDocumentationFindNo.UserControllerApi* | [**updateUser**](docs/UserControllerApi.md#updateUser) | **PUT** /api/v1/users/update-my-profile | Update user info
@@ -166,11 +172,12 @@ Class | Method | HTTP request | Description
  - [OpenApiDocumentationFindNo.ListingListResponseDTO](docs/ListingListResponseDTO.md)
  - [OpenApiDocumentationFindNo.ListingResponseDTO](docs/ListingResponseDTO.md)
  - [OpenApiDocumentationFindNo.MessageRequestDTO](docs/MessageRequestDTO.md)
- - [OpenApiDocumentationFindNo.MessageResponsetDTO](docs/MessageResponsetDTO.md)
+ - [OpenApiDocumentationFindNo.MessageResponseDTO](docs/MessageResponseDTO.md)
  - [OpenApiDocumentationFindNo.SearchHistoryListResponseDTO](docs/SearchHistoryListResponseDTO.md)
  - [OpenApiDocumentationFindNo.SearchHistoryRequestDTO](docs/SearchHistoryRequestDTO.md)
  - [OpenApiDocumentationFindNo.SearchHistoryResponseDTO](docs/SearchHistoryResponseDTO.md)
  - [OpenApiDocumentationFindNo.TokenResponseDTO](docs/TokenResponseDTO.md)
+ - [OpenApiDocumentationFindNo.UpdateListingRequest](docs/UpdateListingRequest.md)
  - [OpenApiDocumentationFindNo.UserRequestDTO](docs/UserRequestDTO.md)
  - [OpenApiDocumentationFindNo.UserResponseDTO](docs/UserResponseDTO.md)
 

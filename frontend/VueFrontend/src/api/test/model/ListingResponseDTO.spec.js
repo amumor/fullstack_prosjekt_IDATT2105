@@ -126,6 +126,12 @@
       //expect(instance).to.be();
     });
 
+    it('should have the property imageUrls (base name: "imageUrls")', function() {
+      // uncomment below and update the code to test the property imageUrls
+      //var instance = new OpenApiDocumentationFindNo.ListingResponseDTO();
+      //expect(instance).to.be();
+    });
+
   });
 
 }));

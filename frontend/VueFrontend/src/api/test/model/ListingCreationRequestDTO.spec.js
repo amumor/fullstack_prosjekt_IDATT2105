@@ -96,6 +96,12 @@
       //expect(instance).to.be();
     });
 
+    it('should have the property imagesToDelete (base name: "imagesToDelete")', function() {
+      // uncomment below and update the code to test the property imagesToDelete
+      //var instance = new OpenApiDocumentationFindNo.ListingCreationRequestDTO();
+      //expect(instance).to.be();
+    });
+
   });
 
 }));

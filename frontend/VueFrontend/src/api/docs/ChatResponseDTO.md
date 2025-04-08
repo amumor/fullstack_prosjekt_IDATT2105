@@ -11,6 +11,7 @@ Name | Type | Description | Notes
 **sellerFirstName** | **String** |  | [optional] 
 **sellerLastName** | **String** |  | [optional] 
 **createdAt** | **Date** |  | [optional] 
-**messages** | [**[MessageResponsetDTO]**](MessageResponsetDTO.md) |  | [optional] 
+**messages** | [**[MessageResponseDTO]**](MessageResponseDTO.md) |  | [optional] 
+**bids** | [**[BidResponseDTO]**](BidResponseDTO.md) |  | [optional] 
 
 

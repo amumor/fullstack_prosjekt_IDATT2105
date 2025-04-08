@@ -58,6 +58,26 @@
         done();
       });
     });
+    describe('deleteListing', function() {
+      it('should call deleteListing successfully', function(done) {
+        //uncomment below and update the code to test deleteListing
+        //instance.deleteListing(function(error) {
+        //  if (error) throw error;
+        //expect().to.be();
+        //});
+        done();
+      });
+    });
+    describe('getByCategory', function() {
+      it('should call getByCategory successfully', function(done) {
+        //uncomment below and update the code to test getByCategory
+        //instance.getByCategory(function(error) {
+        //  if (error) throw error;
+        //expect().to.be();
+        //});
+        done();
+      });
+    });
     describe('getById', function() {
       it('should call getById successfully', function(done) {
         //uncomment below and update the code to test getById
@@ -68,10 +88,40 @@
         done();
       });
     });
+    describe('getBySeller', function() {
+      it('should call getBySeller successfully', function(done) {
+        //uncomment below and update the code to test getBySeller
+        //instance.getBySeller(function(error) {
+        //  if (error) throw error;
+        //expect().to.be();
+        //});
+        done();
+      });
+    });
+    describe('getByTitle', function() {
+      it('should call getByTitle successfully', function(done) {
+        //uncomment below and update the code to test getByTitle
+        //instance.getByTitle(function(error) {
+        //  if (error) throw error;
+        //expect().to.be();
+        //});
+        done();
+      });
+    });
     describe('getSuggestions', function() {
       it('should call getSuggestions successfully', function(done) {
         //uncomment below and update the code to test getSuggestions
         //instance.getSuggestions(function(error) {
+        //  if (error) throw error;
+        //expect().to.be();
+        //});
+        done();
+      });
+    });
+    describe('updateListing', function() {
+      it('should call updateListing successfully', function(done) {
+        //uncomment below and update the code to test updateListing
+        //instance.updateListing(function(error) {
         //  if (error) throw error;
         //expect().to.be();
         //});

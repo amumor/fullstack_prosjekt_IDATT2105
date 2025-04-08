@@ -26,11 +26,12 @@ import ListingCreationRequestDTO from './model/ListingCreationRequestDTO';
 import ListingListResponseDTO from './model/ListingListResponseDTO';
 import ListingResponseDTO from './model/ListingResponseDTO';
 import MessageRequestDTO from './model/MessageRequestDTO';
-import MessageResponsetDTO from './model/MessageResponsetDTO';
+import MessageResponseDTO from './model/MessageResponseDTO';
 import SearchHistoryListResponseDTO from './model/SearchHistoryListResponseDTO';
 import SearchHistoryRequestDTO from './model/SearchHistoryRequestDTO';
 import SearchHistoryResponseDTO from './model/SearchHistoryResponseDTO';
 import TokenResponseDTO from './model/TokenResponseDTO';
+import UpdateListingRequest from './model/UpdateListingRequest';
 import UserRequestDTO from './model/UserRequestDTO';
 import UserResponseDTO from './model/UserResponseDTO';
 import AuthenticationControllerApi from './api/AuthenticationControllerApi';
@@ -160,10 +161,10 @@ export {
     MessageRequestDTO,
 
     /**
-     * The MessageResponsetDTO model constructor.
-     * @property {module:model/MessageResponsetDTO}
+     * The MessageResponseDTO model constructor.
+     * @property {module:model/MessageResponseDTO}
      */
-    MessageResponsetDTO,
+    MessageResponseDTO,
 
     /**
      * The SearchHistoryListResponseDTO model constructor.
@@ -188,6 +189,12 @@ export {
      * @property {module:model/TokenResponseDTO}
      */
     TokenResponseDTO,
+
+    /**
+     * The UpdateListingRequest model constructor.
+     * @property {module:model/UpdateListingRequest}
+     */
+    UpdateListingRequest,
 
     /**
      * The UserRequestDTO model constructor.

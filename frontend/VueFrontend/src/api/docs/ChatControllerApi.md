@@ -4,24 +4,28 @@ All URIs are relative to *http://localhost:8080*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**addMessageToChat**](ChatControllerApi.md#addMessageToChat) | **POST** /api/v1/chat/{chatId}/message | 
-[**createChatFromBuyer**](ChatControllerApi.md#createChatFromBuyer) | **POST** /api/v1/listing/{listingId}/create | 
-[**getAllChatsForListing**](ChatControllerApi.md#getAllChatsForListing) | **GET** /api/v1/listing/{listingId}/chats | 
-[**getAllChatsForUser**](ChatControllerApi.md#getAllChatsForUser) | **GET** /api/v1/user/my-chats | 
-[**getChat**](ChatControllerApi.md#getChat) | **GET** /api/v1/listing/{listingId}/chat | 
+[**addMessageToChat**](ChatControllerApi.md#addMessageToChat) | **POST** /api/v1/chat/{chatId}/message | Add a message to a chat
+[**createChatFromBuyer**](ChatControllerApi.md#createChatFromBuyer) | **POST** /api/v1/listing/{listingId}/create | Create a chat between a buyer and a listing
+[**getAllChatsForListing**](ChatControllerApi.md#getAllChatsForListing) | **GET** /api/v1/listing/{listingId}/chats | Get all chats for a listing for a seller
+[**getAllChatsForUser**](ChatControllerApi.md#getAllChatsForUser) | **GET** /api/v1/user/my-chats | Get all chats for a user
+[**getChat**](ChatControllerApi.md#getChat) | **GET** /api/v1/listing/{listingId}/chat | Get a chat between a buyer and a listing
 
 
 
 ## addMessageToChat
 
-> MessageResponsetDTO addMessageToChat(chatId, messageRequestDTO)
+> MessageResponseDTO addMessageToChat(chatId, messageRequestDTO)
 
-
+Add a message to a chat
 
 ### Example
 
 ```javascript
 import OpenApiDocumentationFindNo from 'open_api_documentation_find_no';
+let defaultClient = OpenApiDocumentationFindNo.ApiClient.instance;
+// Configure Bearer (JWT) access token for authorization: bearerAuth
+let bearerAuth = defaultClient.authentications['bearerAuth'];
+bearerAuth.accessToken = "YOUR ACCESS TOKEN"
 
 let apiInstance = new OpenApiDocumentationFindNo.ChatControllerApi();
 let chatId = "chatId_example"; // String | 
@@ -44,11 +48,11 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**MessageResponsetDTO**](MessageResponsetDTO.md)
+[**MessageResponseDTO**](MessageResponseDTO.md)
 
 ### Authorization
 
-No authorization required
+[bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
@@ -60,12 +64,16 @@ No authorization required
 
 > ChatResponseDTO createChatFromBuyer(listingId, messageRequestDTO)
 
-
+Create a chat between a buyer and a listing
 
 ### Example
 
 ```javascript
 import OpenApiDocumentationFindNo from 'open_api_documentation_find_no';
+let defaultClient = OpenApiDocumentationFindNo.ApiClient.instance;
+// Configure Bearer (JWT) access token for authorization: bearerAuth
+let bearerAuth = defaultClient.authentications['bearerAuth'];
+bearerAuth.accessToken = "YOUR ACCESS TOKEN"
 
 let apiInstance = new OpenApiDocumentationFindNo.ChatControllerApi();
 let listingId = "listingId_example"; // String | 
@@ -92,7 +100,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
@@ -104,12 +112,16 @@ No authorization required
 
 > [ChatResponseDTO] getAllChatsForListing(listingId)
 
-
+Get all chats for a listing for a seller
 
 ### Example
 
 ```javascript
 import OpenApiDocumentationFindNo from 'open_api_documentation_find_no';
+let defaultClient = OpenApiDocumentationFindNo.ApiClient.instance;
+// Configure Bearer (JWT) access token for authorization: bearerAuth
+let bearerAuth = defaultClient.authentications['bearerAuth'];
+bearerAuth.accessToken = "YOUR ACCESS TOKEN"
 
 let apiInstance = new OpenApiDocumentationFindNo.ChatControllerApi();
 let listingId = "listingId_example"; // String | 
@@ -134,7 +146,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
@@ -146,12 +158,16 @@ No authorization required
 
 > [ChatResponseDTO] getAllChatsForUser()
 
-
+Get all chats for a user
 
 ### Example
 
 ```javascript
 import OpenApiDocumentationFindNo from 'open_api_documentation_find_no';
+let defaultClient = OpenApiDocumentationFindNo.ApiClient.instance;
+// Configure Bearer (JWT) access token for authorization: bearerAuth
+let bearerAuth = defaultClient.authentications['bearerAuth'];
+bearerAuth.accessToken = "YOUR ACCESS TOKEN"
 
 let apiInstance = new OpenApiDocumentationFindNo.ChatControllerApi();
 apiInstance.getAllChatsForUser().then((data) => {
@@ -172,7 +188,7 @@ This endpoint does not need any parameter.
 
 ### Authorization
 
-No authorization required
+[bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
@@ -184,12 +200,16 @@ No authorization required
 
 > ChatResponseDTO getChat(listingId)
 
-
+Get a chat between a buyer and a listing
 
 ### Example
 
 ```javascript
 import OpenApiDocumentationFindNo from 'open_api_documentation_find_no';
+let defaultClient = OpenApiDocumentationFindNo.ApiClient.instance;
+// Configure Bearer (JWT) access token for authorization: bearerAuth
+let bearerAuth = defaultClient.authentications['bearerAuth'];
+bearerAuth.accessToken = "YOUR ACCESS TOKEN"
 
 let apiInstance = new OpenApiDocumentationFindNo.ChatControllerApi();
 let listingId = "listingId_example"; // String | 
@@ -214,7 +234,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 

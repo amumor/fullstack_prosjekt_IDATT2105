@@ -38,6 +38,7 @@ export default class SearchHistoryControllerApi {
 
 
     /**
+     * Add a new search history entry for the authenticated user
      * @param {module:model/SearchHistoryRequestDTO} searchHistoryRequestDTO 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/SearchHistoryResponseDTO} and HTTP response
      */
@@ -57,7 +58,7 @@ export default class SearchHistoryControllerApi {
       let formParams = {
       };
 
-      let authNames = [];
+      let authNames = ['bearerAuth'];
       let contentTypes = ['application/json'];
       let accepts = ['*/*'];
       let returnType = SearchHistoryResponseDTO;
@@ -69,6 +70,7 @@ export default class SearchHistoryControllerApi {
     }
 
     /**
+     * Add a new search history entry for the authenticated user
      * @param {module:model/SearchHistoryRequestDTO} searchHistoryRequestDTO 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link module:model/SearchHistoryResponseDTO}
      */
@@ -81,6 +83,7 @@ export default class SearchHistoryControllerApi {
 
 
     /**
+     * Get search history for the authenticated user
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/SearchHistoryListResponseDTO} and HTTP response
      */
     findByUserIdWithHttpInfo() {
@@ -95,7 +98,7 @@ export default class SearchHistoryControllerApi {
       let formParams = {
       };
 
-      let authNames = [];
+      let authNames = ['bearerAuth'];
       let contentTypes = [];
       let accepts = ['*/*'];
       let returnType = SearchHistoryListResponseDTO;
@@ -107,6 +110,7 @@ export default class SearchHistoryControllerApi {
     }
 
     /**
+     * Get search history for the authenticated user
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link module:model/SearchHistoryListResponseDTO}
      */
     findByUserId() {

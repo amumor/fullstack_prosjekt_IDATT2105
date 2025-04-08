@@ -83,6 +83,9 @@ class ListingResponseDTO {
             if (data.hasOwnProperty('lastEditedAt')) {
                 obj['lastEditedAt'] = ApiClient.convertToType(data['lastEditedAt'], 'Date');
             }
+            if (data.hasOwnProperty('imageUrls')) {
+                obj['imageUrls'] = ApiClient.convertToType(data['imageUrls'], ['String']);
+            }
         }
         return obj;
     }
@@ -120,6 +123,10 @@ class ListingResponseDTO {
         // ensure the json data is a string
         if (data['listingStatus'] && !(typeof data['listingStatus'] === 'string' || data['listingStatus'] instanceof String)) {
             throw new Error("Expected the field `listingStatus` to be a primitive type in the JSON string but got " + data['listingStatus']);
+        }
+        // ensure the json data is an array
+        if (!Array.isArray(data['imageUrls'])) {
+            throw new Error("Expected the field `imageUrls` to be an array in the JSON data but got " + data['imageUrls']);
         }
 
         return true;
@@ -189,6 +196,11 @@ ListingResponseDTO.prototype['createdAt'] = undefined;
  * @member {Date} lastEditedAt
  */
 ListingResponseDTO.prototype['lastEditedAt'] = undefined;
+
+/**
+ * @member {Array.<String>} imageUrls
+ */
+ListingResponseDTO.prototype['imageUrls'] = undefined;
 
 
 
