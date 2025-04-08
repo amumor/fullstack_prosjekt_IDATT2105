@@ -5,9 +5,9 @@ import {
     UserControllerApi,
     UserRequestDTO
 } from '@/api';
-import { serviceConfigParams } from '@/services/ServiceSetup.js';
+import {serviceConfigParams} from '@/services/ServiceSetup.js';
 
-const { bearerTokenAuth, timeout, baseURL } = serviceConfigParams();
+const {bearerTokenAuth, timeout, baseURL} = serviceConfigParams();
 
 /**
  * Deletes a user by their ID.
@@ -25,7 +25,7 @@ const { bearerTokenAuth, timeout, baseURL } = serviceConfigParams();
 export function deleteUser(id, token) {
     const client = new ApiClient(baseURL);
     client.timeout = timeout;
-    client.authentications.bearerAuth = { type: 'bearer', accessToken: token };
+    client.authentications.bearerAuth = {type: 'bearer', accessToken: token};
 
     const userApi = new UserControllerApi(client);
     return userApi.deleteUser(id)
@@ -54,11 +54,11 @@ export function deleteUser(id, token) {
 export function getUserByEmail(email, token) {
     const client = new ApiClient(baseURL);
     client.timeout = timeout;
-    client.authentications.bearerAuth = { type: 'bearer', accessToken: token };
+    client.authentications.bearerAuth = {type: 'bearer', accessToken: token};
 
     const userApi = new UserControllerApi(client);
     return userApi.getUserByEmail(email)
-        .then(response_and_data => response_and_data.data)
+        .then(response_and_data => response_and_data)
         .catch(error => {
             console.error('Failed to get user by email:', error);
             throw error;
@@ -81,11 +81,11 @@ export function getUserByEmail(email, token) {
 export function getUserById(id, token) {
     const client = new ApiClient(baseURL);
     client.timeout = timeout;
-    client.authentications.bearerAuth = { type: 'bearer', accessToken: token };
+    client.authentications.bearerAuth = {type: 'bearer', accessToken: token};
 
     const userApi = new UserControllerApi(client);
     return userApi.getUserById(id)
-        .then(response_and_data => response_and_data.data)
+        .then(response_and_data => response_and_data)
         .catch(error => {
             console.error('Failed to get user by ID:', error);
             throw error;
@@ -120,7 +120,7 @@ export function getUserById(id, token) {
 export function updateUser(user, token) {
     const client = new ApiClient(baseURL);
     client.timeout = timeout;
-    client.authentications.bearerAuth = { type: 'bearer', accessToken: token };
+    client.authentications.bearerAuth = {type: 'bearer', accessToken: token};
 
     const userApi = new UserControllerApi(client);
     const userRequestDTO = new UserRequestDTO();
@@ -132,7 +132,7 @@ export function updateUser(user, token) {
     userRequestDTO.role = user.role || null;
 
     return userApi.updateUser(userRequestDTO)
-        .then(response_and_data => response_and_data.data)
+        .then(response_and_data => response_and_data)
         .catch(error => {
             console.error('Failed to update user:', error);
             throw error;
@@ -154,11 +154,11 @@ export function updateUser(user, token) {
 export function getMyProfile(token) {
     const client = new ApiClient(baseURL);
     client.timeout = timeout;
-    client.authentications.bearerAuth = { type: 'bearer', accessToken: token };
+    client.authentications.bearerAuth = {type: 'bearer', accessToken: token};
 
     const userApi = new UserControllerApi(client);
     return userApi.getMyProfile()
-        .then(response_and_data => response_and_data.data)
+        .then(response_and_data => response_and_data)
         .catch(error => {
             console.error('Failed to retrieve my profile:', error);
             throw error;
