@@ -98,10 +98,10 @@ const createListings = () => {
     return;
   }
   listingStore.selectListing({
-    seller: '1',
+    seller: user.id,
     title: title.value,
     description: description.value,
-    category: selectedCategory.value.id,
+    category: 'Car',
     price: price.value,
     location: getCoordinates(location.value),
     image: images.value[0],
