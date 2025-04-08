@@ -1,6 +1,5 @@
 package edu.ntnu.SpringBackend.mapper;
 
-import edu.ntnu.SpringBackend.dto.CategoryCreationRequestDTO;
 import edu.ntnu.SpringBackend.dto.CategoryListResponseDTO;
 import edu.ntnu.SpringBackend.dto.CategoryResponseDTO;
 import edu.ntnu.SpringBackend.model.Category;
@@ -9,21 +8,28 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Mapper class for converting Category entities to DTOs and vice versa.
+ * This class is responsible for transforming data between the model and the DTO layer.
+ * It provides methods to convert a single Category entity to a CategoryResponseDTO
+ * and a list of Category entities to a CategoryListResponseDTO.
+ *
+ * @author Vetle Hodne, Amund Mørk
+ * @version 1.0
+ * @since 1.0
+ * @see CategoryResponseDTO
+ * @see CategoryListResponseDTO
+ */
 @Component
 public class CategoryMapper {
 
-    /*public Category toEntity(CategoryCreationRequestDTO dto) { TODO: remove
-        if (dto == null) {
-            throw new IllegalArgumentException("dto argument can not be null");
-        }
-
-        Category category = new Category();
-        category.setName(dto.getName());
-        // Set other fields if necessary
-
-        return category;
-    }*/
-
+    /**
+     * Converts a Category entity to a CategoryResponseDTO.
+     *
+     * @param category The Category entity to convert.
+     * @return The converted CategoryResponseDTO.
+     * @throws IllegalArgumentException if the category argument is null.
+     */
     public CategoryResponseDTO toDto(Category category) {
         if (category == null) {
             throw new IllegalArgumentException("category argument can not be null");
@@ -36,6 +42,13 @@ public class CategoryMapper {
         return dto;
     }
 
+    /**
+     * Converts a list of Category entities to a CategoryListResponseDTO.
+     *
+     * @param categories The list of Category entities to convert.
+     * @return The converted CategoryListResponseDTO.
+     * @throws IllegalArgumentException if the category argument is null.
+     */
     public CategoryListResponseDTO toDto(List<Category> categories) {
         if (categories == null) {
             throw new IllegalArgumentException("categories argument can not be null");
