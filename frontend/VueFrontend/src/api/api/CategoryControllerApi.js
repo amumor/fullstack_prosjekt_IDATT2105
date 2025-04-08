@@ -38,6 +38,7 @@ export default class CategoryControllerApi {
 
 
     /**
+     * Delete a category
      * @param {String} id 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing HTTP response
      */
@@ -58,7 +59,7 @@ export default class CategoryControllerApi {
       let formParams = {
       };
 
-      let authNames = [];
+      let authNames = ['bearerAuth'];
       let contentTypes = [];
       let accepts = ['*/*'];
       let returnType = null;
@@ -70,6 +71,7 @@ export default class CategoryControllerApi {
     }
 
     /**
+     * Delete a category
      * @param {String} id 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}
      */
@@ -82,6 +84,7 @@ export default class CategoryControllerApi {
 
 
     /**
+     * Create a new category
      * @param {module:model/CategoryCreationRequestDTO} categoryCreationRequestDTO 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/CategoryResponseDTO} and HTTP response
      */
@@ -101,7 +104,7 @@ export default class CategoryControllerApi {
       let formParams = {
       };
 
-      let authNames = [];
+      let authNames = ['bearerAuth'];
       let contentTypes = ['application/json'];
       let accepts = ['*/*'];
       let returnType = CategoryResponseDTO;
@@ -113,6 +116,7 @@ export default class CategoryControllerApi {
     }
 
     /**
+     * Create a new category
      * @param {module:model/CategoryCreationRequestDTO} categoryCreationRequestDTO 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link module:model/CategoryResponseDTO}
      */
@@ -125,6 +129,7 @@ export default class CategoryControllerApi {
 
 
     /**
+     * Get all categories
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/CategoryListResponseDTO} and HTTP response
      */
     getAllWithHttpInfo() {
@@ -151,6 +156,7 @@ export default class CategoryControllerApi {
     }
 
     /**
+     * Get all categories
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link module:model/CategoryListResponseDTO}
      */
     getAll() {
@@ -162,6 +168,7 @@ export default class CategoryControllerApi {
 
 
     /**
+     * Get a category by ID
      * @param {String} id 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/CategoryResponseDTO} and HTTP response
      */
@@ -194,6 +201,7 @@ export default class CategoryControllerApi {
     }
 
     /**
+     * Get a category by ID
      * @param {String} id 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link module:model/CategoryResponseDTO}
      */
@@ -206,6 +214,7 @@ export default class CategoryControllerApi {
 
 
     /**
+     * Get a category by name
      * @param {String} name 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/CategoryResponseDTO} and HTTP response
      */
@@ -238,6 +247,7 @@ export default class CategoryControllerApi {
     }
 
     /**
+     * Get a category by name
      * @param {String} name 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link module:model/CategoryResponseDTO}
      */

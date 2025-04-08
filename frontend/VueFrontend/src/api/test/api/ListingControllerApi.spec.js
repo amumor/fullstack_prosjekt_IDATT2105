@@ -68,10 +68,30 @@
         done();
       });
     });
+    describe('getByCategory', function() {
+      it('should call getByCategory successfully', function(done) {
+        //uncomment below and update the code to test getByCategory
+        //instance.getByCategory(function(error) {
+        //  if (error) throw error;
+        //expect().to.be();
+        //});
+        done();
+      });
+    });
     describe('getById', function() {
       it('should call getById successfully', function(done) {
         //uncomment below and update the code to test getById
         //instance.getById(function(error) {
+        //  if (error) throw error;
+        //expect().to.be();
+        //});
+        done();
+      });
+    });
+    describe('getBySeller', function() {
+      it('should call getBySeller successfully', function(done) {
+        //uncomment below and update the code to test getBySeller
+        //instance.getBySeller(function(error) {
         //  if (error) throw error;
         //expect().to.be();
         //});

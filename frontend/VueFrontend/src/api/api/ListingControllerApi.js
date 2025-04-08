@@ -39,6 +39,7 @@ export default class ListingControllerApi {
 
 
     /**
+     * Create a new listing
      * @param {module:model/ListingCreationRequestDTO} listing 
      * @param {Object} opts Optional parameters
      * @param {Array.<File>} [images] 
@@ -63,7 +64,7 @@ export default class ListingControllerApi {
         'images': this.apiClient.buildCollectionParam(opts['images'], 'passthrough')
       };
 
-      let authNames = [];
+      let authNames = ['bearerAuth'];
       let contentTypes = ['multipart/form-data'];
       let accepts = ['*/*'];
       let returnType = ListingResponseDTO;
@@ -75,6 +76,7 @@ export default class ListingControllerApi {
     }
 
     /**
+     * Create a new listing
      * @param {module:model/ListingCreationRequestDTO} listing 
      * @param {Object} opts Optional parameters
      * @param {Array.<File>} opts.images 
@@ -89,6 +91,7 @@ export default class ListingControllerApi {
 
 
     /**
+     * Delete a listing
      * @param {String} id 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing HTTP response
      */
@@ -109,7 +112,7 @@ export default class ListingControllerApi {
       let formParams = {
       };
 
-      let authNames = [];
+      let authNames = ['bearerAuth'];
       let contentTypes = [];
       let accepts = ['*/*'];
       let returnType = null;
@@ -121,6 +124,7 @@ export default class ListingControllerApi {
     }
 
     /**
+     * Delete a listing
      * @param {String} id 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}
      */
@@ -133,6 +137,62 @@ export default class ListingControllerApi {
 
 
     /**
+     * Get listings by category
+     * @param {String} categoryName 
+     * @param {Object} opts Optional parameters
+     * @param {Number} [page = 0)] 
+     * @param {Number} [size = 10)] 
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/ListingListResponseDTO} and HTTP response
+     */
+    getByCategoryWithHttpInfo(categoryName, opts) {
+      opts = opts || {};
+      let postBody = null;
+      // verify the required parameter 'categoryName' is set
+      if (categoryName === undefined || categoryName === null) {
+        throw new Error("Missing the required parameter 'categoryName' when calling getByCategory");
+      }
+
+      let pathParams = {
+      };
+      let queryParams = {
+        'categoryName': categoryName,
+        'page': opts['page'],
+        'size': opts['size']
+      };
+      let headerParams = {
+      };
+      let formParams = {
+      };
+
+      let authNames = [];
+      let contentTypes = [];
+      let accepts = ['*/*'];
+      let returnType = ListingListResponseDTO;
+      return this.apiClient.callApi(
+        '/api/v1/listing/get-by-category', 'GET',
+        pathParams, queryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, null
+      );
+    }
+
+    /**
+     * Get listings by category
+     * @param {String} categoryName 
+     * @param {Object} opts Optional parameters
+     * @param {Number} opts.page  (default to 0)
+     * @param {Number} opts.size  (default to 10)
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link module:model/ListingListResponseDTO}
+     */
+    getByCategory(categoryName, opts) {
+      return this.getByCategoryWithHttpInfo(categoryName, opts)
+        .then(function(response_and_data) {
+          return response_and_data.data;
+        });
+    }
+
+
+    /**
+     * Get a listing by ID
      * @param {String} id 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/ListingResponseDTO} and HTTP response
      */
@@ -165,6 +225,7 @@ export default class ListingControllerApi {
     }
 
     /**
+     * Get a listing by ID
      * @param {String} id 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link module:model/ListingResponseDTO}
      */
@@ -177,6 +238,55 @@ export default class ListingControllerApi {
 
 
     /**
+     * Get listings by seller
+     * @param {Object} opts Optional parameters
+     * @param {Number} [page = 0)] 
+     * @param {Number} [size = 10)] 
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/ListingListResponseDTO} and HTTP response
+     */
+    getBySellerWithHttpInfo(opts) {
+      opts = opts || {};
+      let postBody = null;
+
+      let pathParams = {
+      };
+      let queryParams = {
+        'page': opts['page'],
+        'size': opts['size']
+      };
+      let headerParams = {
+      };
+      let formParams = {
+      };
+
+      let authNames = ['bearerAuth'];
+      let contentTypes = [];
+      let accepts = ['*/*'];
+      let returnType = ListingListResponseDTO;
+      return this.apiClient.callApi(
+        '/api/v1/listing/get-by-seller', 'GET',
+        pathParams, queryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, null
+      );
+    }
+
+    /**
+     * Get listings by seller
+     * @param {Object} opts Optional parameters
+     * @param {Number} opts.page  (default to 0)
+     * @param {Number} opts.size  (default to 10)
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link module:model/ListingListResponseDTO}
+     */
+    getBySeller(opts) {
+      return this.getBySellerWithHttpInfo(opts)
+        .then(function(response_and_data) {
+          return response_and_data.data;
+        });
+    }
+
+
+    /**
+     * Get listings by title (search)
      * @param {String} title 
      * @param {Object} opts Optional parameters
      * @param {Number} [page = 0)] 
@@ -215,6 +325,7 @@ export default class ListingControllerApi {
     }
 
     /**
+     * Get listings by title (search)
      * @param {String} title 
      * @param {Object} opts Optional parameters
      * @param {Number} opts.page  (default to 0)
@@ -230,6 +341,7 @@ export default class ListingControllerApi {
 
 
     /**
+     * Get suggestions for listings based on search history
      * @param {Object} opts Optional parameters
      * @param {Number} [page = 0)] 
      * @param {Number} [size = 10)] 
@@ -250,7 +362,7 @@ export default class ListingControllerApi {
       let formParams = {
       };
 
-      let authNames = [];
+      let authNames = ['bearerAuth'];
       let contentTypes = [];
       let accepts = ['*/*'];
       let returnType = ListingListResponseDTO;
@@ -262,6 +374,7 @@ export default class ListingControllerApi {
     }
 
     /**
+     * Get suggestions for listings based on search history
      * @param {Object} opts Optional parameters
      * @param {Number} opts.page  (default to 0)
      * @param {Number} opts.size  (default to 10)
@@ -276,6 +389,7 @@ export default class ListingControllerApi {
 
 
     /**
+     * Update a listing
      * @param {String} id 
      * @param {Object} opts Optional parameters
      * @param {module:model/UpdateListingRequest} [updateListingRequest] 
@@ -299,7 +413,7 @@ export default class ListingControllerApi {
       let formParams = {
       };
 
-      let authNames = [];
+      let authNames = ['bearerAuth'];
       let contentTypes = ['application/json'];
       let accepts = ['*/*'];
       let returnType = ListingResponseDTO;
@@ -311,6 +425,7 @@ export default class ListingControllerApi {
     }
 
     /**
+     * Update a listing
      * @param {String} id 
      * @param {Object} opts Optional parameters
      * @param {module:model/UpdateListingRequest} opts.updateListingRequest 

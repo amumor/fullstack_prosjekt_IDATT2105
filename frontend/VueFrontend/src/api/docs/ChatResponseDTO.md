@@ -12,5 +12,6 @@ Name | Type | Description | Notes
 **sellerLastName** | **String** |  | [optional] 
 **createdAt** | **Date** |  | [optional] 
 **messages** | [**[MessageResponseDTO]**](MessageResponseDTO.md) |  | [optional] 
+**bids** | [**[BidResponseDTO]**](BidResponseDTO.md) |  | [optional] 
 
 

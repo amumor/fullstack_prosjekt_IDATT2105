@@ -6,7 +6,7 @@ Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**authenticate**](AuthenticationControllerApi.md#authenticate) | **POST** /api/v1/auth/authenticate | 
 [**register**](AuthenticationControllerApi.md#register) | **POST** /api/v1/auth/register | 
-[**registerAdmin**](AuthenticationControllerApi.md#registerAdmin) | **POST** /api/v1/auth/register/admin | 
+[**registerAdmin**](AuthenticationControllerApi.md#registerAdmin) | **POST** /api/v1/auth/register/admin | Register a new admin user
 
 
 
@@ -98,12 +98,16 @@ No authorization required
 
 > TokenResponseDTO registerAdmin(userRequestDTO)
 
-
+Register a new admin user
 
 ### Example
 
 ```javascript
 import OpenApiDocumentationFindNo from 'open_api_documentation_find_no';
+let defaultClient = OpenApiDocumentationFindNo.ApiClient.instance;
+// Configure Bearer (JWT) access token for authorization: bearerAuth
+let bearerAuth = defaultClient.authentications['bearerAuth'];
+bearerAuth.accessToken = "YOUR ACCESS TOKEN"
 
 let apiInstance = new OpenApiDocumentationFindNo.AuthenticationControllerApi();
 let userRequestDTO = new OpenApiDocumentationFindNo.UserRequestDTO(); // UserRequestDTO | 
@@ -128,7 +132,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 

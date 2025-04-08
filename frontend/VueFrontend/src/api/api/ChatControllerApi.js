@@ -38,6 +38,7 @@ export default class ChatControllerApi {
 
 
     /**
+     * Add a message to a chat
      * @param {String} chatId 
      * @param {module:model/MessageRequestDTO} messageRequestDTO 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/MessageResponseDTO} and HTTP response
@@ -63,7 +64,7 @@ export default class ChatControllerApi {
       let formParams = {
       };
 
-      let authNames = [];
+      let authNames = ['bearerAuth'];
       let contentTypes = ['application/json'];
       let accepts = ['*/*'];
       let returnType = MessageResponseDTO;
@@ -75,6 +76,7 @@ export default class ChatControllerApi {
     }
 
     /**
+     * Add a message to a chat
      * @param {String} chatId 
      * @param {module:model/MessageRequestDTO} messageRequestDTO 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link module:model/MessageResponseDTO}
@@ -88,6 +90,7 @@ export default class ChatControllerApi {
 
 
     /**
+     * Create a chat between a buyer and a listing
      * @param {String} listingId 
      * @param {module:model/MessageRequestDTO} messageRequestDTO 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/ChatResponseDTO} and HTTP response
@@ -113,7 +116,7 @@ export default class ChatControllerApi {
       let formParams = {
       };
 
-      let authNames = [];
+      let authNames = ['bearerAuth'];
       let contentTypes = ['application/json'];
       let accepts = ['*/*'];
       let returnType = ChatResponseDTO;
@@ -125,6 +128,7 @@ export default class ChatControllerApi {
     }
 
     /**
+     * Create a chat between a buyer and a listing
      * @param {String} listingId 
      * @param {module:model/MessageRequestDTO} messageRequestDTO 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link module:model/ChatResponseDTO}
@@ -138,6 +142,7 @@ export default class ChatControllerApi {
 
 
     /**
+     * Get all chats for a listing for a seller
      * @param {String} listingId 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/ChatResponseDTO>} and HTTP response
      */
@@ -158,7 +163,7 @@ export default class ChatControllerApi {
       let formParams = {
       };
 
-      let authNames = [];
+      let authNames = ['bearerAuth'];
       let contentTypes = [];
       let accepts = ['*/*'];
       let returnType = [ChatResponseDTO];
@@ -170,6 +175,7 @@ export default class ChatControllerApi {
     }
 
     /**
+     * Get all chats for a listing for a seller
      * @param {String} listingId 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/ChatResponseDTO>}
      */
@@ -182,6 +188,7 @@ export default class ChatControllerApi {
 
 
     /**
+     * Get all chats for a user
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/ChatResponseDTO>} and HTTP response
      */
     getAllChatsForUserWithHttpInfo() {
@@ -196,7 +203,7 @@ export default class ChatControllerApi {
       let formParams = {
       };
 
-      let authNames = [];
+      let authNames = ['bearerAuth'];
       let contentTypes = [];
       let accepts = ['*/*'];
       let returnType = [ChatResponseDTO];
@@ -208,6 +215,7 @@ export default class ChatControllerApi {
     }
 
     /**
+     * Get all chats for a user
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/ChatResponseDTO>}
      */
     getAllChatsForUser() {
@@ -219,6 +227,7 @@ export default class ChatControllerApi {
 
 
     /**
+     * Get a chat between a buyer and a listing
      * @param {String} listingId 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/ChatResponseDTO} and HTTP response
      */
@@ -239,7 +248,7 @@ export default class ChatControllerApi {
       let formParams = {
       };
 
-      let authNames = [];
+      let authNames = ['bearerAuth'];
       let contentTypes = [];
       let accepts = ['*/*'];
       let returnType = ChatResponseDTO;
@@ -251,6 +260,7 @@ export default class ChatControllerApi {
     }
 
     /**
+     * Get a chat between a buyer and a listing
      * @param {String} listingId 
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link module:model/ChatResponseDTO}
      */

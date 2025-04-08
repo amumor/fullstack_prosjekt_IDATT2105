@@ -4,11 +4,11 @@ All URIs are relative to *http://localhost:8080*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**acceptBid**](BidControllerApi.md#acceptBid) | **POST** /api/v1/bids/{bidId}/accept | 
-[**cancelBid**](BidControllerApi.md#cancelBid) | **POST** /api/v1/bids/{bidId}/cancel | 
-[**getAcceptedBids**](BidControllerApi.md#getAcceptedBids) | **GET** /api/v1/bids/accepted | 
-[**placeBid**](BidControllerApi.md#placeBid) | **POST** /api/v1/chat/{chatId}/bids | 
-[**rejectBid**](BidControllerApi.md#rejectBid) | **POST** /api/v1/bids/{bidId}/reject | 
+[**acceptBid**](BidControllerApi.md#acceptBid) | **POST** /api/v1/bids/{bidId}/accept | Accept a bid
+[**cancelBid**](BidControllerApi.md#cancelBid) | **POST** /api/v1/bids/{bidId}/cancel | Cancel a bid
+[**getAcceptedBids**](BidControllerApi.md#getAcceptedBids) | **GET** /api/v1/bids/accepted | Get all accepted bids for a user
+[**placeBid**](BidControllerApi.md#placeBid) | **POST** /api/v1/chat/{chatId}/bids | Place a bid on a chat
+[**rejectBid**](BidControllerApi.md#rejectBid) | **POST** /api/v1/bids/{bidId}/reject | Reject a bid
 
 
 
@@ -16,12 +16,16 @@ Method | HTTP request | Description
 
 > BidResponseDTO acceptBid(bidId)
 
-
+Accept a bid
 
 ### Example
 
 ```javascript
 import OpenApiDocumentationFindNo from 'open_api_documentation_find_no';
+let defaultClient = OpenApiDocumentationFindNo.ApiClient.instance;
+// Configure Bearer (JWT) access token for authorization: bearerAuth
+let bearerAuth = defaultClient.authentications['bearerAuth'];
+bearerAuth.accessToken = "YOUR ACCESS TOKEN"
 
 let apiInstance = new OpenApiDocumentationFindNo.BidControllerApi();
 let bidId = "bidId_example"; // String | 
@@ -46,7 +50,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
@@ -58,12 +62,16 @@ No authorization required
 
 > BidResponseDTO cancelBid(bidId)
 
-
+Cancel a bid
 
 ### Example
 
 ```javascript
 import OpenApiDocumentationFindNo from 'open_api_documentation_find_no';
+let defaultClient = OpenApiDocumentationFindNo.ApiClient.instance;
+// Configure Bearer (JWT) access token for authorization: bearerAuth
+let bearerAuth = defaultClient.authentications['bearerAuth'];
+bearerAuth.accessToken = "YOUR ACCESS TOKEN"
 
 let apiInstance = new OpenApiDocumentationFindNo.BidControllerApi();
 let bidId = "bidId_example"; // String | 
@@ -88,7 +96,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
@@ -100,12 +108,16 @@ No authorization required
 
 > [BidResponseDTO] getAcceptedBids()
 
-
+Get all accepted bids for a user
 
 ### Example
 
 ```javascript
 import OpenApiDocumentationFindNo from 'open_api_documentation_find_no';
+let defaultClient = OpenApiDocumentationFindNo.ApiClient.instance;
+// Configure Bearer (JWT) access token for authorization: bearerAuth
+let bearerAuth = defaultClient.authentications['bearerAuth'];
+bearerAuth.accessToken = "YOUR ACCESS TOKEN"
 
 let apiInstance = new OpenApiDocumentationFindNo.BidControllerApi();
 apiInstance.getAcceptedBids().then((data) => {
@@ -126,7 +138,7 @@ This endpoint does not need any parameter.
 
 ### Authorization
 
-No authorization required
+[bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
@@ -138,12 +150,16 @@ No authorization required
 
 > BidResponseDTO placeBid(chatId, bidRequestDTO)
 
-
+Place a bid on a chat
 
 ### Example
 
 ```javascript
 import OpenApiDocumentationFindNo from 'open_api_documentation_find_no';
+let defaultClient = OpenApiDocumentationFindNo.ApiClient.instance;
+// Configure Bearer (JWT) access token for authorization: bearerAuth
+let bearerAuth = defaultClient.authentications['bearerAuth'];
+bearerAuth.accessToken = "YOUR ACCESS TOKEN"
 
 let apiInstance = new OpenApiDocumentationFindNo.BidControllerApi();
 let chatId = "chatId_example"; // String | 
@@ -170,7 +186,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
@@ -182,12 +198,16 @@ No authorization required
 
 > BidResponseDTO rejectBid(bidId)
 
-
+Reject a bid
 
 ### Example
 
 ```javascript
 import OpenApiDocumentationFindNo from 'open_api_documentation_find_no';
+let defaultClient = OpenApiDocumentationFindNo.ApiClient.instance;
+// Configure Bearer (JWT) access token for authorization: bearerAuth
+let bearerAuth = defaultClient.authentications['bearerAuth'];
+bearerAuth.accessToken = "YOUR ACCESS TOKEN"
 
 let apiInstance = new OpenApiDocumentationFindNo.BidControllerApi();
 let bidId = "bidId_example"; // String | 
@@ -212,7 +232,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[bearerAuth](../README.md#bearerAuth)
 
 ### HTTP request headers
 
