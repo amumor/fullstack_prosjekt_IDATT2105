@@ -17,6 +17,19 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Service class for managing categories.
+ * This class provides methods to create, delete, and retrieve categories.
+ * It also includes functionality to match categories based on search history.
+ * <p>
+ * This class is responsible for the business logic related to categories.
+ * It interacts with the CategoryRepository to perform CRUD operations
+ * and other category-related tasks.
+ *
+ * @author Vetle Hodne, Amund Mørk
+ * @version 1.0
+ * @since 1.0
+ */
 @Service
 @RequiredArgsConstructor
 public class CategoryService {
@@ -24,23 +37,51 @@ public class CategoryService {
     private final Logger logger = LoggerFactory.getLogger(CategoryService.class);
     private final CategoryRepository categoryRepository;
 
+    /**
+     * Fetches all categories from the database.
+     *
+     * @return A list of all categories.
+     */
     public List<Category> getAll() {
         logger.info("> Fetching all categories");
         return new ArrayList<>(categoryRepository.findAll());
     }
 
+    /**
+     * Fetches a category by its name.
+     *
+     * @param name The name of the category to fetch.
+     * @return The category with the specified name.
+     * @throws NoSuchElementException if the category with the specified name does not exist.
+     */
     public Category getByName(String name) {
         logger.info("> Fetching category by name: {}", name);
         return categoryRepository.findByNameIgnoreCase(name)
                 .orElseThrow(() -> new NoSuchElementException("Category with name " + name + " not found"));
     }
 
+    /**
+     * Fetches a category by its ID.
+     *
+     * @param id The ID of the category to fetch.
+     * @return The category with the specified ID.
+     * @throws NoSuchElementException if the category with the specified ID does not exist.
+     */
     public Category getById(UUID id) {
         logger.info("> Fetching category by ID: {}", id);
         return categoryRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Category with ID " + id + " not found"));
     }
 
+    /**
+     * Adds a new category to the database.
+     *
+     * @param requestDTO The request DTO containing category creation details.
+     * @param user       The authenticated user making the request.
+     * @return The created category.
+     * @throws AccessDeniedException if the user does not have the ADMIN role.
+     * @throws IllegalArgumentException if a category with the same name already exists.
+     */
     @Transactional
     public Category add(CategoryCreationRequestDTO requestDTO, @AuthenticationPrincipal User user) {
         logger.info("> Adding new category: {}", requestDTO.getName());
@@ -57,6 +98,14 @@ public class CategoryService {
         return categoryRepository.save(category);
     }
 
+    /**
+     * Deletes a category by its ID.
+     *
+     * @param id   The ID of the category to delete.
+     * @param user The authenticated user making the request.
+     * @throws AccessDeniedException if the user does not have the ADMIN role.
+     * @throws NoSuchElementException if the category with the specified ID does not exist.
+     */
     @Transactional
     public void delete(UUID id, @AuthenticationPrincipal User user) {
         logger.info("> Deleting category with ID: {}", id);
@@ -70,6 +119,12 @@ public class CategoryService {
         categoryRepository.deleteById(id);
     }
 
+    /**
+     * Finds categories based on a list of past search queries.
+     *
+     * @param searchHistoryList List of past search history objects
+     * @return List of matched Category objects (alphabetically sorted by name, no duplicates)
+     */
     public List<Category> findBySearchHistory(List<SearchHistory> searchHistoryList) {
         logger.info("> Finding categories by search history");
         if (searchHistoryList == null || searchHistoryList.isEmpty()) {
@@ -93,7 +148,7 @@ public class CategoryService {
      * @param categories List of Category objects
      * @return List of matched Category objects (alphabetically sorted by name, no duplicates)
      */
-    private List<Category> matchCategories(List<String> searchQueries, List<Category> categories) {
+    public List<Category> matchCategories(List<String> searchQueries, List<Category> categories) {
         List<Category> matched = new ArrayList<>();
 
         for (String query : searchQueries) {
@@ -111,10 +166,4 @@ public class CategoryService {
         matched.sort(Comparator.comparing(Category::getName));
         return matched;
     }
-
-  public Category findByName(String categoryName) {
-        return categoryRepository.findByNameIgnoreCase(categoryName).
-                orElseThrow(() -> new NoSuchElementException("Category with name " + categoryName + " not found")
-        );
-  }
 }
