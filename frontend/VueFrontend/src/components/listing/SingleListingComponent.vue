@@ -5,25 +5,35 @@ import { Icon } from '@iconify/vue'
 
 import ListingMapComponent from '@/components/listing/ListingMapComponent.vue'
 import { userStore } from '@/stores/user.js'
+import { useListingStore } from '../../stores/listing';
+import { getListingById } from '../../services/ListingService';
+import { storeToRefs } from 'pinia';
 
-
-const user = userStore()
-
-const props = defineProps({
-  id: String,
-  title: String,
-  description: String,
-  price: String,
-  location: Array,
-  category: String,
-  lastEdited: String,
-  image: String,
-  isLoggedIn: Boolean,
-})
+const props = defineProps({ id: String })
 
 const router = useRouter();
-const isOwner = ref(true);
 const isFavorite = ref(false);
+
+// Listing store
+const listingStore = useListingStore();
+const { selectedListing } = storeToRefs(listingStore);
+
+// Get listing data by ID
+try{
+  await getListingById(props.id)
+    .then(async response => {
+      listingStore.selectListing(response.data);
+    })
+    .catch(error => {
+      console.error('Error in getListingById:', error);
+    });
+} catch (error) {
+  console.error('Error fetching listing:', error);
+}
+
+// Userstore
+const useUserStore = userStore();
+const isOwner = ref(useUserStore.id === listingStore.seller);
 
 const toggleFavorite = () => {
   isFavorite.value = !isFavorite.value;
@@ -45,25 +55,25 @@ const toEditListing = () => {
 
   <!-- Image container -->
   <div class="image-container">
-    <img class="image-item" :src="props.image" alt="Front image">
+    <img class="image-item" :src="selectedListing.image" alt="Front image">
     <button class="favorite" :class="{ 'isFavorite': isFavorite }" @click="toggleFavorite">
       <Icon icon="material-symbols:favorite" width="40" height="40" />
     </button>
-    <p id="lastEdited">Last edited: {{ props.lastEdited }}</p>
+    <p id="lastEdited">Last edited: {{ selectedListing.lastEditedAt }}</p>
   </div>
 
   <div class="sidebar">
 
     <!-- Description -->
     <div class="description">
-      <h2>{{ props.title }}</h2>
-      <p id="price">{{ props.price }}</p>
-      <p id="description">{{ props.description }}</p>
-      <p id="categories">{{ props.category }}</p>
+      <h2>{{ selectedListing.title }}</h2>
+      <p id="price">{{ selectedListing.price }}</p>
+      <p id="description">{{ selectedListing.description }}</p>
+      <p id="categories">{{ selectedListing.category }}</p>
     </div>
 
     <!-- Buy item or message seller -->
-    <div class="btn" v-if="user.isLoggedIn && !isOwner">
+    <div class="btn" v-if="useUserStore.isLoggedIn && !isOwner">
       <button class="message-btn">Message seller</button>
       <button class="buy-btn">Buy</button>
     </div>
@@ -80,7 +90,7 @@ const toEditListing = () => {
     <!-- Map -->
     <div class="map">
       <ListingMapComponent
-        :location=props.location />
+        :location="[selectedListing.location[0], selectedListing.location[1]]"/>
     </div>
 
 
