@@ -67,7 +67,7 @@ const saveChanges = () => {
       return;
     }
     if (!validatePassword(newPassword.value) && newPassword.value.length > 1) {
-      resultModalMessage.value = "Password is required";
+      resultModalMessage.value = "Password does not meet the required criteria";
       showResultModal.value = true;
       return;
     }
