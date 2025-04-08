@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
 
 /**
  * Controller for handling bookmark-related requests.
+ * A bookmark is a listing that a user has saved for later, in other words, a favorite listing.
  * This class provides endpoints for creating, retrieving, and deleting bookmarks.
  *
  * @author Vetle Hodne
@@ -35,11 +37,13 @@ public class BookmarkController {
   private final BookmarkService bookmarkService;
 
   /**
-   * Get all bookmarks for a user
+   * Get all bookmarks for a user.
+   * Only authenticated users can get their bookmarks.
    *
    * @param user the authenticated user
    * @return a list of bookmark response DTOs
    */
+  @PreAuthorize("isAuthenticated()")
   @GetMapping("/my-bookmarks")
   @Operation(summary = "Getting all bookmarks for a user", security = @SecurityRequirement(name = "bearerAuth"))
   public List<BookmarkResponseDTO> getUserBookmarks(
@@ -54,11 +58,13 @@ public class BookmarkController {
 
   /**
    * Create a new bookmark for a listing.
+   * Only authenticated users can create bookmarks for listings.
    *
    * @param user the authenticated user creating the bookmark
    * @param bookmarkRequestDTO the request DTO containing the listing ID
    * @return the created bookmark response DTO
    */
+  @PreAuthorize("isAuthenticated()")
   @PostMapping("/create")
   @Operation(summary = "Create a bookmark for a listing", security = @SecurityRequirement(name = "bearerAuth"))
   public ResponseEntity<BookmarkResponseDTO> createBookmark(
@@ -72,11 +78,13 @@ public class BookmarkController {
 
   /**
    * Delete a bookmark by its ID.
+   * Only the authenticated user who created the bookmark can delete it.
    *
    * @param user the authenticated user deleting the bookmark
    * @param bookmarkId the ID of the bookmark to delete
    * @return a response entity with no content
    */
+  @PreAuthorize("isAuthenticated()")
   @DeleteMapping("/{bookmarkId}")
   @Operation(summary = "Delete a bookmark", security = @SecurityRequirement(name = "bearerAuth"))
   public ResponseEntity<Void> deleteBookmark(

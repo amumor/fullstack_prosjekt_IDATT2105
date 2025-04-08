@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,10 +38,12 @@ public class BidController {
 
   /**
    * Get all bids for a user.
+   * Only authenticated users can get their bids.
    *
    * @param user the user who is getting the bids
    * @return the list of bids
    */
+  @PreAuthorize("isAuthenticated()")
   @GetMapping("/bids/accepted")
   @Operation(summary = "Get all accepted bids for a user", security = @SecurityRequirement(name = "bearerAuth"))
   public ResponseEntity<List<BidResponseDTO>> getAcceptedBids(
@@ -54,12 +57,14 @@ public class BidController {
 
   /**
    * Place a bid on a chat.
+   * Only authenticated users can place a bid.
    *
    * @param chatId the id of the chat
    * @param user the user who is placing the bid
    * @param bidRequest the bid request
    * @return the bid response
    */
+  @PreAuthorize("isAuthenticated()")
   @PostMapping("/chat/{chatId}/bids")
   @Operation(summary = "Place a bid on a chat", security = @SecurityRequirement(name = "bearerAuth"))
   public ResponseEntity<BidResponseDTO> placeBid(
@@ -79,6 +84,7 @@ public class BidController {
    * @param user the user who is accepting the bid
    * @return the bid response
    */
+  @PreAuthorize("isAuthenticated()")
   @PostMapping("/bids/{bidId}/accept")
   @Operation(summary = "Accept a bid", security = @SecurityRequirement(name = "bearerAuth"))
   public ResponseEntity<BidResponseDTO> acceptBid(
@@ -97,6 +103,7 @@ public class BidController {
    * @param user the user who is rejecting the bid
    * @return the bid response
    */
+  @PreAuthorize("isAuthenticated()")
   @PostMapping("/bids/{bidId}/reject")
   @Operation(summary = "Reject a bid", security = @SecurityRequirement(name = "bearerAuth"))
   public ResponseEntity<BidResponseDTO> rejectBid(
@@ -115,6 +122,7 @@ public class BidController {
    * @param user the user who is canceling the bid
    * @return the bid response
    */
+  @PreAuthorize("isAuthenticated()")
   @PostMapping("/bids/{bidId}/cancel")
   @Operation(summary = "Cancel a bid", security = @SecurityRequirement(name = "bearerAuth"))
   public ResponseEntity<BidResponseDTO> cancelBid(
