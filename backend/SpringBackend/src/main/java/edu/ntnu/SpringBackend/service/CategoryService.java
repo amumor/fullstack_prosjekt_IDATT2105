@@ -1,5 +1,6 @@
 package edu.ntnu.SpringBackend.service;
 
+import edu.ntnu.SpringBackend.dto.CategoryCreationRequestDTO;
 import edu.ntnu.SpringBackend.model.Category;
 import edu.ntnu.SpringBackend.model.SearchHistory;
 import edu.ntnu.SpringBackend.model.User;
@@ -40,11 +41,17 @@ public class CategoryService {
     }
 
     @Transactional
-    public Category add(Category category, @AuthenticationPrincipal User user) {
-        logger.info("> Adding new category: {}", category.getName());
+    public Category add(CategoryCreationRequestDTO requestDTO, @AuthenticationPrincipal User user) {
+        logger.info("> Adding new category: {}", requestDTO.getName());
         if (user == null || !user.getRole().equals(Role.ROLE_ADMIN)) {
             throw new SecurityException("User is not authorized to delete categories");
         }
+        if (categoryRepository.existsByNameIgnoreCase(requestDTO.getName())) {
+            throw new IllegalArgumentException("Category with name " + requestDTO.getName().toLowerCase() + " already exists");
+        }
+        Category category = Category.builder()
+                .name(requestDTO.getName())
+                .build();
 
         return categoryRepository.save(category);
     }
