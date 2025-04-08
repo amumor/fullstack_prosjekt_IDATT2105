@@ -159,4 +159,43 @@ label {
     padding: 20px;
   }
 }
+
+/* Responsive Design for very small screens (max-width: 480px) */
+@media (max-width: 480px) {
+  .display-page-container {
+    width: 90%; /* Take almost full width */
+    padding: 15px; /* Reduce padding */
+    box-shadow: none; /* Simplify shadow for smaller screens */
+    border-radius: 8px; /* Slightly reduce border radius */
+  }
+
+  h2 {
+    font-size: 18px; /* Adjust font size for smaller screens */
+    text-align: center; /* Keep heading centered */
+  }
+
+  .display-values-content {
+    gap: 10px; /* Reduce gap between input fields */
+  }
+
+  .display-values-item {
+    flex-direction: column; /* Ensure inputs stack vertically */
+  }
+
+  label {
+    font-size: 12px; /* Adjust label font size */
+    margin-bottom: 3px; /* Reduce spacing below labels */
+  }
+
+  input {
+    font-size: 14px; /* Adjust input font size */
+    padding: 8px; /* Reduce padding for inputs */
+  }
+
+  .basic-blue-btn {
+    font-size: 14px; /* Adjust button font size */
+    padding: 10px; /* Add padding for better usability */
+    width: 100%; /* Ensure button takes full width */
+  }
+}
 </style>

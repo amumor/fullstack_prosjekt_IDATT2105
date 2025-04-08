@@ -118,4 +118,77 @@ h1 {
   max-width: 300px;
   max-height: 200px;
 }
+
+/* Responsive Design for medium screens (max-width: 768px) */
+@media (max-width: 768px) {
+  .profile-info-container {
+    flex-direction: column; /* Stack profile info vertically */
+    align-items: center; /* Center align items */
+    margin: 20px 0; /* Adjust margin */
+  }
+
+  h2 {
+    margin: 20px 0 0 0; /* Adjust margin */
+    text-align: center; /* Center align text */
+  }
+
+  h1 {
+    font-size: 14px; /* Adjust font size */
+    text-align: center; /* Center align text */
+    margin: 10px 0 0 0; /* Adjust margin */
+  }
+
+  .options-containers {
+    flex-direction: column; /* Stack options vertically */
+    gap: 20px; /* Add spacing between options */
+  }
+
+  .profile-container {
+    width: 80%; /* Adjust width */
+    margin: 10px auto; /* Center align options */
+    max-width: 250px; /* Adjust max width */
+  }
+
+  .basic-blue-btn {
+    font-size: 14px; /* Adjust font size */
+    padding: 10px; /* Adjust padding */
+  }
+}
+
+/* Responsive Design for very small screens (max-width: 480px) */
+@media (max-width: 480px) {
+  .profile-info-container {
+    flex-direction: column; /* Stack profile info vertically */
+    align-items: center; /* Center align items */
+    margin: 10px 0; /* Adjust margin */
+  }
+
+  h2 {
+    font-size: 16px; /* Adjust font size */
+    margin: 10px 0 0 0; /* Adjust margin */
+    text-align: center; /* Center align text */
+  }
+
+  h1 {
+    font-size: 12px; /* Adjust font size */
+    text-align: center; /* Center align text */
+    margin: 5px 0 0 0; /* Adjust margin */
+  }
+
+  .options-containers {
+    flex-direction: column; /* Stack options vertically */
+    gap: 15px; /* Add spacing between options */
+  }
+
+  .profile-container {
+    width: 90%; /* Adjust width */
+    margin: 5px auto; /* Center align options */
+    max-width: 200px; /* Adjust max width */
+  }
+
+  .basic-blue-btn {
+    font-size: 12px; /* Adjust font size */
+    padding: 8px; /* Adjust padding */
+  }
+}
 </style>

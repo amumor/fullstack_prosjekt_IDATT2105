@@ -165,4 +165,55 @@ h2 {
     padding: 20px;
   }
 }
+
+/* Responsive Design for very small screens (max-width: 480px) */
+@media (max-width: 480px) {
+  .display-page-container {
+    width: 90%; /* Take almost full width */
+    padding: 15px; /* Reduce padding */
+    box-shadow: none; /* Simplify shadow for smaller screens */
+    border-radius: 8px; /* Slightly reduce border radius */
+  }
+
+  h2 {
+    font-size: 18px; /* Adjust font size for smaller screens */
+    text-align: center; /* Keep heading centered */
+  }
+
+  .text-fields {
+    gap: 10px; /* Reduce gap between input fields */
+  }
+
+  #description {
+    font-size: 14px; /* Adjust font size */
+    height: 80px; /* Reduce height */
+    padding: 8px; /* Reduce padding */
+  }
+
+  .text-fields input[type="text"],
+  .text-fields textarea {
+    font-size: 14px; /* Adjust font size */
+    padding: 8px; /* Reduce padding */
+  }
+
+  .text-fields label {
+    font-size: 12px; /* Adjust label font size */
+    gap: 3px; /* Reduce gap between checkbox and label text */
+  }
+
+  .image-field {
+    margin-top: 15px; /* Reduce margin */
+  }
+
+  .image-field input {
+    font-size: 12px; /* Adjust font size */
+    padding: 5px; /* Add padding for better usability */
+  }
+
+  .submit-button button {
+    font-size: 14px; /* Adjust button font size */
+    padding: 10px; /* Add padding for better usability */
+    width: 100%; /* Ensure button takes full width */
+  }
+}
 </style>

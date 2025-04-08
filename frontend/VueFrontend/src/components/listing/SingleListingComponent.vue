@@ -221,4 +221,103 @@ const toEditListing = () => {
   background-color: #eee;
   border-radius: 10px;
 }
+
+/* Responsive Design for medium screens (max-width: 768px) */
+@media (max-width: 768px) {
+  .display-page-container {
+    flex-direction: column; /* Stack the image and sidebar vertically */
+    align-items: center; /* Center align items */
+    padding: 15px; /* Add padding */
+  }
+
+  .image-container {
+    max-width: 100%; /* Allow the image to take full width */
+    margin: 0 0 15px 0; /* Adjust margin */
+  }
+
+  .image-item {
+    height: 250px; /* Reduce image height */
+  }
+
+  .sidebar {
+    width: 100%; /* Take full width */
+    margin: 0; /* Remove extra margins */
+  }
+
+  .btn,
+  .owner-options {
+    gap: 10px; /* Add spacing between buttons */
+    max-width: 100%; /* Allow buttons to take full width */
+  }
+
+  .buy-btn,
+  .message-btn,
+  .owner-btn {
+    font-size: 14px; /* Adjust font size */
+    padding: 8px; /* Reduce padding */
+  }
+
+  .map {
+    height: 120px; /* Reduce map height */
+  }
+}
+
+/* Responsive Design for very small screens (max-width: 480px) */
+@media (max-width: 480px) {
+  .display-page-container {
+    flex-direction: column; /* Stack the image and sidebar vertically */
+    align-items: center; /* Center align items */
+    padding: 10px; /* Add padding */
+  }
+
+  .image-container {
+    max-width: 100%; /* Allow the image to take full width */
+    margin: 0 0 10px 0; /* Adjust margin */
+  }
+
+  .image-item {
+    height: 200px; /* Further reduce image height */
+  }
+
+  .sidebar {
+    width: 100%; /* Take full width */
+    margin: 0; /* Remove extra margins */
+  }
+
+  .description {
+    padding: 5px; /* Reduce padding */
+  }
+
+  #price {
+    font-size: 18px; /* Adjust font size */
+  }
+
+  #description,
+  #categories {
+    font-size: 14px; /* Adjust font size */
+  }
+
+  .btn,
+  .owner-options {
+    flex-direction: column; /* Stack buttons vertically */
+    gap: 8px; /* Add spacing between buttons */
+    max-width: 100%; /* Allow buttons to take full width */
+  }
+
+  .buy-btn,
+  .message-btn,
+  .owner-btn {
+    font-size: 12px; /* Adjust font size */
+    padding: 6px; /* Reduce padding */
+  }
+
+  .map {
+    height: 100px; /* Further reduce map height */
+  }
+
+  h2 {
+    font-size: 16px; /* Adjust heading font size */
+    text-align: center; /* Center align heading */
+  }
+}
 </style>

@@ -520,5 +520,140 @@ onUpdated(() => {
   width:auto;
 }
 
+/* Responsive design for smaller screens */
+@media (max-width: 768px) {
+  .display-page-container {
+    flex-direction: column; /* Stack the left and right containers vertically */
+    gap: 10px;
+  }
 
+  .display-left-container {
+    max-width: 100%; /* Take full width on smaller screens */
+  }
+
+  .display-right-container {
+    max-width: 100%; /* Take full width on smaller screens */
+    height: auto; /* Allow height to adjust dynamically */
+  }
+
+  .chats-container {
+    margin-top: 10px;
+    max-width: 100%; /* Take full width */
+  }
+
+  .chat-item {
+    padding-bottom: 10px;
+    font-size: 14px; /* Adjust font size for smaller screens */
+  }
+
+  .message-info {
+    padding: 10px;
+    gap: 5px; /* Reduce gap for smaller screens */
+  }
+
+  .sent-message,
+  .received-message {
+    max-width: 90%; /* Allow messages to take more space */
+    font-size: 14px; /* Adjust font size */
+    padding: 5px 8px; /* Reduce padding */
+  }
+
+  .message-input {
+    flex-direction: column; /* Stack the input and buttons vertically */
+    gap: 10px;
+    padding: 10px;
+  }
+
+  .message-input textarea {
+    width: 100%; /* Take full width */
+    font-size: 14px; /* Adjust font size */
+  }
+
+  .message-input button {
+    width: 100%; /* Take full width */
+    font-size: 14px; /* Adjust font size */
+    padding: 10px; /* Adjust padding */
+  }
+
+  .basic-blue-btn {
+    width: 100%; /* Take full width */
+    font-size: 14px; /* Adjust font size */
+  }
+}
+
+/* Responsive design for very small screens (max-width: 480px) */
+@media (max-width: 480px) {
+  .display-page-container {
+    flex-direction: column; /* Stack the left and right containers vertically */
+    gap: 8px; /* Reduce gap for smaller screens */
+    padding: 10px; /* Add padding for better spacing */
+  }
+
+  .display-left-container {
+    max-width: 100%; /* Take full width */
+    padding: 10px; /* Add padding */
+  }
+
+  .display-right-container {
+    max-width: 100%; /* Take full width */
+    height: auto; /* Allow height to adjust dynamically */
+    padding: 10px; /* Add padding */
+  }
+
+  .chats-container {
+    margin-top: 5px; /* Reduce margin */
+    max-width: 100%; /* Take full width */
+  }
+
+  .chat-item {
+    padding-bottom: 8px; /* Reduce padding */
+    font-size: 12px; /* Adjust font size for smaller screens */
+  }
+
+  .message-info {
+    padding: 8px; /* Reduce padding */
+    gap: 5px; /* Reduce gap for smaller screens */
+  }
+
+  .sent-message,
+  .received-message {
+    max-width: 95%; /* Allow messages to take more space */
+    font-size: 12px; /* Adjust font size */
+    padding: 5px; /* Reduce padding */
+  }
+
+  .message-input {
+    flex-direction: column; /* Stack the input and buttons vertically */
+    gap: 8px; /* Reduce gap */
+    padding: 8px; /* Add padding */
+  }
+
+  .message-input textarea {
+    width: 100%; /* Take full width */
+    font-size: 12px; /* Adjust font size */
+    padding: 8px; /* Add padding */
+  }
+
+  .message-input button {
+    width: 100%; /* Take full width */
+    font-size: 12px; /* Adjust font size */
+    padding: 8px; /* Add padding */
+  }
+
+  .basic-blue-btn {
+    width: 100%; /* Take full width */
+    font-size: 12px; /* Adjust font size */
+    padding: 8px; /* Add padding */
+  }
+
+  .initials {
+    width: 80px; /* Reduce size of initials display */
+    height: 80px;
+  }
+
+  h2 {
+    font-size: 16px; /* Adjust heading font size */
+    text-align: center; /* Center align headings */
+  }
+}
 </style>

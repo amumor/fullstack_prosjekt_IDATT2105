@@ -89,4 +89,65 @@ const toListingView = () => {
   flex-direction: column;
   align-items: flex-start;
 }
+
+/* Responsive design for smaller screens */
+@media (max-width: 768px) {
+  .listings {
+    padding: 8px;
+    border-radius: 8px;
+    box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .image-item {
+    width: 100%; /* Make the image take full width */
+    max-width: 300px; /* Limit the maximum width */
+    height: auto;
+  }
+
+  .price {
+    font-size: 12px; /* Adjust font size for smaller screens */
+    padding: 4px;
+  }
+
+  .town {
+    font-size: 14px; /* Adjust font size */
+  }
+
+  .title {
+    font-size: 20px; /* Adjust font size */
+  }
+
+  .description {
+    margin: 8px;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 480px) {
+  .listings {
+    padding: 6px;
+    border-radius: 6px;
+  }
+
+  .image-item {
+    max-width: 100%; /* Ensure the image fits within the container */
+  }
+
+  .price {
+    font-size: 10px; /* Further reduce font size for very small screens */
+    padding: 3px;
+  }
+
+  .town {
+    font-size: 12px;
+  }
+
+  .title {
+    font-size: 18px;
+  }
+
+  .description {
+    margin: 6px;
+  }
+}
 </style>

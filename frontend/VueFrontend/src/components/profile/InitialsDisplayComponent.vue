@@ -34,4 +34,22 @@ const getInitials = (name) => {
   justify-content: center;
   align-items: center;
 }
+
+/* Responsive Design for medium screens (max-width: 768px) */
+@media (max-width: 768px) {
+  .profile-icon {
+    height: 60px; /* Adjust height */
+    width: 60px; /* Adjust width */
+    font-size: 20px; /* Adjust font size */
+  }
+}
+
+/* Responsive Design for very small screens (max-width: 480px) */
+@media (max-width: 480px) {
+  .profile-icon {
+    height: 50px; /* Further adjust height */
+    width: 50px; /* Further adjust width */
+    font-size: 16px; /* Further adjust font size */
+  }
+}
 </style>

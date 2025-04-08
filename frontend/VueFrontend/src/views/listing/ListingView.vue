@@ -40,4 +40,20 @@ const image="https://iqboatlifts.com/wp-content/uploads/2018/06/Yacht-vs-Boat-Wh
   max-width: 800px;
   padding: 20px;
 }
+
+/* Responsive Design for medium screens (max-width: 768px) */
+@media (max-width: 768px) {
+  .display-page-container {
+    max-width: 90%; /* Reduce width for medium screens */
+    padding: 15px; /* Adjust padding */
+  }
+}
+
+/* Responsive Design for very small screens (max-width: 480px) */
+@media (max-width: 480px) {
+  .display-page-container {
+    max-width: 100%; /* Take full width */
+    padding: 10px; /* Reduce padding */
+  }
+}
 </style>

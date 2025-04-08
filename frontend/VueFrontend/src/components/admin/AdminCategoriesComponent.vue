@@ -57,7 +57,7 @@ const newCategory = () => {
     <div class="edit-mode" v-if="isEditMode">
       <div class="category-item">
         <button class="basic-blue-btn" id="new-category-btn" @click="newCategory">+</button>
-        <input type="text" v-model="newCategoryName" placeholder="Name"/>
+        <input id="category-input" type="text" v-model="newCategoryName" placeholder="Name"/>
       </div>
       <div class="category-item" v-for="(category, index) in categories" :key="category.id">
         <button class="basic-blue-btn" id="delete-btn" @click="() => localDeleteCategory(index)">Delete</button>
@@ -85,13 +85,16 @@ const newCategory = () => {
   width: 100%;
 }
 
+#category-input {
+  margin-top: 22px;
+}
+
 .not-edit-mode {
   display: flex;
   flex-direction: column;
   gap: 50px;
-  margin: 78px 0 0 83px;
+  margin: 98px 0 30px 83px;
 }
-
 
 #new-category-btn {
   background-color: white;
@@ -118,4 +121,70 @@ const newCategory = () => {
   background-color: darkred;
 }
 
+/* Responsive design for smaller screens */
+@media (max-width: 768px) {
+  .category-item {
+    flex-direction: column; /* Stack items vertically */
+    align-items: flex-start; /* Align items to the left */
+    gap: 10px; /* Reduce gap for smaller screens */
+  }
+
+  #category-input {
+    width: 100%; /* Take full width on smaller screens */
+    max-width: none; /* Remove max-width restriction */
+  }
+
+  #new-category-btn {
+    width: 100%; /* Take full width for better usability */
+    height: 50px; /* Increase height for touch devices */
+    font-size: 16px; /* Adjust font size */
+  }
+
+  #delete-btn {
+    width: 100%; /* Take full width for better usability */
+    font-size: 16px; /* Adjust font size */
+  }
+
+  .not-edit-mode {
+    gap: 15px; /* Reduce gap for smaller screens */
+    margin: 10px 0; /* Adjust margins */
+  }
+
+  /* Additional styles for very small screens (max-width: 480px) */
+@media (max-width: 480px) {
+  .category-item {
+    flex-direction: column; /* Stack items vertically */
+    align-items: stretch; /* Stretch items to fill the container */
+    gap: 8px; /* Reduce gap further for very small screens */
+  }
+
+  #category-input {
+    width: 100%; /* Ensure input takes full width */
+    font-size: 14px; /* Adjust font size for smaller screens */
+    padding: 8px; /* Reduce padding */
+  }
+
+  #new-category-btn {
+    width: 100%; /* Take full width */
+    height: 45px; /* Slightly reduce height */
+    font-size: 14px; /* Adjust font size */
+  }
+
+  #delete-btn {
+    width: 100%; /* Take full width */
+    font-size: 14px; /* Adjust font size */
+    padding: 8px; /* Add padding for better touch usability */
+  }
+
+  .not-edit-mode {
+    gap: 10px; /* Reduce gap further */
+    margin: 5px 0; /* Adjust margins */
+  }
+
+  .category-text {
+    font-size: 14px; /* Adjust font size for smaller screens */
+    word-wrap: break-word; /* Ensure long text wraps properly */
+  }
+}
+}
 </style>

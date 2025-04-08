@@ -146,30 +146,30 @@ const registerAdmin = async () => {
 <template>
   <Navbar/>
   <div class="display-page-container">
-    <div class="header-container">
-      <h2>Admin settings</h2>
-      <div class="edit-mode" v-if="isEditeMode">
-        <button class="basic-blue-btn" @click="toggleEditMode">Save</button>
-      </div>
-      <div class="edit-mode" v-else>
-        <button class="basic-blue-btn" id="edit-btn" @click="toggleEditMode">Edit</button>
-      </div>
-    </div>
-    <suspense>
-    <AdminCategoriesComponent :isEditMode="isEditeMode" />
-    </suspense>
-    <div>
-      <div class="sign-up">
-        <h2>Register Admin</h2>
-        <div class="fields">
-          <input v-model="firstName" type="text" placeholder="First name"/>
-          <input v-model="lastName" type="text" placeholder="Last name"/>
-          <input v-model="email" type="text" placeholder="E-mail"/>
-          <input v-model="phoneNumber" type="text" placeholder="Phone number"/>
-          <input v-model="password" type="password" placeholder="Password"/>
-          <input v-model="confirmPassword" type="password" placeholder="Confirm password"/>
-          <button class="basic-blue-btn" @click="registerAdmin">Register</button>
+    <div class="admin-settings">
+      <div class="header-container">
+        <h2>Admin settings</h2>
+        <div class="edit-mode" v-if="isEditeMode">
+          <button class="basic-blue-btn" @click="toggleEditMode">Save</button>
         </div>
+        <div class="edit-mode" v-else>
+          <button class="basic-blue-btn" id="edit-btn" @click="toggleEditMode">Edit</button>
+        </div>
+      </div>
+      <suspense>
+      <AdminCategoriesComponent :isEditMode="isEditeMode" />
+      </suspense>
+    </div>
+    <div class="sign-up">
+      <h2>Register Admin</h2>
+      <div class="fields">
+        <input v-model="firstName" type="text" placeholder="First name"/>
+        <input v-model="lastName" type="text" placeholder="Last name"/>
+        <input v-model="email" type="text" placeholder="E-mail"/>
+        <input v-model="phoneNumber" type="text" placeholder="Phone number"/>
+        <input v-model="password" type="password" placeholder="Password"/>
+        <input v-model="confirmPassword" type="password" placeholder="Confirm password"/>
+        <button class="basic-blue-btn" @click="registerAdmin">Register</button>
       </div>
     </div>
   </div>
@@ -181,9 +181,39 @@ const registerAdmin = async () => {
 </template>
 
 <style scoped>
+.display-page-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  padding: 50px;
+  gap: 20px; 
+  align-items: center;
+}
+
+.admin-settings {
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  width: 70%;
+  padding: 2rem;
+}
+
 .header-container {
   display: flex;
+  flex-direction: row;
   justify-content: space-between;
+}
+
+.sign-up {
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  
+  border-radius: 10px;
+  padding: 2rem;
+  width: 70%;
+  align-self: center;
 }
 
 #edit-btn {
@@ -198,7 +228,79 @@ const registerAdmin = async () => {
 
 .basic-blue-btn {
   width: 100px;
-  height: 50px;
-  padding: 10px;
+}
+
+.fields input {
+  margin-bottom: 15px;
+}
+
+.fields button {
+  margin-top: 20px;
+  width: 100%;
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 768px) {
+  .display-page-container {
+    flex-direction: column; /* Stack sections vertically */
+    align-items: center;
+  }
+
+  .admin-settings,
+  .sign-up {
+    max-width: 100%; /* Allow full width on smaller screens */
+  }
+}
+
+/* Responsive design for very small screens (max-width: 480px) */
+@media (max-width: 480px) {
+  .display-page-container {
+    flex-direction: column; /* Stack sections vertically */
+    align-items: center; /* Center align items */
+    padding: 20px; /* Reduce padding */
+    gap: 15px; /* Reduce gap between sections */
+  }
+
+  .admin-settings,
+  .sign-up {
+    width: 100%; /* Take full width */
+    padding: 1rem; /* Reduce padding */
+    box-shadow: none; /* Simplify shadow for smaller screens */
+  }
+
+  .header-container {
+    flex-direction: column; /* Stack header elements vertically */
+    align-items: flex-start; /* Align items to the left */
+    gap: 10px; /* Add spacing between elements */
+  }
+
+  #edit-btn {
+    width: 100%; /* Make the button take full width */
+    font-size: 14px; /* Adjust font size */
+    padding: 10px; /* Add padding for better usability */
+  }
+
+  .basic-blue-btn {
+    width: 100%; /* Make buttons take full width */
+    font-size: 14px; /* Adjust font size */
+    padding: 10px; /* Add padding for better usability */
+  }
+
+  .fields input {
+    width: 100%; /* Make input fields take full width */
+    font-size: 14px; /* Adjust font size */
+    padding: 10px; /* Add padding for better usability */
+  }
+
+  .fields button {
+    width: 100%; /* Make the button take full width */
+    font-size: 14px; /* Adjust font size */
+    padding: 10px; /* Add padding for better usability */
+  }
+
+  h2 {
+    font-size: 18px; /* Adjust heading font size */
+    text-align: center; /* Center align headings */
+  }
 }
 </style>

@@ -52,4 +52,34 @@ function closeModal() {
   border-radius: 4px;
   cursor: pointer;
 }
+
+/* Responsive Design for medium screens (max-width: 768px) */
+@media (max-width: 768px) {
+  .modal-content {
+    width: 80%; /* Adjust modal width for medium screens */
+    padding: 15px; /* Reduce padding */
+  }
+
+  .modal-close-btn {
+    font-size: 14px; /* Adjust font size */
+    padding: 8px 12px; /* Adjust button padding */
+  }
+}
+
+/* Responsive Design for very small screens (max-width: 480px) */
+@media (max-width: 480px) {
+  .modal-content {
+    width: 90%; /* Adjust modal width for small screens */
+    padding: 10px; /* Further reduce padding */
+  }
+
+  .modal-close-btn {
+    font-size: 12px; /* Adjust font size */
+    padding: 6px 10px; /* Further adjust button padding */
+  }
+
+  p {
+    font-size: 14px; /* Adjust text font size */
+  }
+}
 </style>

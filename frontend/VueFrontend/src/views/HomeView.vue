@@ -145,4 +145,72 @@ const categories = [
   gap: 20px;
 }
 
+/* Responsive Design for medium screens (max-width: 768px) */
+@media (max-width: 768px) {
+  .search-container {
+    width: 90%; /* Adjust width for medium screens */
+    flex-direction: column; /* Stack search bar and buttons vertically */
+    gap: 15px; /* Adjust gap */
+  }
+
+  .search-input {
+    font-size: 14px; /* Adjust font size */
+    padding: 8px; /* Adjust padding */
+  }
+
+  .search-btn, .map-btn {
+    font-size: 14px; /* Adjust font size */
+    padding: 8px 12px; /* Adjust padding */
+    width: 70px; /* Full width for buttons */
+  }
+
+  .category-container {
+    flex-wrap: wrap; /* Allow categories to wrap */
+    gap: 15px; /* Adjust gap */
+  }
+
+  #category-btn {
+    font-size: 14px; /* Adjust font size */
+    padding: 8px 12px; /* Adjust padding */
+  }
+
+  .listings {
+    flex-wrap: wrap; /* Allow listings to wrap */
+    gap: 15px; /* Adjust gap */
+  }
+}
+
+/* Responsive Design for very small screens (max-width: 480px) */
+@media (max-width: 480px) {
+  .search-container {
+    width: 100%; /* Take full width */
+    flex-direction: column; /* Stack search bar and buttons vertically */
+    gap: 10px; /* Adjust gap */
+  }
+
+  .search-input {
+    font-size: 12px; /* Adjust font size */
+    padding: 6px; /* Adjust padding */
+  }
+
+  .search-btn, .map-btn {
+    font-size: 12px; /* Adjust font size */
+    padding: 6px 10px; /* Adjust padding */
+  }
+
+  .category-container {
+    flex-wrap: wrap; /* Allow categories to wrap */
+    gap: 10px; /* Adjust gap */
+  }
+
+  #category-btn {
+    font-size: 12px; /* Adjust font size */
+    padding: 6px 10px; /* Adjust padding */
+  }
+
+  .listings {
+    flex-wrap: wrap; /* Allow listings to wrap */
+    gap: 10px; /* Adjust gap */
+  }
+}
 </style>
