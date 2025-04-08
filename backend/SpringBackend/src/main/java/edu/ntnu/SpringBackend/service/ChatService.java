@@ -168,4 +168,10 @@ public class ChatService {
     String sellerEmail = chat.getListing().getSeller().getEmail();
     return !currentEmail.equals(buyerEmail) && !currentEmail.equals(sellerEmail);
   }
+
+  public Chat getChatById(UUID chatId) {
+    logger.info("> Fetching chat for chatId {}", chatId);
+    return chatRepository.findById(chatId)
+            .orElseThrow(() -> new NoSuchElementException("Chat not found"));
+  }
 }

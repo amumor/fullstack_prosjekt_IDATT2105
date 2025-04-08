@@ -1,6 +1,6 @@
 <script setup>
 import Navbar from '@/components/Navbar.vue'
-import EditListingComponent from '@/components/Listing/EditListingComponent.vue'
+import EditListingComponent from '@/components/listing/EditListingComponent.vue'
 
 const id = '44'
 const image = 'https://iqboatlifts.com/wp-content/uploads/2018/06/Yacht-vs-Boat-Whats-the-Difference-Between-the-Two-1024x571.jpg'
@@ -11,7 +11,7 @@ const location = [60.472024, 8.524123] // Oslo coordinates
 </script>
 
 <template>
-<Navbar :isLoggedIn="true" />
+<Navbar />
 <EditListingComponent
   :id="id"
   :image="image"

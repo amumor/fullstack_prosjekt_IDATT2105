@@ -1,8 +1,8 @@
 <script setup>
 import Navbar from '@/components/Navbar.vue'
-import ListingPreviewComponent from '@/components/Listing/ListingPreviewComponent.vue'
-document.body.style.backgroundColor = "#ffffff";
+import ListingPreviewComponent from '@/components/listing/ListingPreviewComponent.vue'
 
+document.body.style.backgroundColor = "#ffffff";
 
 const searchFunction = () => {};
 
@@ -34,7 +34,7 @@ const categories = [
 </script>
 
 <template>
-<Navbar :isLoggedIn=true />
+<Navbar />
 <div class="display-page-container">
 
   <!-- Search bar -->

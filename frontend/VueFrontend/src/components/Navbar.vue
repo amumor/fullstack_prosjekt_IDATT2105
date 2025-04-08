@@ -1,20 +1,14 @@
 <script setup>
-import { ref, defineProps, onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
+import { Icon } from '@iconify/vue'
+import { userStore } from '@/stores/user.js';
 
-/**
- * @property {Boolean} isLoggedIn - Indicates if the user is logged in.
- */
-const props = defineProps({
-  isLoggedIn: {
-    type: Boolean,
-    default: false
-  },
-});
+const user = userStore();
 
 // Mobile menu state
-const isUserLoggedIn = ref(props.isLoggedIn);
 const isOpen = ref(false);
 const isMobile = ref(window.innerWidth <= 768);
+const isAdmin = ref(true);
 
 const toggleMenu = () => {
   isOpen.value = !isOpen.value;
@@ -34,7 +28,7 @@ onMounted(() => {
 
 <template>
 <div class="navbar">
-  <router-link to ="/" id="header">FIND.no</router-link>
+  <router-link to="/" id="header">FIND.no</router-link>
 
   <!-- Desktop Menu -->
   <template v-if="!isMobile">
@@ -42,16 +36,21 @@ onMounted(() => {
       <div class="options">
 
         <!-- Logged in menu -->
-        <template v-if="isUserLoggedIn">
-          <router-link to ="/newListing" id="router-link">New listing</router-link>
-          <router-link to ="/profile/favorites" id="router-link">Favorites</router-link>
-          <router-link to ="/inbox" id="router-link">Inbox</router-link>
-          <router-link to ="/profile" id="router-link">Profile</router-link>
+        <template v-if="user.isLoggedIn">
+          <router-link to="/newListing" id="router-link">New listing</router-link>
+          <router-link to="/profile/favorites" id="router-link">Favorites</router-link>
+          <router-link to="/inbox" id="router-link">Inbox</router-link>
+          <router-link to="/profile" id="router-link">Profile</router-link>
+
+          <!-- Admin settings -->
+          <router-link to="/admin" id="admin-settings" v-if="isAdmin">
+            <Icon :icon="'material-symbols:settings'" width="30" height="30" />
+          </router-link>
         </template>
 
         <!-- Logged out menu -->
         <template v-else>
-          <router-link to ="/login" id="router-link">Log in</router-link>
+          <router-link to="/login" id="router-link">Log in</router-link>
         </template>
       </div>
     </div>
@@ -65,11 +64,16 @@ onMounted(() => {
 
         <ul v-show="isOpen" class="dropdown">
           <!-- Logged In Menu -->
-          <template v-if="isUserLoggedIn" v-show="isOpen">
+          <template v-if="user.isLoggedIn" v-show="isOpen">
             <li><router-link to="/newListing" @click="toggleMenu" id="router-link">New listing</router-link></li>
             <li><router-link to="/profile/favorites" @click="toggleMenu" id="router-link">Favorites</router-link></li>
             <li><router-link to="/inbox" @click="toggleMenu" id="router-link">Inbox</router-link></li>
             <li><router-link to="/profile" @click="toggleMenu" id="router-link">Profile</router-link></li>
+
+            <!-- Admin settings -->
+            <li><router-link to="/admin" @click="toggleMenu" id="admin-settings" v-if="isAdmin">
+              <Icon :icon="'material-symbols:settings'" width="30" height="30" />
+            </router-link></li>
           </template>
 
           <!-- Logged Out Menu -->
@@ -109,6 +113,12 @@ onMounted(() => {
   margin-right: 20px;
 }
 
+#admin-settings {
+  text-decoration: none;
+  color: #333;
+  margin-right: 20px;
+}
+
 .desktop-navbar {
   display: flex;
   align-items: center;
@@ -132,8 +142,14 @@ onMounted(() => {
   transition: background-color 0.3s, transform 0.3s;
 }
 
+.options #admin-settings {
+  text-decoration: none;
+  background-color: transparent;
+  padding: 7px 0 0 0;
+}
+
 .options a:hover {
-  background-color: #f1f1f1;
+  color: #f1f1f1;
   transform: scale(1.005);
 }
 

@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 public class ChatMapper {
 
   private final MessageMapper messageMapper;
+  private final BidMapper bidMapper;
 
   public ChatResponseDTO toDto(Chat chat) {
     return ChatResponseDTO.builder()
@@ -24,6 +25,9 @@ public class ChatMapper {
             .createdAt(chat.getCreatedAt())
             .messages(chat.getMessages().stream()
                     .map(messageMapper::toDto)
+                    .collect(Collectors.toList()))
+            .bids(chat.getBids().stream()
+                    .map(bidMapper::toDto)
                     .collect(Collectors.toList()))
             .build();
   }

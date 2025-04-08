@@ -1,8 +1,8 @@
 <script setup>
 import { ref } from 'vue'
-import Navbar from '@/components/Navbar.vue'
 import { LMap, LTileLayer, LMarker, LPopup } from '@vue-leaflet/vue-leaflet';
 import { Icon } from "leaflet";
+import Navbar from '@/components/Navbar.vue'
 import BackToComponent from '@/components/BackToComponent.vue'
 
 // Fix for missing Leaflet icons
@@ -24,7 +24,7 @@ const markers = ref([
 </script>
 
 <template>
-  <Navbar :isLoggedIn=true />
+  <Navbar />
   <BackToComponent />
   <div class="map-container">
     <LMap :zoom="10" :center="center">

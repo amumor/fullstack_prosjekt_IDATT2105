@@ -7,6 +7,7 @@ const props = defineProps({
   width: Number,
 });
 const getInitials = (name) => {
+  if (!props.name) return '';
   const nameArray = name.split(' ');
   return nameArray
     .map((word) => word.charAt(0).toUpperCase())

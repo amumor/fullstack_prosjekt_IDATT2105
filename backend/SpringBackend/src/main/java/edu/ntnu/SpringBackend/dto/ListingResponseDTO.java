@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -25,14 +27,7 @@ public class ListingResponseDTO {
     private double price;
     private double latitude;
     private double longitude;
-
-    /**
-     * Format: ISO 8601, Date and time when this listing was created.
-     */
-    private String createdAt;
-
-    /**
-     * Format ISO 8601, Date and time when this listing was last edited.
-     */
-    private String lastEditedAt;
+    private LocalDateTime createdAt;
+    private LocalDateTime lastEditedAt;
+    private List<String> imageUrls;
 }

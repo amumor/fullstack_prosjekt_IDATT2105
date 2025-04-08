@@ -1,6 +1,6 @@
 <script setup>
 import Navbar from '@/components/Navbar.vue'
-import ListingPreviewComponent from '@/components/Listing/ListingPreviewComponent.vue'
+import ListingPreviewComponent from '@/components/listing/ListingPreviewComponent.vue'
 import BackToComponent from '@/components/BackToComponent.vue'
 
 const listings = [
@@ -23,7 +23,7 @@ const listings = [
 
 <template>
 
-<Navbar :isLoggedIn="true" />
+<Navbar />
 
 <div class="display-page-container">
   <BackToComponent />

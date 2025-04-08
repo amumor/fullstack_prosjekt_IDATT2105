@@ -38,6 +38,10 @@ public class Chat {
   @Builder.Default
   private List<Message> messages = new ArrayList<>();
 
+  @OneToMany(mappedBy = "chat", cascade = CascadeType.ALL, orphanRemoval = true)
+  @Builder.Default
+  private List<Bid> bids = new ArrayList<>();
+
   @PrePersist
   protected void onCreate() {
     createdAt = LocalDateTime.now();
@@ -51,6 +55,7 @@ public class Chat {
             ", listing=" + listing +
             ", createdAt=" + createdAt +
             ", messages=" + messages +
+            ", bids=" + bids +
             '}';
   }
 }

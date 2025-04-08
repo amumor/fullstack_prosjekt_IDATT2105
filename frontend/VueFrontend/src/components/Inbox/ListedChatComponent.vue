@@ -1,7 +1,7 @@
 <script setup>
 import { defineProps } from 'vue'
-
-import InitialsDisplayComponent from '@/components/Profile/InitialsDisplayComponent.vue'
+import { useChatStore } from '@/stores/chat.js'
+import InitialsDisplayComponent from '@/components/profile/InitialsDisplayComponent.vue'
 
 const props = defineProps({
   listingTitle: String,
@@ -10,14 +10,26 @@ const props = defineProps({
   isMessageRead: Boolean,
   messengerName: String,
   messages: Array,
-  selected: Boolean
+  selected: Boolean,
+  chatId: Number,
 })
 
+// Access the chat store to update the selected chat
+const chatStore = useChatStore()
 
+// Function to handle chat selection
+const selectChat = () => {
+  const chat = chatStore.chats.find(c => c.id === props.chatId)
+  if (chat) {
+    chatStore.selectChat(chat)
+  }
+}
 </script>
 
 <template>
-<div :class="['listed-chat-container', { 'selected-chat': props.selected }]">
+  <div
+  :class="['listed-chat-container', { 'selected-chat': props.selected, 'chat-read': props.isMessageRead }]"
+  @click="selectChat">
   <div class="chat-image-container">
     <img :src="props.image" class="chat-image" alt="Chat Image" />
     <InitialsDisplayComponent
@@ -26,7 +38,7 @@ const props = defineProps({
       :width=35
       class="initials"/>
   </div>
-  <div class="chat-unread" :class="{ 'chat-read': props.isMessageRead }">
+  <div class="chat-unread">
     <h3>{{ props.listingTitle }}</h3>
     <p>{{ props.lastMessageTime }}</p>
     <!-- Remove? -->
@@ -83,7 +95,7 @@ const props = defineProps({
 }
 
 /* Unread message styling */
-.chat-unread, .chat-read {
+.chat-unread {
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -96,20 +108,17 @@ const props = defineProps({
   font-weight: 600;
 }
 
-.chat-read h3 {
-  font-size: 16px;
-  color: #666;
-  margin-bottom: 5px;
-  font-weight: 400;
-}
-
-.chat-unread p, .chat-read p {
+.chat-unread p{
   font-size: 14px;
   color: #666;
   margin: 2px 0;
 }
 
-/* Styling for read messages */
+/* Read message styling */
+.chat-read h3{
+  font-weight: 400;
+  color: #999;  
+}
 
 
 @media (max-width: 768px) {

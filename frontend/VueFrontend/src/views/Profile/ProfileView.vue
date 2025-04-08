@@ -1,37 +1,50 @@
 <script setup>
 import { useRouter } from 'vue-router'
 import Navbar from '@/components/Navbar.vue'
-import ProfileOption from '@/components/Profile/ProfileOption.vue'
-import InitialsDisplayComponent from '@/components/Profile/InitialsDisplayComponent.vue'
+import ProfileOption from '@/components/profile/ProfileOption.vue'
+import InitialsDisplayComponent from '@/components/profile/InitialsDisplayComponent.vue'
+import { userStore } from '@/stores/user.js'
+
+const userStorage = userStore();
 
 document.body.style.backgroundColor = "#ffffff";
 
-const fullName = 'Fyfasan Ben Reddik';
-const email = 'fasan@reddik.ben'
 const router = useRouter()
 
 const routeTo = (route) => {
   router.push('/profile'+ route);
 }
+
+/**
+ * Handles logout button click.
+ * @returns {Promise<void>}
+ */
+const logout = async () => {
+  try {
+  await userStorage.logout()
+  await router.push('/')
+  } catch (error) {
+    console.log(error)
+  }
+}
 </script>
 
 <template>
-  <Navbar :isLoggedIn=true />
+  <Navbar />
   <div class="display-page-container">
     <div class="profile-info-container">
       <!-- Profile info -->
       <div class="profile-icon">
         <InitialsDisplayComponent
-          :name=fullName
+          :name="userStorage.firstName + ' ' + userStorage.lastName"
           :width=120
           :height=120 />
       </div>
       <div class="profile-info">
-        <h2>{{ fullName }}</h2>
-        <h1>{{email}}</h1>
+        <h2>{{ userStorage.firstName + ' ' + userStorage.lastName }}</h2>
+        <h1>{{ userStorage.email }}</h1>
       </div>
-      <!-- Log out logic -->
-      <router-link to="/login" id="router-link">Log out</router-link>
+      <button class="basic-blue-btn" @click="logout">Log out</button>
     </div>
     <div class="options-containers">
       <ProfileOption

@@ -1,6 +1,12 @@
 <script setup>
-import { ref, defineProps } from 'vue';
-import { useRouter } from 'vue-router';
+import {ref, defineProps} from 'vue';
+import {useRouter} from 'vue-router';
+import {userStore} from '@/stores/user.js';
+import {authenticateUser, registerUser} from "@/services/AuthenticationService.js";
+import {getMyProfile, getUserByEmail} from "@/services/UserService.js";
+import {TokenResponseDTO} from "@/api/index.js";
+
+const userStorage = userStore();
 
 /**
  * @property {Boolean} hasUser - Indicates if the user is registered.
@@ -56,40 +62,63 @@ const emailRegex = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/;
 
 const phoneRegex = /^\d{8}$/;
 
-const passwordRegex = /^(?=.[A-Z])(?=.\d)(?=.[!@#$%^&()_+\-={}:;"'|<>,.?]).{10,}$/;
+const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&()_+\-={}:;"'|<>,.?]).{10,}$/;
 
 /**
  * Function to handle login
  * @returns {void}
  */
 const login = async () => {
-  if(!email.value) {
+  if (!email.value) {
     errorMsg.value = 'Email is required';
     return;
   }
-  if(!password.value) {
+  if (!password.value) {
     errorMsg.value = 'Password is required';
     return;
   }
-  if(!emailRegex.test(email.value)) {
+  if (!emailRegex.test(email.value)) {
     errorMsg.value = 'Invalid email';
     return;
   }
-  if(!passwordRegex.test(password.value)) {
+  if (!passwordRegex.test(password.value)) {
     errorMsg.value = 'Invalid password';
     return;
   }
 
-  try{
+  try {
 
-    // Logic to handle login here
+    await authenticateUser(email.value, password.value)
+        .then(async authResponse => {
+          console.debug('User authenticated successfully:', authResponse);
+          const authToken = authResponse.token;
 
-    await router.push('/')
-  }catch(error){
+          await getMyProfile(authToken)
+              .then(async userResponse => {
+                console.log('user response:', userResponse);
+                const user = {
+                  token: authToken,
+                  email: userResponse.email,
+                  firstName: userResponse.firstName,
+                  lastName: userResponse.lastName,
+                  phoneNumber: userResponse.phoneNumber,
+                };
+                userStorage.login(user);
+                await router.push('/')
+              })
+              .catch(error => {
+                console.error('Fetching user by email failed: ', error);
+                errorMsg.value = "Try again.";
+              })
+        })
+        .catch(error => {
+          console.error('Authentication failed:', error);
+          errorMsg.value = "Try again.";
+        });
+  } catch (error) {
     console.error("Login failed:", error)
     errorMsg.value = "Try again.";
   }
-
 };
 
 /**
@@ -97,61 +126,103 @@ const login = async () => {
  * @returns {void}
  */
 const register = async () => {
-  if(!firstName.value) {
+  if (!firstName.value) {
     errorMsg.value = 'First name is required';
+    console.log(errorMsg.value);
     return;
   }
-  if(!lastName.value) {
+  if (!lastName.value) {
     errorMsg.value = 'Last name is required';
+    console.log(errorMsg.value);
     return;
   }
-  if(!email.value) {
+  if (!email.value) {
     errorMsg.value = 'Email is required';
+    console.log(errorMsg.value);
     return;
   }
-  if(!phoneNumber.value) {
+  if (!phoneNumber.value) {
     errorMsg.value = 'Phone number is required';
+    console.log(errorMsg.value);
     return;
   }
-  if(!password.value) {
+  if (!password.value) {
     errorMsg.value = 'Password is required';
+    console.log(errorMsg.value);
     return;
   }
-  if(!confirmPassword.value) {
+  if (!confirmPassword.value) {
     errorMsg.value = 'Confirm password is required';
+    console.log(errorMsg.value);
     return;
   }
   if (!nameRegex.test(firstName.value)) {
     errorMsg.value = 'Invalid first name';
+    console.log(errorMsg.value);
     return;
   }
   if (!nameRegex.test(lastName.value)) {
     errorMsg.value = 'Invalid last name';
+    console.log(errorMsg.value);
     return;
   }
   if (!emailRegex.test(email.value)) {
     errorMsg.value = 'Invalid email';
+    console.log(errorMsg.value);
     return;
   }
   if (!phoneRegex.test(phoneNumber.value)) {
     errorMsg.value = 'Invalid phone number';
+    console.log(errorMsg.value);
     return;
   }
   if (!passwordRegex.test(password.value)) {
     errorMsg.value = 'Invalid password';
+    console.log(errorMsg.value);
     return;
   }
   if (password.value !== confirmPassword.value) {
     errorMsg.value = 'Passwords do not match';
+    console.log(errorMsg.value);
     return;
   }
 
-  try{
+  try {
 
-    // Logic to handle registration here
+    await registerUser({
+      firstName: firstName.value,
+      lastName: lastName.value,
+      email: email.value,
+      password: password.value,
+      phoneNumber: phoneNumber.value,
+    })
+        .then(async authResponse => {
+          console.debug('User authenticated successfully:', authResponse);
+          const authToken = authResponse.token;
+          const user = {
+            token: authToken,
+            email: email.value,
+            firstName: firstName.value,
+            lastName: lastName.value,
+            phoneNumber: phoneNumber.value,
+          };
+          userStorage.login(user);
+          await router.push('/')
+              .catch(error => {
+                console.error('Fetching user by email failed: ', error);
+                errorMsg.value = "Try again.";
+              })
 
-    await router.push('/login')
-  }catch(error){
+        })
+        .catch(error => {
+          console.error('Registration failed:', error);
+        })
+
+
+    email.value = '';
+    password.value = '';
+    toggleForm();
+  } catch (error) {
     console.error("Registration failed:", error)
     errorMsg.value = "Try again.";
   }
@@ -171,41 +242,41 @@ const toggleForm = () => {
 </script>
 
 <template>
-<div class="display-page-container">
-  <h2 class="logo-header">FIND.no</h2>
-  <template v-if="isUserRegistered">
-    <div class="login">
-      <h2>Log in</h2>
-      <div class="fields">
-        <input type="text" placeholder="E-mail" />
-        <input type="password" placeholder="Password" />
-        <button class="basic-blue-btn" @click="login">Log in</button>
+  <div class="display-page-container">
+    <h2 class="logo-header">FIND.no</h2>
+    <template v-if="isUserRegistered">
+      <div class="login">
+        <h2>Log in</h2>
+        <div class="fields">
+          <input v-model="email" type="text" placeholder="E-mail"/>
+          <input v-model="password" type="password" placeholder="Password"/>
+          <button class="basic-blue-btn" @click="login">Log in</button>
+        </div>
+        <div class="to-sign-up">
+          <p>Don't have an account yet?</p>
+          <button @click="toggleForm">Sign up</button>
+        </div>
       </div>
-      <div class="to-sign-up">
-        <p>Don't have an account yet?</p>
-        <button @click="toggleForm">Sign up</button>
+    </template>
+    <template v-else>
+      <div class="sign-up">
+        <h2>Register</h2>
+        <div class="fields">
+          <input v-model="firstName" type="text" placeholder="First name"/>
+          <input v-model="lastName" type="text" placeholder="Last name"/>
+          <input v-model="email" type="text" placeholder="E-mail"/>
+          <input v-model="phoneNumber" type="text" placeholder="Phone number"/>
+          <input v-model="password" type="password" placeholder="Password"/>
+          <input v-model="confirmPassword" type="password" placeholder="Confirm password"/>
+          <button class="basic-blue-btn" @click="register">Register</button>
+        </div>
+        <div class="to-login">
+          <p>Already have an account?</p>
+          <button @click="toggleForm">Log in</button>
+        </div>
       </div>
-    </div>
-  </template>
-  <template v-else>
-    <div class="sign-up">
-      <h2>Register</h2>
-      <div class="fields">
-        <input v-model="firstName" type="text" placeholder="First name" />
-        <input v-model="lastName" type="text" placeholder="Last name" />
-        <input v-model="email" type="text" placeholder="E-mail" />
-        <input v-model="phoneNumber" type="text" placeholder="Phone number" />
-        <input v-model="password" type="password" placeholder="Password" />
-        <input v-model="confirmPassword" type="password" placeholder="Confirm password" />
-        <button class="basic-blue-btn" @click="toggleForm && register" >Register</button>
-      </div>
-      <div class="to-login">
-        <p>Already have an account?</p>
-        <button @click="toggleForm">Log in</button>
-      </div>
-    </div>
-  </template>
-</div>
+    </template>
+  </div>
 </template>
 
 <style scoped>

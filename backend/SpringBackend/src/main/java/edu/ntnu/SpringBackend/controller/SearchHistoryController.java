@@ -1,18 +1,19 @@
 package edu.ntnu.SpringBackend.controller;
 
-import edu.ntnu.SpringBackend.dto.SearchHistoryDTO;
+import edu.ntnu.SpringBackend.dto.SearchHistoryResponseDTO;
 import edu.ntnu.SpringBackend.dto.SearchHistoryListResponseDTO;
+import edu.ntnu.SpringBackend.dto.SearchHistoryRequestDTO;
 import edu.ntnu.SpringBackend.mapper.SearchHistoryMapper;
 import edu.ntnu.SpringBackend.model.User;
 import edu.ntnu.SpringBackend.service.SearchHistoryService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/search-history")
@@ -23,6 +24,7 @@ public class SearchHistoryController {
     private final SearchHistoryService searchHistoryService;
 
     @GetMapping("/get-my-history")
+    @Operation(summary = "Get search history for the authenticated user", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<SearchHistoryListResponseDTO> findByUserId(
             @AuthenticationPrincipal User user
             ) {
@@ -31,9 +33,10 @@ public class SearchHistoryController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<SearchHistoryDTO> add(
+    @Operation(summary = "Add a new search history entry for the authenticated user", security = @SecurityRequirement(name = "bearerAuth"))
+    public ResponseEntity<SearchHistoryResponseDTO> add(
             @AuthenticationPrincipal User user,
-            @RequestBody SearchHistoryDTO request
+            @RequestBody SearchHistoryRequestDTO request
     ) {
         logger.info("POST Request received on [/api/v1/search-history/add]");
         return ResponseEntity.ok(searchHistoryMapper.toDto(searchHistoryService.add(request, user)));

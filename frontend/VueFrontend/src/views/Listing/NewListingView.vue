@@ -1,11 +1,11 @@
 <script setup>
-import NewListingComponent from '@/components/Listing/NewListingComponent.vue'
+import NewListingComponent from '@/components/listing/NewListingComponent.vue'
 import Navbar from '@/components/Navbar.vue'
 
 </script>
 
 <template>
-  <Navbar :isLoggedIn="true"/>
+  <Navbar />
   <div class="display-page-container">
     <NewListingComponent />
   </div>
