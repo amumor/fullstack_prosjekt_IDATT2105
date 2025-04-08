@@ -35,10 +35,7 @@ public class CategoryController {
             @RequestBody CategoryCreationRequestDTO request
     ) {
         logger.info("POST Request received on [/api/v1/category/create]");
-        Category category = Category.builder()
-                .name(request.getName())
-                .build();
-        return ResponseEntity.ok(categoryMapper.toDto(categoryService.add(category, user)));
+        return ResponseEntity.ok(categoryMapper.toDto(categoryService.add(request, user)));
     }
 
     @PreAuthorize("hasRole('ADMIN')")
