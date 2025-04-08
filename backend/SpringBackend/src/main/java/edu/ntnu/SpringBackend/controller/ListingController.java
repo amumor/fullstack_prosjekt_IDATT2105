@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,6 +39,7 @@ public class ListingController {
      * Get suggestions for listings based on the user's search history.
      * This endpoint retrieves a list of suggested listings for the authenticated user.
      * Uses pagination to limit the number of results returned.
+     * Accessible to all users, logged in or not.
      *
      * @param user the authenticated user
      * @return a list of listing response DTOs
@@ -69,6 +71,7 @@ public class ListingController {
     /**
      * Get a specific listing by its ID.
      * This endpoint retrieves a listing by its unique identifier.
+     * Accessible to all users, logged in or not.
      *
      * @param id the ID of the listing to retrieve
      * @return the listing response DTO
@@ -84,6 +87,7 @@ public class ListingController {
 
     /**
      * Get listings by title (search) with pagination.
+     * Accessible to all users, logged in or not.
      *
      * @param title the title or keyword to search for
      * @param page  the page number (default 0)
@@ -112,12 +116,15 @@ public class ListingController {
 
     /**
      * Get listings for the authenticated seller with pagination.
+     * This endpoint retrieves a list of listings created by the authenticated seller.
+     * To view their own listings, the seller must be authenticated.
      *
      * @param user the authenticated seller
      * @param page the page number (default 0)
      * @param size the page size (default 10)
      * @return a list of listings created by the seller
      */
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/get-by-seller")
     @Operation(summary = "Get listings by seller", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<ListingListResponseDTO> getBySeller(
@@ -140,6 +147,7 @@ public class ListingController {
 
     /**
      * Get listings by single category with pagination.
+     * Accessible to all users, logged in or not.
      *
      * @param categoryName the name of the category to filter by
      * @param page         the page number (default 0)
@@ -166,12 +174,14 @@ public class ListingController {
     /**
      * Create a new listing.
      * This endpoint allows the authenticated user to create a new listing.
+     * Only authenticated users can create listings.
      *
      * @param user the authenticated user creating the listing
      * @param request the request DTO containing listing details
      * @param images array of images for the listing
      * @return the created listing response DTO
      */
+    @PreAuthorize("isAuthenticated()")
     @PostMapping(value = "/create", consumes = {"multipart/form-data"})
     @Operation(summary = "Create a new listing", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<ListingResponseDTO> create(
@@ -187,10 +197,12 @@ public class ListingController {
     /**
      * Get all listings for the authenticated user.
      * This endpoint retrieves a list of all listings created by the authenticated user.
+     * Only authenticated users can access this endpoint.
      *
      * @param user the authenticated user
      * @return a list of listing response DTOs
      */
+    @PreAuthorize("isAuthenticated()")
     @PutMapping("/update/{id}")
     @Operation(summary = "Update a listing", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<ListingResponseDTO> updateListing(
@@ -208,11 +220,13 @@ public class ListingController {
     /**
      * Delete a listing by its ID.
      * This endpoint allows the authenticated user to delete a listing.
+     * Only authenticated users can delete listings.
      *
      * @param user the authenticated user deleting the listing
      * @param id the ID of the listing to delete
      * @return a response entity with no content
      */
+    @PreAuthorize("isAuthenticated()")
     @DeleteMapping("/delete/{id}")
     @Operation(summary = "Delete a listing", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<Void> deleteListing(
