@@ -6,7 +6,7 @@ import { userStore } from '@/stores/user.js'
 import { storeToRefs } from 'pinia'
 
 const categories = [
-  { id: 1, name: 'Boats' },
+  { id: 1, name: 'Window' },
   { id: 2, name: 'Cars' },
   { id: 3, name: 'Motorcycles' },
   { id: 4, name: 'Real Estate' },
@@ -42,19 +42,12 @@ const getCoordinates = async (address) => {
   return null;
 };
 
-// Get image URL
 const handleFileChange = (event) => {
   const files = event.target.files; // Get the list of selected files
-
+  
   // Check if files are selected
   if (files.length > 0) {
-    const file = files[0]; // Get the first file (if multiple files can be selected, handle accordingly)
-
-    // Generate a temporary URL for the image
-    const imageUrl = URL.createObjectURL(file);
-
-    // Add the image URL to the images array
-    images.value.push(imageUrl);
+    images.value.push(files[0]);
   }
 }
 
@@ -65,7 +58,7 @@ const user = userStore();
 const listingStore = useListingStore();
 const { selectedListing } = storeToRefs(listingStore);
 
-const createListings = () => {
+const createListings = async () => {
   // Logic to save the listing (v-model?)
   if(!title.value){
     errorMsg.value = 'Title is required';
@@ -97,24 +90,34 @@ const createListings = () => {
     console.log('Image is required');
     return;
   }
+  getCoordinates(location.value);
+  console.log('Coordinates:', coordinates.value);
   listingStore.selectListing({
-    seller: user.id,
+    id: 0,
+    seller: user,
     title: title.value,
     description: description.value,
-    category: 'Car',
+    category: selectedCategory.value,
     price: price.value,
-    location: getCoordinates(location.value),
+    latitude: coordinates.value[0],
+    longitude: coordinates.value[1],
     image: images.value[0],
   });
   listingStore.addListing( selectedListing.value )
+  console.log('SelectedListing:', selectedListing.value);
+  
   try{
-    const listResponse = createListing({
-      listing: selectedListing.value,
-      images: images.value,
-      token: user.token,
-    });
-    errorMsg.value = 'Listing created successfully';
+    const listResponse = await createListing({
+      title: selectedCategory.value.title,
+      description: selectedCategory.value.description,
+      categoryName: selectedCategory.value.selectedCategory,
+      listingStatus: 'ACTIVE',
+      price: selectedCategory.value.price,
+      latitude: selectedCategory.value.latitude,
+      longitude: selectedCategory.value.longitude,
+    }, images.value, user.token);
     console.log('Listing created successfully:', listResponse);
+    console.log('SelectedListing:', selectedListing.value);
   } catch (error) {
     errorMsg.value = 'Error creating listing';
     console.error('Error creating listing:', error);
@@ -149,7 +152,7 @@ const createListings = () => {
     <div class="image-field">
       <form action="/upload" method="post" enctype="multipart/form-data">
         <label for="file">Upload image:</label>
-        <input type="file" id="file" name="file" accept="image/*" @change="handleFileChange">
+        <input type="file" id="file" name="file" accept="image/*" @change="handleFileChange" />
       </form>
       <div v-for="(image, index) in images" :key="index">
         <p>{{ image }}</p>

@@ -39,7 +39,9 @@ const { timeout, baseURL } = serviceConfigParams();
  *   .then(response => console.log('Listing created:', response))
  *   .catch(error => console.error('Creation failed:', error));
  */
-export function createListing(listing, images = [], token) {
+
+/** 
+export function createListing(listing, images = [], token) { // TODO: fix
     const client = new ApiClient(baseURL);
     client.timeout = timeout;
     // Set up bearer authentication using the provided token.
@@ -72,6 +74,87 @@ export function createListing(listing, images = [], token) {
             throw error;
         });
 }
+*/
+
+import request from 'superagent';
+
+/**
+ * Creates a new listing with the provided details.
+ *
+ * @param {Object} listing - An object containing listing details.
+ * @param {string} listing.title - The title of the listing.
+ * @param {string} listing.description - The description of the listing.
+ * @param {string} listing.categoryName - The category name.
+ * @param {string} listing.listingStatus - The status of the listing. Enum: ACTIVE, INACTIVE or SOLD
+ * @param {number} listing.price - The price of the listing.
+ * @param {number} listing.latitude - The latitude coordinate.
+ * @param {number} listing.longitude - The longitude coordinate.
+ * @param {Array.<string>} listing.imagesToDelete - Array of images to delete, if empty no images are deleted
+ * @param {Array.<File>} [images] - Optional array of image files to upload.
+ * @param {string} token - JWT token.
+ * @returns {Promise<Object>} A promise that resolves to the created ListingResponseDTO.
+ * @throws {Error} If listing creation fails.
+ *
+ * @example
+ * createListing({
+ *   title: 'Vintage Car',
+ *   description: 'A well-maintained vintage car',
+ *   categoryName: 'Cars',
+ *   listingStatus: 'ACTIVE',
+ *   price: 15000,
+ *   latitude: 40.7128,
+ *   longitude: -74.0060
+ * }, images, 'jwt-token')
+ *   .then(response => console.log('Listing created:', response))
+ *   .catch(error => console.error('Creation failed:', error));
+ */
+export function createListing(listing, images = [], token) {
+    // Prepare the listing data to be sent in the request.
+    const requestData = {
+        title: listing.title,
+        description: listing.description,
+        categoryName: listing.categoryName,
+        listingStatus: listing.listingStatus, // Should be a valid enum value like 'ACTIVE'
+        price: listing.price,
+        latitude: listing.latitude,
+        longitude: listing.longitude,
+        imagesToDelete: listing.imagesToDelete || [],
+    };
+    console.log('imagesToDelete:', requestData.imagesToDelete);
+
+    // Initialize the superagent request.
+    let req = request
+        .post('http://localhost:8080/api/v1/listing/create')  
+        .set('Authorization', `Bearer ${token}`)  // Set Authorization header with Bearer token
+        .type('multipart/form-data'); // We're sending form data
+
+    // Add listing details as fields to the form.
+    Object.keys(requestData).forEach(key => {
+        req.field(key, requestData[key]);
+    });
+
+    req.field('listing', JSON.stringify(listing)); // Send listing as a JSON string
+    // Add the images if provided.
+    if (images.length > 0) {
+        images.forEach(image => {
+            req.attach('images', image); // 'images' is the key expected by the backend to receive files
+        });
+    }
+
+    // Send the request and return a promise.
+    console.log('Request:', req);
+    return req
+        .then(response => {
+            // Resolve with the response body.
+            return response.body;  // Assuming the response contains the ListingResponseDTO in the body
+        })
+        .catch(error => {
+            console.error('Listing creation failed:', error);
+            throw new Error(`Listing creation failed: ${error.message}`);
+        });
+}
+
+
 
 /**
  * Retrieves a listing by its ID.
