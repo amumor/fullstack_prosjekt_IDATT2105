@@ -66,9 +66,7 @@ export function createListing(listing, images = [], token) {
     const opts = { images };
 
     return listingApi.create(listingCreationRequestDTO, opts)
-        .then(listingResponseDTO => {
-            return listingResponseDTO;
-        })
+        .then(listingResponseDTO => listingResponseDTO)
         .catch(error => {
             console.error('Listing creation failed:', error);
             throw error;
