@@ -9,6 +9,7 @@ import edu.ntnu.SpringBackend.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,7 +45,7 @@ public class CategoryService {
     public Category add(CategoryCreationRequestDTO requestDTO, @AuthenticationPrincipal User user) {
         logger.info("> Adding new category: {}", requestDTO.getName());
         if (user == null || !user.getRole().equals(Role.ROLE_ADMIN)) {
-            throw new SecurityException("User is not authorized to delete categories");
+            throw new AccessDeniedException("User is not authorized to create categories");
         }
         if (categoryRepository.existsByNameIgnoreCase(requestDTO.getName())) {
             throw new IllegalArgumentException("Category with name " + requestDTO.getName().toLowerCase() + " already exists");
@@ -60,7 +61,7 @@ public class CategoryService {
     public void delete(UUID id, @AuthenticationPrincipal User user) {
         logger.info("> Deleting category with ID: {}", id);
         if (user == null || !user.getRole().equals(Role.ROLE_ADMIN)) {
-            throw new SecurityException("User is not authorized to delete categories");
+            throw new AccessDeniedException("User is not authorized to delete categories");
         }
 
         if (!categoryRepository.existsById(id)) {
