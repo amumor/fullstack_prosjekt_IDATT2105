@@ -20,6 +20,7 @@ import java.util.UUID;
  * @since 1.0
  */
 public interface CategoryRepository extends JpaRepository<Category, UUID> {
+
   /**
    * Finds a category by its name, ignoring case.
    *

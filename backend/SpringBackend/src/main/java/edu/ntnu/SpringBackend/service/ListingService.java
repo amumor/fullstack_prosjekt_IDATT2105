@@ -112,7 +112,7 @@ public class ListingService {
     if (categoryName == null || categoryName.trim().isEmpty()) {
       throw new IllegalArgumentException("Category name must be provided.");
     }
-    Category category = categoryService.findByName(categoryName);
+    Category category = categoryService.getByName(categoryName);
     return listingRepository.findByCategoryAndStatus(category, ListingStatus.ACTIVE, pageable);
   }
 
@@ -133,7 +133,7 @@ public class ListingService {
     Listing listing = Listing.builder()
                     .title(dto.getTitle())
                     .description(dto.getDescription())
-                    .category(categoryService.findByName(dto.getCategoryName()))
+                    .category(categoryService.getByName(dto.getCategoryName()))
                     .status(dto.getListingStatus())
                     .price(dto.getPrice())
                     .latitude(dto.getLatitude())
@@ -174,7 +174,7 @@ public class ListingService {
 
     listing.setTitle(dto.getTitle());
     listing.setDescription(dto.getDescription());
-    listing.setCategory(categoryService.findByName(dto.getCategoryName()));
+    listing.setCategory(categoryService.getByName(dto.getCategoryName()));
     listing.setStatus(dto.getListingStatus() != null ? dto.getListingStatus() : ListingStatus.ACTIVE);
     listing.setPrice(dto.getPrice());
     listing.setLatitude(dto.getLatitude());
