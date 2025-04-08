@@ -22,15 +22,7 @@ const image="https://iqboatlifts.com/wp-content/uploads/2018/06/Yacht-vs-Boat-Wh
 
   <!-- Listing component -->
   <div class="display-page-container">
-    <SingleListingComponent
-      :id=id
-      :title=title
-      :description=description
-      :price=price
-      :location=location
-      :category=category
-      :lastEdited=lastEdited
-      :image=image />
+    <SingleListingComponent :id=id />
   </div>
 </template>
 

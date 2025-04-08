@@ -32,8 +32,8 @@ try{
 }
 
 // Userstore
-const useUserStore = userStore();
-const isOwner = ref(useUserStore.id === listingStore.seller);
+const user = userStore();
+const isOwner = ref(user.id === listingStore.seller);
 
 const toggleFavorite = () => {
   isFavorite.value = !isFavorite.value;
@@ -73,7 +73,7 @@ const toEditListing = () => {
     </div>
 
     <!-- Buy item or message seller -->
-    <div class="btn" v-if="useUserStore.isLoggedIn && !isOwner">
+    <div class="btn" v-if="user.isLoggedIn && !isOwner">
       <button class="message-btn">Message seller</button>
       <button class="buy-btn">Buy</button>
     </div>

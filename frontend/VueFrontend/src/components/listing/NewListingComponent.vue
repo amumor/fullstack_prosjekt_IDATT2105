@@ -1,5 +1,9 @@
 <script setup>
 import { ref } from 'vue'
+import { useListingStore } from '@/stores/listing.js'
+import { createListing } from '@/services/ListingService.js'
+import { userStore } from '@/stores/user.js'
+import { storeToRefs } from 'pinia'
 
 const categories = [
   { id: 1, name: 'Boats' },
@@ -9,6 +13,14 @@ const categories = [
 ];
 
 const coordinates = ref([59.9139, 10.7522]); // Default coordinates (Oslo)
+
+const title = ref('');
+const description = ref('');
+const selectedCategory = ref('');
+const price = ref('');
+const location = ref('');
+const images = ref([]);
+const errorMsg = ref('');
 
 const getCoordinates = async (address) => {
   const encodedAddress = encodeURIComponent(address);
@@ -30,8 +42,83 @@ const getCoordinates = async (address) => {
   return null;
 };
 
-const createListing = () => {
+// Get image URL
+const handleFileChange = (event) => {
+  const files = event.target.files; // Get the list of selected files
+
+  // Check if files are selected
+  if (files.length > 0) {
+    const file = files[0]; // Get the first file (if multiple files can be selected, handle accordingly)
+
+    // Generate a temporary URL for the image
+    const imageUrl = URL.createObjectURL(file);
+
+    // Add the image URL to the images array
+    images.value.push(imageUrl);
+  }
+}
+
+// User store
+const user = userStore();
+
+// Listing store
+const listingStore = useListingStore();
+const { selectedListing } = storeToRefs(listingStore);
+
+const createListings = () => {
   // Logic to save the listing (v-model?)
+  if(!title.value){
+    errorMsg.value = 'Title is required';
+    console.log('Title is required');
+    return;
+  }
+  if(!description.value){
+    errorMsg.value = 'Description is required';
+    console.log('Description is required');
+    return;
+  }
+  if(!selectedCategory.value){
+    errorMsg.value = 'Category is required';
+    console.log('Category is required');
+    return;
+  }
+  if(!price.value){
+    errorMsg.value = 'Price is required';
+    console.log('Price is required');
+    return;
+  }
+  if(!location.value){
+    errorMsg.value = 'Location is required';
+    console.log('Location is required');
+    return;
+  }
+  if(images.value.length === 0){
+    errorMsg.value = 'Image is required';
+    console.log('Image is required');
+    return;
+  }
+  listingStore.selectListing({
+    seller: '1',
+    title: title.value,
+    description: description.value,
+    category: selectedCategory.value.id,
+    price: price.value,
+    location: getCoordinates(location.value),
+    image: images.value[0],
+  });
+  listingStore.addListing( selectedListing.value )
+  try{
+    const listResponse = createListing({
+      listing: selectedListing.value,
+      images: images.value,
+      token: user.token,
+    });
+    errorMsg.value = 'Listing created successfully';
+    console.log('Listing created successfully:', listResponse);
+  } catch (error) {
+    errorMsg.value = 'Error creating listing';
+    console.error('Error creating listing:', error);
+  }
 };
 
 </script>
@@ -41,24 +128,38 @@ const createListing = () => {
   <div class="fields">
     <h2>Create a new listing</h2>
     <div class="text-fields">
-      <input type="text" placeholder="Header" required />
-      <textarea type="text" id="description" placeholder="Description" required />
-      <input type="text" placeholder="Price" required />
-      <input type="text" placeholder="Location" required />
+      <input v-model="title" type="text" placeholder="Header" required />
+      <textarea v-model="description" type="text" id="description" placeholder="Description" required />
+      <input v-model="price" type="text" placeholder="Price" required />
+      <input v-model="location" type="text" placeholder="Location" required />
+
+      <!-- Categories-->
       <div v-for="category in categories" :key="category.id">
         <label>
-          <input type="checkbox" :name=category.name :value=category.name>{{ category.name }}
+          <input 
+            v-model="selectedCategory"
+            type="radio" 
+            :name="'category'" 
+            :value="category.name" 
+          />
+          {{ category.name }}
         </label>
       </div>
     </div>
     <div class="image-field">
       <form action="/upload" method="post" enctype="multipart/form-data">
         <label for="file">Upload image:</label>
-        <input type="file" id="file" name="file" accept="image/*">
+        <input type="file" id="file" name="file" accept="image/*" @change="handleFileChange">
       </form>
+      <div v-for="(image, index) in images" :key="index">
+        <p>{{ image }}</p>
+      </div>
     </div>
+
+    <div v-if="errorMsg" class="error-msg">{{ errorMsg }}</div>
+
     <div class="submit-button">
-      <button type="submit" class="basic-blue-btn" @click="createListing">Create</button>
+      <button type="submit" class="basic-blue-btn" @click="createListings">Create</button>
     </div>
   </div>
 </div>
