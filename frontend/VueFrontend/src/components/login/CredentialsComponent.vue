@@ -53,15 +53,10 @@ const password = ref('');
  * @type {import('vue').Ref<string>}
  */
 const confirmPassword = ref('');
-
 const errorMsg = ref('');
-
 const nameRegex = /^[A-Za-zÆØÅæøå]+$/;
-
 const emailRegex = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/;
-
 const phoneRegex = /^\d{8}$/;
-
 const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&()_+\-={}:;"'|<>,.?]).{10,}$/;
 
 /**
