@@ -1,38 +1,67 @@
 <script setup>
 //Get categories from backend
-import { ref, defineProps } from 'vue'
+import {ref, defineProps} from 'vue'
+import {createCategory, deleteCategory, getAllCategories} from "@/services/CategoryService.js";
+import SuccessFailModal from "@/components/modal/SuccessFailModal.vue";
+import {userStore} from "@/stores/user.js";
+import {isTokenExpired} from "@/services/TokenService.js";
 
-const categories = ref([
-  { id: 1, name: 'Boats' },
-  { id: 2, name: 'Cars' },
-  { id: 3, name: 'Motorcycles' },
-  { id: 4, name: 'Real Estate' },
-]);
+const categories = ref([]);
+const newCategoryName = ref('')
 
-const props = defineProps ({
+const userStorage = userStore();
+const token = userStorage.token;
+if (isTokenExpired(token)) {
+  userStorage.logout();
+}
+const response = await getAllCategories(token);
+console.log("response: ", response.categories);
+categories.value.push(...response.categories)
+
+
+console.log(categories);
+
+const showResultModal = ref(false);
+const resultModalMessage = ref('');
+
+const props = defineProps({
   isEditMode: Boolean
 })
 
-const deleteCategory = () => {
-  // Logic to delete the category
+const localDeleteCategory = (index) => {
+  const category = categories.value[index]
+  deleteCategory(category.id, token)
+      .then(() => {
+        categories.value.splice(index, 1)
+      })
+      .catch((error) => {
+        console.error('Failed to delete category:', error)
+        resultModalMessage.value = "Failed to delete category";
+        showResultModal.value = true;
+      })
 }
 
 const newCategory = () => {
+  console.log(newCategoryName.value);
+  const response = createCategory(newCategoryName.value, token)
   categories.value.push({
-    id: categories.value.length + 1,
-    name: ''
+    id: response.id,
+    name: newCategoryName.value,
   })
 }
 
 </script>
 
 <template>
-<div class="category-container">
+  <div class="category-container">
     <div class="edit-mode" v-if="isEditMode">
-      <button class="basic-blue-btn" id="new-category-btn" @click="newCategory">+</button>
+      <div class="category-item">
+        <button class="basic-blue-btn" id="new-category-btn" @click="newCategory">+</button>
+        <input type="text" v-model="newCategoryName" placeholder="Name"/>
+      </div>
       <div class="category-item" v-for="(category, index) in categories" :key="category.id">
-        <button class="basic-blue-btn" id="delete-btn" @click="() => deleteCategory(index)">Delete</button>
-        <input type="text" v-model=category.name />
+        <button class="basic-blue-btn" id="delete-btn" @click="() => localDeleteCategory(index)">Delete</button>
+        <input type="text" v-model="category.name"/>
       </div>
     </div>
     <div class="not-edit-mode" v-if="!isEditMode">
@@ -40,7 +69,12 @@ const newCategory = () => {
         <p class="category-text">{{ category.name }}</p>
       </div>
     </div>
-</div>
+  </div>
+  <SuccessFailModal
+      v-if="showResultModal"
+      :message="resultModalMessage"
+      @close="showResultModal = false"
+  />
 </template>
 
 <style scoped>

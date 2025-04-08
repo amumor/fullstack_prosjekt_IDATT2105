@@ -6,6 +6,7 @@ import CredentialsComponent from "@/components/login/CredentialsComponent.vue";
 import {registerAdminUser, registerUser} from "@/services/AuthenticationService.js";
 import {userStore} from "@/stores/user.js";
 import SuccessFailModal from "@/components/modal/SuccessFailModal.vue";
+import {isTokenExpired} from "@/services/TokenService.js";
 
 const isEditeMode = ref(false);
 const userStorage = userStore();
@@ -121,6 +122,9 @@ const registerAdmin = async () => {
 
   try {
     const token = userStorage.token;
+    if (isTokenExpired(token)) {
+      userStorage.logout();
+    }
     const authResponse = await registerAdminUser({
       firstName: firstName.value,
       lastName: lastName.value,
@@ -151,7 +155,9 @@ const registerAdmin = async () => {
         <button class="basic-blue-btn" id="edit-btn" @click="toggleEditMode">Edit</button>
       </div>
     </div>
+    <suspense>
     <AdminCategoriesComponent :isEditMode="isEditeMode" />
+    </suspense>
     <div>
       <div class="sign-up">
         <h2>Register Admin</h2>
