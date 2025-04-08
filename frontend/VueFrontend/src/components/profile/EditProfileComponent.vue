@@ -1,61 +1,134 @@
 <script setup>
-import { ref, defineProps } from 'vue';
-import { useRouter } from 'vue-router'
-import { userStore } from '@/stores/user.js';
+import {ref, defineProps} from 'vue';
+import {useRouter} from 'vue-router'
+import {userStore} from '@/stores/user.js';
+import {updateUser} from "@/services/UserService.js";
+import {
+  validateEmail,
+  validateFirstName,
+  validateLastName,
+  validatePassword,
+  validatePhoneNumber
+} from "@/utils/Validation.js";
+import SuccessFailModal from "@/components/modal/SuccessFailModal.vue";
+import {isTokenExpired} from "@/services/TokenService.js";
 
 const user = userStore()
 
-const props = defineProps ({
-  firstName: String,
-  lastName: String,
-  email: String,
-  phoneNumber: String
-})
+// const props = defineProps ({
+//   firstName: String,
+//   lastName: String,
+//   email: String,
+//   phoneNumber: String
+// })
 
-const newFirstName = ref(user.firstName);
-const newLastName = ref(user.lastName);
-const newEmail = ref(user.email);
-const newPhoneNumber = ref(user.phoneNumber);
+// const newFirstName = ref(user.firstName);
+// const newLastName = ref(user.lastName);
+// const newEmail = ref(user.email);
+// const newPhoneNumber = ref(user.phoneNumber);
+const newFirstName = ref('');
+const newLastName = ref('');
+const newEmail = ref('');
+const newPhoneNumber = ref('');
+const newPassword = ref('');
+
+
+newFirstName.value = user.firstName
+newLastName.value = user.lastName
+newEmail.value = user.email
+newPhoneNumber.value = user.phoneNumber
+
+const showResultModal = ref(false);
+const resultModalMessage = ref('');
 
 const router = useRouter()
 
 const saveChanges = () => {
+  try {
 
-  // Validate the input fields
-  
-  user.setProfile({
-    firstName: newFirstName.value,
-    lastName: newLastName.value,
-    email: newEmail.value,
-    phoneNumber: newPhoneNumber.value
-  })
-  router.push('/profile');
+    if (!validateFirstName(newFirstName.value)) {
+      resultModalMessage.value = "First name is required";
+      showResultModal.value = true;
+      return;
+    }
+    if (!validateLastName(newLastName.value)) {
+      resultModalMessage.value = "Last name is required";
+      showResultModal.value = true;
+      return;
+    }
+    if (!validateEmail(newEmail.value)) {
+      resultModalMessage.value = "Email is required";
+      showResultModal.value = true;
+      return;
+    }
+    if (!validatePhoneNumber(newPhoneNumber.value)) {
+      resultModalMessage.value = "Phone number is required";
+      showResultModal.value = true;
+      return;
+    }
+    if (!validatePassword(newPassword.value) && newPassword.value.length > 1) {
+      resultModalMessage.value = "Password is required";
+      showResultModal.value = true;
+      return;
+    }
+
+    const newUser = {
+      firstName: newFirstName.value,
+      lastName: newLastName.value,
+      email: newEmail.value,
+      phoneNumber: newPhoneNumber.value,
+      password: newPassword.value
+    }
+    const token = user.token;
+    if (isTokenExpired(token)) {
+      user.logout();
+    }
+
+    updateUser(newUser, token);
+    user.logout();
+
+    router.push('/login');
+  } catch (error) {
+    console.log(error);
+    resultModalMessage.value = "Something went wrong";
+    showResultModal.value = true;
+  }
 }
 </script>
 
 <template>
-<div class="display-page-container">
-  <h2 class="display-credentials-title">Edit Profile</h2>
-  <div class="display-credentials-content">
-    <div class="display-credentials-item">
-      <label for="firstName">First name:</label>
-      <input type="text" id="first-name" v-model="newFirstName"/>
+  <div class="display-page-container">
+    <h2 class="display-credentials-title">Edit Profile</h2>
+    <div class="display-credentials-content">
+      <div class="display-credentials-item">
+        <label for="firstName">First name:</label>
+        <input type="text" id="first-name" v-model="newFirstName"/>
+      </div>
+      <div class="display-credentials-item">
+        <label for="lastName">Last name:</label>
+        <input type="text" id="last-name" v-model="newLastName"/>
+      </div>
+      <div class="display-credentials-item">
+        <label for="email">Email:</label>
+        <input type="email" id="email" v-model="newEmail"/>
+      </div>
+      <div class="display-credentials-item">
+        <label for="phoneNumber">Phone number:</label>
+        <input type="text" id="phone-number" v-model="newPhoneNumber"/>
+      </div>
+      <div class="display-credentials-item">
+        <label for="Password">Password:</label>
+        <input type="password" id="password" v-model="newPassword"/>
+      </div>
+      <button @click="saveChanges">Save changes</button>
+      <p class="restart-note">Updating user information requires an automatic logout to take effect.</p>
     </div>
-    <div class="display-credentials-item">
-      <label for="lastName">Last name:</label>
-      <input type="text" id="first-name" v-model="newLastName" />
-    </div>
-    <div class="display-credentials-item">
-      <label for="email">Email:</label>
-      <input type="email" id="email" v-model="newEmail" />
-    </div>
-    <div class="display-credentials-item">
-      <label for="phoneNumber">Password:</label>
-      <input type="text" id="phone-number" v-model="newPhoneNumber" />
-    </div>
-    <button @click="saveChanges">Save changes</button>
   </div>
-</div>
+  <SuccessFailModal
+      v-if="showResultModal"
+      :message="resultModalMessage"
+      @close="showResultModal = false"
+  />
 </template>
 
 <style scoped>
