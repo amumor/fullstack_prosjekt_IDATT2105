@@ -1,13 +1,8 @@
 // src/services/BookmarkService.js
 
-import {
-    ApiClient,
-    BookmarkControllerApi,
-    BookmarkRequestDTO
-} from '@/api';
-import { serviceConfigParams } from '@/services/ServiceSetup.js';
+import request from 'superagent';
 
-const { timeout, baseURL } = serviceConfigParams();
+const BASE_URL = 'http://localhost:8080/api/v1/bookmarks'; // Adjust if needed
 
 /**
  * Creates a new bookmark for the given listing.
@@ -15,33 +10,19 @@ const { timeout, baseURL } = serviceConfigParams();
  * @param {Object} bookmarkData - Data required for creating a bookmark.
  * @param {string} bookmarkData.listingId - The ID of the listing to bookmark.
  * @param {string} token - JWT token.
- * @returns {Promise<Object>} A promise that resolves to a BookmarkResponseDTO object.
- * @throws {Error} If bookmark creation fails.
- *
- * @example
- * createBookmark({ listingId: 'abc123' }, 'jwt.tok.en')
- *   .then(response => console.log('Bookmark created:', response))
- *   .catch(error => console.error('Error creating bookmark:', error));
+ * @returns {Promise<Object>} A promise that resolves to the bookmark response.
  */
-export function createBookmark(bookmarkData, token) {
-    const client = new ApiClient(baseURL);
-    client.timeout = timeout;
-    client.authentications.bearerAuth = {
-        type: 'bearer',
-        accessToken: token
-    };
-
-    const bookmarkApi = new BookmarkControllerApi(client);
-    const bookmarkRequestDTO = new BookmarkRequestDTO();
-    bookmarkRequestDTO.listingId = bookmarkData.listingId;
-
-    return bookmarkApi.createBookmark(bookmarkRequestDTO)
-        .then(bookmarkResponseDTO => bookmarkResponseDTO)
-        .catch(error => {
-            console.error('Failed to create bookmark:', error);
-            throw error;
+export const createBookmark = (bookmarkData, token) => {
+    return request
+        .post(`${BASE_URL}/create`)
+        .set('Authorization', `Bearer ${token}`)
+        .send(bookmarkData)
+        .then(res => res.body)
+        .catch(err => {
+            console.error('Failed to create bookmark:', err);
+            throw err;
         });
-}
+};
 
 /**
  * Deletes a bookmark by its ID.
@@ -49,60 +30,33 @@ export function createBookmark(bookmarkData, token) {
  * @param {string} bookmarkId - The ID of the bookmark to delete.
  * @param {string} token - JWT token.
  * @returns {Promise<void>} A promise that resolves if deletion is successful.
- * @throws {Error} If bookmark deletion fails.
- *
- * @example
- * deleteBookmark('bookmark123', 'jwt.tok.en')
- *   .then(() => console.log('Bookmark deleted successfully'))
- *   .catch(error => console.error('Failed to delete bookmark:', error));
  */
-export function deleteBookmark(bookmarkId, token) {
-    const client = new ApiClient(baseURL);
-    client.timeout = timeout;
-    client.authentications.bearerAuth = {
-        type: 'bearer',
-        accessToken: token
-    };
-
-    const bookmarkApi = new BookmarkControllerApi(client);
-
-    return bookmarkApi.deleteBookmark(bookmarkId)
+export const deleteBookmark = (bookmarkId, token) => {
+    return request
+        .delete(`${BASE_URL}/${bookmarkId}`)
+        .set('Authorization', `Bearer ${token}`)
         .then(() => {
-            // If your backend returns 204 (No Content), you might want to resolve with a value:
-            return; // or: return { message: 'Bookmark deleted successfully' };
+            // No content returned; resolved implicitly
         })
-        .catch(error => {
-            console.error('Failed to delete bookmark:', error);
-            throw error;
+        .catch(err => {
+            console.error('Failed to delete bookmark:', err);
+            throw err;
         });
-}
+};
 
 /**
  * Retrieves all bookmarks for the currently authenticated user.
  *
  * @param {string} token - JWT token.
- * @returns {Promise<Array>} A promise that resolves to an array of BookmarkResponseDTO objects.
- * @throws {Error} If fetching bookmarks fails.
- *
- * @example
- * getUserBookmarks('jwt.tok.en')
- *   .then(bookmarks => console.log('Retrieved bookmarks:', bookmarks))
- *   .catch(error => console.error('Error fetching bookmarks:', error));
+ * @returns {Promise<Array>} A promise that resolves to a list of bookmarks.
  */
-export function getUserBookmarks(token) {
-    const client = new ApiClient(baseURL);
-    client.timeout = timeout;
-    client.authentications.bearerAuth = {
-        type: 'bearer',
-        accessToken: token
-    };
-
-    const bookmarkApi = new BookmarkControllerApi(client);
-
-    return bookmarkApi.getUserBookmarks()
-        .then(bookmarkList => bookmarkList)
-        .catch(error => {
-            console.error('Failed to retrieve user bookmarks:', error);
-            throw error;
+export const getUserBookmarks = (token) => {
+    return request
+        .get(`${BASE_URL}/my-bookmarks`)
+        .set('Authorization', `Bearer ${token}`)
+        .then(res => res.body)
+        .catch(err => {
+            console.error('Failed to retrieve user bookmarks:', err);
+            throw err;
         });
-}
+};
