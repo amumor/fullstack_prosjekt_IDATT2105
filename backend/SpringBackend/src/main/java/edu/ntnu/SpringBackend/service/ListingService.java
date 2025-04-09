@@ -9,6 +9,7 @@ import edu.ntnu.SpringBackend.model.enums.ListingStatus;
 import edu.ntnu.SpringBackend.repository.ListingImageRepository;
 import edu.ntnu.SpringBackend.repository.ListingRepository;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
@@ -85,6 +86,8 @@ public class ListingService {
     }
 
     /**
+     * DOESN NOT WORK! Pagination issue. Use
+     * <p>
      * Retrieves listings by their categories.
      * This method checks if the listing exists in the database and returns it.
      * Mainly used for filtering listings based on user search history.
@@ -94,23 +97,52 @@ public class ListingService {
      * @return a list of listings by the specified categories
      */
     public List<Listing> findByCategories(List<Category> categoryList, Pageable pageable) {
-        logger.info("> Finding listings by categories: {}", categoryList);
-        if (categoryList == null || categoryList.isEmpty()) {
-            categoryList = categoryService.getAll();
+        throw new NotImplementedException("This method does not work! Pagination issue accross multiple categories");
+        //TODO: Fix at a later time.
+
+//        logger.info("> Finding listings by categories: {}", categoryList);
+//        if (categoryList == null || categoryList.isEmpty()) {
+//            categoryList = categoryService.getAll();
+//        }
+//
+//        int totalPageSize = pageable.getPageSize();
+//        int categoryCount = categoryList.size();
+//        int perCategorySize = (int) Math.ceil((double) totalPageSize / categoryCount);
+//
+//        List<Listing> combinedListings = new ArrayList<>();
+//        for (Category category : categoryList) {
+//            Pageable categoryPageable = PageRequest.of(pageable.getPageNumber(), perCategorySize, pageable.getSort());
+//            List<Listing> listingsPerCategory = listingRepository.findByCategoryAndStatus(category, ListingStatus.ACTIVE, categoryPageable);
+//
+//            logger.info("> Category {} returned {} listings", category.getName(), listingsPerCategory.size());
+//            combinedListings.addAll(listingsPerCategory);
+//        }
+//        if (combinedListings.size() > totalPageSize) {
+//            logger.warn("> Combined listings size exceeds total page size, trimming to {}", totalPageSize);
+//            combinedListings = combinedListings.subList(0, totalPageSize);
+//        }
+//        logger.info("> Combined listings count: {}", combinedListings.size());
+//        return combinedListings;
+    }
+
+    public List<Listing> findByCategories2(List<Category> categories, Pageable pageable) {
+        if (categories == null || categories.isEmpty()) {
+            categories = categoryService.getAll();
         }
 
         int totalPageSize = pageable.getPageSize();
-        int categoryCount = categoryList.size();
+        int categoryCount = categories.size();
         int perCategorySize = (int) Math.ceil((double) totalPageSize / categoryCount);
 
         List<Listing> combinedListings = new ArrayList<>();
-        for (Category category : categoryList) {
-            Pageable categoryPageable = PageRequest.of(pageable.getPageNumber(), perCategorySize, pageable.getSort());
-            List<Listing> listingsPerCategory = listingRepository.findByCategoryAndStatus(category, ListingStatus.ACTIVE, categoryPageable);
 
-            logger.info("> Category {} returned {} listings", category.getName(), listingsPerCategory.size());
-            combinedListings.addAll(listingsPerCategory);
+        for (Category category : categories) {
+            combinedListings.addAll(category.getListings());
         }
+
+        // Scramble to avoid some listings in categories never being shown.
+        Collections.shuffle(combinedListings);
+
         if (combinedListings.size() > totalPageSize) {
             logger.warn("> Combined listings size exceeds total page size, trimming to {}", totalPageSize);
             combinedListings = combinedListings.subList(0, totalPageSize);

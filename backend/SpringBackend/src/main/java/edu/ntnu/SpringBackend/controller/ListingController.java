@@ -70,7 +70,9 @@ public class ListingController {
         logger.info(" ---- Categories found: {}", categories.toString());
 
         // Find the listings using the categories and pageable
-        List<Listing> listings = listingService.findByCategories(categories, pageable);
+//        List<Listing> listings = listingService.findByCategories(categories, pageable); //TODO: fix this piece of shit
+        List<Listing> listings = listingService.findByCategories2(categories, pageable);
+
         logger.info(" ---- Listings retrieved: {}", listings.toString());
         for (Listing listing : listings) {
             logger.info(" ---- Listing: {}", listing.toString());
