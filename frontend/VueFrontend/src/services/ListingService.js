@@ -5,9 +5,9 @@ import {
     ListingControllerApi,
     ListingCreationRequestDTO
 } from '@/api';
-import { serviceConfigParams } from '@/services/ServiceSetup.js';
+import {serviceConfigParams} from '@/services/ServiceSetup.js';
 
-const { timeout, baseURL } = serviceConfigParams();
+const {timeout, baseURL} = serviceConfigParams();
 
 /**
  * Creates a new listing with the provided details.
@@ -63,7 +63,7 @@ export function createListing(listing, images = [], token) {
     listingCreationRequestDTO.imagesToDelete = listing.imagesToDelete || [];
 
     // Pass the optional images via opts.
-    const opts = { images };
+    const opts = {images};
 
     return listingApi.create(listingCreationRequestDTO, opts)
         .then(listingResponseDTO => listingResponseDTO)
@@ -120,13 +120,9 @@ export function getListingById(id, token) {
  *   .then(listings => console.log('Listing suggestions:', listings))
  *   .catch(error => console.error('Failed to retrieve suggestions:', error));
  */
-export function getListingSuggestions(opts = { page: 0, size: 10 }, token) {
+export function getListingSuggestions(opts = {page: 0, size: 10}) {
     const client = new ApiClient(baseURL);
     client.timeout = timeout;
-    client.authentications.bearerAuth = {
-        type: 'bearer',
-        accessToken: token,
-    };
 
     const listingApi = new ListingControllerApi(client);
     return listingApi.getSuggestions(opts)
@@ -175,7 +171,7 @@ export function updateListing(id, updateData, token) {
 
     const listingApi = new ListingControllerApi(client);
     // Pass the update data in the opts parameter under updateListingRequest.
-    const opts = { updateListingRequest: updateData };
+    const opts = {updateListingRequest: updateData};
 
     return listingApi.updateListing(id, opts)
         .then(listingResponseDTO => listingResponseDTO)
@@ -186,36 +182,29 @@ export function updateListing(id, updateData, token) {
 }
 
 /**
- * Retrieves listings by category with optional pagination.
+ * Retrieves listings by category name.
  *
  * @param {string} categoryName - The category name to filter listings.
- * @param {Object} [opts] - Optional parameters.
- * @param {number} [opts.page=0] - The page number (default is 0).
- * @param {number} [opts.size=10] - The number of listings per page (default is 10).
- * @param {string} token - JWT token.
- * @returns {Promise<Object>} A promise that resolves to a ListingListResponseDTO object.
- * @throws {Error} If fetching listings by category fails.
- *
- * @example
- * getListingByCategory('Cars', { page: 0, size: 10 }, 'jwt-token')
- *   .then(response => console.log('Listings for category:', response))
- *   .catch(error => console.error('Failed to retrieve listings by category:', error));
+ * @returns {Promise<Object>} A promise that resolves to the listings.
+ * @throws {Error} If the request fails.
  */
-export function getListingByCategory(categoryName, opts = { page: 0, size: 10 }, token) {
-    const client = new ApiClient(baseURL);
-    client.timeout = timeout;
-    if (token) {
-        client.authentications.bearerAuth = {
-            type: 'bearer',
-            accessToken: token,
-        };
-    }
+export async function getListingsByCategory(categoryName) {
+    const url = new URL('http://localhost:8080/api/v1/listing/get-by-category');
+    url.searchParams.append('categoryName', categoryName);
 
-    const listingApi = new ListingControllerApi(client);
-    return listingApi.getByCategoryWithHttpInfo(categoryName, opts)
-        .then(response => response.data)
-        .catch(error => {
-            console.error('Failed to retrieve listings by category:', error);
-            throw error;
+    try {
+        const response = await fetch(url, {
+            method: 'GET',
         });
+
+        if (!response.ok) {
+            throw new Error(`Failed to fetch listings: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        return data.listings;
+    } catch (error) {
+        console.error('Error fetching listings by category:', error);
+        throw error;
+    }
 }
