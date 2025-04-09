@@ -7,7 +7,7 @@ import { get } from 'superagent';
 
 const props = defineProps({
   id: Number,
-  // image: String,
+  image: String,
   price: String,
   latitude: Number,
   longitude: Number,

@@ -7,6 +7,7 @@ import {isTokenExpired} from "@/services/TokenService.js";
 import {getAllCategories} from "@/services/CategoryService.js";
 import {onMounted, ref} from "vue";
 import router from "@/router/index.js";
+import {fetchImage} from "@/services/ImageService.js";
 
 document.body.style.backgroundColor = "#ffffff";
 
@@ -121,7 +122,7 @@ const localGetSuggestions = async () => {
       <div v-for="listing in listings" :key="listing.id">
         <ListingPreviewComponent
             :id="listing.id"
-            :image="listing.image"
+            :image="fetchImage(listing.imageUrls)"
             :price="listing.price"
             :town="listing.town"
             :title="listing.title"/>
