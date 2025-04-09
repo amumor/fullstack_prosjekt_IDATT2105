@@ -213,4 +213,101 @@ const rejectBid = () => {
 .send-bid-box .submit-btn:hover {
   background-color: #0056b3;
 }
+
+/* Responsive design for smaller screens */
+@media (max-width: 768px) {
+  .bid-box-container {
+    max-width: 90%; /* Reduce the width for smaller screens */
+    padding: 0.5rem; /* Reduce padding */
+  }
+
+  .inchat-bid-box {
+    padding: 0.5rem; /* Reduce padding */
+  }
+
+  .inchat-bid-box h3 {
+    font-size: 1rem; /* Adjust font size */
+  }
+
+  .inchat-bid-box p {
+    font-size: 0.9rem; /* Adjust font size */
+  }
+
+  .action-buttons .basic-blue-btn {
+    padding: 0.4rem 0.8rem; /* Reduce button padding */
+    font-size: 0.8rem; /* Adjust font size */
+  }
+
+  .send-bid-box {
+    padding: 0.5rem; /* Reduce padding */
+  }
+
+  .send-bid-box h3 {
+    font-size: 1rem; /* Adjust font size */
+  }
+
+  .send-bid-box input {
+    padding: 0.4rem; /* Reduce input padding */
+    font-size: 0.9rem; /* Adjust font size */
+  }
+
+  .send-bid-box .submit-btn {
+    padding: 0.4rem; /* Reduce button padding */
+    font-size: 0.9rem; /* Adjust font size */
+  }
+}
+
+/* Responsive design for very small screens (max-width: 480px) */
+@media (max-width: 480px) {
+  .bid-box-container {
+    max-width: 100%; /* Take full width */
+    padding: 0.5rem; /* Reduce padding */
+  }
+
+  .inchat-bid-box {
+    padding: 0.5rem; /* Reduce padding */
+  }
+
+  .inchat-bid-box h3 {
+    font-size: 0.9rem; /* Adjust font size */
+  }
+
+  .inchat-bid-box p {
+    font-size: 0.8rem; /* Adjust font size */
+  }
+
+  .action-buttons {
+    flex-direction: column; /* Stack buttons vertically */
+    gap: 0.5rem; /* Add spacing between buttons */
+  }
+
+  .action-buttons .basic-blue-btn {
+    padding: 0.4rem; /* Reduce button padding */
+    font-size: 0.8rem; /* Adjust font size */
+    width: 100%; /* Make buttons take full width */
+  }
+
+  .send-bid-box {
+    padding: 0.5rem; /* Reduce padding */
+  }
+
+  .send-bid-box h3 {
+    font-size: 0.9rem; /* Adjust font size */
+  }
+
+  .send-bid-box input {
+    padding: 0.4rem; /* Reduce input padding */
+    font-size: 0.8rem; /* Adjust font size */
+  }
+
+  .send-bid-box .submit-btn {
+    padding: 0.4rem; /* Reduce button padding */
+    font-size: 0.8rem; /* Adjust font size */
+    width: 100%; /* Make button take full width */
+  }
+
+  .send-bid-box .close-btn {
+    font-size: 1rem; /* Adjust font size */
+  }
+}
 </style>

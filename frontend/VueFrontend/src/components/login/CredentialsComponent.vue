@@ -328,4 +328,58 @@ input {
   text-decoration: underline;
 }
 
+/* Responsive Design for medium screens (max-width: 768px) */
+@media (max-width: 768px) {
+  .display-page-container {
+    width: 80%; /* Adjust width for medium screens */
+    padding: 30px; /* Adjust padding */
+  }
+
+  input {
+    width: 90%; /* Make inputs take more width */
+  }
+
+  .logo-header {
+    font-size: 22px; /* Adjust font size */
+    text-align: center; /* Center align logo */
+  }
+
+  h2 {
+    font-size: 20px; /* Adjust heading font size */
+    text-align: center; /* Center align heading */
+  }
+}
+
+/* Responsive Design for very small screens (max-width: 480px) */
+@media (max-width: 480px) {
+  .display-page-container {
+    width: 90%; /* Take almost full width */
+    padding: 20px; /* Reduce padding */
+  }
+
+  input {
+    width: 100%; /* Make inputs take full width */
+    font-size: 14px; /* Adjust font size */
+    padding: 10px; /* Add padding for better usability */
+  }
+
+  .logo-header {
+    font-size: 18px; /* Adjust font size */
+    text-align: center; /* Center align logo */
+  }
+
+  h2 {
+    font-size: 18px; /* Adjust heading font size */
+    text-align: center; /* Center align heading */
+  }
+
+  .to-sign-up, .to-login {
+    font-size: 12px; /* Adjust font size */
+    justify-content: center; /* Center align links */
+  }
+
+  .to-sign-up button, .to-login button {
+    font-size: 12px; /* Adjust button font size */
+  }
+}
 </style>

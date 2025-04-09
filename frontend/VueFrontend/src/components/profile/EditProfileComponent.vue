@@ -183,11 +183,51 @@ button:hover {
   transform: scale(1.05);
 }
 
-/* Responsive Design */
+/* Responsive Design for medium screens (max-width: 768px) */
 @media (max-width: 768px) {
   .display-page-container {
     width: 80%;
     padding: 20px;
+  }
+
+  .display-credentials-content {
+    gap: 10px;
+  }
+
+  button {
+    font-size: 14px;
+    padding: 10px;
+  }
+}
+
+/* Responsive Design for very small screens (max-width: 480px) */
+@media (max-width: 480px) {
+  .display-page-container {
+    width: 90%;
+    padding: 15px;
+  }
+
+  .display-credentials-content {
+    gap: 8px;
+  }
+
+  label {
+    font-size: 12px;
+  }
+
+  input {
+    font-size: 14px;
+    padding: 8px;
+  }
+
+  button {
+    font-size: 12px;
+    padding: 8px;
+  }
+
+  .restart-note {
+    font-size: 12px;
+    text-align: center;
   }
 }
 </style>

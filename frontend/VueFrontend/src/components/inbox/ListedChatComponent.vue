@@ -141,4 +141,52 @@ const selectChat = () => {
     font-size: 12px;
   }
 }
+
+/* Responsive design for very small screens (max-width: 480px) */
+@media (max-width: 480px) {
+  .listed-chat-container {
+    flex-direction: column; /* Stack items vertically */
+    align-items: flex-start; /* Align items to the left */
+    padding: 8px; /* Reduce padding */
+    max-width: 100%; /* Ensure it takes full width */
+  }
+
+  .chat-image-container {
+    margin-bottom: 10px; /* Add spacing between the image and text */
+  }
+
+  .chat-image {
+    width: 40px; /* Reduce image size */
+    height: 40px;
+    margin-right: 0; /* Remove right margin */
+  }
+
+  .initials {
+    bottom: -3px; /* Adjust positioning for smaller images */
+    right: 3px;
+  }
+
+  .chat-unread {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 5px; /* Add spacing between text elements */
+  }
+
+  .chat-unread h3 {
+    font-size: 12px; /* Reduce font size */
+    margin-bottom: 3px; /* Adjust spacing */
+  }
+
+  .chat-unread p {
+    font-size: 10px; /* Reduce font size */
+    color: #777; /* Slightly lighter color for readability */
+  }
+
+  .chat-read h3 {
+    font-size: 12px; /* Reduce font size for read messages */
+    font-weight: 400;
+    color: #aaa; /* Lighter color for read messages */
+  }
+}
 </style>
