@@ -107,10 +107,9 @@ export function deleteCategory(id, token) {
 // CategoryService.js
 import request from 'superagent';
 
-export const getAllCategories = (token) => {
+export const getAllCategories = () => {
     return request
         .get('http://localhost:8080/api/v1/category/all')
-        .set('Authorization', `Bearer ${token}`)
         .then(res => res.body)
         .catch(err => {
             console.error('Failed to retrieve categories:', err);
