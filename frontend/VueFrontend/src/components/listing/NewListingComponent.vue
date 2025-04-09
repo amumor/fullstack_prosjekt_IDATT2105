@@ -1,67 +1,93 @@
 <script setup>
-import { ref } from 'vue'
+import {onMounted, ref} from 'vue'
+import {getAllCategories} from "@/services/CategoryService.js";
+import {userStore} from "@/stores/user.js";
+import {isTokenExpired} from "@/services/TokenService.js";
 
-const categories = [
-  { id: 1, name: 'Boats' },
-  { id: 2, name: 'Cars' },
-  { id: 3, name: 'Motorcycles' },
-  { id: 4, name: 'Real Estate' },
-];
+const categories = ref([]);
+const selectedCategories = ref([]);
+
+const title = ref('');
+const description = ref('');
+const selectedCategory = ref('');
+const price = ref('');
+const location = ref('');
+const images = ref([]);
 
 const coordinates = ref([59.9139, 10.7522]); // Default coordinates (Oslo)
 
-const getCoordinates = async (address) => {
-  const encodedAddress = encodeURIComponent(address);
-  const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodedAddress}`;
+const user = userStore();
+
+const localGetCategories = async () => {
+  try {
+    const categoryResponse = await getAllCategories();
+    categories.value = categoryResponse.categories
+  } catch (error) {
+    console.error('Error fetching categories:', error);
+  }
+};
+
+const handleCreateListing = async () => {
+  const formData = new FormData();
+  formData.append('title', title.value);
+  formData.append('description', description.value);
+  formData.append('price', price.value);
+  formData.append('location', location.value);
+  formData.append('coordinates', JSON.stringify(coordinates.value));
+  formData.append('categories', JSON.stringify(selectedCategories.value));
+
+  images.value.forEach((image) => {
+    formData.append('images', image);
+  });
 
   try {
-    const response = await fetch(url, {
-      headers: {
-        'Accept': 'application/json'
-      }
-    });
-    const data = await response.json();
-    if (data.length > 0) {
-      coordinates.value = [parseFloat(data[0].lat), parseFloat(data[0].lon)];
-    }
+    // Call the API to create the listing
+    // await createListingAPI(formData);
+    console.log('Listing created successfully');
   } catch (error) {
-    console.error('Error fetching coordinates:', error);
+    console.error('Error creating listing:', error);
   }
-  return null;
 };
 
-const createListing = () => {
-  // Logic to save the listing (v-model?)
-};
-
+onMounted(() => {
+  localGetCategories();
+  const token = user.token;
+  if (isTokenExpired(token)) {
+    user.logout();
+  }
+});
 </script>
 
 <template>
-<div class="display-page-container">
-  <div class="fields">
-    <h2>Create a new listing</h2>
-    <div class="text-fields">
-      <input type="text" placeholder="Header" required />
-      <textarea type="text" id="description" placeholder="Description" required />
-      <input type="text" placeholder="Price" required />
-      <input type="text" placeholder="Location" required />
-      <div v-for="category in categories" :key="category.id">
-        <label>
-          <input type="checkbox" :name=category.name :value=category.name>{{ category.name }}
-        </label>
+  <div class="display-page-container">
+    <form @submit.prevent="createListing" class="fields">
+      <h2>Create a new listing</h2>
+      <div class="text-fields">
+        <input v-model="title" type="text" placeholder="Header" required />
+        <textarea v-model="description" id="description" placeholder="Description" required></textarea>
+        <input v-model="price" type="text" placeholder="Price" required />
+        <input v-model="location" type="text" placeholder="Location" required />
+        <div v-for="category in categories" :key="category.id">
+          <label>
+            <input
+                v-model="selectedCategory"
+                type="radio"
+                name="category"
+                :value="category.name"
+            />
+            {{ category.name }}
+          </label>
+        </div>
       </div>
-    </div>
-    <div class="image-field">
-      <form action="/upload" method="post" enctype="multipart/form-data">
+      <div class="image-field">
         <label for="file">Upload image:</label>
-        <input type="file" id="file" name="file" accept="image/*">
-      </form>
-    </div>
-    <div class="submit-button">
-      <button type="submit" class="basic-blue-btn" @click="createListing">Create</button>
-    </div>
+        <input type="file" id="file" name="file" accept="image/*" @change="handleFileChange" />
+      </div>
+      <div class="submit-button">
+        <button type="submit" class="basic-blue-btn">Create</button>
+      </div>
+    </form>
   </div>
-</div>
 </template>
 
 <style scoped>
