@@ -25,9 +25,34 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BidResponseDTO {
+
+  /**
+   * The unique identifier of the bid.
+   * This field is automatically generated and cannot be null.
+   */
   private UUID id;
+
+  /**
+   * The unique identifier of the chat associated with the bid.
+   * This field cannot be null.
+   */
   private UUID chatId;
+
+  /**
+   * The price of the bid.
+   * This field cannot be null.
+   */
   private Double price;
+
+  /**
+   * The status of the bid.
+   * This field cannot be null.
+   */
   private BidStatus status;
+
+  /**
+   * The timestamp of when the bid was created.
+   * This field cannot be null.
+   */
   private LocalDateTime timestamp;
 }

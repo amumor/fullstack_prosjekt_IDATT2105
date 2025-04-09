@@ -21,6 +21,20 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+
+/**
+ * Controller for handling chat-related requests.
+ * This class provides endpoints for creating, retrieving, and managing chats between users.
+ * It uses the ChatService to perform the actual business logic and the ChatMapper to convert
+ * between entity and DTO objects.
+ * <p>
+ * The controller is secured with Spring Security,
+ * allowing only authenticated users to access the endpoints.
+ *
+ * @author Vetle Hodne, Amund Mørk
+ * @version 1.0
+ * @since 1.0
+ */
 @RestController
 @RequestMapping("/api/v1")
 @RequiredArgsConstructor

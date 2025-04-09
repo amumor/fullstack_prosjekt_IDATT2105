@@ -5,8 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.UUID;
-
 /**
  * TokenResponseDTO is a data transfer object (DTO) used for token response data.
  * It contains the token string.
@@ -24,8 +22,8 @@ import java.util.UUID;
 @NoArgsConstructor
 public class TokenResponseDTO {
 
-    /**
-     * The token string.
-     */
-    private String token;
+  /**
+   * The token string.
+   */
+  private String token;
 }

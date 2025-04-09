@@ -16,48 +16,48 @@ import java.util.stream.Collectors;
  *
  * @author Vetle Hodne, Amund Mørk
  * @version 1.0
- * @since 1.0
  * @see CategoryResponseDTO
  * @see CategoryListResponseDTO
+ * @since 1.0
  */
 @Component
 public class CategoryMapper {
 
-    /**
-     * Converts a Category entity to a CategoryResponseDTO.
-     *
-     * @param category The Category entity to convert.
-     * @return The converted CategoryResponseDTO.
-     * @throws IllegalArgumentException if the category argument is null.
-     */
-    public CategoryResponseDTO toDto(Category category) {
-        if (category == null) {
-            throw new IllegalArgumentException("category argument can not be null");
-        }
-
-        CategoryResponseDTO dto = new CategoryResponseDTO();
-        dto.setId(category.getId());
-        dto.setName(category.getName());
-
-        return dto;
+  /**
+   * Converts a Category entity to a CategoryResponseDTO.
+   *
+   * @param category The Category entity to convert.
+   * @return The converted CategoryResponseDTO.
+   * @throws IllegalArgumentException if the category argument is null.
+   */
+  public CategoryResponseDTO toDto(Category category) {
+    if (category == null) {
+      throw new IllegalArgumentException("category argument can not be null");
     }
 
-    /**
-     * Converts a list of Category entities to a CategoryListResponseDTO.
-     *
-     * @param categories The list of Category entities to convert.
-     * @return The converted CategoryListResponseDTO.
-     * @throws IllegalArgumentException if the category argument is null.
-     */
-    public CategoryListResponseDTO toDto(List<Category> categories) {
-        if (categories == null) {
-            throw new IllegalArgumentException("categories argument can not be null");
-        }
+    CategoryResponseDTO dto = new CategoryResponseDTO();
+    dto.setId(category.getId());
+    dto.setName(category.getName());
 
-        List<CategoryResponseDTO> categoryDtos = categories.stream()
-                .map(this::toDto)
-                .collect(Collectors.toList());
+    return dto;
+  }
 
-        return new CategoryListResponseDTO(categoryDtos);
+  /**
+   * Converts a list of Category entities to a CategoryListResponseDTO.
+   *
+   * @param categories The list of Category entities to convert.
+   * @return The converted CategoryListResponseDTO.
+   * @throws IllegalArgumentException if the category argument is null.
+   */
+  public CategoryListResponseDTO toDto(List<Category> categories) {
+    if (categories == null) {
+      throw new IllegalArgumentException("categories argument can not be null");
     }
+
+    List<CategoryResponseDTO> categoryDtos = categories.stream()
+            .map(this::toDto)
+            .collect(Collectors.toList());
+
+    return new CategoryListResponseDTO(categoryDtos);
+  }
 }

@@ -22,13 +22,13 @@ import java.util.UUID;
 @NoArgsConstructor
 public class CategoryResponseDTO {
 
-    /**
-     * The unique identifier of the category.
-     */
-    private UUID id;
+  /**
+   * The unique identifier of the category.
+   */
+  private UUID id;
 
-    /**
-     * The name of the category.
-     */
-    private String name;
+  /**
+   * The name of the category.
+   */
+  private String name;
 }

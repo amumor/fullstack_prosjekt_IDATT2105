@@ -11,14 +11,29 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 /**
- * Configuration class for customizing the Jackson ObjectMapper.
- * Serialization and deserialization of Java date and time types
- * (e.g., LocalDateTime) will be handled correctly.
+ * Jackson configuration for the application.
+ * <p>
+ * This class is responsible for configuring the Jackson ObjectMapper
+ * to handle Java 8 date and time types, specifically LocalDateTime.
+ * </p>
+ *
+ * @author Vetle Hodne
+ * @version 1.0
+ * @since 1.0
  */
 @Configuration
 public class JacksonConfig {
   private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ISO_DATE_TIME;
 
+  /**
+   * Configures the ObjectMapper to use a custom serializer for LocalDateTime.
+   * <p>
+   * This method registers a JavaTimeModule with a custom serializer for LocalDateTime
+   * and disables the default behavior of writing dates as timestamps.
+   * </p>
+   *
+   * @return the configured ObjectMapper
+   */
   @Bean
   public ObjectMapper objectMapper() {
     JavaTimeModule module = new JavaTimeModule();

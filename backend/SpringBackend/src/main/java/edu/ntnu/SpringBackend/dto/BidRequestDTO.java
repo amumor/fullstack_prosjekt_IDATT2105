@@ -23,7 +23,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BidRequestDTO {
-    @NotNull(message = "Price must be provided")
-    @Min(value = 0, message = "Bid price must be 0 (free) or greater")
-    private Double price;
+
+  /**
+   * The price of the bid.
+   * This field is required and must be 0 or greater.
+   */
+  @NotNull(message = "Price must be provided")
+  @Min(value = 0, message = "Bid price must be 0 (free) or greater")
+  private Double price;
 }
