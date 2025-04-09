@@ -1,7 +1,7 @@
 <script setup>
 import Navbar from '@/components/Navbar.vue'
 import ListingPreviewComponent from '@/components/listing/ListingPreviewComponent.vue'
-import {getListingSuggestions} from "@/services/ListingService.js";
+import {getListingsByCategory, getListingSuggestions} from "@/services/ListingService.js";
 import {userStore} from "@/stores/user.js";
 import {isTokenExpired} from "@/services/TokenService.js";
 import {getAllCategories} from "@/services/CategoryService.js";
@@ -42,11 +42,32 @@ const user = userStore()
 const categories = ref([]);
 const listings = ref([]);
 onMounted(async () => {
+  await localGetSuggestions();
+})
+
+const currentFilter = ref("None");
+const handleCategoryFilterClick = async (categoryName) => {
+  try {
+    listings.value = await getListingsByCategory(categoryName, {page: 1, size: 10});
+    console.log("Listings value after filtering", listings.value)
+    currentFilter.value = categoryName;
+
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+const handleFilterReset = async () => {
+  await localGetSuggestions();
+  currentFilter.value = "None";
+}
+
+const localGetSuggestions = async () => {
   try {
     const token = user.token
     if (!token) {
       // If user is not logged in, get listings without token
-      const listingResponse = await getListingSuggestions({ page: 1, size: 10 })
+      const listingResponse = await getListingSuggestions({page: 1, size: 10})
       const categoryResponse = await getAllCategories()
       console.log("listing response:", listingResponse)
       console.log("category response:", categoryResponse)
@@ -60,8 +81,8 @@ onMounted(async () => {
         await router.push("/")
       } else {
         // If user is logged in, get listings with token
-        const listingResponse = await getListingSuggestions({ page: 1, size: 10 }, token)
-        const categoryResponse = await getAllCategories(token)
+        const listingResponse = await getListingSuggestions({page: 1, size: 10})
+        const categoryResponse = await getAllCategories()
         listings.value = listingResponse.listings
         categories.value = categoryResponse.categories
       }
@@ -69,7 +90,8 @@ onMounted(async () => {
   } catch (error) {
     console.error(error)
   }
-})
+}
+
 </script>
 
 <template>
@@ -88,8 +110,10 @@ onMounted(async () => {
     <!-- Categories -->
     <div class="category-container">
       <div v-for="category in categories" :key="category.id">
-        <button id="category-btn">{{ category.name }}</button>
+        <button id="category-btn" @click="() => handleCategoryFilterClick(category.name)">{{ category.name }}</button>
       </div>
+      <button id="category-btn" @click="handleFilterReset">Reset</button>
+      <h3>Current filter: {{currentFilter}}</h3>
     </div>
 
     <!-- Listings -->

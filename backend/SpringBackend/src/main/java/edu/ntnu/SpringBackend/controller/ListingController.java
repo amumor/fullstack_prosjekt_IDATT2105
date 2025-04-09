@@ -16,6 +16,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -59,26 +60,28 @@ public class ListingController {
         if (size > MAX_SIZE) {
             size = MAX_SIZE;
         }
-        logger.debug("GET Request received on [/api/v1/listing/get-suggestions]");
+        logger.info("GET Request received on [/api/v1/listing/get-suggestions]");
         Pageable pageable = PageRequest.of(page, size);
         // Retrieve the search history of the user
         List<SearchHistory> searchHistory = searchHistoryService.findByUser(user);
-        logger.debug(" ---- Search history retrieved: {}", searchHistory.toString());
+        logger.info(" ---- Search history retrieved: {}", searchHistory.toString());
 
         // Retrieve categories based on the search history
         List<Category> categories = categoryService.findBySearchHistory(searchHistory);
-        logger.debug(" ---- Categories found: {}", categories.toString());
+        logger.info(" ---- Categories found: {}", categories.toString());
 
         // Find the listings using the categories and pageable
-        List<Listing> listings = listingService.findByCategories(categories, pageable);
-        logger.debug(" ---- Listings retrieved: {}", listings.toString());
+//        List<Listing> listings = listingService.findByCategories(categories, pageable); //TODO: fix this piece of shit
+        List<Listing> listings = listingService.findByCategories2(categories, pageable).toList();
+
+        logger.info(" ---- Listings retrieved: {}", listings.toString());
         for (Listing listing : listings) {
-            logger.debug(" ---- Listing: {}", listing.toString());
+            logger.info(" ---- Listing: {}", listing.toString());
         }
 
         // Map the listings to a DTO
         var dto = listingMapper.toDto(listings);
-        logger.debug(" ---- Mapped DTO: {}", dto.toString());
+        logger.info(" ---- Mapped DTO: {}", dto.toString());
 
         // Return the response with the mapped DTO
         return ResponseEntity.ok(dto);
@@ -183,8 +186,13 @@ public class ListingController {
         }
         logger.info("GET Request received on [/api/v1/listing/get-by-category] with categoryName: {}", categoryName);
         Pageable pageable = PageRequest.of(page, size);
-        return ResponseEntity.ok(listingMapper.toDto(listingService.getListingsBySingleCategory(categoryName, pageable)));
-    }
+        List<Listing> listingsPage = listingService.getListingsBySingleCategory(categoryName, pageable);
+        logger.info("> Retrieved {} listings for category: {}", listingsPage.size(), categoryName);
+
+        var listingsDto = listingMapper.toDto(listingsPage);
+        logger.info("> Mapping result: {}", listingsDto);
+
+        return ResponseEntity.ok(listingsDto);    }
 
 
     /**
