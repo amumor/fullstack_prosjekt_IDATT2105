@@ -170,7 +170,6 @@ public class CategoryServiceTest {
 
     assertNotNull(result);
     assertTrue(result.isEmpty());
-    //verifyNoInteractions(categoryRepository);
   }
 
   @Test
