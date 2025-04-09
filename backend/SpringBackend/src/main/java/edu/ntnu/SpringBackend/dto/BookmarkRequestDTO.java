@@ -29,4 +29,5 @@ public class BookmarkRequestDTO {
    * This field is required and cannot be null.
    */
   private UUID listingId;
+  private UUID userId;
 }

@@ -1,28 +1,34 @@
 <script setup>
-import { ref, defineProps, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { Icon } from '@iconify/vue'
 import { storeToRefs } from 'pinia';
 
 import ListingMapComponent from '@/components/listing/ListingMapComponent.vue'
 import { userStore } from '@/stores/user.js'
-import { getListingById } from '@/services/ListingService.js'
+import { getListingById, deleteListing } from '@/services/ListingService.js'
 import { createBookmark, deleteBookmark, getUserBookmarks } from '../../services/BookmarkService';
 import { useListingStore } from '@/stores/listing.js'
 
 const listing = ref(null); 
 const image = 'https://iqboatlifts.com/wp-content/uploads/2018/06/Yacht-vs-Boat-Whats-the-Difference-Between-the-Two-1024x571.jpg';
 
+// Verify token
+const checkToken = () => {
+  if (!token && user.isLoggedIn) {
+    user.logout();
+    console.error('Token is expired, user logged out');
+  }
+}
+
 // User store
 const user = userStore()
 
 const token = user.token;
-if(!token && user.isLoggedIn) {
-  user.logout();
-  console.error('Token is expired, user logged out');
-}
+checkToken();
 
 const favorites = ref([]);
+const isFavorite = ref();
 
 // Fetch listing id
 onMounted(async () => {
@@ -43,9 +49,11 @@ onMounted(async () => {
 
 // Fetch user bookmarks only if the user is logged in
 if (user.isLoggedIn) {
+  checkToken();
   getUserBookmarks(token)
     .then((data) => {
       favorites.value = data;
+      checkIfFavorite();
     })
     .catch((err) => {
       console.error('Error fetching bookmarks:', err);
@@ -55,9 +63,8 @@ if (user.isLoggedIn) {
 }
 
 // Favorite button
-const isFavorite = ref();
 const checkIfFavorite = () => {
-  if (user.isLoggedIn) {
+  if (user.isLoggedIn && listing.value) {
     isFavorite.value = favorites.value.some(favorite => favorite.listingId === listing.value.id);
   } else {
     isFavorite.value = false;
@@ -65,16 +72,35 @@ const checkIfFavorite = () => {
 }
 
 const toggleFavorite = async () => {
+  checkToken();
+  // Check the current state
   checkIfFavorite();
+  // Delete as favorite
   if (isFavorite.value) {
-    await deleteBookmark(token, listing.value.id);
+    const favoriteId = favorites.value.find(f => f.listingId === listing.value.id).id;
+    await deleteBookmark(token, favoriteId);
     favorites.value = favorites.value.filter(f => f.listingId !== listing.value.id);
   } else {
-    await createBookmark(token, listing.value.id);
-    favorites.value.push({ listingId: listing.value.id });
+    // Add as favorite
+    await createBookmark(token, {
+      listingId: listing.value.id,
+      userId: user.userId
+    });
+    // Get the new favoriteId
+    getUserBookmarks(token)
+    .then((data) => {
+      favorites.value = data;
+    })
+    .catch((err) => {
+      console.error('Error fetching bookmarks:', err);
+    });
   }
   isFavorite.value = !isFavorite.value;
 }
+
+watch(favorites, () => {
+  checkIfFavorite();
+});
 
 // Check if the user is the owner of the listing
 const isOwner = () => {
@@ -86,8 +112,19 @@ const isOwner = () => {
 
 // Delete listing
 const delListing = () => {
-  // Logic to delete the listing
-  router.back()
+  checkToken();
+  if (!isOwner()) {
+        console.error("User is not the owner of the listing.");
+        return;
+    }
+  deleteListing(token, listing.value.id)
+    .then(() => {
+        console.log('Listing deleted successfully!');
+        router.back()
+    })
+    .catch(err => {
+        console.error('Error deleting listing:', err);
+    });
 }
 
 // Route to edit listing
@@ -116,7 +153,7 @@ const formatDateTime = (dateTimeString) => {
   <!-- Image container -->
   <div class="image-container">
     <img class="image-item" :src="image" alt="Front image">
-    <button class="favorite" :class="{ 'isFavorite': isFavorite }" @click="toggleFavorite">
+    <button v-if="user.isLoggedIn" class="favorite" :class="{ 'isFavorite': isFavorite }" @click="toggleFavorite">
       <Icon icon="material-symbols:favorite" width="40" height="40" />
     </button>
     <p id="lastEdited">Last edited: {{ formatDateTime(listing.lastEdited) }}</p>
@@ -127,7 +164,7 @@ const formatDateTime = (dateTimeString) => {
     <!-- Description -->
     <div class="description">
       <h2>{{ listing.title }}</h2>
-      <p id="price">{{ listing.price }}</p>
+      <p id="price">{{ listing.price + ' kr' }}</p>
       <p id="description">{{ listing.description }}</p>
       <p id="categories">{{ listing.category }}</p>
     </div>

@@ -169,22 +169,14 @@ export function getListingSuggestions(opts = {page: 0, size: 10}) {
  *   .catch(error => console.error('Update failed:', error));
  */
 export function updateListing(id, updateData, token) {
-    const client = new ApiClient(baseURL);
-    client.timeout = timeout;
-    client.authentications.bearerAuth = {
-        type: 'bearer',
-        accessToken: token,
-    };
-
-    const listingApi = new ListingControllerApi(client);
-    // Pass the update data in the opts parameter under updateListingRequest.
-    const opts = {updateListingRequest: updateData};
-
-    return listingApi.updateListing(id, opts)
-        .then(listingResponseDTO => listingResponseDTO)
-        .catch(error => {
-            console.error('Failed to update listing:', error);
-            throw error;
+    return request
+        .put(`http://localhost:8080/api/v1/listing/update/${id}`) // Assuming your API endpoint for updating is like this
+        .set('Authorization', `Bearer ${token}`)
+        .send(updateData) // Send the updateData as the request body
+        .then(res => res.body) // Assuming the response contains the updated listing
+        .catch(err => {
+            console.error('Failed to update listing:', err);
+            throw err;
         });
 }
 
@@ -241,3 +233,23 @@ export async function getListingsBySeller(token, page, size) {
         throw error;
     }
 }
+
+/**
+ * Deletes a listing by its ID.
+ *
+ * @param {string} token - The authentication token.
+ * @param {UUID} id - The ID of the listing to delete.
+ * @returns {Promise<void>} - Resolves when the listing is successfully deleted.
+ */
+export const deleteListing = (token, id) => {
+    return request
+        .delete(`http://localhost:8080/api/v1/listing/delete/${id}`)
+        .set('Authorization', `Bearer ${token}`)
+        .then(() => {
+            console.log(`Listing with ID ${id} deleted successfully.`);
+        })
+        .catch(err => {
+            console.error(`Failed to delete listing with ID ${id}:`, err);
+            throw err;
+        });
+};

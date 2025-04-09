@@ -73,7 +73,7 @@ public class BookmarkController {
   ) {
     logger.info("Received POST request on [/api/v1/bookmarks/create] with body: {}", bookmarkRequestDTO);
 
-    return ResponseEntity.ok(BookmarkMapper.toDto(bookmarkService.createBookmark(bookmarkRequestDTO, user)));
+    return ResponseEntity.ok(BookmarkMapper.toDto(bookmarkService.createBookmark(user, bookmarkRequestDTO)));
   }
 
   /**
@@ -92,7 +92,7 @@ public class BookmarkController {
           @PathVariable UUID bookmarkId
   ) {
     logger.info("Received DELETE request on [/api/v1/bookmarks/{}]", bookmarkId);
-    bookmarkService.deleteBookmark(bookmarkId, user);
+    bookmarkService.deleteBookmark(user, bookmarkId);
 
     return ResponseEntity.noContent().build();
   }

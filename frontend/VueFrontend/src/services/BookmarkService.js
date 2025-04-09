@@ -12,7 +12,7 @@ const BASE_URL = 'http://localhost:8080/api/v1/bookmarks'; // Adjust if needed
  * @param {string} token - JWT token.
  * @returns {Promise<Object>} A promise that resolves to the bookmark response.
  */
-export const createBookmark = (bookmarkData, token) => {
+export const createBookmark = (token, bookmarkData) => {
     return request
         .post(`${BASE_URL}/create`)
         .set('Authorization', `Bearer ${token}`)
@@ -31,7 +31,7 @@ export const createBookmark = (bookmarkData, token) => {
  * @param {string} token - JWT token.
  * @returns {Promise<void>} A promise that resolves if deletion is successful.
  */
-export const deleteBookmark = (bookmarkId, token) => {
+export const deleteBookmark = (token, bookmarkId) => {
     return request
         .delete(`${BASE_URL}/${bookmarkId}`)
         .set('Authorization', `Bearer ${token}`)
