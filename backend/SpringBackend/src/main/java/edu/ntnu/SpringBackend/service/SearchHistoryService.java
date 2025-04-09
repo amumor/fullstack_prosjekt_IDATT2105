@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -20,6 +21,10 @@ public class SearchHistoryService {
     private final Logger logger = LoggerFactory.getLogger(SearchHistoryService.class);
 
     public List<SearchHistory> findByUser(User user) {
+        if (user == null) {
+            logger.warn("> User is null, cannot find search history, returning empty list");
+            return new ArrayList<SearchHistory>();
+        }
         logger.info("> Finding search history by user id: {}", user.getId());
         return searchHistoryRepository.findByUserIdOrderBySearchedAtDesc(user.getId());
     }
