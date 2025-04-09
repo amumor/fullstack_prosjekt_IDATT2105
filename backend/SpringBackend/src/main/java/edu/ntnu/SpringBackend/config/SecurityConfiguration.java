@@ -32,7 +32,8 @@ public class SecurityConfiguration {
                                 "/api/v1/auth/**",
                                 "/swagger-ui/**",
                                 "/v3/api-docs",
-                                "/v3/api-docs/**"
+                                "/v3/api-docs/**",
+                                "/api/v1/listing/get-suggestions" // Whitelisting to get suggestions when not logged in
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
