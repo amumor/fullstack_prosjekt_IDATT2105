@@ -4,6 +4,9 @@ import edu.ntnu.SpringBackend.dto.ListingCreationRequestDTO;
 import edu.ntnu.SpringBackend.dto.ListingListResponseDTO;
 import edu.ntnu.SpringBackend.dto.ListingResponseDTO;
 import edu.ntnu.SpringBackend.mapper.ListingMapper;
+import edu.ntnu.SpringBackend.model.Category;
+import edu.ntnu.SpringBackend.model.Listing;
+import edu.ntnu.SpringBackend.model.SearchHistory;
 import edu.ntnu.SpringBackend.model.User;
 import edu.ntnu.SpringBackend.service.CategoryService;
 import edu.ntnu.SpringBackend.service.ListingService;
@@ -23,6 +26,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -55,17 +59,29 @@ public class ListingController {
         if (size > MAX_SIZE) {
             size = MAX_SIZE;
         }
-        logger.info("GET Request received on [/api/v1/listing/get-suggestions]");
+        logger.debug("GET Request received on [/api/v1/listing/get-suggestions]");
         Pageable pageable = PageRequest.of(page, size);
-        return ResponseEntity.ok(
-                listingMapper.toDto(
-                        listingService.findByCategories(
-                                categoryService.findBySearchHistory(
-                                        searchHistoryService.findByUser(user)
-                                ), pageable
-                        )
-                )
-        );
+        // Retrieve the search history of the user
+        List<SearchHistory> searchHistory = searchHistoryService.findByUser(user);
+        logger.debug(" ---- Search history retrieved: {}", searchHistory.toString());
+
+        // Retrieve categories based on the search history
+        List<Category> categories = categoryService.findBySearchHistory(searchHistory);
+        logger.debug(" ---- Categories found: {}", categories.toString());
+
+        // Find the listings using the categories and pageable
+        List<Listing> listings = listingService.findByCategories(categories, pageable);
+        logger.debug(" ---- Listings retrieved: {}", listings.toString());
+        for (Listing listing : listings) {
+            logger.debug(" ---- Listing: {}", listing.toString());
+        }
+
+        // Map the listings to a DTO
+        var dto = listingMapper.toDto(listings);
+        logger.debug(" ---- Mapped DTO: {}", dto.toString());
+
+        // Return the response with the mapped DTO
+        return ResponseEntity.ok(dto);
     }
 
     /**
@@ -176,9 +192,9 @@ public class ListingController {
      * This endpoint allows the authenticated user to create a new listing.
      * Only authenticated users can create listings.
      *
-     * @param user the authenticated user creating the listing
+     * @param user    the authenticated user creating the listing
      * @param request the request DTO containing listing details
-     * @param images array of images for the listing
+     * @param images  array of images for the listing
      * @return the created listing response DTO
      */
     @PreAuthorize("isAuthenticated()")
@@ -223,7 +239,7 @@ public class ListingController {
      * Only authenticated users can delete listings.
      *
      * @param user the authenticated user deleting the listing
-     * @param id the ID of the listing to delete
+     * @param id   the ID of the listing to delete
      * @return a response entity with no content
      */
     @PreAuthorize("isAuthenticated()")
