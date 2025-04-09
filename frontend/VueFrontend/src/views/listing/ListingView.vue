@@ -5,7 +5,7 @@ import Navbar from '@/components/Navbar.vue'
 document.body.style.backgroundColor = "#ffffff";
 
 // Dummy data for listing
-const id= "1";
+const id= "b21edfdc-9d97-4df5-8e26-53dba65311ce";
 const title="BÅT MEGA";
 const description="Massemammssemamaasad oifdjvl uifhiiiififif jdjdjdjdj";
 const price="100kr";
@@ -23,14 +23,7 @@ const image="https://iqboatlifts.com/wp-content/uploads/2018/06/Yacht-vs-Boat-Wh
   <!-- Listing component -->
   <div class="display-page-container">
     <SingleListingComponent
-      :id=id
-      :title=title
-      :description=description
-      :price=price
-      :location=location
-      :category=category
-      :lastEdited=lastEdited
-      :image=image />
+      :listingId="id" />
   </div>
 </template>
 

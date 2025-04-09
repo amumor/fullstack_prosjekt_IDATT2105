@@ -2,7 +2,11 @@
 import Navbar from '@/components/Navbar.vue'
 import ListingPreviewComponent from '@/components/listing/ListingPreviewComponent.vue'
 import BackToComponent from '@/components/BackToComponent.vue'
+import { getUserBookmarks } from '../../services/BookmarkService';
+import { userStore } from '@/stores/user.js'
+import { ref } from 'vue';
 
+/**
 const listings = [
   {
     id: 1,
@@ -19,6 +23,27 @@ const listings = [
     title: 'Big Boat 2',
   },
 ];
+*/
+
+// User store
+const user = userStore()
+const token = user.token;
+
+// Fetch bookmarked listings
+const listings = ref([]); 
+getUserBookmarks(token)
+  .then((data) => {
+    if (data.length === 0) {
+      console.log('No bookmarks found');
+      return;
+    }
+    listings.value = data;
+    console.log('Bookmarks found:', data);
+  })
+  .catch((err) => {
+    console.error('Error fetching bookmarks:', err);
+  });
+
 </script>
 
 <template>
@@ -27,12 +52,14 @@ const listings = [
   <BackToComponent />
   <h2>Favorites</h2>
   <div class="listings">
-    <div v-for="listing in listings" :key="listing.id">
+    <div v-for="listing in listings.value" :key="listing.id">
+      <!-- No image -->
       <ListingPreviewComponent
         :id="listing.id"
-        :image="listing.image"
+        
         :price="listing.price"
-        :town="listing.town"
+        :latitude="listing.latitude"
+        :longitude="listing.longitude"
         :title="listing.title" />
     </div>
   </div>
