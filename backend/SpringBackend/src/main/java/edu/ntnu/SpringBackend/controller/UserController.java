@@ -15,9 +15,21 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
+
+/**
+ * UserController handles user-related requests, including getting user information,
+ * updating user profiles, and deleting users.
+ * It uses the UserService to perform the actual logic for these operations.
+ * <p>
+ * The controller is secured with Spring Security, allowing only users with the ROLE_ADMIN role
+ * to access certain endpoints. It also logs incoming requests and user IDs for debugging purposes.
+ *
+ * @author Vetle Hodne, Amund Mørk
+ * @version 1.0
+ * @since 1.0
+ */
 @RestController
 @RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
@@ -25,6 +37,16 @@ public class UserController {
     private final Logger logger = LoggerFactory.getLogger(UserController.class);
     private final UserService userService;
 
+    /**
+     * Gets user information by user ID.
+     * <p>
+     * This endpoint allows users with the ROLE_ADMIN role to retrieve user information
+     * based on the provided user ID.
+     *
+     * @param user the authenticated user making the request
+     * @param id   the UUID of the user to retrieve
+     * @return a response entity containing the user information
+     */
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/id/{id}")
     @Operation(summary = "Getting user info by user id", security = @SecurityRequirement(name = "bearerAuth"))
@@ -36,6 +58,16 @@ public class UserController {
         return ResponseEntity.ok(UserMapper.toDto(userService.getUserById(id)));
     }
 
+    /**
+     * Gets user information by email.
+     * <p>
+     * This endpoint allows users with the ROLE_ADMIN role to retrieve user information
+     * based on the provided email address.
+     *
+     * @param user  the authenticated user making the request
+     * @param email the email address of the user to retrieve
+     * @return a response entity containing the user information
+     */
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/email/{email}")
     @Operation(summary = "Getting user info by email", security = @SecurityRequirement(name = "bearerAuth"))
@@ -47,6 +79,15 @@ public class UserController {
         return ResponseEntity.ok(UserMapper.toDto(userService.getUserByEmail(email)));
     }
 
+    /**
+     * Updates user information.
+     * <p>
+     * This endpoint allows users to update their own profile information.
+     *
+     * @param user          the authenticated user making the request
+     * @param userRequestDTO the user request DTO containing updated user information
+     * @return a response entity containing the updated user information
+     */
     @PutMapping("/update-my-profile")
     @Operation(summary = "Update user info", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<UserResponseDTO> updateUser(
@@ -57,8 +98,16 @@ public class UserController {
         return ResponseEntity.ok(UserMapper.toDto(userService.updateUser(user, userRequestDTO)));
     }
 
+    /**
+     * Gets the authenticated user's profile information.
+     * <p>
+     * This endpoint allows users to retrieve their own profile information.
+     *
+     * @param user the authenticated user making the request
+     * @return a response entity containing the user's profile information
+     */
     @GetMapping("/get-my-profile")
-    @Operation(summary = "Getting user info by email", security = @SecurityRequirement(name = "bearerAuth"))
+    @Operation(summary = "Getting user info for the logged in user", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<UserResponseDTO> getMyProfile(
             @AuthenticationPrincipal User user
     ) {
@@ -66,6 +115,15 @@ public class UserController {
         return ResponseEntity.ok(UserMapper.toDto(userService.getUserByEmail(user.getEmail())));
     }
 
+    /**
+     * Deletes a user by ID.
+     * <p>
+     * This endpoint allows users with the ROLE_ADMIN role to delete a user based on the provided user ID.
+     *
+     * @param user the authenticated user making the request
+     * @param id   the UUID of the user to delete
+     * @return a response entity indicating the result of the deletion
+     */
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete user by id", security = @SecurityRequirement(name = "bearerAuth"))
