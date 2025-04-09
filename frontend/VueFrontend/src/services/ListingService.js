@@ -101,10 +101,9 @@ export function createListing(listing, images = [], token) {
  *   .then(listing => console.log('Listing retrieved:', listing))
  *   .catch(error => console.error('Failed to fetch listing:', error));
  */
-export const getListingById = (id, token) => {
+export const getListingById = (id) => {
     return request
         .get(`http://localhost:8080/api/v1/listing/id/${id}`)
-        .set('Authorization', `Bearer ${token}`)
         .then(res => res.body)
         .catch(error => {
             console.error('Failed to retrieve listing by ID:', error);

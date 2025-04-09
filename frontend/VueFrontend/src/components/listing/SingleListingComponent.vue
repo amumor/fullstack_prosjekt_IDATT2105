@@ -13,6 +13,17 @@ import { useListingStore } from '@/stores/listing.js'
 const listing = ref(null); 
 const image = 'https://iqboatlifts.com/wp-content/uploads/2018/06/Yacht-vs-Boat-Whats-the-Difference-Between-the-Two-1024x571.jpg';
 
+// User store
+const user = userStore()
+
+const token = user.token;
+if(!token && user.isLoggedIn) {
+  user.logout();
+  console.error('Token is expired, user logged out');
+}
+
+const favorites = ref([]);
+
 // Fetch listing id
 onMounted(async () => {
   const listingStore = useListingStore();
@@ -24,26 +35,24 @@ onMounted(async () => {
   } 
   try {
     // Fetch listing
-    listing.value = await getListingById(id.value, token);
+    listing.value = await getListingById(id.value);
   } catch (err) {
     console.error('Listing not found:', err);
   }
 });
 
-
-// User store
-const user = userStore()
-const token = user.token;
-const favorites = ref([]);
-
-// Fetch user bookmarks
-getUserBookmarks(token)
-  .then((data) => {
-    favorites.value = data;
-  })
-  .catch((err) => {
-    console.error('Error fetching bookmarks:', err);
-  })
+// Fetch user bookmarks only if the user is logged in
+if (user.isLoggedIn) {
+  getUserBookmarks(token)
+    .then((data) => {
+      favorites.value = data;
+    })
+    .catch((err) => {
+      console.error('Error fetching bookmarks:', err);
+    });
+} else {
+  console.warn('User is not logged in. Skipping bookmark fetch.');
+}
 
 // Favorite button
 const isFavorite = ref();
@@ -131,7 +140,7 @@ const formatDateTime = (dateTimeString) => {
 
     <!-- Owner options -->
     <div class="owner-options">
-      <template v-if="isOwner">
+      <template v-if="isOwner()">
         <button class="owner-btn" @click="toEditListing">Edit</button>
         <button class="owner-btn">Archive</button>
         <button class="owner-btn" id="delete" @click=delListing>Delete</button>
