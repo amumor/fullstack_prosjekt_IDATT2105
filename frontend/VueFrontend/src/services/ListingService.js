@@ -191,3 +191,29 @@ export function updateListing(id, updateData, token) {
             throw error;
         });
 }
+
+export async function getListingsBySeller(token, page, size) {
+    const url = new URL('http://localhost:8080/api/v1/listing/get-by-seller');
+    url.searchParams.append('page', page);
+    url.searchParams.append('size', size);
+
+    try {
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`, // Add JWT token
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error(`Failed to fetch listings: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        return data.listings;
+    } catch (error) {
+        console.error('Error fetching listings by category:', error);
+        throw error;
+    }
+}

@@ -1,21 +1,42 @@
 <script setup>
-import { ref, defineProps } from 'vue';
+import { ref, defineProps, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { Icon } from '@iconify/vue'
+import { storeToRefs } from 'pinia';
 
 import ListingMapComponent from '@/components/listing/ListingMapComponent.vue'
 import { userStore } from '@/stores/user.js'
 import { getListingById } from '@/services/ListingService.js'
 import { createBookmark, deleteBookmark, getUserBookmarks } from '../../services/BookmarkService';
+import { useListingStore } from '@/stores/listing.js'
 
-const props = defineProps({
-  listingId: String,
-})
+const listing = ref(null); 
+const image = 'https://iqboatlifts.com/wp-content/uploads/2018/06/Yacht-vs-Boat-Whats-the-Difference-Between-the-Two-1024x571.jpg';
+
+// Fetch listing id
+onMounted(async () => {
+  const listingStore = useListingStore();
+  const { id } = storeToRefs(listingStore);
+  
+  if (!id.value) {
+    console.error('Listing ID is null');
+    return;
+  } 
+  try {
+    // Fetch listing
+    listing.value = await getListingById(id.value, token);
+  } catch (err) {
+    console.error('Listing not found:', err);
+  }
+});
+
 
 // User store
 const user = userStore()
 const token = user.token;
 const favorites = ref([]);
+
+// Fetch user bookmarks
 getUserBookmarks(token)
   .then((data) => {
     favorites.value = data;
@@ -23,17 +44,6 @@ getUserBookmarks(token)
   .catch((err) => {
     console.error('Error fetching bookmarks:', err);
   })
-
-// Fetch the listing
-const listing = ref(null); 
-getListingById(props.listingId, token)
-  .then((data) => {
-    listing.value = data;
-    console.log('Listing found:', data);
-  })
-  .catch((err) => {
-    console.error('Listing not found:', err);
-  });
 
 // Favorite button
 const isFavorite = ref();
@@ -45,29 +55,33 @@ const checkIfFavorite = () => {
   }
 }
 
-const toggleFavorite = () => {
+const toggleFavorite = async () => {
   checkIfFavorite();
-  if(isFavorite){
-    deleteBookmark(token, listing.value.id)
-    favorites.value = favorites.value.filter(favorite => favorite.listingId !== listing.value.id);
+  if (isFavorite.value) {
+    await deleteBookmark(token, listing.value.id);
+    favorites.value = favorites.value.filter(f => f.listingId !== listing.value.id);
   } else {
-    createBookmark(token, listing.value.id)
+    await createBookmark(token, listing.value.id);
     favorites.value.push({ listingId: listing.value.id });
   }
+  isFavorite.value = !isFavorite.value;
 }
 
+// Check if the user is the owner of the listing
 const isOwner = () => {
-  if (user.isLoggedIn) {
-    user.userId === listing.value.userId  
+  if (user.isLoggedIn && listing.value) {
+    return user.userId === listing.value.userId;
   }
   return false;
 }
 
+// Delete listing
 const delListing = () => {
   // Logic to delete the listing
   router.back()
 }
 
+// Route to edit listing
 const router = useRouter();
 const toEditListing = () => {
   router.push('/listing/update/' + listing.value.id + '/edit');
@@ -75,35 +89,42 @@ const toEditListing = () => {
 
 // Format LocalDateTime to a readable format
 const formatDateTime = (dateTimeString) => {
+  if (!dateTimeString) {
+    dateTimeString = listing.value.createdAt;
+  } 
+  if(!dateTimeString) return 'N/A';
   const date = new Date(dateTimeString); 
-  return date.toLocaleString(); 
+  if (isNaN(date)) {
+    console.error('Invalid date format:', dateTimeString);
+    return 'Invalid Date';
+  }
+  return date.toLocaleString();
 };
 </script>
 
 <template>
-<div class="display-page-container">
-  <p>herher</p>
+<div class="display-page-container" v-if="listing">
   <!-- Image container -->
   <div class="image-container">
-    <!--<img class="image-item" :src="listing.value.images" alt="Front image">-->
+    <img class="image-item" :src="image" alt="Front image">
     <button class="favorite" :class="{ 'isFavorite': isFavorite }" @click="toggleFavorite">
       <Icon icon="material-symbols:favorite" width="40" height="40" />
     </button>
-    <p id="lastEdited">Last edited: {{ formatDateTime(listing.value.lastEdited) }}</p>
+    <p id="lastEdited">Last edited: {{ formatDateTime(listing.lastEdited) }}</p>
   </div>
 
   <div class="sidebar">
 
     <!-- Description -->
     <div class="description">
-      <h2>{{ listing.value.title }}</h2>
-      <p id="price">{{ listing.value.price }}</p>
-      <p id="description">{{ listing.value.description }}</p>
-      <p id="categories">{{ listing.value.category }}</p>
+      <h2>{{ listing.title }}</h2>
+      <p id="price">{{ listing.price }}</p>
+      <p id="description">{{ listing.description }}</p>
+      <p id="categories">{{ listing.category }}</p>
     </div>
 
     <!-- Buy item or message seller -->
-    <div class="btn" v-if="user.isLoggedIn && !isOwner">
+    <div class="btn" v-if="user.isLoggedIn && !isOwner()">
       <button class="message-btn">Message seller</button>
       <button class="buy-btn">Buy</button>
     </div>
@@ -120,7 +141,7 @@ const formatDateTime = (dateTimeString) => {
     <!-- Map -->
     <div class="map">
       <ListingMapComponent
-        :location="[listing.value.latitude, listing.value.longitude]" />
+        :location="[listing.latitude, listing.longitude]" />
     </div>
 
 

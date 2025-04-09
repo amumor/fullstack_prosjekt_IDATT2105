@@ -4,6 +4,7 @@ import { useRouter } from 'vue-router';
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import { get } from 'superagent';
+import { useListingStore } from '@/stores/listing.js';
 
 const props = defineProps({
   id: Number,
@@ -15,10 +16,9 @@ const props = defineProps({
 })
 
 // Get address from coordinates
-const address = ref('???');
-const apiKey = "AIzaSyDex1Dj8eXvChJFyafFKaB8bthMStoOtfo";
-console.log("API Key:", apiKey);
+const address = ref('Loading address...');
 
+/**
 const getAddress = async () => {
   try {
     const response = await axios.get(
@@ -41,12 +41,18 @@ const getAddress = async () => {
 onMounted(() => {
   getAddress();
 });
-
+*/
 
 // Route to single listing
+const listingStore = useListingStore();
 const router = useRouter();
 const toListingView = () => {
-  router.push('/listing/id/' + props.id);
+  try{
+    listingStore.setListing(props.id);
+    router.push('/listing/id/' + props.id);
+  } catch (err) {
+    console.error('Error navigating to listing view:', err);
+  }
 }
 </script>
 
