@@ -1,7 +1,7 @@
 <script setup>
 import Navbar from '@/components/Navbar.vue'
 import ListingPreviewComponent from '@/components/listing/ListingPreviewComponent.vue'
-import {getListingByCategory, getListingSuggestions} from "@/services/ListingService.js";
+import {getListingsByCategory, getListingSuggestions} from "@/services/ListingService.js";
 import {userStore} from "@/stores/user.js";
 import {isTokenExpired} from "@/services/TokenService.js";
 import {getAllCategories} from "@/services/CategoryService.js";
@@ -47,7 +47,8 @@ onMounted(async () => {
 
 const handleCategoryFilterClick = async (categoryName) => {
   try {
-    listings.value = await getListingByCategory(categoryName, {page: 1, size: 10});
+    listings.value = await getListingsByCategory(categoryName, {page: 1, size: 10});
+    console.log("Listings value after filtering", listings.value)
 
   } catch (error) {
     console.log(error);
