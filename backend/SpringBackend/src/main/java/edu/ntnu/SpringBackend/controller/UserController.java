@@ -107,7 +107,7 @@ public class UserController {
      * @return a response entity containing the user's profile information
      */
     @GetMapping("/get-my-profile")
-    @Operation(summary = "Getting user info by email", security = @SecurityRequirement(name = "bearerAuth"))
+    @Operation(summary = "Getting user info for the logged in user", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<UserResponseDTO> getMyProfile(
             @AuthenticationPrincipal User user
     ) {
