@@ -31,7 +31,7 @@ const router = createRouter({
       component: ProfileView
     },
     {
-      path: '/listing/:id',
+      path: '/listing/id/:id',
       name: 'listing',
       component: ListingView,
     },
@@ -66,7 +66,7 @@ const router = createRouter({
       component: MapView
     },
     {
-      path: '/listing/:id/edit',
+      path: '/listing/update/:id/edit',
       name: 'editListing',
       component: EditListingView,
     },

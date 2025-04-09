@@ -216,3 +216,13 @@ export async function getListingsByCategory(categoryName) {
         throw error;
     }
 }
+
+export async function (token, page, size) {
+    const url = new URL('http://localhost:8080/api/v1/listing/get-by-seller');
+    url.searchParams.append('page', page);
+    url.searchParams.append('size', size);
+    headers: {
+                  'Authorization': `Bearer ${token}`, // Add JWT token
+                  'Content-Type': 'application/json',
+              },
+}
