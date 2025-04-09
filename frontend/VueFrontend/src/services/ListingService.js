@@ -184,3 +184,38 @@ export function updateListing(id, updateData, token) {
             throw error;
         });
 }
+
+/**
+ * Retrieves listings by category with optional pagination.
+ *
+ * @param {string} categoryName - The category name to filter listings.
+ * @param {Object} [opts] - Optional parameters.
+ * @param {number} [opts.page=0] - The page number (default is 0).
+ * @param {number} [opts.size=10] - The number of listings per page (default is 10).
+ * @param {string} token - JWT token.
+ * @returns {Promise<Object>} A promise that resolves to a ListingListResponseDTO object.
+ * @throws {Error} If fetching listings by category fails.
+ *
+ * @example
+ * getListingByCategory('Cars', { page: 0, size: 10 }, 'jwt-token')
+ *   .then(response => console.log('Listings for category:', response))
+ *   .catch(error => console.error('Failed to retrieve listings by category:', error));
+ */
+export function getListingByCategory(categoryName, opts = { page: 0, size: 10 }, token) {
+    const client = new ApiClient(baseURL);
+    client.timeout = timeout;
+    if (token) {
+        client.authentications.bearerAuth = {
+            type: 'bearer',
+            accessToken: token,
+        };
+    }
+
+    const listingApi = new ListingControllerApi(client);
+    return listingApi.getByCategoryWithHttpInfo(categoryName, opts)
+        .then(response => response.data)
+        .catch(error => {
+            console.error('Failed to retrieve listings by category:', error);
+            throw error;
+        });
+}
