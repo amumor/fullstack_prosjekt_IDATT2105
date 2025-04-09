@@ -14,8 +14,8 @@ import java.util.List;
  *
  * @author Vetle Hodne, Amund Mørk
  * @version 1.0
- * @since 1.0
  * @see CategoryResponseDTO
+ * @since 1.0
  */
 @Data
 @Builder
@@ -23,8 +23,8 @@ import java.util.List;
 @NoArgsConstructor
 public class CategoryListResponseDTO {
 
-    /**
-     * A list of CategoryResponseDTOs.
-     */
-    List<CategoryResponseDTO> categories;
+  /**
+   * A list of CategoryResponseDTOs.
+   */
+  List<CategoryResponseDTO> categories;
 }

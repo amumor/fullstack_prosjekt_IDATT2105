@@ -22,13 +22,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AuthenticationRequestDTO {
 
-    /**
-     * The email address of the user.
-     */
-    private String email;
+  /**
+   * The email address of the user.
+   */
+  private String email;
 
-    /**
-     * The password of the user.
-     */
-    private String password;
+  /**
+   * The password of the user.
+   */
+  private String password;
 }

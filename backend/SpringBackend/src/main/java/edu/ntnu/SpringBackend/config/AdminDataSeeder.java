@@ -11,6 +11,19 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import io.github.cdimascio.dotenv.Dotenv;
 
+/**
+ * AdminDataSeeder is a CommandLineRunner that seeds the database with a default admin user
+ * if no admin user exists in the database.
+ * The default admin user is created with a predefined email and password,
+ * which are loaded from environment variables using the Dotenv library.
+ * <p>
+ * This class is executed when the Spring application starts,
+ * ensuring that there is always an admin user available for managing the application.
+ *
+ * @author Amund Mørk
+ * @version 1.0
+ * @since 1.0
+ */
 @Component
 @RequiredArgsConstructor
 public class AdminDataSeeder implements CommandLineRunner {
@@ -23,6 +36,13 @@ public class AdminDataSeeder implements CommandLineRunner {
     private final String DEFAULT_ADMIN_EMAIL = dotenv.get("APP_DEFAULT_ADMIN_EMAIL");
     private final String DEFAULT_ADMIN_PASSWORD = dotenv.get("APP_DEFAULT_ADMIN_PASSWORD");
 
+    /**
+     * This method is executed when the Spring application starts.
+     * It checks if an admin user exists in the database,
+     * and if not, creates a default admin user with a predefined email and password.
+     *
+     * @param args command line arguments
+     */
     @Override
     public void run(String... args) {
         boolean hasAdmin = userRepository.existsByRole(Role.ROLE_ADMIN);

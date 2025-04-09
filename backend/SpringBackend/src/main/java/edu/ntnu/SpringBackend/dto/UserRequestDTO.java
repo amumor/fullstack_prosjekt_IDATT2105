@@ -23,33 +23,33 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserRequestDTO {
 
-    /**
-     * The first name of the user.
-     */
-    private String firstName;
+  /**
+   * The first name of the user.
+   */
+  private String firstName;
 
-    /**
-     * The last name of the user.
-     */
-    private String lastName;
+  /**
+   * The last name of the user.
+   */
+  private String lastName;
 
-    /**
-     * The email address of the user.
-     */
-    private String email;
+  /**
+   * The email address of the user.
+   */
+  private String email;
 
-    /**
-     * The password of the user.
-     */
-    private String password;
+  /**
+   * The password of the user.
+   */
+  private String password;
 
-    /**
-     * The phone number of the user.
-     */
-    private String phoneNumber;
+  /**
+   * The phone number of the user.
+   */
+  private String phoneNumber;
 
-    /**
-     * The role of the user.
-     */
-    private Role role;
+  /**
+   * The role of the user.
+   */
+  private Role role;
 }
