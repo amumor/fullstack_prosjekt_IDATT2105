@@ -5,28 +5,39 @@ import { Icon } from '@iconify/vue'
 
 import ListingMapComponent from '@/components/listing/ListingMapComponent.vue'
 import { userStore } from '@/stores/user.js'
-
-
-const user = userStore()
+import { getListingById } from '@/services/ListingService.js'
 
 const props = defineProps({
-  id: String,
-  title: String,
-  description: String,
-  price: String,
-  location: Array,
-  category: String,
-  lastEdited: String,
-  image: String,
-  isLoggedIn: Boolean,
+  listingId: String,
 })
 
+// User store
+const user = userStore()
+const token = user.token;
+
+// Fetch the listing
+const listing = ref(null); 
+getListingById(props.listingId, token)
+  .then((data) => {
+    listing.value = data;
+    console.log('Listing found:', data);
+  })
+  .catch((err) => {
+    console.error('Listing not found:', err);
+  });
+
 const router = useRouter();
-const isOwner = ref(true);
 const isFavorite = ref(false);
 
 const toggleFavorite = () => {
   isFavorite.value = !isFavorite.value;
+}
+
+const isOwner = () => {
+  if (user.isLoggedIn) {
+    user.userId === listing.value.userId  
+  }
+  return false;
 }
 
 const delListing = () => {
@@ -35,31 +46,36 @@ const delListing = () => {
 }
 
 const toEditListing = () => {
-  router.push('/listing/' + props.id + '/edit');
+  router.push('/listing/update/' + listing.id + '/edit');
 }
 
+// Format LocalDateTime to a readable format
+const formatDateTime = (dateTimeString) => {
+  const date = new Date(dateTimeString); 
+  return date.toLocaleString(); 
+};
 </script>
 
 <template>
 <div class="display-page-container">
-
+  <p>herher</p>
   <!-- Image container -->
   <div class="image-container">
-    <img class="image-item" :src="props.image" alt="Front image">
+    <!--<img class="image-item" :src="listing.images" alt="Front image">-->
     <button class="favorite" :class="{ 'isFavorite': isFavorite }" @click="toggleFavorite">
       <Icon icon="material-symbols:favorite" width="40" height="40" />
     </button>
-    <p id="lastEdited">Last edited: {{ props.lastEdited }}</p>
+    <p id="lastEdited">Last edited: {{ formatDateTime(listing.lastEdited) }}</p>
   </div>
 
   <div class="sidebar">
 
     <!-- Description -->
     <div class="description">
-      <h2>{{ props.title }}</h2>
-      <p id="price">{{ props.price }}</p>
-      <p id="description">{{ props.description }}</p>
-      <p id="categories">{{ props.category }}</p>
+      <h2>{{ listing.title }}</h2>
+      <p id="price">{{ listing.price }}</p>
+      <p id="description">{{ listing.description }}</p>
+      <p id="categories">{{ listing.category }}</p>
     </div>
 
     <!-- Buy item or message seller -->
@@ -80,7 +96,7 @@ const toEditListing = () => {
     <!-- Map -->
     <div class="map">
       <ListingMapComponent
-        :location=props.location />
+        :location="[listing.latitude, listing.longitude]" />
     </div>
 
 
