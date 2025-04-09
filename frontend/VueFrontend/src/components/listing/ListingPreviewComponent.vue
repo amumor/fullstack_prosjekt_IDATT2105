@@ -17,6 +17,8 @@ const props = defineProps({
 
 // Get address from coordinates
 const address = ref('Loading address...');
+const image = 'https://iqboatlifts.com/wp-content/uploads/2018/06/Yacht-vs-Boat-Whats-the-Difference-Between-the-Two-1024x571.jpg';
+
 
 /**
 const getAddress = async () => {
@@ -58,10 +60,10 @@ const toListingView = () => {
 
 <template>
   <button class="listings" @click="toListingView">
-    <!--<span class="image-container">-->
-      <!--<img class="image-item" :src="props.image" alt="Boat">-->
-      <span class="price">{{ props.price }}</span>
-    <!--</span>-->
+    <span class="image-container">
+      <img class="image-item" :src="image" alt="Boat">
+      <span class="price">{{ props.price + ' kr' }}</span>
+    </span>
     <span class="description">
       <span class="town">{{ address }}</span>
       <span class="title">{{ props.title }}</span>
@@ -90,14 +92,14 @@ const toListingView = () => {
 }
 
 /* Image container */
-.image-container, .price {
+.image-container {
   position: relative;
   overflow: hidden;
   border-radius: 10px;
   margin: 10px  10px 0 10px ;
 }
 
-.image-item, .price {
+.image-item {
   width: 200px;
   height: auto;
   display: block;

@@ -52,7 +52,7 @@ public class BookmarkService {
    * @return The created bookmark.
    */
   @Transactional
-  public Bookmark createBookmark(BookmarkRequestDTO bookmarkRequestDTO, User user) {
+  public Bookmark createBookmark(User user, BookmarkRequestDTO bookmarkRequestDTO) {
     logger.info("> Handling bookmark creation for user: {}", user.getEmail());
 
     Listing listing = listingRepository.findById(bookmarkRequestDTO.getListingId())
@@ -81,7 +81,7 @@ public class BookmarkService {
    * @param user      The user who is deleting the bookmark.
    */
   @Transactional
-  public void deleteBookmark(UUID bookmarkId, User user) {
+  public void deleteBookmark(User user, UUID bookmarkId) {
     logger.info("> Deleting bookmark with ID: {}", bookmarkId);
     Bookmark bookmark = bookmarkRepository.findById(bookmarkId)
             .orElseThrow(() -> new ObjectNotFoundException(bookmarkId, "Bookmark not found"));

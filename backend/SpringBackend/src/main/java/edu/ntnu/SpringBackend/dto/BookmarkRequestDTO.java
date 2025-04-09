@@ -16,4 +16,5 @@ import java.util.UUID;
 @AllArgsConstructor
 public class BookmarkRequestDTO {
   private UUID listingId;
+  private UUID userId;
 }
