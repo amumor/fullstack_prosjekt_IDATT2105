@@ -45,10 +45,12 @@ onMounted(async () => {
   await localGetSuggestions();
 })
 
+const currentFilter = ref("None");
 const handleCategoryFilterClick = async (categoryName) => {
   try {
     listings.value = await getListingsByCategory(categoryName, {page: 1, size: 10});
     console.log("Listings value after filtering", listings.value)
+    currentFilter.value = categoryName;
 
   } catch (error) {
     console.log(error);
@@ -57,6 +59,7 @@ const handleCategoryFilterClick = async (categoryName) => {
 
 const handleFilterReset = async () => {
   await localGetSuggestions();
+  currentFilter.value = "None";
 }
 
 const localGetSuggestions = async () => {
@@ -110,6 +113,7 @@ const localGetSuggestions = async () => {
         <button id="category-btn" @click="() => handleCategoryFilterClick(category.name)">{{ category.name }}</button>
       </div>
       <button id="category-btn" @click="handleFilterReset">Reset</button>
+      <h3>Current filter: {{currentFilter}}</h3>
     </div>
 
     <!-- Listings -->
