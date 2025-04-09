@@ -128,7 +128,8 @@ public class CategoryService {
     public List<Category> findBySearchHistory(List<SearchHistory> searchHistoryList) {
         logger.info("> Finding categories by search history");
         if (searchHistoryList == null || searchHistoryList.isEmpty()) {
-            return new ArrayList<>();
+            logger.warn("> Search history list is null or empty, returning all categories");
+            return categoryRepository.findAll();
         }
 
         List<String> searchQueries = searchHistoryList.stream()
