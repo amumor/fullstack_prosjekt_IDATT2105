@@ -5,7 +5,7 @@ import {getListingSuggestions} from "@/services/ListingService.js";
 import {userStore} from "@/stores/user.js";
 import {isTokenExpired} from "@/services/TokenService.js";
 import {getAllCategories} from "@/services/CategoryService.js";
-import {ref} from "vue";
+import {onMounted, ref} from "vue";
 import router from "@/router/index.js";
 
 document.body.style.backgroundColor = "#ffffff";
@@ -38,34 +38,38 @@ const searchFunction = () => {
 //   {id: 3, name: 'Motorcycles'},
 //   {id: 4, name: 'Real Estate'},
 // ];
-
 const user = userStore()
 const categories = ref([]);
 const listings = ref([]);
-try {
-  const token = user.token;
-  if (token === null || token === undefined || token === '') {
-    // If user is not logged in, get lsitings withtout token
-    const listingResponse = await getListingSuggestions({page: 1, size: 10});
-    const categoryResponse = await getAllCategories();
-    listings.value = listingResponse.listings;
-    categories.value = categoryResponse.categories;
-
-  } else {
-    if (isTokenExpired(token)) {
-      user.logout();
-      router.push("/");
+onMounted(async () => {
+  try {
+    const token = user.token
+    if (!token) {
+      // If user is not logged in, get listings without token
+      const listingResponse = await getListingSuggestions({ page: 1, size: 10 })
+      const categoryResponse = await getAllCategories()
+      console.log("listing response:", listingResponse)
+      console.log("category response:", categoryResponse)
+      listings.value = listingResponse.listings
+      categories.value = categoryResponse.categories
+      console.log("listings: ", listings.value)
+      console.log("categories: ", categories.value)
     } else {
-      // If user is logged in, get listings from suggestions with token
-      const listingResponse = await getListingSuggestions({page: 1, size: 10}, token);
-      const categoryResponse = await getAllCategories(token);
-      listings.value = listingResponse.listings;
-      categories.value = categoryResponse.categories;
+      if (isTokenExpired(token)) {
+        user.logout()
+        await router.push("/")
+      } else {
+        // If user is logged in, get listings with token
+        const listingResponse = await getListingSuggestions({ page: 1, size: 10 }, token)
+        const categoryResponse = await getAllCategories(token)
+        listings.value = listingResponse.listings
+        categories.value = categoryResponse.categories
+      }
     }
+  } catch (error) {
+    console.error(error)
   }
-} catch (error) {
-  console.error(error);
-}
+})
 </script>
 
 <template>
