@@ -16,6 +16,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -71,7 +72,7 @@ public class ListingController {
 
         // Find the listings using the categories and pageable
 //        List<Listing> listings = listingService.findByCategories(categories, pageable); //TODO: fix this piece of shit
-        List<Listing> listings = listingService.findByCategories2(categories, pageable);
+        List<Listing> listings = listingService.findByCategories2(categories, pageable).toList();
 
         logger.info(" ---- Listings retrieved: {}", listings.toString());
         for (Listing listing : listings) {
@@ -185,8 +186,13 @@ public class ListingController {
         }
         logger.info("GET Request received on [/api/v1/listing/get-by-category] with categoryName: {}", categoryName);
         Pageable pageable = PageRequest.of(page, size);
-        return ResponseEntity.ok(listingMapper.toDto(listingService.getListingsBySingleCategory(categoryName, pageable)));
-    }
+        List<Listing> listingsPage = listingService.getListingsBySingleCategory(categoryName, pageable);
+        logger.info("> Retrieved {} listings for category: {}", listingsPage.size(), categoryName);
+
+        var listingsDto = listingMapper.toDto(listingsPage);
+        logger.info("> Mapping result: {}", listingsDto);
+
+        return ResponseEntity.ok(listingsDto);    }
 
 
     /**

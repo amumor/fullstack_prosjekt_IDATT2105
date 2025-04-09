@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
@@ -125,30 +127,37 @@ public class ListingService {
 //        return combinedListings;
     }
 
-    public List<Listing> findByCategories2(List<Category> categories, Pageable pageable) {
+    public Page<Listing> findByCategories2(List<Category> categories, Pageable pageable) {
         if (categories == null || categories.isEmpty()) {
             categories = categoryService.getAll();
         }
 
-        int totalPageSize = pageable.getPageSize();
-        int categoryCount = categories.size();
-        int perCategorySize = (int) Math.ceil((double) totalPageSize / categoryCount);
-
+        // Combine listings from all categories.
         List<Listing> combinedListings = new ArrayList<>();
-
         for (Category category : categories) {
             combinedListings.addAll(category.getListings());
         }
 
-        // Scramble to avoid some listings in categories never being shown.
+        // Shuffle the listings for randomization.
         Collections.shuffle(combinedListings);
 
-        if (combinedListings.size() > totalPageSize) {
-            logger.warn("> Combined listings size exceeds total page size, trimming to {}", totalPageSize);
-            combinedListings = combinedListings.subList(0, totalPageSize);
+        int pageSize = pageable.getPageSize();
+        int totalListings = combinedListings.size();
+        int requestedPageNumber = pageable.getPageNumber();
+        int fromIndex = requestedPageNumber * pageSize;
+        int toIndex = Math.min(fromIndex + pageSize, totalListings);
+
+        // If the requested page is out of bounds, set it to the last page.
+        if (fromIndex >= totalListings && totalListings > 0) {
+            int lastPage = (totalListings - 1) / pageSize;
+            fromIndex = lastPage * pageSize;
+            toIndex = Math.min(fromIndex + pageSize, totalListings);
         }
-        logger.info("> Combined listings count: {}", combinedListings.size());
-        return combinedListings;
+
+        List<Listing> pageContent = combinedListings.subList(fromIndex, toIndex);
+        logger.info("> Combined listings count: {}", pageContent.size());
+
+        return new PageImpl<>(pageContent, pageable, totalListings);
     }
 
     /**
