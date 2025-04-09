@@ -5,28 +5,62 @@ import { Icon } from '@iconify/vue'
 
 import ListingMapComponent from '@/components/listing/ListingMapComponent.vue'
 import { userStore } from '@/stores/user.js'
-
-
-const user = userStore()
+import { getListingById } from '@/services/ListingService.js'
+import { createBookmark, deleteBookmark, getUserBookmarks } from '../../services/BookmarkService';
 
 const props = defineProps({
-  id: String,
-  title: String,
-  description: String,
-  price: String,
-  location: Array,
-  category: String,
-  lastEdited: String,
-  image: String,
-  isLoggedIn: Boolean,
+  listingId: String,
 })
 
-const router = useRouter();
-const isOwner = ref(true);
-const isFavorite = ref(false);
+// User store
+const user = userStore()
+const token = user.token;
+const favorites = ref([]);
+getUserBookmarks(token)
+  .then((data) => {
+    favorites.value = data;
+  })
+  .catch((err) => {
+    console.error('Error fetching bookmarks:', err);
+  })
+
+// Fetch the listing
+const listing = ref(null); 
+getListingById(props.listingId, token)
+  .then((data) => {
+    listing.value = data;
+    console.log('Listing found:', data);
+  })
+  .catch((err) => {
+    console.error('Listing not found:', err);
+  });
+
+// Favorite button
+const isFavorite = ref();
+const checkIfFavorite = () => {
+  if (user.isLoggedIn) {
+    isFavorite.value = favorites.value.some(favorite => favorite.listingId === listing.value.id);
+  } else {
+    isFavorite.value = false;
+  }
+}
 
 const toggleFavorite = () => {
-  isFavorite.value = !isFavorite.value;
+  checkIfFavorite();
+  if(isFavorite){
+    deleteBookmark(token, listing.value.id)
+    favorites.value = favorites.value.filter(favorite => favorite.listingId !== listing.value.id);
+  } else {
+    createBookmark(token, listing.value.id)
+    favorites.value.push({ listingId: listing.value.id });
+  }
+}
+
+const isOwner = () => {
+  if (user.isLoggedIn) {
+    user.userId === listing.value.userId  
+  }
+  return false;
 }
 
 const delListing = () => {
@@ -34,32 +68,38 @@ const delListing = () => {
   router.back()
 }
 
+const router = useRouter();
 const toEditListing = () => {
-  router.push('/listing/' + props.id + '/edit');
+  router.push('/listing/update/' + listing.value.id + '/edit');
 }
 
+// Format LocalDateTime to a readable format
+const formatDateTime = (dateTimeString) => {
+  const date = new Date(dateTimeString); 
+  return date.toLocaleString(); 
+};
 </script>
 
 <template>
 <div class="display-page-container">
-
+  <p>herher</p>
   <!-- Image container -->
   <div class="image-container">
-    <img class="image-item" :src="props.image" alt="Front image">
+    <!--<img class="image-item" :src="listing.value.images" alt="Front image">-->
     <button class="favorite" :class="{ 'isFavorite': isFavorite }" @click="toggleFavorite">
       <Icon icon="material-symbols:favorite" width="40" height="40" />
     </button>
-    <p id="lastEdited">Last edited: {{ props.lastEdited }}</p>
+    <p id="lastEdited">Last edited: {{ formatDateTime(listing.value.lastEdited) }}</p>
   </div>
 
   <div class="sidebar">
 
     <!-- Description -->
     <div class="description">
-      <h2>{{ props.title }}</h2>
-      <p id="price">{{ props.price }}</p>
-      <p id="description">{{ props.description }}</p>
-      <p id="categories">{{ props.category }}</p>
+      <h2>{{ listing.value.title }}</h2>
+      <p id="price">{{ listing.value.price }}</p>
+      <p id="description">{{ listing.value.description }}</p>
+      <p id="categories">{{ listing.value.category }}</p>
     </div>
 
     <!-- Buy item or message seller -->
@@ -80,7 +120,7 @@ const toEditListing = () => {
     <!-- Map -->
     <div class="map">
       <ListingMapComponent
-        :location=props.location />
+        :location="[listing.value.latitude, listing.value.longitude]" />
     </div>
 
 
