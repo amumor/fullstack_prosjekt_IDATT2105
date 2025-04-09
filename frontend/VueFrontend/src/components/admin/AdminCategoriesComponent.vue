@@ -14,7 +14,7 @@ const token = userStorage.token;
 if (isTokenExpired(token)) {
   userStorage.logout();
 }
-const response = await getAllCategories(token);
+const response = await getAllCategories();
 console.log("response: ", response.categories);
 categories.value.push(...response.categories)
 
