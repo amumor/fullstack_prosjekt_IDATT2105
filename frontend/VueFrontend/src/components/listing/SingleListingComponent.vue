@@ -6,6 +6,7 @@ import { Icon } from '@iconify/vue'
 import ListingMapComponent from '@/components/listing/ListingMapComponent.vue'
 import { userStore } from '@/stores/user.js'
 import { getListingById } from '@/services/ListingService.js'
+import { createBookmark, deleteBookmark, getUserBookmarks } from '../../services/BookmarkService';
 
 const props = defineProps({
   listingId: String,
@@ -14,6 +15,14 @@ const props = defineProps({
 // User store
 const user = userStore()
 const token = user.token;
+const favorites = ref([]);
+getUserBookmarks(token)
+  .then((data) => {
+    favorites.value = data;
+  })
+  .catch((err) => {
+    console.error('Error fetching bookmarks:', err);
+  })
 
 // Fetch the listing
 const listing = ref(null); 
@@ -26,11 +35,25 @@ getListingById(props.listingId, token)
     console.error('Listing not found:', err);
   });
 
-const router = useRouter();
-const isFavorite = ref(false);
+// Favorite button
+const isFavorite = ref();
+const checkIfFavorite = () => {
+  if (user.isLoggedIn) {
+    isFavorite.value = favorites.value.some(favorite => favorite.listingId === listing.value.id);
+  } else {
+    isFavorite.value = false;
+  }
+}
 
 const toggleFavorite = () => {
-  isFavorite.value = !isFavorite.value;
+  checkIfFavorite();
+  if(isFavorite){
+    deleteBookmark(token, listing.value.id)
+    favorites.value = favorites.value.filter(favorite => favorite.listingId !== listing.value.id);
+  } else {
+    createBookmark(token, listing.value.id)
+    favorites.value.push({ listingId: listing.value.id });
+  }
 }
 
 const isOwner = () => {
@@ -45,8 +68,9 @@ const delListing = () => {
   router.back()
 }
 
+const router = useRouter();
 const toEditListing = () => {
-  router.push('/listing/update/' + listing.id + '/edit');
+  router.push('/listing/update/' + listing.value.id + '/edit');
 }
 
 // Format LocalDateTime to a readable format
@@ -61,21 +85,21 @@ const formatDateTime = (dateTimeString) => {
   <p>herher</p>
   <!-- Image container -->
   <div class="image-container">
-    <!--<img class="image-item" :src="listing.images" alt="Front image">-->
+    <!--<img class="image-item" :src="listing.value.images" alt="Front image">-->
     <button class="favorite" :class="{ 'isFavorite': isFavorite }" @click="toggleFavorite">
       <Icon icon="material-symbols:favorite" width="40" height="40" />
     </button>
-    <p id="lastEdited">Last edited: {{ formatDateTime(listing.lastEdited) }}</p>
+    <p id="lastEdited">Last edited: {{ formatDateTime(listing.value.lastEdited) }}</p>
   </div>
 
   <div class="sidebar">
 
     <!-- Description -->
     <div class="description">
-      <h2>{{ listing.title }}</h2>
-      <p id="price">{{ listing.price }}</p>
-      <p id="description">{{ listing.description }}</p>
-      <p id="categories">{{ listing.category }}</p>
+      <h2>{{ listing.value.title }}</h2>
+      <p id="price">{{ listing.value.price }}</p>
+      <p id="description">{{ listing.value.description }}</p>
+      <p id="categories">{{ listing.value.category }}</p>
     </div>
 
     <!-- Buy item or message seller -->
@@ -96,7 +120,7 @@ const formatDateTime = (dateTimeString) => {
     <!-- Map -->
     <div class="map">
       <ListingMapComponent
-        :location="[listing.latitude, listing.longitude]" />
+        :location="[listing.value.latitude, listing.value.longitude]" />
     </div>
 
 

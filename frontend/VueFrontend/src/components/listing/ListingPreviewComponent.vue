@@ -1,29 +1,63 @@
 <script setup>
 import { defineProps } from 'vue';
 import { useRouter } from 'vue-router';
+import { ref, onMounted } from 'vue';
+import axios from 'axios';
+import { get } from 'superagent';
 
 const props = defineProps({
   id: Number,
-  image: String,
+  // image: String,
   price: String,
-  town: String,
+  latitude: Number,
+  longitude: Number,
   title: String,
 })
-const router = useRouter();
 
+// Get address from coordinates
+const address = ref('???');
+const apiKey = "AIzaSyDex1Dj8eXvChJFyafFKaB8bthMStoOtfo";
+console.log("API Key:", apiKey);
+
+const getAddress = async () => {
+  try {
+    const response = await axios.get(
+      `https://maps.googleapis.com/maps/api/geocode/json?latlng=${props.latitude},${props.longitude}&key=${apiKey}`
+    );
+
+    if (response.data.status === 'OK') {
+      // Get the formatted address from the first result
+      address.value = response.data.results[0]?.formatted_address;
+
+      console.log('Formatted Address:', address.value);
+    } else {
+      throw new Error('No address found');
+    }
+  } catch (err) {
+    console.error(err);
+  } 
+};
+
+onMounted(() => {
+  getAddress();
+});
+
+
+// Route to single listing
+const router = useRouter();
 const toListingView = () => {
-  router.push('/listing/' + props.id);
+  router.push('/listing/id/' + props.id);
 }
 </script>
 
 <template>
   <button class="listings" @click="toListingView">
-    <span class="image-container">
-      <img class="image-item" :src="props.image" alt="Boat">
+    <!--<span class="image-container">-->
+      <!--<img class="image-item" :src="props.image" alt="Boat">-->
       <span class="price">{{ props.price }}</span>
-    </span>
+    <!--</span>-->
     <span class="description">
-      <span class="town">{{ props.town }}</span>
+      <span class="town">{{ address }}</span>
       <span class="title">{{ props.title }}</span>
     </span>
   </button>
@@ -50,14 +84,14 @@ const toListingView = () => {
 }
 
 /* Image container */
-.image-container {
+.image-container, .price {
   position: relative;
   overflow: hidden;
   border-radius: 10px;
   margin: 10px  10px 0 10px ;
 }
 
-.image-item {
+.image-item, .price {
   width: 200px;
   height: auto;
   display: block;
@@ -76,6 +110,7 @@ const toListingView = () => {
 .town {
   font-size: 15px;
   color: darkgray;
+  text-align: left; 
 }
 
 .title {
