@@ -9,71 +9,6 @@ import { serviceConfigParams } from '@/services/ServiceSetup.js';
 
 const { timeout, baseURL } = serviceConfigParams();
 
-/**
- * Creates a new listing with the provided details.
- *
- * @param {Object} listing - An object containing listing details.
- * @param {string} listing.title - The title of the listing.
- * @param {string} listing.description - The description of the listing.
- * @param {string} listing.categoryName - The category name.
- * @param {string} listing.listingStatus - The status of the listing. Enum: ACTIVE, INACTIVE or SOLD
- * @param {number} listing.price - The price of the listing.
- * @param {number} listing.latitude - The latitude coordinate.
- * @param {number} listing.longitude - The longitude coordinate.
- * @param {Array.<string>} listing.imagesToDelete - Array of images to delete, if empty no images are deleted
- * @param {Array.<File>} [images] - Optional array of image files to upload.
- * @param {string} token - JWT token.
- * @returns {Promise<Object>} A promise that resolves to the created ListingResponseDTO.
- * @throws {Error} If listing creation fails.
- *
- * @example
- * createListing({
- *   title: 'Vintage Car',
- *   description: 'A well-maintained vintage car',
- *   categoryName: 'Cars',
- *   listingStatus: 'ACTIVE',
- *   price: 15000,
- *   latitude: 40.7128,
- *   longitude: -74.0060
- * }, images, 'jwt-token')
- *   .then(response => console.log('Listing created:', response))
- *   .catch(error => console.error('Creation failed:', error));
- */
-/**
-export function createListing(listing, images = [], token) {
-    const client = new ApiClient(baseURL);
-    client.timeout = timeout;
-    // Set up bearer authentication using the provided token.
-    client.authentications.bearerAuth = {
-        type: 'bearer',
-        accessToken: token,
-    };
-
-    // Create an instance of the ListingControllerApi.
-    const listingApi = new ListingControllerApi(client);
-
-    // Set up the ListingCreationRequestDTO with the listing details.
-    const listingCreationRequestDTO = new ListingCreationRequestDTO();
-    listingCreationRequestDTO.title = listing.title;
-    listingCreationRequestDTO.description = listing.description;
-    listingCreationRequestDTO.categoryName = listing.categoryName;
-    listingCreationRequestDTO.listingStatus = ListingCreationRequestDTO.ListingStatusEnum[listing.listingStatus];
-    listingCreationRequestDTO.price = listing.price;
-    listingCreationRequestDTO.latitude = listing.latitude;
-    listingCreationRequestDTO.longitude = listing.longitude;
-    listingCreationRequestDTO.imagesToDelete = listing.imagesToDelete || [];
-
-    // Pass the optional images via opts.
-    const opts = { images };
-
-    return listingApi.create(listingCreationRequestDTO, opts)
-        .then(listingResponseDTO => listingResponseDTO)
-        .catch(error => {
-            console.error('Listing creation failed:', error);
-            throw error;
-        });
-}*/
-
 import request from 'superagent';
 
 /**
@@ -151,42 +86,6 @@ export function createListing(listing, images = [], token) {
             throw new Error(`Listing creation failed: ${error.message}`);
         });
 }
-
-/**
- * Retrieves a listing by its ID.
- *
- * @param {string} id - The ID of the listing.
- * @param {string} token - JWT token.
- * @returns {Promise<Object>} A promise that resolves to a ListingResponseDTO.
- * @throws {Error} If fetching the listing fails.
- *
- * @example
- * getListingById('listingId123', 'jwt-token')
- *   .then(listing => console.log('Listing retrieved:', listing))
- *   .catch(error => console.error('Failed to fetch listing:', error));
- */
-/** 
-export function getListingById(id, token) {
-    const client = new ApiClient(baseURL);
-    client.timeout = timeout;
-    if (token) {
-        client.authentications.bearerAuth = {
-            type: 'bearer',
-            accessToken: token,
-        };
-    }
-
-    const listingApi = new ListingControllerApi(client);
-    return listingApi.getById(id)
-        .then(listingResponseDTO => listingResponseDTO)
-        .catch(error => {
-            console.error('Failed to retrieve listing by ID:', error);
-            throw error;
-        });
-}
-*/
-
-//import request from 'superagent';
 
 /**
  * Retrieves a listing by its ID using superagent.
