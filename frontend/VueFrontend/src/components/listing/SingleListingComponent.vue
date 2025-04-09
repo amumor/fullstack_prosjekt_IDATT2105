@@ -7,17 +7,16 @@ import ListingMapComponent from '@/components/listing/ListingMapComponent.vue'
 import { userStore } from '@/stores/user.js'
 import { getListingById } from '@/services/ListingService.js'
 
-
-const user = userStore()
-const token = user.token;
-
 const props = defineProps({
   listingId: String,
 })
 
-const listing = ref(null); // <-- Make it reactive!
+// User store
+const user = userStore()
+const token = user.token;
 
 // Fetch the listing
+const listing = ref(null); 
 getListingById(props.listingId, token)
   .then((data) => {
     listing.value = data;
@@ -28,11 +27,17 @@ getListingById(props.listingId, token)
   });
 
 const router = useRouter();
-const isOwner = ref(true);
 const isFavorite = ref(false);
 
 const toggleFavorite = () => {
   isFavorite.value = !isFavorite.value;
+}
+
+const isOwner = () => {
+  if (user.isLoggedIn) {
+    user.userId === listing.value.userId  
+  }
+  return false;
 }
 
 const delListing = () => {
@@ -44,6 +49,11 @@ const toEditListing = () => {
   router.push('/listing/update/' + listing.id + '/edit');
 }
 
+// Format LocalDateTime to a readable format
+const formatDateTime = (dateTimeString) => {
+  const date = new Date(dateTimeString); 
+  return date.toLocaleString(); 
+};
 </script>
 
 <template>
@@ -51,11 +61,11 @@ const toEditListing = () => {
   <p>herher</p>
   <!-- Image container -->
   <div class="image-container">
-    <img class="image-item" :src="listing.images" alt="Front image">
+    <!--<img class="image-item" :src="listing.images" alt="Front image">-->
     <button class="favorite" :class="{ 'isFavorite': isFavorite }" @click="toggleFavorite">
       <Icon icon="material-symbols:favorite" width="40" height="40" />
     </button>
-    <p id="lastEdited">Last edited: {{ listing.lastEdited }}</p>
+    <p id="lastEdited">Last edited: {{ formatDateTime(listing.lastEdited) }}</p>
   </div>
 
   <div class="sidebar">
