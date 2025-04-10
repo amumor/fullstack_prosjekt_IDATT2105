@@ -163,7 +163,7 @@ const prevPage = () => {
       <div class="listing-item" v-for="listing in paginatedListings" :key="listing.id">
         <ListingPreviewComponent
             :id="listing.id"
-            :image="listing.image"
+            :image="listing.imageUrls && listing.imageUrls.length > 0 ? listing.imageUrls[0] : null"
             :price="listing.price"
             :town="listing.town"
             :title="listing.title"/>

@@ -102,7 +102,7 @@ const prevPage = () => {
       <!-- No image -->
       <ListingPreviewComponent
         :id="listing.id"
-        
+        :image="listing.imageUrls && listing.imageUrls.length > 0 ? listing.imageUrls[0] : null"
         :price="listing.price"
         :latitude="listing.latitude"
         :longitude="listing.longitude"
