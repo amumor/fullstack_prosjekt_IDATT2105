@@ -286,3 +286,31 @@ export const deleteListing = (token, id) => {
             throw err;
         });
 };
+
+/**
+ * Get listings by title (search), with optional pagination.
+ * 
+ * @param {String} title - The title or keyword to search for.
+ * @param {Object} opts - Optional parameters.
+ * @param {Number} opts.page - Page number (default 0).
+ * @param {Number} opts.size - Page size (default 10).
+ * @param {String} token - Optional JWT token for auth (if needed).
+ * @returns {Promise<Object>} A promise that resolves to the response body.
+ */
+export const getListingsByTitle = (title, opts = {}) => {
+    const { page = 0, size = 10 } = opts;
+
+    return request
+        .get('http://localhost:8080/api/v1/listing/get-by-title')
+        .query({ title, page, size })
+        .then(res => res.body)
+        .catch(err => {
+            if (err.status === 404) {
+                // No listings found — return empty result to handle gracefully
+                return { listings: [] };
+            }
+
+            console.error('Failed to retrieve listings by title:', err);
+            throw err;
+        });
+};

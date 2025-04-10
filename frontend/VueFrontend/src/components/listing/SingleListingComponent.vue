@@ -1,14 +1,17 @@
 <script setup>
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted, watch, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { Icon } from '@iconify/vue'
 import { storeToRefs } from 'pinia';
+import { jwtDecode } from 'jwt-decode';
 
 import ListingMapComponent from '@/components/listing/ListingMapComponent.vue'
 import { userStore } from '@/stores/user.js'
 import { getListingById, deleteListing } from '@/services/ListingService.js'
 import { createBookmark, deleteBookmark, getUserBookmarks } from '../../services/BookmarkService';
 import { useListingStore } from '@/stores/listing.js'
+import { getUserById } from '../../services/UserService';
+import { fetchImage } from '@/services/ImageService.js';
 
 const listing = ref(null); 
 const image = 'https://iqboatlifts.com/wp-content/uploads/2018/06/Yacht-vs-Boat-Whats-the-Difference-Between-the-Two-1024x571.jpg';
@@ -31,6 +34,7 @@ const favorites = ref([]);
 const isFavorite = ref();
 
 // Fetch listing id
+const isOwner = ref(false);
 onMounted(async () => {
   const listingStore = useListingStore();
   const { id } = storeToRefs(listingStore);
@@ -45,6 +49,24 @@ onMounted(async () => {
   } catch (err) {
     console.error('Listing not found:', err);
   }
+
+  // Check if the user is the owner of the listing
+  if (user.isLoggedIn && listing.value) {
+    if(user.firstName === listing.value.sellerFirstName && user.lastName === listing.value.sellerLastName){
+      isOwner.value = true;
+    } else {
+      isOwner.value = false;
+    }
+  } else {
+    isOwner.value = false;
+  }
+});
+
+const getImageUrl = computed(() => {
+  if (listing.value && listing.value.imageUrls && listing.value.imageUrls.length > 0) {
+    return fetchImage(listing.value.imageUrls);
+  }
+  return 'https://placehold.co/600x400?text=No+Image';
 });
 
 // Fetch user bookmarks only if the user is logged in
@@ -102,14 +124,6 @@ watch(favorites, () => {
   checkIfFavorite();
 });
 
-// Check if the user is the owner of the listing
-const isOwner = () => {
-  if (user.isLoggedIn && listing.value) {
-    return user.userId === listing.value.userId;
-  }
-  return false;
-}
-
 // Delete listing
 const delListing = () => {
   checkToken();
@@ -152,7 +166,7 @@ const formatDateTime = (dateTimeString) => {
 <div class="display-page-container" v-if="listing">
   <!-- Image container -->
   <div class="image-container">
-    <img class="image-item" :src="image" alt="Front image">
+    <img class="image-item" :src="getImageUrl" alt="Front image">
     <button v-if="user.isLoggedIn" class="favorite" :class="{ 'isFavorite': isFavorite }" @click="toggleFavorite">
       <Icon icon="material-symbols:favorite" width="40" height="40" />
     </button>
@@ -170,14 +184,14 @@ const formatDateTime = (dateTimeString) => {
     </div>
 
     <!-- Buy item or message seller -->
-    <div class="btn" v-if="user.isLoggedIn && !isOwner()">
-      <button class="message-btn">Message seller</button>
+    <div class="btn" v-if="user.isLoggedIn && !isOwner">
+      <button class="message-btn">Message</button>
       <button class="buy-btn">Buy</button>
     </div>
 
     <!-- Owner options -->
     <div class="owner-options">
-      <template v-if="isOwner()">
+      <template v-if="isOwner">
         <button class="owner-btn" @click="toEditListing">Edit</button>
         <button class="owner-btn">Archive</button>
         <button class="owner-btn" id="delete" @click=delListing>Delete</button>
