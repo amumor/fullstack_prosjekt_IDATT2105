@@ -1,0 +1,91 @@
+{
+	"Logo": "FIND.no",
+	"button": {
+		"delete": "Delete",
+		"password": "Password",
+		"save-changes": "Save changes",
+		"create": "Create",
+		"message": "Message",
+		"buy": "Buy",
+		"send": "Send",
+		"edit": "Edit",
+		"sign-up": "Sign up",
+		"close": "Close",
+		"go-back": "Go back",
+		"logout": "Logout",
+		"cancel": "Cancel",
+		"accept": "Accept",
+		"reject": "Reject",
+		"make-bid": "Make bid",
+		"reset": "Reset"
+	},
+	"header": {
+		"edit-listing": "Edit Listing",
+		"create-new-listing": "Create New Listing",
+		"login": "Login",
+		"register": "Register",
+		"admin-settings": "Admin Settings",
+		"register-admin": "Register Admin",
+		"messages": "Messages",
+		"new-listing": "New listing",
+		"favorites": "Favorites",
+		"inbox": "Inbox",
+		"profile": "Profile"
+	},
+	"chat": {
+		"bid": "Bid",
+		"price": "Price",
+		"accepted": "Accepted",
+		"rejected": "Rejected",
+		"make-a-bid": "Make a bid",
+		"no-messages-yet": "No messages yet",
+		"cancelled": "Cancelled"
+	},
+	"listing": {
+		"header": "Header",
+		"description": "Description",
+		"price": "Price",
+		"category": "Category",
+		"location": "Location",
+		"images": "Images",
+		"delete": "Delete",
+		"upload-image": "Upload image",
+		"activeCL": "ACTIVE",
+		"inactiveCL": "INACTIVE",
+		"last-edited": "Last edited",
+		"file": "File"
+	},
+	"map": {
+		"map": "Map",
+		"loading-map": "Loading map"
+	},
+	"login": {
+		"username": "Username",
+		"password": "Password",
+		"register": "Register",
+		"dont-have-an-account-yet": "Don't have an account yet?",
+		"already-have-an-account": "Already have an account?"
+	},
+	"profile": {
+		"edit-profile": "Edit profile",
+		"first-name": "First name",
+		"last-name": "Last name",
+		"email": "Email",
+		"phone-number": "Phone number",
+		"password": "Password",
+		"confirm-password": "Confirm password",
+		"update-user-info-warning": "Updating user information requires an automatic logout to take effect."
+	},
+	"pageination": {
+		"page": "Page",
+		"of": "of",
+		"next": "Next",
+		"previous": "Previous"
+	},
+	"home": {
+		"search": "Search",
+		"search-placeholder": "Search for listings",
+		"no-listings-found": "No listings found",
+		"no-favorites-found": "No favorites found"
+	}
+}
