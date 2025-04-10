@@ -4,17 +4,20 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.UUID;
 
+import edu.ntnu.SpringBackend.service.ListingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
+import edu.ntnu.SpringBackend.model.User;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -22,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ImageController {
 
     private final Path imageBasePath = Paths.get("app/uploads");
+    private final ListingService listingService;
 
     /**
      * Serves an image from the local file system.
@@ -60,6 +64,17 @@ public class ImageController {
         } catch (IOException ex) {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/set-image")
+    public ResponseEntity<?> setImageOnListing(
+            @AuthenticationPrincipal User user,
+            @RequestParam("images")MultipartFile[] images,
+            @RequestParam("listing-id") UUID listingId
+            ) {
+        return ResponseEntity.ok(listingService.setImagesInListingWithUserCheck(listingId, images, user));
+
     }
 
 

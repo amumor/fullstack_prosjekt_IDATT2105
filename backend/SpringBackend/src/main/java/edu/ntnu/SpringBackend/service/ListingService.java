@@ -14,7 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -205,7 +204,7 @@ public class ListingService {
 
         listing = listingRepository.save(listing);
         if (images != null && images.length != 0) {
-            addImagesToListing(listing.getId(), images);
+            setImagesInListing(listing.getId(), images);
         }
         return listing;
     }
@@ -246,7 +245,7 @@ public class ListingService {
         }
 
         if (images != null && images.length > 0) {
-            addImagesToListing(listing.getId(), images);
+            setImagesInListing(listing.getId(), images);
         }
 
         return listingRepository.save(listing);
@@ -319,17 +318,22 @@ public class ListingService {
      * @param listingId the ID of the listing
      * @param images    the images to add
      */
-    public void addImagesToListing(UUID listingId, MultipartFile[] images) {
+    public void setImagesInListing(UUID listingId, MultipartFile[] images) {
         logger.info("> Adding image(s) to listing: {}", listingId);
-
         if (images == null || images.length == 0) return;
+        logger.info("> Image count: {}", Arrays.stream(images).count());
 
         Listing listing = listingRepository.findById(listingId)
                 .orElseThrow(() -> new NoSuchElementException("Listing with ID " + listingId + " not found."));
 
+        // Remove and delete existing images
+        if (!listing.getImages().isEmpty()) {
+            listingImageRepository.deleteAll(listing.getImages());
+            listing.getImages().clear();
+        }
+
         List<ListingImage> listingImages = new ArrayList<>();
         Path imageDir = Paths.get("/app/uploads", listingId.toString());
-
         try {
             Files.createDirectories(imageDir);
         } catch (IOException e) {
@@ -363,6 +367,48 @@ public class ListingService {
         listing.getImages().addAll(listingImages);
     }
 
+    /**
+     * Adds images to a listing after verifying that the authenticated user is the owner.
+     * <p>
+     * This method first retrieves the listing and checks that the user making the request is the owner.
+     * If the listing is not found, a {@code NoSuchElementException} is thrown.
+     * Likewise, if the user is not the owner, an {@code AccessDeniedException} is thrown.
+     * If the ownership checks pass, the images are added to the listing.
+     * In case of any exception during the image addition process, the error is logged and {@code false} is returned.
+     * </p>
+     *
+     * @param listingId the unique identifier of the listing to which images should be added
+     * @param images    an array of {@code MultipartFile} representing the images to add
+     * @param user      the authenticated user attempting to add images to the listing
+     * @return {@code true} if the images are added successfully; {@code false} if an exception occurs during image addition
+     * @throws NoSuchElementException if no listing with the given ID is found
+     * @throws AccessDeniedException  if the authenticated user does not own the listing
+     */
+    public boolean setImagesInListingWithUserCheck(UUID listingId, MultipartFile[] images, User user) {
+        // Checking tht request sender is the owner of the requested listing to be changed
+        try {
+            Listing listing = getListingById(listingId);
+            if (!listing.getSeller().getId().equals(user.getId())) {
+                throw new AccessDeniedException("User: " + user.getId().toString() +" requesting to add image(s) to listing: " + listingId.toString() + "does not own the requested listing.");
+            }
+        } catch (NoSuchElementException nsee) {
+            logger.error("!!! No listing with id: {} exists", listingId);
+            throw nsee;
+        } catch (AccessDeniedException ade) {
+            logger.error("!!! User: {} tried to access listing: {} that they do not own, exception: {}", user.getId().toString(), listingId.toString(), ade.getMessage());
+            throw ade;
+        }
+
+        // Adding images to listing
+        try {
+            setImagesInListing(listingId, images);
+            return true;
+
+        } catch (Exception e) {
+            logger.error("!!! An exception occured while adding images to Listing: {}", e.getMessage());
+            return false;
+        }
+    }
 
     /**
      * Removes images from a listing.
