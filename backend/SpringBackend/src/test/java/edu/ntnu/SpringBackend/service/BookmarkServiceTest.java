@@ -3,7 +3,6 @@ package edu.ntnu.SpringBackend.service;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import java.time.LocalDateTime;
 import java.util.*;
 
 import org.hibernate.ObjectNotFoundException;
@@ -60,7 +59,7 @@ public class BookmarkServiceTest {
     when(listingRepository.findById(listingId)).thenReturn(Optional.empty());
 
     assertThrows(ObjectNotFoundException.class, () -> {
-      bookmarkService.createBookmark(requestDTO, user);
+      bookmarkService.createBookmark(user, requestDTO);
     });
     verify(listingRepository, times(1)).findById(listingId);
   }
@@ -79,7 +78,7 @@ public class BookmarkServiceTest {
     Bookmark existingBookmark = Bookmark.builder().build();
     when(bookmarkRepository.findByUserAndListing(user, listing)).thenReturn(Optional.of(existingBookmark));
 
-    Bookmark result = bookmarkService.createBookmark(requestDTO, user);
+    Bookmark result = bookmarkService.createBookmark(user, requestDTO);
     assertEquals(existingBookmark, result);
     verify(bookmarkRepository, never()).save(any(Bookmark.class));
   }
@@ -99,7 +98,7 @@ public class BookmarkServiceTest {
     Bookmark newBookmark = Bookmark.builder().build();
     when(bookmarkRepository.save(any(Bookmark.class))).thenReturn(newBookmark);
 
-    Bookmark result = bookmarkService.createBookmark(requestDTO, user);
+    Bookmark result = bookmarkService.createBookmark(user, requestDTO);
     assertEquals(newBookmark, result);
     verify(bookmarkRepository, times(1)).save(any(Bookmark.class));
   }
@@ -113,7 +112,7 @@ public class BookmarkServiceTest {
     when(bookmarkRepository.findById(bookmarkId)).thenReturn(Optional.empty());
 
     assertThrows(ObjectNotFoundException.class, () -> {
-      bookmarkService.deleteBookmark(bookmarkId, user);
+      bookmarkService.deleteBookmark(user, bookmarkId);
     });
     verify(bookmarkRepository, never()).delete(any(Bookmark.class));
   }
@@ -133,7 +132,7 @@ public class BookmarkServiceTest {
     when(bookmarkRepository.findById(bookmarkId)).thenReturn(Optional.of(bookmark));
 
     assertThrows(AccessDeniedException.class, () -> {
-      bookmarkService.deleteBookmark(bookmarkId, requester);
+      bookmarkService.deleteBookmark(requester, bookmarkId);
     });
     verify(bookmarkRepository, never()).delete(any(Bookmark.class));
   }
@@ -152,7 +151,7 @@ public class BookmarkServiceTest {
     when(bookmarkRepository.findById(bookmarkId)).thenReturn(Optional.of(bookmark));
 
     // Expect no exception and deletion to be performed.
-    assertDoesNotThrow(() -> bookmarkService.deleteBookmark(bookmarkId, user));
+    assertDoesNotThrow(() -> bookmarkService.deleteBookmark(user, bookmarkId));
     verify(bookmarkRepository, times(1)).delete(bookmark);
   }
 }
