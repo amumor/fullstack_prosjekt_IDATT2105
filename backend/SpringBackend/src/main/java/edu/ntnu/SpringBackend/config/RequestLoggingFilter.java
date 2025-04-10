@@ -10,15 +10,30 @@ import java.io.IOException;
 import java.util.Collections;
 
 /**
- * A filter that logs incoming HTTP requests.
+ * RequestLoggingFilter is a servlet filter that logs incoming HTTP requests.
  * It logs the request method, URI, content type, and headers.
- * Used for debugging and monitoring purposes.
+ * This filter is useful for debugging and monitoring incoming requests to the application.
+ * Mainly used for debugging purposes.
+ *
+ * @author Vetle Hodne
+ * @version 1.0
+ * @since 1.0
  */
 @Component
 public class RequestLoggingFilter implements Filter {
 
   private static final Logger logger = LoggerFactory.getLogger(RequestLoggingFilter.class);
 
+  /**
+   * This method is called for every request to log the request details.
+   * It logs the request method, URI, content type, and headers.
+   *
+   * @param request  the HTTP request
+   * @param response the HTTP response
+   * @param chain    the filter chain
+   * @throws IOException      if an I/O error occurs
+   * @throws ServletException if a servlet error occurs
+   */
   @Override
   public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
           throws IOException, ServletException {

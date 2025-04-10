@@ -59,8 +59,8 @@ public class BidController {
    * Place a bid on a chat.
    * Only authenticated users can place a bid.
    *
-   * @param chatId the id of the chat
-   * @param user the user who is placing the bid
+   * @param chatId     the id of the chat
+   * @param user       the user who is placing the bid
    * @param bidRequest the bid request
    * @return the bid response
    */
@@ -81,7 +81,7 @@ public class BidController {
    * Only the seller of the listing can accept a bid.
    *
    * @param bidId the id of the bid
-   * @param user the user who is accepting the bid
+   * @param user  the user who is accepting the bid
    * @return the bid response
    */
   @PreAuthorize("isAuthenticated()")
@@ -100,7 +100,7 @@ public class BidController {
    * Only the seller of the listing can reject a bid.
    *
    * @param bidId the id of the bid
-   * @param user the user who is rejecting the bid
+   * @param user  the user who is rejecting the bid
    * @return the bid response
    */
   @PreAuthorize("isAuthenticated()")
@@ -119,7 +119,7 @@ public class BidController {
    * Only the buyer of the bid can cancel a bid.
    *
    * @param bidId the id of the bid
-   * @param user the user who is canceling the bid
+   * @param user  the user who is canceling the bid
    * @return the bid response
    */
   @PreAuthorize("isAuthenticated()")

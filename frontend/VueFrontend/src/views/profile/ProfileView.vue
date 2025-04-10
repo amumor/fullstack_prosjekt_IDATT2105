@@ -119,6 +119,14 @@ h1 {
   max-height: 200px;
 }
 
+.basic-blue-btn {
+  max-width: 100px;
+  max-height: 40px;
+  padding: 5px;
+  margin-left: auto;
+  margin-right: 70px; 
+  margin-top: 40px;
+}
 /* Responsive Design for medium screens (max-width: 768px) */
 @media (max-width: 768px) {
   .profile-info-container {
@@ -152,6 +160,7 @@ h1 {
   .basic-blue-btn {
     font-size: 14px; /* Adjust font size */
     padding: 10px; /* Adjust padding */
+    margin-left: 60px;
   }
 }
 

@@ -15,8 +15,21 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.UUID;
 
+/**
+ * Service class for handling chat operations.
+ * This class contains methods for creating, fetching, and sending messages in chats.
+ * It also contains methods for checking if a user is a participant in a chat.
+ * The class uses the ChatRepository and MessageRepository to interact with the database.
+ *
+ * @author Vetle Hodne, Amund Mørk
+ * @version 1.0
+ * @since 1.0
+ */
 @Service
 @RequiredArgsConstructor
 public class ChatService {
@@ -29,7 +42,7 @@ public class ChatService {
    * Get a chat between a buyer and a listing.
    *
    * @param listingId the listing id of the listing
-   * @param user the user who is trying to get the chat
+   * @param user      the user who is trying to get the chat
    * @return the chat between the buyer and the listing
    */
   public Chat getChatFromBuyerAndListing(UUID listingId, User user) {
@@ -45,7 +58,7 @@ public class ChatService {
    * Get all chats for a listing for a seller.
    *
    * @param listingId the listing id of the listing
-   * @param user the user who is trying to get the chats
+   * @param user      the user who is trying to get the chats
    * @return all chats for the user
    */
   public List<Chat> getAllChatsForListing(UUID listingId, User user) {
@@ -89,8 +102,8 @@ public class ChatService {
   /**
    * Create a chat between a buyer and a listing.
    *
-   * @param buyer the buyer who is trying to create the chat
-   * @param listingId the listing id of the listing
+   * @param buyer             the buyer who is trying to create the chat
+   * @param listingId         the listing id of the listing
    * @param messageRequestDTO the chat request dto
    * @return the chat between the buyer and the listing
    */
@@ -127,8 +140,8 @@ public class ChatService {
   /**
    * Send a message to a chat.
    *
-   * @param chatId the id of the chat
-   * @param user the user who is trying to send the message
+   * @param chatId            the id of the chat
+   * @param user              the user who is trying to send the message
    * @param messageRequestDTO the message request dto
    * @return the message response dto
    */
@@ -155,7 +168,7 @@ public class ChatService {
    * Check if the user is a participant in the chat.
    *
    * @param chatId the id of the chat
-   * @param user the user who is trying to check if they are a participant
+   * @param user   the user who is trying to check if they are a participant
    * @return true if the user is a participant, false otherwise
    */
   public boolean isParticipant(UUID chatId, User user) {

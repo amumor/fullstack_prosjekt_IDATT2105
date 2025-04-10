@@ -5,6 +5,7 @@ import BackToComponent from '@/components/BackToComponent.vue'
 import { getUserBookmarks } from '../../services/BookmarkService';
 import { userStore } from '@/stores/user.js'
 import { ref } from 'vue';
+import { getListingById } from '../../services/ListingService';
 
 /**
 const listings = [
@@ -30,20 +31,42 @@ const user = userStore()
 const token = user.token;
 
 // Fetch bookmarked listings
-const listings = ref([]); 
-getUserBookmarks(token)
-  .then((data) => {
+const bookmarks = ref([]);
+const listings = ref([]);
+
+// Fetch bookmarked listings
+const fetchBookmarks = async () => {
+  try {
+    const data = await getUserBookmarks(token);
     if (data.length === 0) {
       console.log('No bookmarks found');
       return;
     }
-    listings.value = data;
-    console.log('Bookmarks found:', data);
-  })
-  .catch((err) => {
-    console.error('Error fetching bookmarks:', err);
-  });
+    bookmarks.value = data;
 
+    // Fetch full listing details for each bookmark
+    const fetchedListings = await Promise.all(
+      bookmarks.value.map(async (bookmark) => {
+        try {
+          const listing = await getListingById(bookmark.listingId);
+          return listing;
+        } catch (error) {
+          console.error(`Error fetching listing with ID ${bookmark.listingId}:`, error);
+          return null; // Handle errors gracefully
+        }
+      })
+    );
+
+    // Filter out any null values (failed fetches)
+    listings.value = fetchedListings.filter((listing) => listing !== null);
+    console.log('Fetched listings:', listings.value);
+  } catch (err) {
+    console.error('Error fetching bookmarks:', err);
+  }
+};
+
+// Fetch bookmarks and listings on component mount
+fetchBookmarks();
 </script>
 
 <template>
@@ -52,7 +75,7 @@ getUserBookmarks(token)
   <BackToComponent />
   <h2>Favorites</h2>
   <div class="listings">
-    <div v-for="listing in listings.value" :key="listing.id">
+    <div v-for="listing in listings" :key="listing.id">
       <!-- No image -->
       <ListingPreviewComponent
         :id="listing.id"
