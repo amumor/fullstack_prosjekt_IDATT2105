@@ -6,7 +6,6 @@ import { getUserBookmarks } from '../../services/BookmarkService';
 import { userStore } from '@/stores/user.js'
 import { ref } from 'vue';
 import { getListingById } from '../../services/ListingService';
-import { fetchImage } from '@/services/ImageService.js';
 
 /**
 const listings = [
