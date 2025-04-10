@@ -218,6 +218,23 @@ public class ListingController {
         return ResponseEntity.ok(listingMapper.toDto(listingService.createListing(request, user, images)));
     }
 
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping(value = "/create-split")
+    @Operation(summary = "Create a new listing, images handled by another endpoint", security = @SecurityRequirement(name = "bearerAuth"))
+    public ResponseEntity<ListingResponseDTO> createWithoutImage(
+            @AuthenticationPrincipal User user,
+            @RequestBody ListingCreationRequestDTO requestDTO
+    ) {
+        logger.info("POST Request received on [/api/v1/category/create-split]");
+        try {
+            var listing = listingService.createListing(requestDTO, user, null);
+            return ResponseEntity.ok(listingMapper.toDto(listing));
+        } catch (IOException e) {
+            logger.error("Failed to create listing due to an IO exception", e);
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
     /**
      * Get all listings for the authenticated user.
      * This endpoint retrieves a list of all listings created by the authenticated user.
