@@ -146,7 +146,7 @@ onMounted(() => {
       </div>
       <div class="image-field">
         <label for="file">Upload image:</label>
-        <input type="file" id="file" name="file" accept="image/*" @change="handleFileChange" />
+        <input type="file" id="file" name="file" accept="image/*" @change="handleFileChange" disabled />
       </div>
       <div class="submit-button">
         <button type="submit" class="basic-blue-btn">Create</button>
