@@ -47,7 +47,8 @@ const newCategory = () => {
   categories.value.push({
     id: response.id,
     name: newCategoryName.value,
-  })
+  }), 
+  newCategoryName.value = "";
 }
 
 </script>
