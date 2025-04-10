@@ -5,7 +5,7 @@ import {getListingsByCategory, getListingSuggestions} from "@/services/ListingSe
 import {userStore} from "@/stores/user.js";
 import {isTokenExpired} from "@/services/TokenService.js";
 import {getAllCategories} from "@/services/CategoryService.js";
-import {onMounted, ref} from "vue";
+import {onMounted, ref, computed} from "vue";
 import router from "@/router/index.js";
 import {getListingsByTitle} from "@/services/ListingService.js";
 
@@ -140,7 +140,7 @@ const searchFunction = async() => {
       <div v-for="listing in listings" :key="listing.id">
         <ListingPreviewComponent
             :id="listing.id"
-            :image="listing.image"
+            :image="listing.imageUrls && listing.imageUrls.length > 0 ? listing.imageUrls[0] : null"
             :price="listing.price"
             :town="listing.town"
             :title="listing.title"/>
