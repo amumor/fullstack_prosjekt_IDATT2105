@@ -21,6 +21,7 @@ button {
   background-color: #007bff;
 
   margin-bottom: 10px;
+  margin-top: 10px;
   padding: 10px 15px;
   border-radius: 5px;
   max-height: 40px;

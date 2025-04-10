@@ -98,7 +98,7 @@ const prevPage = () => {
   <BackToComponent />
   <h2>Favorites</h2>
   <div class="listings">
-    <div v-for="listing in listings" :key="listing.id">
+    <div v-for="listing in paginatedListings" :key="listing.id">
       <!-- No image -->
       <ListingPreviewComponent
         :id="listing.id"

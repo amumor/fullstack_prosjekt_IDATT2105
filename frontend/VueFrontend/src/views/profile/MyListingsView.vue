@@ -80,7 +80,7 @@ const prevPage = () => {
 
   <!-- Listings -->
   <div class="listings">
-    <div v-for="listing in listings" :key="listing.id">
+    <div v-for="listing in paginatedListings" :key="listing.id">
       <ListingPreviewComponent
         :id="listing.id"
        

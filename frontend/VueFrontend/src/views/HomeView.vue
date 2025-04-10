@@ -144,9 +144,8 @@ const prevPage = () => {
     <div class="search-container">
       <input v-model="searchInput" type="text" class="search-input" placeholder="Search for listings..." id="searchInput">
       <button class="search-btn" @click="searchFunction">Search</button>
-      <button class="map-btn">
-        <router-link to="/map" id="router-link">Map</router-link>
-      </button>
+      <router-link class="map-btn" to="/map" id="router-link">Map</router-link>
+  
     </div>
 
     <!-- Categories -->
@@ -165,7 +164,8 @@ const prevPage = () => {
             :id="listing.id"
             :image="listing.imageUrls && listing.imageUrls.length > 0 ? listing.imageUrls[0] : null"
             :price="listing.price"
-            :town="listing.town"
+            :latitude="listing.latitude"
+            :longitude="listing.longitude"
             :title="listing.title"/>
       </div>
     </div>
