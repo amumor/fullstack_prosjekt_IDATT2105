@@ -1,82 +1,43 @@
 <script setup>
-import { ref, watch } from 'vue';
-import { useRouter } from 'vue-router'
-import { onMounted } from 'vue';
-import { storeToRefs } from 'pinia';
-import { useListingStore } from '@/stores/listing.js';
-import { userStore } from '@/stores/user.js'
-import { getListingById, updateListing } from '@/services/ListingService.js'
-import { getAllCategories } from '../../services/CategoryService';
+import {ref, watch} from 'vue';
+import {useRouter} from 'vue-router'
+import {onMounted} from 'vue';
+import {storeToRefs} from 'pinia';
+import {useListingStore} from '@/stores/listing.js';
+import {userStore} from '@/stores/user.js'
+import {getListingById, updateListing} from '@/services/ListingService.js'
+import {getAllCategories} from '../../services/CategoryService';
+import {isTokenExpired} from "@/services/TokenService.js";
 
 
 // Router instance
 const router = useRouter();
-
-// User store
 const user = userStore();
-const token = user.token;
 
 // Listing data
 const listing = ref(null);
 const categories = ref([]);
 const newTitle = ref('');
 const newDescription = ref('');
-const newStatus = ref('');
+// const newStatus = ref('');
 const newPrice = ref('');
 const newLocation = ref('Loading address...');
 const newCategory = ref('');
 
-// Fetch categories
-try {
-  getAllCategories()
-    .then((data) => {
-      categories.value = data;
-    })
-    .catch((err) => {
-      console.error('Error fetching categories:', err);
-    });
-} catch (err) {
-  console.error('Error fetching categories:', err);
-}
 
-// Status options
-const statusOptions = [
-  { value: 'ACTIVE', label: 'Active' },
-  { value: 'SOLD', label: 'Sold' },
-  { value: 'INACTIVE', label: 'Inactive' },
-];
-
-// Fetch listing by ID
-onMounted(async () => {
-  const listingStore = useListingStore();
-  const { id } = storeToRefs(listingStore);
-  
-  if (!id.value) {
-    console.error('Listing ID is null');
-    return;
-  }
-  
-  try {
-    listing.value = await getListingById(id.value);
-    
-    newTitle.value = listing.value.title;
-    newDescription.value = listing.value.description;
-    newStatus.value = listing.value.listingStatus;
-    newPrice.value = listing.value.price;
-    newLocation.value = 'Loading address...'; // Add logic to fetch the location address from coordinates.
-    newCategory.value = listing.value.categoryName;
-    console.log('Listing:', listing.value);
-  } catch (err) {
-    console.error('Listing not found:', err);
-  }
-});
+// // Status options
+// const statusOptions = [
+//   { value: 'ACTIVE', label: 'Active' },
+//   { value: 'SOLD', label: 'Sold' },
+//   { value: 'INACTIVE', label: 'Inactive' },
+// ];
 
 // Create address from coordinates
 const getAddressFromCoordinates = async (latitude, longitude) => {
   const url = `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`;
   try {
     const response = await fetch(url, {
-      headers: { 'User-Agent': 'YourAppName/1.0 (your@email.com)' }
+      headers: {'User-Agent': 'YourAppName/1.0 (your@email.com)'}
     });
 
     if (!response.ok) {
@@ -91,32 +52,84 @@ const getAddressFromCoordinates = async (latitude, longitude) => {
   }
 };
 
+const localGetCategories = async () => {
+  try {
+    const categoryResponse = await getAllCategories();
+    categories.value = categoryResponse.categories
+  } catch (error) {
+    console.error('Error fetching categories:', error);
+  }
+};
+
 // Save changes
-const saveChanges = () => {
+const saveChanges = async () => {
+  const token = user.token;
+  if (isTokenExpired(token)) {
+    user.logout();
+    await router.push("/login")
+  }
+
   //getCoordinates(newLocation);
   console.log('newTitle:', newTitle.value);
   console.log('newDescription:', newDescription.value);
   console.log('newCategory:', newCategory.value);
-  console.log('newStatus:', newStatus.value);
   console.log('newPrice:', newPrice.value);
   console.log('latitude:', listing.value.latitude);
   console.log('longitude:', listing.value.longitude);
   try {
-    updateListing(listing.value.id, {
+    await updateListing(listing.value.id, {
       title: newTitle.value,
       description: newDescription.value,
-      categoryName: 'Car',
+      categoryName: newCategory.value,
       listingStatus: 'ACTIVE',
-      latitude: '59.9139', 
-      longitude: '10.7522',
-      price: '100',
-      // images: imagesArrayHere
+      latitude: listing.value.latitude, // TODO: Replace with actual latitude
+      longitude: listing.value.longitude, // TODO: Replace with actual longitude
+      price: newPrice.value,
     }, token);
     router.go(-1);
   } catch (err) {
     console.error('Error updating listing:', err);
   }
 };
+
+const localGetCurrentValues = async () => {
+  const listingStore = useListingStore();
+  const {id} = storeToRefs(listingStore);
+
+  if (!id.value) {
+    console.error('Listing ID is null');
+    return;
+  }
+
+  try {
+    listing.value = await getListingById(id.value);
+    if (!listing.value) {
+      console.error('Listing not found');
+      return;
+    }
+    console.log("Listing: " + listing.value);
+    newTitle.value = listing.value.title;
+    newDescription.value = listing.value.description;
+    newPrice.value = listing.value.price;
+    newLocation.value = 'Loading address...'; // TODO: Add logic to fetch the location address from coordinates.
+    newCategory.value = listing.value.categoryName;
+    console.log('Listing:', listing.value);
+  } catch (err) {
+    console.error('Listing not found:', err);
+  }
+}
+
+onMounted(() => {
+  // Check if the user is logged in and if the token is expired, if not logout
+  const token = user.token;
+  if (isTokenExpired(token)) {
+    user.logout();
+    router.push("/login")
+  }
+
+  localGetCategories();
+  localGetCurrentValues();
+});
 </script>
 
 <template>
@@ -133,43 +146,35 @@ const saveChanges = () => {
       <!-- Description -->
       <div class="display-values-item">
         <label for="description">{{ $t('header.description') }}:</label>
-        <input type="text" id="description" v-model="newDescription" />
+        <input type="text" id="description" v-model="newDescription"/>
       </div>
 
       <!-- Category Selection -->
-      <div v-for="category in categories" :key="category.id" class="display-values-item">
-        <label>
-          <input 
-            v-model="newCategory" 
-            type="radio" 
-            :name="'category'" 
-            :value="category.name" />
-          {{ category.name }}
-        </label>
-      </div>
-
-      <!-- Status Selection -->
-      <div v-for="status in statusOptions" :key="status.value" class="display-values-item">
-        <label>
-          <input 
-            v-model="newStatus" 
-            type="radio" 
-            :name="'status'" 
-            :value="status.value" />
-          {{ status.label }}
-        </label>
+      <div class="display-values-item">
+        <label class="radio-container">Category:</label>
+        <div v-for="category in categories" :key="category.id" class="radio-container">
+          <label>
+            {{ category.name }}
+            <input
+                v-model="newCategory"
+                type="radio"
+                name="category"
+                :value="category.name"
+            />
+          </label>
+        </div>
       </div>
 
       <!-- Price -->
       <div class="display-values-item">
         <label for="price">{{ $t('listing.price') }}:</label>
-        <input type="text" id="price" v-model="newPrice" />
+        <input type="text" id="price" v-model="newPrice"/>
       </div>
 
       <!-- Location -->
       <div class="display-values-item">
-        <label for="location">{{ $t('listing.location') }}:</label>
-        <input type="text" id="location" v-model="newLocation" />
+        <label for="location">{{ $t('listing.location') }}</label>
+        <input type="text" id="location" v-model="newLocation"/>
       </div>
 
       <!-- Save changes -->
@@ -188,6 +193,27 @@ const saveChanges = () => {
   border-radius: 10px;
   margin: 20px auto;
   position: relative;
+}
+
+/*Category Radio buttons*/
+.radio-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 0;
+}
+
+.radio-container label {
+  margin: 0;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.radio-container input[type="radio"] {
+  margin: 0;
+  vertical-align: middle;
 }
 
 /* Header */

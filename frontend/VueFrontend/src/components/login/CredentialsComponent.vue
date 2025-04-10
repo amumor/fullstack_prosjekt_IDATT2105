@@ -238,7 +238,8 @@ const toggleForm = () => {
 
 <template>
   <div class="display-page-container">
-    <h2 class="logo-header">{{ $t('logo') }}</h2>
+    <router-link to="/" id="title-header">{{ $t('logo') }}</router-link>
+
     <template v-if="isUserRegistered">
       <div class="login">
         <h2>{{ $t('header.login') }}</h2>
@@ -294,6 +295,13 @@ const toggleForm = () => {
   text-align: left;
 
   margin: 0;
+}
+
+#title-header {
+  text-decoration: none;
+  color: #333;
+  font-size: 24px;
+  font-weight: bold;
 }
 
 /* Title */
