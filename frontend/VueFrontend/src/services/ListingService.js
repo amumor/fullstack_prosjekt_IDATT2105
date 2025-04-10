@@ -43,12 +43,11 @@ import request from 'superagent';
  *   .catch(error => console.error('Creation failed:', error));
  */
 export function createListing(listing, images = [], token) {
-    // Prepare the listing data to be sent in the request.
     const requestData = {
         title: listing.title,
         description: listing.description,
         categoryName: listing.categoryName,
-        listingStatus: listing.listingStatus, // Should be a valid enum value like 'ACTIVE'
+        listingStatus: listing.listingStatus,
         price: listing.price,
         latitude: listing.latitude,
         longitude: listing.longitude,
@@ -108,14 +107,14 @@ export async function createListingWithoutImage(listing, token) {
                 'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(listing) // Send the listing as JSON
+            body: JSON.stringify(listing)
         });
 
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        return await response.json(); // Parse and return the JSON response
+        return await response.json();
     } catch (error) {
         console.error('Error creating listing without image:', error);
         throw new Error(`Listing creation failed: ${error.message}`);
@@ -175,7 +174,7 @@ export function getListingSuggestions(opts = {page: 0, size: 10}) {
 }
 
 /**
- * Updates an existing listing with the provided details.
+ * Updates an existing listing with the provided details using fetch().
  *
  * @param {string} id - The ID of the listing to update.
  * @param {Object} updateData - An object containing the updated listing details.
@@ -192,26 +191,29 @@ export function getListingSuggestions(opts = {page: 0, size: 10}) {
  * @param {string} token - JWT token.
  * @returns {Promise<Object>} A promise that resolves to the updated ListingResponseDTO.
  * @throws {Error} If updating the listing fails.
- *
- * @example
- * updateListing('listing123', {
- *   title: 'Updated Title',
- *   description: 'Updated Description',
- *   imagesToDelete: ['oldImage1.jpg']
- * }, 'jwt-token')
- *   .then(response => console.log('Listing updated:', response))
- *   .catch(error => console.error('Update failed:', error));
  */
-export function updateListing(id, updateData, token) {
-    return request
-        .put(baseURL + `/api/v1/listing//update-split/${id}`) // Assuming your API endpoint for updating is like this
-        .set('Authorization', `Bearer ${token}`)
-        .send(updateData) // Send the updateData as the request body
-        .then(res => res.body) // Assuming the response contains the updated listing
-        .catch(err => {
-            console.error('Failed to update listing:', err);
-            throw err;
+export async function updateListing(id, updateData, token) {
+    const url = `${baseURL}/api/v1/listing/update-split/${id}`;
+
+    try {
+        const response = await fetch(url, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(updateData),
         });
+
+        if (!response.ok) {
+            throw new Error(`Failed to update listing: ${response.statusText}`);
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error('Failed to update listing:', error);
+        throw error;
+    }
 }
 
 /**
@@ -251,7 +253,7 @@ export async function getListingsBySeller(token, page, size) {
         const response = await fetch(url, {
             method: 'GET',
             headers: {
-                'Authorization': `Bearer ${token}`, // Add JWT token
+                'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json',
             },
         });
