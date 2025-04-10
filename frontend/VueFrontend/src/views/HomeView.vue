@@ -111,6 +111,29 @@ const searchFunction = async() => {
     console.error('Error fetching listings:', error);
   }
 };
+
+// Pagination state
+const currentPage = ref(1)
+const itemsPerPage = 50
+
+// Total number of pages
+const totalPages = computed(() => Math.ceil(listings.value.length / itemsPerPage))
+
+// Get the listings for the current page
+const paginatedListings = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage
+  const end = start + itemsPerPage
+  return listings.value.slice(start, end)
+})
+
+// Pagination functions
+const nextPage = () => {
+  if (currentPage.value < totalPages.value) currentPage.value++
+}
+
+const prevPage = () => {
+  if (currentPage.value > 1) currentPage.value--
+}
 </script>
 
 <template>
@@ -137,7 +160,7 @@ const searchFunction = async() => {
 
     <!-- Listings -->
     <div class="listings" v-if="!noResults">
-      <div v-for="listing in listings" :key="listing.id">
+      <div class="listing-item" v-for="listing in paginatedListings" :key="listing.id">
         <ListingPreviewComponent
             :id="listing.id"
             :image="listing.imageUrls && listing.imageUrls.length > 0 ? listing.imageUrls[0] : null"
@@ -148,6 +171,13 @@ const searchFunction = async() => {
     </div>
     <div v-else>
       <h1>No results found</h1>
+    </div>
+
+    <!-- Pagination controls -->
+    <div class="pagination-controls">
+      <button @click="prevPage" :disabled="currentPage === 1">Previous</button>
+      <span>Page {{ currentPage }} of {{ totalPages }}</span>
+      <button @click="nextPage" :disabled="currentPage === totalPages">Next</button>
     </div>
   </div>
 </template>
@@ -232,10 +262,41 @@ h1 {
   font-family: 'Inter', sans-serif;
   list-style: none;
   padding: 0;
-  display: flex;
   gap: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  margin-left: 15px;
+  margin-bottom: 10px;
 }
 
+.listing-item {
+  flex: 1 0 26%; /* 4 items per row */
+  max-width: 250px;
+}
+
+.pagination-controls {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+}
+
+.pagination-controls button {
+  padding: 5px 10px;
+  font-size: 16px;
+  border: 1px solid #1C64FF;
+  background-color: white;
+  cursor: pointer;
+}
+
+.pagination-controls button:disabled {
+  cursor: not-allowed;
+  background-color: #e0e0e0;
+}
+
+.pagination-controls span {
+  font-size: 16px;
+}
 /* Responsive Design for medium screens (max-width: 768px) */
 @media (max-width: 768px) {
   .search-container {
@@ -268,6 +329,12 @@ h1 {
   .listings {
     flex-wrap: wrap; /* Allow listings to wrap */
     gap: 15px; /* Adjust gap */
+    margin-left: 5px;;
+  }
+
+  .listing-item {
+    flex: 1 0 48%; /* Adjust width for medium screens */
+    max-width: 150px; /* Full width for items */
   }
 }
 
@@ -301,7 +368,13 @@ h1 {
 
   .listings {
     flex-wrap: wrap; /* Allow listings to wrap */
-    gap: 10px; /* Adjust gap */
+    gap: 15px; /* Adjust gap */
+    margin-left: 3px;;
+  }
+
+  .listing-item {
+    flex: 1 0 48%; /* Adjust width for medium screens */
+    max-width: 100px; /* Full width for items */
   }
 }
 </style>

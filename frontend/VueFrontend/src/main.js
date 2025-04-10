@@ -9,10 +9,13 @@ import 'vue-map-ui/dist/style.css';
 import 'vue-map-ui/dist/theme-all.css';
 import './assets/main.css'
 import {userStore} from "@/stores/user.js";
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 
 const app = createApp(App)
 
-app.use(createPinia())
+const pinia = createPinia()
+pinia.use(piniaPluginPersistedstate)
+app.use(pinia)
 app.use(router)
 
 const store = userStore();

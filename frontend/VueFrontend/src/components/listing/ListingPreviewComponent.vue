@@ -101,14 +101,15 @@ const toListingView = () => {
 .image-container {
   position: relative;
   overflow: hidden;
-  border-radius: 10px;
   margin: 10px  10px 0 10px ;
+ 
 }
 
 .image-item {
   width: 200px;
   height: auto;
   display: block;
+  border-radius: 10px;
 }
 
 .price {
