@@ -6,6 +6,7 @@ import {isTokenExpired} from "@/services/TokenService.js";
 import {createListing2, createListingWithoutImage} from "@/services/ListingService.js";
 import router from "@/router/index.js";
 import SuccessFailModal from "@/components/modal/SuccessFailModal.vue";
+import {sendImagesToListing, setImageOnListing} from "@/services/ImageService.js";
 
 const categories = ref([]);
 const selectedCategories = ref([]);
@@ -69,23 +70,50 @@ const handleCreateListing = async () => {
     return;
   }
 
+  let createListingResponse = "";
+  let createListingSuccess = false;
   try {
-    const response = await createListingWithoutImage(listing, token);
-    console.log('Listing created successfully:', response);
-    resultModalMessage.value = 'Listing created successfully!';
-    showResultModal.value = true;
+    createListingResponse = await createListingWithoutImage(listing, token);
+    console.log('Listing created successfully:', createListingResponse);
+    createListingSuccess = true;
   } catch (error) {
     console.error('Error creating listing:', error);
+    resultModalMessage.value = 'Error while creating listing. Please try again.';
+    showResultModal.value = true;
+  }
+  // If images are selected, send them to the server
+  if (images.value.length > 0 && createListingSuccess) {
+    try {
+      const listingId = createListingResponse.listingId; // Assuming the response contains the listing ID
+      console.log('Listing ID:', listingId);
+      const imageResponse = await sendImagesToListing(images.value, listingId, token);
+      console.log('Images sent successfully:', imageResponse);
+      resultModalMessage.value = 'Listing created successfully with images.';
+      showResultModal.value = true;
+    } catch (error) {
+      console.error('Error sending images:', error);
+      resultModalMessage.value = 'Error while sending images. Please try again.';
+      showResultModal.value = true;
+    }
+  } else {
+    resultModalMessage.value = 'Listing created successfully.';
+    showResultModal.value = true;
   }
 };
 
-const handleFileChange = () => {
+const handleFileChange = (event) => {
+  const selectedFiles = event.target.files;
 
-}
+  if (selectedFiles && selectedFiles.length > 0) {
+    images.value = Array.from(selectedFiles); // Store files in the `images` array
+    console.log('Selected files:', images.value);
+  } else {
+    console.log('No files selected.');
+  }
+};
 
 onMounted(() => {
   localGetCategories();
-
   // Check if the user is logged in and if the token is expired, if not logout
   const token = user.token;
   if (isTokenExpired(token)) {
@@ -100,10 +128,10 @@ onMounted(() => {
     <form @submit.prevent="handleCreateListing" class="fields">
       <h2>Create a new listing</h2>
       <div class="text-fields">
-        <input v-model="title" type="text" placeholder="Header" required />
+        <input v-model="title" type="text" placeholder="Header" required/>
         <textarea v-model="description" id="description" placeholder="Description" required></textarea>
-        <input v-model="price" type="text" placeholder="Price" required />
-        <input v-model="location" type="text" placeholder="Location" required />
+        <input v-model="price" type="text" placeholder="Price" required/>
+        <input v-model="location" type="text" placeholder="Location" required/>
         <div v-for="category in categories" :key="category.id">
           <label>
             <input
@@ -118,7 +146,7 @@ onMounted(() => {
       </div>
       <div class="image-field">
         <label for="file">Upload image:</label>
-        <input type="file" id="file" name="file" accept="image/*" @change="handleFileChange" disabled="disabled"/>
+        <input type="file" id="file" name="file" accept="image/*" @change="handleFileChange" />
       </div>
       <div class="submit-button">
         <button type="submit" class="basic-blue-btn">Create</button>
