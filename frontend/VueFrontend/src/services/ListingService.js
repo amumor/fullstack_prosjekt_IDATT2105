@@ -7,6 +7,7 @@ import {
 } from '@/api';
 import {serviceConfigParams} from '@/services/ServiceSetup.js';
 
+
 const {timeout, baseURL} = serviceConfigParams();
 
 import request from 'superagent';
@@ -57,7 +58,7 @@ export function createListing(listing, images = [], token) {
 
     // Initialize the superagent request.
     let req = request
-        .post('http://localhost:8080/api/v1/listing/create')
+        .post(baseURL + '/api/v1/listing/create')
         .set('Authorization', `Bearer ${token}`)
         .type('multipart/form-data');
 
@@ -88,7 +89,7 @@ export function createListing(listing, images = [], token) {
 export async function createListing2(formData, token) {
     try {
         const response = await request
-            .post('http://localhost:8080/api/v1/listing/create')
+            .post(baseURL + '/api/v1/listing/create')
             .set('Authorization', `Bearer ${token}`)
             .type('multipart/form-data')
             .send(formData); // Send FormData
@@ -101,7 +102,7 @@ export async function createListing2(formData, token) {
 
 export async function createListingWithoutImage(listing, token) {
     try {
-        const response = await fetch('http://localhost:8080/api/v1/listing/create-split', {
+        const response = await fetch(baseURL + '/api/v1/listing/create-split', {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -136,7 +137,7 @@ export async function createListingWithoutImage(listing, token) {
  */
 export const getListingById = (id) => {
     return request
-        .get(`http://localhost:8080/api/v1/listing/id/${id}`)
+        .get(baseURL + `/api/v1/listing/id/${id}`)
         .then(res => res.body)
         .catch(error => {
             console.error('Failed to retrieve listing by ID:', error);
@@ -203,7 +204,7 @@ export function getListingSuggestions(opts = {page: 0, size: 10}) {
  */
 export function updateListing(id, updateData, token) {
     return request
-        .put(`http://localhost:8080/api/v1/listing/update/${id}`) // Assuming your API endpoint for updating is like this
+        .put(baseURL + `/api/v1/listing//update-split/${id}`) // Assuming your API endpoint for updating is like this
         .set('Authorization', `Bearer ${token}`)
         .send(updateData) // Send the updateData as the request body
         .then(res => res.body) // Assuming the response contains the updated listing
@@ -221,7 +222,7 @@ export function updateListing(id, updateData, token) {
  * @throws {Error} If the request fails.
  */
 export async function getListingsByCategory(categoryName) {
-    const url = new URL('http://localhost:8080/api/v1/listing/get-by-category');
+    const url = new URL(baseURL + '/api/v1/listing/get-by-category');
     url.searchParams.append('categoryName', categoryName);
 
     try {
@@ -242,7 +243,7 @@ export async function getListingsByCategory(categoryName) {
 }
 
 export async function getListingsBySeller(token, page, size) {
-    const url = new URL('http://localhost:8080/api/v1/listing/get-by-seller');
+    const url = new URL(baseURL + '/api/v1/listing/get-by-seller');
     url.searchParams.append('page', page);
     url.searchParams.append('size', size);
 
@@ -276,7 +277,7 @@ export async function getListingsBySeller(token, page, size) {
  */
 export const deleteListing = (token, id) => {
     return request
-        .delete(`http://localhost:8080/api/v1/listing/delete/${id}`)
+        .delete(baseURL + `/api/v1/listing/delete/${id}`)
         .set('Authorization', `Bearer ${token}`)
         .then(() => {
             console.log(`Listing with ID ${id} deleted successfully.`);
@@ -301,7 +302,7 @@ export const getListingsByTitle = (title, opts = {}) => {
     const { page = 0, size = 10 } = opts;
 
     return request
-        .get('http://localhost:8080/api/v1/listing/get-by-title')
+        .get(baseURL + '/api/v1/listing/get-by-title')
         .query({ title, page, size })
         .then(res => res.body)
         .catch(err => {
