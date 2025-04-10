@@ -7,7 +7,6 @@ import {isTokenExpired} from "@/services/TokenService.js";
 import {getAllCategories} from "@/services/CategoryService.js";
 import {onMounted, ref, computed} from "vue";
 import router from "@/router/index.js";
-import {fetchImage} from "@/services/ImageService.js";
 import {getListingsByTitle} from "@/services/ListingService.js";
 
 document.body.style.backgroundColor = "#ffffff";
