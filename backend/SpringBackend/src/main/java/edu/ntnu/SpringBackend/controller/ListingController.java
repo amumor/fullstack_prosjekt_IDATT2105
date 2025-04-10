@@ -218,6 +218,19 @@ public class ListingController {
         return ResponseEntity.ok(listingMapper.toDto(listingService.createListing(request, user, images)));
     }
 
+    /**
+     * Creates a new listing without handling images.
+     * <p>
+     * This endpoint creates a listing using the provided listing details.
+     * Image handling is performed via another endpoint, so no images are processed.
+     * If an IO exception occurs during listing creation, an HTTP 500 response is returned.
+     * </p>
+     *
+     * @param user       the authenticated user creating the listing
+     * @param requestDTO the DTO containing the listing creation details
+     * @return a {@code ResponseEntity} containing the listing response DTO on success,
+     *         or an HTTP 500 error if an IO exception occurs
+     */
     @PreAuthorize("isAuthenticated()")
     @PostMapping(value = "/create-split")
     @Operation(summary = "Create a new listing, images handled by another endpoint", security = @SecurityRequirement(name = "bearerAuth"))
@@ -259,12 +272,18 @@ public class ListingController {
     }
 
     /**
-     * Get all listings for the authenticated user.
-     * This endpoint retrieves a list of all listings created by the authenticated user.
-     * Only authenticated users can access this endpoint.
+     * Updates a listing without handling images.
+     * <p>
+     * This endpoint allows an authenticated user to update a listing's details
+     * using the provided DTO, excluding image data. Image updates must be handled
+     * through another endpoint.
+     * </p>
      *
-     * @param user the authenticated user
-     * @return a list of listing response DTOs
+     * @param id         the unique identifier of the listing to update
+     * @param user       the authenticated user performing the update
+     * @param requestDTO the DTO containing the new details for the listing
+     * @return a ResponseEntity containing the updated listing as a DTO
+     * @throws IOException if an IO error occurs during the update process
      */
     @PreAuthorize("isAuthenticated()")
     @PutMapping("/update-split/{id}")
