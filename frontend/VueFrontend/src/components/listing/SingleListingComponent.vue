@@ -9,9 +9,22 @@ import { userStore } from '@/stores/user.js'
 import { getListingById, deleteListing, updateListing } from '@/services/ListingService.js'
 import { createBookmark, deleteBookmark, getUserBookmarks } from '../../services/BookmarkService';
 import { useListingStore } from '@/stores/listing.js'
+import { getAddressFromCoordinates } from '@/utils/Location.js'
+import { format } from '@/utils/DateTimeFormat.js'
 
 const listing = ref(null); 
 const image = 'https://iqboatlifts.com/wp-content/uploads/2018/06/Yacht-vs-Boat-Whats-the-Difference-Between-the-Two-1024x571.jpg';
+
+// User store
+const user = userStore()
+const token = user.token;
+// Favorite props
+const favorites = ref([]);
+const isFavorite = ref();
+// Archive props
+const isArchived = ref(false);
+// Address props
+const address = ref('Loading...');
 
 // Verify token
 const checkToken = () => {
@@ -24,14 +37,8 @@ const checkToken = () => {
     console.error('Token is expired, user logged out');
   }
 }
-
-// User store
-const user = userStore()
-const token = user.token;
 checkToken();
-const favorites = ref([]);
-const isFavorite = ref();
-const isArchived = ref(false);
+
 
 // Fetch listing id
 const isOwner = ref(false);
@@ -59,6 +66,15 @@ onMounted(async () => {
     }
   } else {
     isOwner.value = false;
+  }
+
+  // Fetch address if coordinates are available
+  if (listing.value.latitude && listing.value.longitude) {
+    const fetchedAddress = await getAddressFromCoordinates(
+      listing.value.latitude,
+      listing.value.longitude
+    );
+    address.value = fetchedAddress || 'No address found';
   }
 });
 
@@ -179,19 +195,6 @@ const toggleArchive = () => {
   isArchived.value = !isArchived.value;
 }
 
-// Format LocalDateTime to a readable format
-const formatDateTime = (dateTimeString) => {
-  if (!dateTimeString) {
-    dateTimeString = listing.value.createdAt;
-  } 
-  if(!dateTimeString) return 'N/A';
-  const date = new Date(dateTimeString); 
-  if (isNaN(date)) {
-    console.error('Invalid date format:', dateTimeString);
-    return 'Invalid Date';
-  }
-  return date.toLocaleString();
-};
 </script>
 
 <template>
@@ -215,7 +218,7 @@ const formatDateTime = (dateTimeString) => {
     <button v-if="user.isLoggedIn" class="favorite" :class="{ 'isFavorite': isFavorite }" @click="toggleFavorite">
       <Icon icon="material-symbols:favorite" width="40" height="40" />
     </button>
-    <p id="lastEdited">Last edited: {{ formatDateTime(listing.lastEdited) }}</p>
+    <p id="lastEdited">Last edited: {{ format(listing.lastEdited, listing.createdAt) }}</p>
   </div>
 
   <div class="sidebar">
@@ -226,6 +229,7 @@ const formatDateTime = (dateTimeString) => {
       <p id="price">{{ listing.price + ' kr' }}</p>
       <p id="description">{{ listing.description }}</p>
       <p id="categories">{{ listing.category }}</p>
+      <p id="location">{{ address }}</p>
     </div>
 
     <!-- Buy item or message seller -->

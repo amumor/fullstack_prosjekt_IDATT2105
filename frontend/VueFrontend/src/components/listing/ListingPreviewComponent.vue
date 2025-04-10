@@ -6,6 +6,7 @@ import axios from 'axios';
 import { get } from 'superagent';
 import { useListingStore } from '@/stores/listing.js';
 import { fetchImage } from '@/services/ImageService.js';
+import { getAddressFromCoordinates } from '../../utils/Location';
 
 const props = defineProps({
   id: Number,
@@ -19,6 +20,7 @@ const props = defineProps({
 // Get address from coordinates
 const address = ref('Loading address...');
 
+
 const getImageUrl = computed(() => {
   if (props.image) {
     return fetchImage(props.image);
@@ -26,30 +28,16 @@ const getImageUrl = computed(() => {
   return 'https://placehold.co/600x400?text=No+Image';
 });
 
-/**
-const getAddress = async () => {
-  try {
-    const response = await axios.get(
-      `https://maps.googleapis.com/maps/api/geocode/json?latlng=${props.latitude},${props.longitude}&key=${apiKey}`
+onMounted(async () => {
+  if (props.latitude && props.longitude) {
+    const fetchedAddress = await getAddressFromCoordinates(
+      props.latitude,
+      props.longitude
     );
-
-    if (response.data.status === 'OK') {
-      // Get the formatted address from the first result
-      address.value = response.data.results[0]?.formatted_address;
-
-      console.log('Formatted Address:', address.value);
-    } else {
-      throw new Error('No address found');
-    }
-  } catch (err) {
-    console.error(err);
-  } 
-};
-
-onMounted(() => {
-  getAddress();
+    address.value = fetchedAddress || 'No address found';
+  }
 });
-*/
+
 
 // Route to single listing
 const listingStore = useListingStore();
