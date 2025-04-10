@@ -5,8 +5,15 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
- * Web configuration class for configuring resource handlers.
- * This class implements the WebMvcConfigurer interface to customize the Spring MVC configuration.
+ * Web configuration for the application.
+ * <p>
+ * This class is responsible for configuring web-related settings,
+ * including resource handlers for serving static resources.
+ * </p>
+ *
+ * @author Vetle Hodne, Amund Mørk
+ * @version 1.0
+ * @since 1.0
  */
 @Configuration
 public class WebConfig implements WebMvcConfigurer {

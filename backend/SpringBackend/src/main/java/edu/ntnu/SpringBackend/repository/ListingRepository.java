@@ -15,6 +15,9 @@ import java.util.UUID;
  * Repository interface for managing listings in the database.
  * This interface extends JpaRepository to provide CRUD operations for Listing entities.
  *
+ * @author Vetle Hodne, Amund Mørk
+ * @version 1.0
+ * @since 1.0
  */
 public interface ListingRepository extends JpaRepository<Listing, UUID> {
   Optional<Listing> findById(UUID id);

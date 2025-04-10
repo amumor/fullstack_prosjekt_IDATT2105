@@ -20,8 +20,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CategoryCreationRequestDTO {
 
-    /**
-     * The name of the category to be created.
-     */
-    private String name;
+  /**
+   * The name of the category to be created.
+   */
+  private String name;
 }

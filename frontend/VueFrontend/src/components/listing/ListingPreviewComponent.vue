@@ -4,6 +4,7 @@ import { useRouter } from 'vue-router';
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import { get } from 'superagent';
+import { useListingStore } from '@/stores/listing.js';
 
 const props = defineProps({
   id: Number,
@@ -15,10 +16,11 @@ const props = defineProps({
 })
 
 // Get address from coordinates
-const address = ref('???');
-const apiKey = "AIzaSyDex1Dj8eXvChJFyafFKaB8bthMStoOtfo";
-console.log("API Key:", apiKey);
+const address = ref('Loading address...');
+const image = 'https://iqboatlifts.com/wp-content/uploads/2018/06/Yacht-vs-Boat-Whats-the-Difference-Between-the-Two-1024x571.jpg';
 
+
+/**
 const getAddress = async () => {
   try {
     const response = await axios.get(
@@ -41,21 +43,27 @@ const getAddress = async () => {
 onMounted(() => {
   getAddress();
 });
-
+*/
 
 // Route to single listing
+const listingStore = useListingStore();
 const router = useRouter();
 const toListingView = () => {
-  router.push('/listing/id/' + props.id);
+  try{
+    listingStore.setListing(props.id);
+    router.push('/listing/id/' + props.id);
+  } catch (err) {
+    console.error('Error navigating to listing view:', err);
+  }
 }
 </script>
 
 <template>
   <button class="listings" @click="toListingView">
-    <!--<span class="image-container">-->
-      <!--<img class="image-item" :src="props.image" alt="Boat">-->
-      <span class="price">{{ props.price }}</span>
-    <!--</span>-->
+    <span class="image-container">
+      <img class="image-item" :src="image" alt="Boat">
+      <span class="price">{{ props.price + ' kr' }}</span>
+    </span>
     <span class="description">
       <span class="town">{{ address }}</span>
       <span class="title">{{ props.title }}</span>
@@ -84,14 +92,14 @@ const toListingView = () => {
 }
 
 /* Image container */
-.image-container, .price {
+.image-container {
   position: relative;
   overflow: hidden;
   border-radius: 10px;
   margin: 10px  10px 0 10px ;
 }
 
-.image-item, .price {
+.image-item {
   width: 200px;
   height: auto;
   display: block;
