@@ -57,21 +57,19 @@ export function createListing(listing, images = [], token) {
 
     // Initialize the superagent request.
     let req = request
-        .post('http://localhost:8080/api/v1/listing/create')  
-        .set('Authorization', `Bearer ${token}`)  // Set Authorization header with Bearer token
-        .type('multipart/form-data'); // We're sending form data
+        .post('http://localhost:8080/api/v1/listing/create')
+        .set('Authorization', `Bearer ${token}`)
+        .type('multipart/form-data');
 
     // Add listing details as fields to the form.
     Object.keys(requestData).forEach(key => {
         req.field(key, requestData[key]);
     });
 
-
-    //req.field('listing', JSON.stringify(listing)); // Send listing as a JSON string
     // Add the images if provided.
     if (images.length > 0) {
         images.forEach(image => {
-            req.attach('images', image); // 'images' is the key expected by the backend to receive files
+            req.attach('images', image);
         });
     }
 
@@ -79,13 +77,48 @@ export function createListing(listing, images = [], token) {
     console.log('Request:', req);
     return req
         .then(response => {
-            // Resolve with the response body.
-            return response.body;  // Assuming the response contains the ListingResponseDTO in the body
+            return response.body;
         })
         .catch(error => {
             console.error('Listing creation failed:', error);
             throw new Error(`Listing creation failed: ${error.message}`);
         });
+}
+
+export async function createListing2(formData, token) {
+    try {
+        const response = await request
+            .post('http://localhost:8080/api/v1/listing/create')
+            .set('Authorization', `Bearer ${token}`)
+            .type('multipart/form-data')
+            .send(formData); // Send FormData
+        return response.body;
+    } catch (error) {
+        console.error('Listing creation failed:', error);
+        throw new Error(`Listing creation failed: ${error.message}`);
+    }
+}
+
+export async function createListingWithoutImage(listing, token) {
+    try {
+        const response = await fetch('http://localhost:8080/api/v1/listing/create-split', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(listing) // Send the listing as JSON
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        return await response.json(); // Parse and return the JSON response
+    } catch (error) {
+        console.error('Error creating listing without image:', error);
+        throw new Error(`Listing creation failed: ${error.message}`);
+    }
 }
 
 /**

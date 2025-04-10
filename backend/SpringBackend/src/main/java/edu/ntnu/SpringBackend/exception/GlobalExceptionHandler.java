@@ -49,7 +49,7 @@ public class GlobalExceptionHandler {
    */
   @ExceptionHandler(NoSuchElementException.class)
   public ResponseEntity<String> handleNoSuchElementException(NoSuchElementException ex, WebRequest request) {
-    logger.error("!!! User not found: {}", ex.getMessage());
+    logger.error("!!! Element not found: {}", ex.getMessage());
     return new ResponseEntity<>("User not found: " + ex.getMessage(), HttpStatus.NOT_FOUND);
   }
 

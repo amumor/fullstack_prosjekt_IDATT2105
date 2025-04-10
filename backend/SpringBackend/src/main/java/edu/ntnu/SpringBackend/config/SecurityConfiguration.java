@@ -58,7 +58,7 @@ public class SecurityConfiguration {
                                 "/api/v1/category/all",
                                 "/api/v1/listing/get-suggestions",
                                 "/api/v1/listing/get-by-category",
-                                "/api/v1/listing/get-by-seller",
+                                "/api/v1/listing/get-by-seller", // TODO remove
                                 "/api/v1/listing/get-by-title",
                                 "/api/v1/listing/id/**",
                                 "/images/**"

@@ -238,7 +238,8 @@ const toggleForm = () => {
 
 <template>
   <div class="display-page-container">
-    <h2 class="logo-header">FIND.no</h2>
+    <router-link to="/" id="title-header">FIND.no</router-link>
+
     <template v-if="isUserRegistered">
       <div class="login">
         <h2>Log in</h2>
@@ -294,6 +295,13 @@ const toggleForm = () => {
   text-align: left;
 
   margin: 0;
+}
+
+#title-header {
+  text-decoration: none;
+  color: #333;
+  font-size: 24px;
+  font-weight: bold;
 }
 
 /* Title */
