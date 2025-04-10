@@ -259,6 +259,28 @@ public class ListingController {
     }
 
     /**
+     * Get all listings for the authenticated user.
+     * This endpoint retrieves a list of all listings created by the authenticated user.
+     * Only authenticated users can access this endpoint.
+     *
+     * @param user the authenticated user
+     * @return a list of listing response DTOs
+     */
+    @PreAuthorize("isAuthenticated()")
+    @PutMapping("/update-split/{id}")
+    @Operation(summary = "Update a listing", security = @SecurityRequirement(name = "bearerAuth"))
+    public ResponseEntity<ListingResponseDTO> updateListingWithoutImage(
+            @PathVariable UUID id,
+            @AuthenticationPrincipal User user,
+            @RequestBody ListingCreationRequestDTO requestDTO
+    ) throws IOException {
+        logger.info("PUT Request received on [/api/v1/listing/update-split/{}]", id);
+        return ResponseEntity.ok(
+                listingMapper.toDto(listingService.updateListing(id, user, requestDTO, null))
+        );
+    }
+
+    /**
      * Delete a listing by its ID.
      * This endpoint allows the authenticated user to delete a listing.
      * Only authenticated users can delete listings.
