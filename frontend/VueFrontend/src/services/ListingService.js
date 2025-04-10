@@ -99,6 +99,28 @@ export async function createListing2(formData, token) {
     }
 }
 
+export async function createListingWithoutImage(listing, token) {
+    try {
+        const response = await fetch('http://localhost:8080/api/v1/listing/create-split', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(listing) // Send the listing as JSON
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        return await response.json(); // Parse and return the JSON response
+    } catch (error) {
+        console.error('Error creating listing without image:', error);
+        throw new Error(`Listing creation failed: ${error.message}`);
+    }
+}
+
 /**
  * Retrieves a listing by its ID using superagent.
  *

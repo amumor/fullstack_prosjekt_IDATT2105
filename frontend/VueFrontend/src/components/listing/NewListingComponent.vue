@@ -3,7 +3,7 @@ import {onMounted, ref} from 'vue'
 import {getAllCategories} from "@/services/CategoryService.js";
 import {userStore} from "@/stores/user.js";
 import {isTokenExpired} from "@/services/TokenService.js";
-import {createListing2} from "@/services/ListingService.js";
+import {createListing2, createListingWithoutImage} from "@/services/ListingService.js";
 import router from "@/router/index.js";
 import SuccessFailModal from "@/components/modal/SuccessFailModal.vue";
 
@@ -54,13 +54,14 @@ const handleCreateListing = async () => {
     latitude: coordinates.value[0],
     longitude: coordinates.value[1],
   };
-  const formData = new FormData();
-  formData.append('listing', JSON.stringify(listing));
+  // const formData = new FormData();
+  // formData.append('listing', JSON.stringify(listing));
 
   // images.value.forEach((image) => { // TODO: implement when images is fixed
   //   formData.append('images', image);
   // });
 
+  // Check token before sending the request
   const token = user.token;
   if (isTokenExpired(token)) {
     user.logout();
@@ -69,7 +70,7 @@ const handleCreateListing = async () => {
   }
 
   try {
-    const response = await createListing2(formData, token);
+    const response = await createListingWithoutImage(listing, token);
     console.log('Listing created successfully:', response);
     resultModalMessage.value = 'Listing created successfully!';
     showResultModal.value = true;
@@ -120,7 +121,7 @@ onMounted(() => {
         <input type="file" id="file" name="file" accept="image/*" @change="handleFileChange" disabled="disabled"/>
       </div>
       <div class="submit-button">
-        <button type="submit" class="basic-blue-btn" @click="handleCreateListing">Create</button>
+        <button type="submit" class="basic-blue-btn">Create</button>
       </div>
     </form>
   </div>
