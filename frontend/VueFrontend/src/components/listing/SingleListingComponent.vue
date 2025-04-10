@@ -25,12 +25,11 @@ const checkToken = () => {
 
 // User store
 const user = userStore()
-
 const token = user.token;
 checkToken();
-
 const favorites = ref([]);
 const isFavorite = ref();
+const isArchived = ref(false);
 
 // Fetch listing id
 const isOwner = ref(false);
@@ -139,6 +138,13 @@ const toEditListing = () => {
   router.push('/listing/update/' + listing.value.id + '/edit');
 }
 
+// Archive listing
+const toggleArchive = () => {
+  checkToken();
+  // use updateListing function to archive the listing
+  isArchived.value = !isArchived.value;
+}
+
 // Format LocalDateTime to a readable format
 const formatDateTime = (dateTimeString) => {
   if (!dateTimeString) {
@@ -155,6 +161,19 @@ const formatDateTime = (dateTimeString) => {
 </script>
 
 <template>
+<div class="toggle-container" id="archive" v-if="isOwner">
+  <label class="switch">
+    <input type="checkbox" @change="toggleArchive()">
+    <span class="slider">
+      <template v-if="isArchived">
+        <span class="switch-label">INACTIVE</span>
+      </template>
+      <template v-else>
+        <span class="switch-label">ACTIVE</span>
+      </template>
+    </span>
+  </label>
+</div>
 <div class="display-page-container" v-if="listing">
   <!-- Image container -->
   <div class="image-container">
@@ -184,8 +203,7 @@ const formatDateTime = (dateTimeString) => {
     <!-- Owner options -->
     <div class="owner-options">
       <template v-if="isOwner">
-        <button class="owner-btn" @click="toEditListing">Edit</button>
-        <button class="owner-btn">Archive</button>
+        <button class="owner-btn" id="edit" @click="toEditListing">Edit</button>
         <button class="owner-btn" id="delete" @click=delListing>Delete</button>
       </template>
     </div>
@@ -281,9 +299,8 @@ const formatDateTime = (dateTimeString) => {
 .owner-options {
   display: flex;
   gap: 10px;
-  width: 100%;
-  max-height: 40px;
-  max-width: 400px;
+  height: 40px;
+  width: 300px;
   margin-bottom: 10px;
 }
 
@@ -294,7 +311,7 @@ const formatDateTime = (dateTimeString) => {
   transition: all 0.3s ease;
 
   flex: 1;
-  padding: 10px;
+  
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -302,14 +319,17 @@ const formatDateTime = (dateTimeString) => {
 }
 
 .buy-btn,
-.owner-btn {
+#edit,
+#delete,
+.slider {
   background-color: white;
   color: #333333;
   border: #1C64FF 2px solid;
 }
 
 .buy-btn:hover,
-.owner-btn:hover {
+#edit:hover,
+#delete:hover{
   background-color: #D9D9D9;
 }
 
@@ -325,6 +345,66 @@ const formatDateTime = (dateTimeString) => {
 #delete:hover {
   background-color: crimson;
   border: crimson 2px solid;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 100px;
+  height: 40px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0; left: 0; right: 0; bottom: 0;
+  transition: 0.4s;
+  border-radius: 5px;
+  width: 140px;
+  height: 40px;
+  margin: 0 50px 50px 630px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 30px;
+  width: 30px;
+  left: 3px;
+  bottom: 3px;
+  background-color: #1C64FF;
+  transition: 0.4s;
+  border-radius: 5px;
+}
+
+input:checked + .slider {
+  background-color: #1C64FF;
+}
+
+input:checked + .slider:before {
+  background-color: white;
+  margin-right: 20px;
+  transform: translateX(100px);
+}
+
+input:checked + .slider .switch-label {
+  color: white;
+}
+
+.switch-label {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 14px;
+  color: #333333;
+  pointer-events: none;
 }
 
 /* Map placeholder */
