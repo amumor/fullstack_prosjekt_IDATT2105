@@ -204,8 +204,9 @@ public class ListingService {
         logger.info("> Creating listing without images");
 
         listing = listingRepository.save(listing);
-        addImagesToListing(listing.getId(), images);
-
+        if (images != null && images.length != 0) {
+            addImagesToListing(listing.getId(), images);
+        }
         return listing;
     }
 
