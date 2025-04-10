@@ -403,7 +403,7 @@ public class ListingService {
      */
     private void validateListing(Listing listing) {
         validateTitle(listing.getTitle());
-        validateDescription(listing.getDescription());
+//        validateDescription(listing.getDescription());
         validatePrice(listing.getPrice());
         validateCategory(listing.getCategory());
         validateLatitude(listing.getLatitude());
