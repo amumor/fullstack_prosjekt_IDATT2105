@@ -7,6 +7,7 @@ import {
 } from '@/api';
 import {serviceConfigParams} from '@/services/ServiceSetup.js';
 
+
 const {timeout, baseURL} = serviceConfigParams();
 
 import request from 'superagent';
@@ -42,12 +43,11 @@ import request from 'superagent';
  *   .catch(error => console.error('Creation failed:', error));
  */
 export function createListing(listing, images = [], token) {
-    // Prepare the listing data to be sent in the request.
     const requestData = {
         title: listing.title,
         description: listing.description,
         categoryName: listing.categoryName,
-        listingStatus: listing.listingStatus, // Should be a valid enum value like 'ACTIVE'
+        listingStatus: listing.listingStatus,
         price: listing.price,
         latitude: listing.latitude,
         longitude: listing.longitude,
@@ -57,7 +57,7 @@ export function createListing(listing, images = [], token) {
 
     // Initialize the superagent request.
     let req = request
-        .post('http://localhost:8080/api/v1/listing/create')
+        .post(baseURL + '/api/v1/listing/create')
         .set('Authorization', `Bearer ${token}`)
         .type('multipart/form-data');
 
@@ -88,7 +88,7 @@ export function createListing(listing, images = [], token) {
 export async function createListing2(formData, token) {
     try {
         const response = await request
-            .post('http://localhost:8080/api/v1/listing/create')
+            .post(baseURL + '/api/v1/listing/create')
             .set('Authorization', `Bearer ${token}`)
             .type('multipart/form-data')
             .send(formData); // Send FormData
@@ -101,20 +101,20 @@ export async function createListing2(formData, token) {
 
 export async function createListingWithoutImage(listing, token) {
     try {
-        const response = await fetch('http://localhost:8080/api/v1/listing/create-split', {
+        const response = await fetch(baseURL + '/api/v1/listing/create-split', {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(listing) // Send the listing as JSON
+            body: JSON.stringify(listing)
         });
 
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        return await response.json(); // Parse and return the JSON response
+        return await response.json();
     } catch (error) {
         console.error('Error creating listing without image:', error);
         throw new Error(`Listing creation failed: ${error.message}`);
@@ -136,7 +136,7 @@ export async function createListingWithoutImage(listing, token) {
  */
 export const getListingById = (id) => {
     return request
-        .get(`http://localhost:8080/api/v1/listing/id/${id}`)
+        .get(baseURL + `/api/v1/listing/id/${id}`)
         .then(res => res.body)
         .catch(error => {
             console.error('Failed to retrieve listing by ID:', error);
@@ -174,7 +174,7 @@ export function getListingSuggestions(opts = {page: 0, size: 10}) {
 }
 
 /**
- * Updates an existing listing with the provided details.
+ * Updates an existing listing with the provided details using fetch().
  *
  * @param {string} id - The ID of the listing to update.
  * @param {Object} updateData - An object containing the updated listing details.
@@ -191,26 +191,29 @@ export function getListingSuggestions(opts = {page: 0, size: 10}) {
  * @param {string} token - JWT token.
  * @returns {Promise<Object>} A promise that resolves to the updated ListingResponseDTO.
  * @throws {Error} If updating the listing fails.
- *
- * @example
- * updateListing('listing123', {
- *   title: 'Updated Title',
- *   description: 'Updated Description',
- *   imagesToDelete: ['oldImage1.jpg']
- * }, 'jwt-token')
- *   .then(response => console.log('Listing updated:', response))
- *   .catch(error => console.error('Update failed:', error));
  */
-export function updateListing(id, updateData, token) {
-    return request
-        .put(`http://localhost:8080/api/v1/listing/update/${id}`) // Assuming your API endpoint for updating is like this
-        .set('Authorization', `Bearer ${token}`)
-        .send(updateData) // Send the updateData as the request body
-        .then(res => res.body) // Assuming the response contains the updated listing
-        .catch(err => {
-            console.error('Failed to update listing:', err);
-            throw err;
+export async function updateListing(id, updateData, token) {
+    const url = `${baseURL}/api/v1/listing/update-split/${id}`;
+
+    try {
+        const response = await fetch(url, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(updateData),
         });
+
+        if (!response.ok) {
+            throw new Error(`Failed to update listing: ${response.statusText}`);
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error('Failed to update listing:', error);
+        throw error;
+    }
 }
 
 /**
@@ -221,7 +224,7 @@ export function updateListing(id, updateData, token) {
  * @throws {Error} If the request fails.
  */
 export async function getListingsByCategory(categoryName) {
-    const url = new URL('http://localhost:8080/api/v1/listing/get-by-category');
+    const url = new URL(baseURL + '/api/v1/listing/get-by-category');
     url.searchParams.append('categoryName', categoryName);
 
     try {
@@ -242,7 +245,7 @@ export async function getListingsByCategory(categoryName) {
 }
 
 export async function getListingsBySeller(token, page, size) {
-    const url = new URL('http://localhost:8080/api/v1/listing/get-by-seller');
+    const url = new URL(baseURL + '/api/v1/listing/get-by-seller');
     url.searchParams.append('page', page);
     url.searchParams.append('size', size);
 
@@ -250,7 +253,7 @@ export async function getListingsBySeller(token, page, size) {
         const response = await fetch(url, {
             method: 'GET',
             headers: {
-                'Authorization': `Bearer ${token}`, // Add JWT token
+                'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json',
             },
         });
@@ -276,7 +279,7 @@ export async function getListingsBySeller(token, page, size) {
  */
 export const deleteListing = (token, id) => {
     return request
-        .delete(`http://localhost:8080/api/v1/listing/delete/${id}`)
+        .delete(baseURL + `/api/v1/listing/delete/${id}`)
         .set('Authorization', `Bearer ${token}`)
         .then(() => {
             console.log(`Listing with ID ${id} deleted successfully.`);
@@ -301,7 +304,7 @@ export const getListingsByTitle = (title, opts = {}) => {
     const { page = 0, size = 10 } = opts;
 
     return request
-        .get('http://localhost:8080/api/v1/listing/get-by-title')
+        .get(baseURL + '/api/v1/listing/get-by-title')
         .query({ title, page, size })
         .then(res => res.body)
         .catch(err => {

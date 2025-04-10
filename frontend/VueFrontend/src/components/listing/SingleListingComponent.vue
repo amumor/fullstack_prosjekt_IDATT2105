@@ -1,10 +1,11 @@
 <script setup>
-import { ref, onMounted, watch, computed } from 'vue';
-import { useRouter } from 'vue-router';
-import { Icon } from '@iconify/vue'
-import { storeToRefs } from 'pinia';
+import {ref, onMounted, watch, computed} from 'vue';
+import {useRouter} from 'vue-router';
+import {Icon} from '@iconify/vue'
+import {storeToRefs} from 'pinia';
 
 import ListingMapComponent from '@/components/listing/ListingMapComponent.vue'
+
 import { userStore } from '@/stores/user.js'
 import { getListingById, deleteListing, updateListing } from '@/services/ListingService.js'
 import { createBookmark, deleteBookmark, getUserBookmarks } from '../../services/BookmarkService';
@@ -30,7 +31,7 @@ const address = ref('Loading...');
 // Verify token
 const checkToken = () => {
   if (!token && user.isLoggedIn) {
-    try{
+    try {
       user.logout();
     } catch (err) {
       console.error('Error logging out:', err);
@@ -45,12 +46,12 @@ checkToken();
 const isOwner = ref(false);
 onMounted(async () => {
   const listingStore = useListingStore();
-  const { id } = storeToRefs(listingStore);
-  
+  const {id} = storeToRefs(listingStore);
+
   if (!id.value) {
     console.error('Listing ID is null');
     return;
-  } 
+  }
   try {
     // Fetch listing
     listing.value = await getListingById(id.value);
@@ -60,7 +61,7 @@ onMounted(async () => {
 
   // Check if the user is the owner of the listing
   if (user.isLoggedIn && listing.value) {
-    if(user.firstName === listing.value.sellerFirstName && user.lastName === listing.value.sellerLastName){
+    if (user.firstName === listing.value.sellerFirstName && user.lastName === listing.value.sellerLastName) {
       isOwner.value = true;
     } else {
       isOwner.value = false;
@@ -72,10 +73,17 @@ onMounted(async () => {
   // Fetch address if coordinates are available
   if (listing.value.latitude && listing.value.longitude) {
     const fetchedAddress = await getAddressFromCoordinates(
-      listing.value.latitude,
-      listing.value.longitude
+        listing.value.latitude,
+        listing.value.longitude
     );
     address.value = fetchedAddress || 'No address found';
+  }
+
+  console.log("Current Listing status: ", listing.value.listingStatus)
+  if (listing.value.listingStatus == "ACTIVE") {
+    isArchived.value = false;
+  } if (listing.value.listingStatus == "INACTIVE") {
+    isArchived.value = true;
   }
 });
 
@@ -91,13 +99,13 @@ const getImageUrl = computed(() => {
 if (user.isLoggedIn) {
   checkToken();
   getUserBookmarks(token)
-    .then((data) => {
-      favorites.value = data;
-      checkIfFavorite();
-    })
-    .catch((err) => {
-      console.error('Error fetching bookmarks:', err);
-    });
+      .then((data) => {
+        favorites.value = data;
+        checkIfFavorite();
+      })
+      .catch((err) => {
+        console.error('Error fetching bookmarks:', err);
+      });
 } else {
   console.warn('User is not logged in. Skipping bookmark fetch.');
 }
@@ -128,12 +136,12 @@ const toggleFavorite = async () => {
     });
     // Get the new favoriteId
     getUserBookmarks(token)
-    .then((data) => {
-      favorites.value = data;
-    })
-    .catch((err) => {
-      console.error('Error fetching bookmarks:', err);
-    });
+        .then((data) => {
+          favorites.value = data;
+        })
+        .catch((err) => {
+          console.error('Error fetching bookmarks:', err);
+        });
   }
   isFavorite.value = !isFavorite.value;
 }
@@ -146,17 +154,17 @@ watch(favorites, () => {
 const delListing = () => {
   checkToken();
   if (!isOwner()) {
-        console.error("User is not the owner of the listing.");
-        return;
-    }
+    console.error("User is not the owner of the listing.");
+    return;
+  }
   deleteListing(token, listing.value.id)
-    .then(() => {
+      .then(() => {
         console.log('Listing deleted successfully!');
         router.back()
-    })
-    .catch(err => {
+      })
+      .catch(err => {
         console.error('Error deleting listing:', err);
-    });
+      });
 }
 
 // Route to edit listing
@@ -165,34 +173,70 @@ const toEditListing = () => {
   router.push('/listing/update/' + listing.value.id + '/edit');
 }
 
+const setStatus = async (status) => {
+  const token = user.token;
+  if (isTokenExpired(token)) {
+    user.logout();
+    await router.push("/login")
+  }
+
+  const currentValues = await localGetCurrentValues();
+  console.log("Current values", currentValues);
+  try {
+    await updateListing(listing.value.id, {
+      title: currentValues.title,
+      description: currentValues.description,
+      categoryName: currentValues.categoryName,
+      listingStatus: status,
+      latitude: currentValues.latitude, // TODO: Replace with actual latitude
+      longitude: currentValues.longitude, // TODO: Replace with actual longitude
+      price: currentValues.price,
+    }, token);
+  } catch (err) {
+    console.error('Error updating listing:', err);
+  }
+}
+
+const localGetCurrentValues = async () => {
+  const listingStore = useListingStore();
+  const {id} = storeToRefs(listingStore);
+
+  if (!id.value) {
+    console.error('Listing ID is null');
+    return;
+  }
+
+  try {
+    listing.value = await getListingById(id.value);
+    if (!listing.value) {
+      console.error('Listing not found');
+      return null;
+    } else {
+      return listing.value;
+    }
+
+  } catch (err) {
+    console.error('Listing not found:', err);
+  }
+}
+
 // Archive listing
-const toggleArchive = () => {
+const toggleArchive = async () => {
   checkToken();
-  // use updateListing function to archive the listing
-  if(isArchived){
-    updateListing(listing.value.id, {
-      ...listing.value,
-      listingStatus: 'INACTIVE'
-    }, token)
-      .then(() => {
-        console.log('Listing archived successfully!');
-        listing.value.listingStatus = 'INACTIVE';
-      })
-      .catch(err => {
-        console.error('Error archiving listing:', err);
-      });
-  } else {
-    updateListing(listing.value.id, {
-      ...listing.value,
-      listingStatus: 'ACTIVE'
-    }, token)
-      .then(() => {
-        console.log('Listing unarchived successfully!');
-        listing.value.listingStatus = 'ACTIVE';
-      })
-      .catch(err => {
-        console.error('Error unarchiving listing:', err);
-      });
+  const curValues = await localGetCurrentValues();
+
+  if (curValues.listingStatus === "ACTIVE") {
+    try {
+      await setStatus('INACTIVE');
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  } else if (curValues.listingStatus === "INACTIVE") {
+    try {
+      await setStatus('ACTIVE');
+    } catch (error) {
+      console.error('Error:', error);
+    }
   }
   isArchived.value = !isArchived.value;
 }
@@ -200,10 +244,10 @@ const toggleArchive = () => {
 </script>
 
 <template>
-<div class="toggle-container" id="archive" v-if="isOwner">
-  <label class="switch">
-    <input type="checkbox" @change="toggleArchive()">
-    <span class="slider">
+  <div class="toggle-container" id="archive" v-if="isOwner">
+    <label class="switch">
+      <input type="checkbox" @change="toggleArchive()">
+      <span class="slider">
       <template v-if="isArchived">
         <span class="switch-label">INACTIVE</span>
       </template>
@@ -211,55 +255,54 @@ const toggleArchive = () => {
         <span class="switch-label">ACTIVE</span>
       </template>
     </span>
-  </label>
-</div>
-<div class="display-page-container" v-if="listing">
-  <!-- Image container -->
-  <div class="image-container">
-    <img class="image-item" :src="getImageUrl" alt="Front image">
-    <button v-if="user.isLoggedIn" class="favorite" :class="{ 'isFavorite': isFavorite }" @click="toggleFavorite">
-      <Icon icon="material-symbols:favorite" width="40" height="40" />
-    </button>
-    <p id="lastEdited">Last edited: {{ format(listing.lastEdited, listing.createdAt) }}</p>
+    </label>
   </div>
-
-  <div class="sidebar">
-
-    <!-- Description -->
-    <div class="description">
-      <h2>{{ listing.title }}</h2>
-      <p id="price">{{ listing.price + ' kr' }}</p>
-      <p id="description">{{ listing.description }}</p>
-      <p id="categories">{{ listing.category }}</p>
-      <p id="location">{{ address }}</p>
+  <div class="display-page-container" v-if="listing">
+    <!-- Image container -->
+    <div class="image-container">
+      <img class="image-item" :src="getImageUrl" alt="Front image">
+      <button v-if="user.isLoggedIn" class="favorite" :class="{ 'isFavorite': isFavorite }" @click="toggleFavorite">
+        <Icon icon="material-symbols:favorite" width="40" height="40"/>
+      </button>
+      <p id="lastEdited">Last edited: {{ format(listing.lastEdited, listing.createdAt) }}</p>
     </div>
 
-    <!-- Buy item or message seller -->
-    <div class="btn" v-if="user.isLoggedIn && !isOwner">
-      <button class="message-btn">Message</button>
-      <button class="buy-btn">Buy</button>
-    </div>
+    <div class="sidebar">
 
-    <!-- Owner options -->
-    <div class="owner-options">
-      <template v-if="isOwner">
-        <button class="owner-btn" id="edit" @click="toEditListing">Edit</button>
-        <button class="owner-btn" id="delete" @click=delListing>Delete</button>
-      </template>
-    </div>
+      <!-- Description -->
+      <div class="description">
+        <h2>{{ listing.title }}</h2>
+        <p id="price">{{ listing.price + ' kr' }}</p>
+        <p id="description">{{ listing.description }}</p>
+        <p id="categories">{{ listing.category }}</p>
+        <p id="location">{{ address }}</p>
+      </div>
 
-    <!-- Map -->
-    <div class="map">
-      <ListingMapComponent
-        :location="[listing.latitude, listing.longitude]" />
-    </div>
+      <!-- Buy item or message seller -->
+      <div class="btn" v-if="user.isLoggedIn && !isOwner">
+        <button class="message-btn">Message</button>
+        <button class="buy-btn">Buy</button>
+      </div>
 
+      <!-- Owner options -->
+      <div class="owner-options">
+        <template v-if="isOwner">
+          <button class="owner-btn" id="edit" @click="toEditListing">Edit</button>
+          <button class="owner-btn" id="delete" @click=delListing>Delete</button>
+        </template>
+      </div>
+
+      <!-- Map -->
+      <div class="map">
+        <ListingMapComponent
+            :location="[listing.latitude, listing.longitude]"/>
+      </div>
+
+
+    </div>
 
 
   </div>
-
-
-</div>
 </template>
 
 <style scoped>
@@ -422,17 +465,13 @@ const toggleArchive = () => {
   border-radius: 5px;
 }
 
-input:checked + .slider {
-  background-color: #1C64FF;
-}
-
 input:checked + .slider:before {
-  background-color: white;
+  background-color: #1C64FF;
   transform: translateX(65px);
 }
 
 input:checked + .slider .switch-label {
-  color: white;
+  color: #333333;
   transform: translate(-75%, -50%);
 }
 
@@ -440,7 +479,7 @@ input:checked + .slider .switch-label {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-10%, -50%);
+  transform: translate(-25%, -50%);
   font-size: 14px;
   color: #333333;
   pointer-events: none;
