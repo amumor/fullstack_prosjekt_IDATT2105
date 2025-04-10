@@ -57,10 +57,10 @@ const newCategory = () => {
     <div class="edit-mode" v-if="isEditMode">
       <div class="category-item">
         <button class="basic-blue-btn" id="new-category-btn" @click="newCategory">+</button>
-        <input id="category-input" type="text" v-model="newCategoryName" placeholder="Name"/>
+        <input id="category-input" type="text" v-model="newCategoryName" :placeholder="$t('profile.name')"/>
       </div>
       <div class="category-item" v-for="(category, index) in categories" :key="category.id">
-        <button class="basic-blue-btn" id="delete-btn" @click="() => localDeleteCategory(index)">{{ $t('buttons.delete') }}</button>
+        <button class="basic-blue-btn" id="delete-btn" @click="() => localDeleteCategory(index)">{{ $t('button.delete') }}</button>
         <input type="text" v-model="category.name"/>
       </div>
     </div>

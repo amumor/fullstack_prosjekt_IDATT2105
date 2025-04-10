@@ -11,32 +11,6 @@ import {getListingsByTitle} from "@/services/ListingService.js";
 
 document.body.style.backgroundColor = "#ffffff";
 
-//Get images from backend
-// const listings = [
-//   {
-//     id: 1,
-//     price: '100 mill',
-//     image: 'https://iqboatlifts.com/wp-content/uploads/2018/06/Yacht-vs-Boat-Whats-the-Difference-Between-the-Two-1024x571.jpg',
-//     town: 'Elverum',
-//     title: 'Big boat 1',
-//   },
-//   {
-//     id: 2,
-//     price: '60 mill',
-//     image: 'https://iqboatlifts.com/wp-content/uploads/2018/06/Yacht-vs-Boat-Whats-the-Difference-Between-the-Two-1024x571.jpg',
-//     town: 'Baerum',
-//     title: 'Big Boat 2',
-//   },
-// ];
-
-// //Get categories from backend
-// const categories = [
-//   {id: 1, name: 'Boats'},
-//   {id: 2, name: 'Cars'},
-//   {id: 3, name: 'Motorcycles'},
-//   {id: 4, name: 'Real Estate'},
-// ];
-
 const user = userStore()
 const categories = ref([]);
 const listings = ref([]);
@@ -142,7 +116,7 @@ const prevPage = () => {
 
     <!-- Search bar -->
     <div class="search-container">
-      <input v-model="searchInput" type="text" class="search-input" placeholder="Search for listings..." id="searchInput">
+      <input v-model="searchInput" type="text" class="search-input" :placeholder="$t('home.search-placeholder') + '...'" id="searchInput">
       <button class="search-btn" @click="searchFunction">{{ $t('home.search') }}</button>
       <router-link class="map-btn" to="/map" id="router-link">{{ $t('map.map') }}</router-link>
   
@@ -154,7 +128,7 @@ const prevPage = () => {
         <button id="category-btn" @click="() => handleCategoryFilterClick(category.name)">{{ category.name }}</button>
       </div>
       <button id="category-btn" @click="handleFilterReset">{{ $t('button.reset') }}</button>
-      <h3>Current filter: {{currentFilter}}</h3>
+      <h3>{{ $t('home.current-filter') }}: {{currentFilter}}</h3>
     </div>
 
     <!-- Listings -->

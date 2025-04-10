@@ -13,6 +13,7 @@
       "delete": "Slett",
       "password": "Passord",
       "save-changes": "Lagre endringer",
+      "save": "Lagre",
       "create": "Opprett",
       "message": "Melding",
       "buy": "Kjøp",
@@ -51,6 +52,9 @@
       "cancelled": "Kansellert"
     },
     "listing": {
+      "listings": "Annonser",
+      "see-all-your-listings": "Se alle dine annonser",
+      "see-all-your-favorites": "Se alle dine favoritter",
       "header": "Tittel",
       "description": "Beskrivelse",
       "price": "Pris",
@@ -77,13 +81,16 @@
     },
     "profile": {
       "edit-profile": "Rediger profil",
+      "name": "Navn",
       "first-name": "Fornavn",
       "last-name": "Etternavn",
       "email": "E-post",
       "phone-number": "Telefonnummer",
       "password": "Passord",
       "confirm-password": "Bekreft passord",
-      "update-user-info-warning": "Oppdatering av brukerinfo krever automatisk utlogging for å tre i kraft."
+      "update-user-info-warning": "Oppdatering av brukerinfo krever automatisk utlogging for å tre i kraft.",
+      "my-profile": "Min profil",
+		  "edit-profile-information": "Rediger profilinformasjon"
     },
     "pageination": {
       "page": "Side",
@@ -95,7 +102,8 @@
       "search": "Søk",
       "search-placeholder": "Søk etter annonser",
       "no-listings-found": "Ingen annonser funnet",
-      "no-favorites-found": "Ingen favoritter funnet"
+      "no-favorites-found": "Ingen favoritter funnet",
+      "current-filter": "Nåværende filter"
     }
   }
   

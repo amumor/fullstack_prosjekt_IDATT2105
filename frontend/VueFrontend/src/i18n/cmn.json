@@ -13,6 +13,7 @@
       "delete": "删除",
       "password": "密码",
       "save-changes": "保存更改",
+      "save": "保存",
       "create": "创建",
       "message": "消息",
       "buy": "购买",
@@ -51,6 +52,9 @@
       "cancelled": "已取消"
     },
     "listing": {
+      "listings": "列表",
+      "see-all-your-listings": "查看所有列表",
+      "see-all-your-favorites": "查看所有收藏",
       "header": "标题",
       "description": "描述",
       "price": "价格",
@@ -77,13 +81,16 @@
     },
     "profile": {
       "edit-profile": "编辑个人资料",
+      "name": "姓名",
       "first-name": "名字",
       "last-name": "姓氏",
       "email": "电子邮箱",
       "phone-number": "电话号码",
       "password": "密码",
       "confirm-password": "确认密码",
-      "update-user-info-warning": "更新用户信息需要自动注销以生效。"
+      "update-user-info-warning": "更新用户信息需要自动注销以生效。",
+      "my-profile": "我的个人资料",
+		  "edit-profile-information": "编辑个人资料信息"
     },
     "pageination": {
       "page": "页",
@@ -95,7 +102,8 @@
       "search": "搜索",
       "search-placeholder": "搜索列表",
       "no-listings-found": "未找到任何列表",
-      "no-favorites-found": "未找到收藏"
+      "no-favorites-found": "未找到收藏",
+      "current-filter": "当前筛选"
     }
   }
   

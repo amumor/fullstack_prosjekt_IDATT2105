@@ -41,10 +41,10 @@ const createListing = () => {
   <div class="fields">
     <h2>{{ $t('header.create-new-listing') }}</h2>
     <div class="text-fields">
-      <input type="text" :placeholder="$('listing.header')" required />
-      <textarea type="text" id="description" :placeholder="$('listing.description')" required />
-      <input type="text" :placeholder="$('listing.price')" required />
-      <input type="text" :placeholder="$('listing.location')" required />
+      <input type="text" :placeholder="$t('listing.header')" required />
+      <textarea type="text" id="description" :placeholder="$t('listing.description')" required />
+      <input type="text" :placeholder="$t('listing.price')" required />
+      <input type="text" :placeholder="$t('listing.location')" required />
       <div v-for="category in categories" :key="category.id">
         <label>
           <input type="checkbox" :name=category.name :value=category.name>{{ category.name }}
@@ -54,7 +54,7 @@ const createListing = () => {
     <div class="image-field">
       <form action="/upload" method="post" enctype="multipart/form-data">
         <label for="file">{{ $t('listing.upload-image') }}:</label>
-        <input type="file" id="file" :name="$('listing.file')" accept="image/*">
+        <input type="file" id="file" :name="$t('listing.file')" accept="image/*">
       </form>
     </div>
     <div class="submit-button">

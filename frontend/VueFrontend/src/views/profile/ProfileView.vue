@@ -49,20 +49,20 @@ const logout = async () => {
     <div class="options-containers">
       <ProfileOption
         class="profile-container"
-        title="My Profile"
-        shortDescription="Edit profile information"
+        :title="$t('profile.my-profile')"
+        :shortDescription="$t('profile.edit-profile-information')"
         :iconString="'material-symbols:person'"
         @click="routeTo('/edit')" />
       <ProfileOption
         class="profile-container"
-        title="Listings"
-        shortDescription="See all your listings"
+        :title="$t('listing.listings')"
+        :shortDescription="$t('listing.see-all-your-listings')"
         :iconString="'material-symbols:format-list-bulleted'"
         @click="routeTo('/myListings')" />
       <ProfileOption
         class="profile-container"
-        title="Favorites"
-        shortDescription="See all your saved favorites"
+        :title="$t('header.favorites')"
+        :shortDescription="$t('listing.see-all-your-favorites')"
         :iconString="'material-symbols:favorite'"
         @click="routeTo('/favorites')"/>
     </div>

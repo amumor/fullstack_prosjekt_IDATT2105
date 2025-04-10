@@ -13,6 +13,7 @@
       "delete": "Eliminar",
       "password": "Contraseña",
       "save-changes": "Guardar cambios",
+      "save": "Guardar",
       "create": "Crear",
       "message": "Mensaje",
       "buy": "Comprar",
@@ -51,6 +52,9 @@
       "cancelled": "Cancelado"
     },
     "listing": {
+      "listings": "Anuncios",
+      "see-all-your-listings": "Ver todos tus anuncios",
+      "see-all-your-favorites": "Ver todos tus favoritos",
       "header": "Título",
       "description": "Descripción",
       "price": "Precio",
@@ -77,13 +81,16 @@
     },
     "profile": {
       "edit-profile": "Editar perfil",
+      "name": "Nombre",
       "first-name": "Nombre",
       "last-name": "Apellido",
       "email": "Correo electrónico",
       "phone-number": "Número de teléfono",
       "password": "Contraseña",
       "confirm-password": "Confirmar contraseña",
-      "update-user-info-warning": "Actualizar la información del usuario requiere un cierre de sesión automático para que surta efecto."
+      "update-user-info-warning": "Actualizar la información del usuario requiere un cierre de sesión automático para que surta efecto.",
+      "my-profile": "Mi perfil",
+		  "edit-profile-information": "Editar información del perfil"
     },
     "pageination": {
       "page": "Página",
@@ -95,7 +102,8 @@
       "search": "Buscar",
       "search-placeholder": "Buscar anuncios",
       "no-listings-found": "No se encontraron anuncios",
-      "no-favorites-found": "No se encontraron favoritos"
+      "no-favorites-found": "No se encontraron favoritos",
+      "current-filter": "Filtro actual"
     }
   }
   

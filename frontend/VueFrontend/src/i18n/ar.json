@@ -13,6 +13,7 @@
       "delete": "حذف",
       "password": "كلمة المرور",
       "save-changes": "حفظ التغييرات",
+      "save": "حفظ",
       "create": "إنشاء",
       "message": "رسالة",
       "buy": "شراء",
@@ -51,6 +52,9 @@
       "cancelled": "تم الإلغاء"
     },
     "listing": {
+      "listings": "الإعلانات",
+      "see-all-your-listings": "عرض جميع إعلاناتك",
+      "see-all-your-favorites": "عرض جميع المفضلات",
       "header": "العنوان",
       "description": "الوصف",
       "price": "السعر",
@@ -77,13 +81,16 @@
     },
     "profile": {
       "edit-profile": "تعديل الملف الشخصي",
+      "name": "الاسم",
       "first-name": "الاسم الأول",
       "last-name": "اسم العائلة",
       "email": "البريد الإلكتروني",
       "phone-number": "رقم الهاتف",
       "password": "كلمة المرور",
       "confirm-password": "تأكيد كلمة المرور",
-      "update-user-info-warning": "تحديث معلومات المستخدم يتطلب تسجيل الخروج تلقائيًا لتفعيل التغييرات."
+      "update-user-info-warning": "تحديث معلومات المستخدم يتطلب تسجيل الخروج تلقائيًا لتفعيل التغييرات.",
+      "my-profile": "ملفي الشخصي",
+		  "edit-profile-information": "تعديل معلومات الملف الشخصي"
     },
     "pageination": {
       "page": "صفحة",
@@ -95,7 +102,8 @@
       "search": "بحث",
       "search-placeholder": "ابحث عن الإعلانات",
       "no-listings-found": "لم يتم العثور على إعلانات",
-      "no-favorites-found": "لا توجد عناصر مفضلة"
+      "no-favorites-found": "لا توجد عناصر مفضلة",
+      "current-filter": "الفلتر الحالي"
     }
   }
   

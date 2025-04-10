@@ -13,6 +13,7 @@
 		"delete": "Delete",
 		"password": "Password",
 		"save-changes": "Save changes",
+		"save": "Save",
 		"create": "Create",
 		"message": "Message",
 		"buy": "Buy",
@@ -52,6 +53,9 @@
 		"cancelled": "Cancelled"
 	},
 	"listing": {
+		"listings": "Listings",
+		"see-all-your-listings": "See all your listings",
+		"see-all-your-favorites": "See all your favorites",
 		"header": "Header",
 		"description": "Description",
 		"price": "Price",
@@ -78,13 +82,16 @@
 	},
 	"profile": {
 		"edit-profile": "Edit profile",
+		"name": "Name",
 		"first-name": "First name",
 		"last-name": "Last name",
 		"email": "Email",
 		"phone-number": "Phone number",
 		"password": "Password",
 		"confirm-password": "Confirm password",
-		"update-user-info-warning": "Updating user information requires an automatic logout to take effect."
+		"update-user-info-warning": "Updating user information requires an automatic logout to take effect.",
+		"my-profile": "My profile",
+		"edit-profile-information": "Edit profile information"
 	},
 	"pageination": {
 		"page": "Page",
@@ -96,6 +103,7 @@
 		"search": "Search",
 		"search-placeholder": "Search for listings",
 		"no-listings-found": "No listings found",
-		"no-favorites-found": "No favorites found"
+		"no-favorites-found": "No favorites found",
+		"current-filter": "Current filter"
 	}
 }

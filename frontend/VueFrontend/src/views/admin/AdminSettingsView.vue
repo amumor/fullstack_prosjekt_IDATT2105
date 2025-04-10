@@ -167,7 +167,7 @@ const registerAdmin = async () => {
         <input v-model="lastName" type="text" :placeholder="$t('profile.last-name')"/>
         <input v-model="email" type="text" :placeholder="$t('profile.email')"/>
         <input v-model="phoneNumber" type="text" :placeholder="$t('profile.phone-number')"/>
-        <input v-model="password" type="password" :placeholder="Password"/>
+        <input v-model="password" type="password" :placeholder="$t('profile.password')"/>
         <input v-model="confirmPassword" type="password" :placeholder="$t('profile.confirm-password')"/>
         <button class="basic-blue-btn" @click="registerAdmin">{{ $t('header.register') }}</button>
       </div>
