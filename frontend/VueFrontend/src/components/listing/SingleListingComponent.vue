@@ -287,7 +287,7 @@ const toggleArchive = async () => {
       <!-- Owner options -->
       <div class="owner-options">
         <template v-if="isOwner">
-          <button class="owner-btn" id="edit" @click="toEditListing">{{ $t('button.edit') }</button>
+          <button class="owner-btn" id="edit" @click="toEditListing">{{ $t('button.edit') }}</button>
           <button class="owner-btn" id="delete" @click=delListing>{{ $t('button.delete') }}</button>
         </template>
       </div>
