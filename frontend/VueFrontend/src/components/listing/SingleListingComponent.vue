@@ -16,7 +16,11 @@ const image = 'https://iqboatlifts.com/wp-content/uploads/2018/06/Yacht-vs-Boat-
 // Verify token
 const checkToken = () => {
   if (!token && user.isLoggedIn) {
-    user.logout();
+    try{
+      user.logout();
+    } catch (err) {
+      console.error('Error logging out:', err);
+    }
     console.error('Token is expired, user logged out');
   }
 }
