@@ -62,7 +62,7 @@ const toListingView = () => {
   <button class="listings" @click="toListingView">
     <span class="image-container">
       <img class="image-item" :src="image" alt="Boat">
-      <span class="price">{{ props.price + ' kr' }}</span>
+      <span class="price">{{ props.price + 'kr' }}</span>
     </span>
     <span class="description">
       <span class="town">{{ address }}</span>
@@ -95,14 +95,15 @@ const toListingView = () => {
 .image-container {
   position: relative;
   overflow: hidden;
-  border-radius: 10px;
   margin: 10px  10px 0 10px ;
+ 
 }
 
 .image-item {
   width: 200px;
   height: auto;
   display: block;
+  border-radius: 10px;
 }
 
 .price {

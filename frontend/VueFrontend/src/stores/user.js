@@ -10,7 +10,6 @@ export const userStore = defineStore('user', {
         phoneNumber: '',
         isLoggedIn: false,
     }),
-    persist: true,
     
     actions: {
         setUser(user) {
