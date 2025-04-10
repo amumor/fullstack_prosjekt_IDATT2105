@@ -3,14 +3,12 @@ import { ref, onMounted, watch, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { Icon } from '@iconify/vue'
 import { storeToRefs } from 'pinia';
-import { jwtDecode } from 'jwt-decode';
 
 import ListingMapComponent from '@/components/listing/ListingMapComponent.vue'
 import { userStore } from '@/stores/user.js'
-import { getListingById, deleteListing } from '@/services/ListingService.js'
+import { getListingById, deleteListing, updateListing } from '@/services/ListingService.js'
 import { createBookmark, deleteBookmark, getUserBookmarks } from '../../services/BookmarkService';
 import { useListingStore } from '@/stores/listing.js'
-import { getUserById } from '../../services/UserService';
 
 const listing = ref(null); 
 const image = 'https://iqboatlifts.com/wp-content/uploads/2018/06/Yacht-vs-Boat-Whats-the-Difference-Between-the-Two-1024x571.jpg';
@@ -142,6 +140,31 @@ const toEditListing = () => {
 const toggleArchive = () => {
   checkToken();
   // use updateListing function to archive the listing
+  if(isArchived){
+    updateListing(listing.value.id, {
+      ...listing.value,
+      listingStatus: 'INACTIVE'
+    }, token)
+      .then(() => {
+        console.log('Listing archived successfully!');
+        listing.value.listingStatus = 'INACTIVE';
+      })
+      .catch(err => {
+        console.error('Error archiving listing:', err);
+      });
+  } else {
+    updateListing(listing.value.id, {
+      ...listing.value,
+      listingStatus: 'ACTIVE'
+    }, token)
+      .then(() => {
+        console.log('Listing unarchived successfully!');
+        listing.value.listingStatus = 'ACTIVE';
+      })
+      .catch(err => {
+        console.error('Error unarchiving listing:', err);
+      });
+  }
   isArchived.value = !isArchived.value;
 }
 
@@ -311,7 +334,6 @@ const formatDateTime = (dateTimeString) => {
   transition: all 0.3s ease;
 
   flex: 1;
-  
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -366,9 +388,9 @@ const formatDateTime = (dateTimeString) => {
   top: 0; left: 0; right: 0; bottom: 0;
   transition: 0.4s;
   border-radius: 5px;
-  width: 140px;
+  width: 105px;
   height: 40px;
-  margin: 0 50px 50px 630px;
+  margin: 0 50px 50px 650px;
 }
 
 .slider:before {
@@ -389,19 +411,19 @@ input:checked + .slider {
 
 input:checked + .slider:before {
   background-color: white;
-  margin-right: 20px;
-  transform: translateX(100px);
+  transform: translateX(65px);
 }
 
 input:checked + .slider .switch-label {
   color: white;
+  transform: translate(-75%, -50%);
 }
 
 .switch-label {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-10%, -50%);
   font-size: 14px;
   color: #333333;
   pointer-events: none;
