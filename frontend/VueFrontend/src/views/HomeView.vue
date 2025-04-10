@@ -51,7 +51,7 @@ const handleCategoryFilterClick = async (categoryName) => {
   try {
     listings.value = await getListingsByCategory(categoryName, {page: 1, size: 10});
     console.log("Listings value after filtering", listings.value)
-    currentFilter.value = categoryName;
+    currentFilter.value = categoryName + " (category)";
 
   } catch (error) {
     console.log(error);
