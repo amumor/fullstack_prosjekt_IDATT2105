@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class ImageController {
 
-    private final Path imageBasePath = Paths.get("app/uplaods");
+    private final Path imageBasePath = Paths.get("app/uploads");
 
     /**
      * Serves an image from the local file system.
