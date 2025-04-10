@@ -11,6 +11,7 @@ import { getListingById, deleteListing } from '@/services/ListingService.js'
 import { createBookmark, deleteBookmark, getUserBookmarks } from '../../services/BookmarkService';
 import { useListingStore } from '@/stores/listing.js'
 import { getUserById } from '../../services/UserService';
+import { fetchImage } from '@/services/ImageService.js';
 
 const listing = ref(null); 
 const image = 'https://iqboatlifts.com/wp-content/uploads/2018/06/Yacht-vs-Boat-Whats-the-Difference-Between-the-Two-1024x571.jpg';
@@ -59,6 +60,13 @@ onMounted(async () => {
   } else {
     isOwner.value = false;
   }
+});
+
+const getImageUrl = computed(() => {
+  if (listing.value && listing.value.imageUrls && listing.value.imageUrls.length > 0) {
+    return fetchImage(listing.value.imageUrls);
+  }
+  return 'https://placehold.co/600x400?text=No+Image';
 });
 
 // Fetch user bookmarks only if the user is logged in
@@ -158,7 +166,7 @@ const formatDateTime = (dateTimeString) => {
 <div class="display-page-container" v-if="listing">
   <!-- Image container -->
   <div class="image-container">
-    <img class="image-item" :src="image" alt="Front image">
+    <img class="image-item" :src="getImageUrl" alt="Front image">
     <button v-if="user.isLoggedIn" class="favorite" :class="{ 'isFavorite': isFavorite }" @click="toggleFavorite">
       <Icon icon="material-symbols:favorite" width="40" height="40" />
     </button>
