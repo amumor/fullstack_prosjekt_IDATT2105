@@ -6,7 +6,7 @@
  */
 export async function fetchImage(url) {
     try {
-        const baseURL = 'http://localhost:8080/api/v1/';
+        const baseURL = 'http://localhost:8080';
         url = baseURL + url;
         console.log(url);
         const response = await fetch(url, { method: 'GET' });

@@ -60,7 +60,8 @@ public class SecurityConfiguration {
                                 "/api/v1/listing/get-by-category",
                                 "/api/v1/listing/get-by-seller",
                                 "/api/v1/listing/get-by-title",
-                                "/api/v1/listing/id/**"
+                                "/api/v1/listing/id/**",
+                                "/images/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
