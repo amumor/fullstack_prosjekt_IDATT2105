@@ -7,11 +7,9 @@ import {isTokenExpired} from "@/services/TokenService.js";
 import {getAllCategories} from "@/services/CategoryService.js";
 import {onMounted, ref} from "vue";
 import router from "@/router/index.js";
+import {getListingsByTitle} from "@/services/ListingService.js";
 
 document.body.style.backgroundColor = "#ffffff";
-
-const searchFunction = () => {
-};
 
 //Get images from backend
 // const listings = [
@@ -38,9 +36,12 @@ const searchFunction = () => {
 //   {id: 3, name: 'Motorcycles'},
 //   {id: 4, name: 'Real Estate'},
 // ];
+
 const user = userStore()
 const categories = ref([]);
 const listings = ref([]);
+const searchInput = ref("");
+const noResults = ref(false);
 onMounted(async () => {
   await localGetSuggestions();
 })
@@ -60,6 +61,8 @@ const handleCategoryFilterClick = async (categoryName) => {
 const handleFilterReset = async () => {
   await localGetSuggestions();
   currentFilter.value = "None";
+  noResults.value = false;  
+  searchInput.value = "";
 }
 
 const localGetSuggestions = async () => {
@@ -92,6 +95,22 @@ const localGetSuggestions = async () => {
   }
 }
 
+const searchFunction = async() => {
+  try {
+    const data = await getListingsByTitle(searchInput.value);
+    if (data.listings.length === 0) {
+      noResults.value = true;
+      console.log('No results found for title:', searchInput.value);
+      console.log('noresult:', noResults.value);
+    }
+    listings.value = data.listings;
+    currentFilter.value = searchInput.value;
+  } catch (error) {
+    noResults.value = true;
+    listings.value = [];
+    console.error('Error fetching listings:', error);
+  }
+};
 </script>
 
 <template>
@@ -100,7 +119,7 @@ const localGetSuggestions = async () => {
 
     <!-- Search bar -->
     <div class="search-container">
-      <input type="text" class="search-input" placeholder="Search for listings..." id="searchInput">
+      <input v-model="searchInput" type="text" class="search-input" placeholder="Search for listings..." id="searchInput">
       <button class="search-btn" @click="searchFunction">Search</button>
       <button class="map-btn">
         <router-link to="/map" id="router-link">Map</router-link>
@@ -117,7 +136,7 @@ const localGetSuggestions = async () => {
     </div>
 
     <!-- Listings -->
-    <div class="listings">
+    <div class="listings" v-if="!noResults">
       <div v-for="listing in listings" :key="listing.id">
         <ListingPreviewComponent
             :id="listing.id"
@@ -126,6 +145,9 @@ const localGetSuggestions = async () => {
             :town="listing.town"
             :title="listing.title"/>
       </div>
+    </div>
+    <div v-else>
+      <h1>No results found</h1>
     </div>
   </div>
 </template>
@@ -169,6 +191,12 @@ const localGetSuggestions = async () => {
 .search-btn:hover, .map-btn:hover {
   background-color: #f1f1f1;
   transform: scale(1.05);
+}
+
+h1 {
+  text-align: center;
+  margin-right: 40px;
+  margin-top: 150px;
 }
 
 /* Categories */
