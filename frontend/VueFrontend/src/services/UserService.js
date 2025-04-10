@@ -53,19 +53,16 @@ export function deleteUser(id, token) {
  *   .then(user => console.log('User retrieved:', user))
  *   .catch(error => console.error('Failed to get user:', error));
  */
-export function getUserByEmail(email, token) {
-    const client = new ApiClient(baseURL);
-    client.timeout = timeout;
-    client.authentications.bearerAuth = {type: 'bearer', accessToken: token};
-
-    const userApi = new UserControllerApi(client);
-    return userApi.getUserByEmail(email)
-        .then(response_and_data => response_and_data)
-        .catch(error => {
-            console.error('Failed to get user by email:', error);
-            throw error;
+export const getUserByEmail = (token, email) => {
+    return request
+        .get(`http://localhost:8080/api/v1/users/email/${email}`)
+        .set('Authorization', `Bearer ${token}`)
+        .then(res => res.body)
+        .catch(err => {
+            console.error('Failed to get user by email:', err);
+            throw err;
         });
-}
+};
 
 /**
  * Retrieves a user by their ID.
