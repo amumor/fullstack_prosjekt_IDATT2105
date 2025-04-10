@@ -6,6 +6,7 @@ import { getUserBookmarks } from '../../services/BookmarkService';
 import { userStore } from '@/stores/user.js'
 import { ref } from 'vue';
 import { getListingById } from '../../services/ListingService';
+import { fetchImage } from '@/services/ImageService.js';
 
 /**
 const listings = [
@@ -79,7 +80,7 @@ fetchBookmarks();
       <!-- No image -->
       <ListingPreviewComponent
         :id="listing.id"
-        
+        :image="listing.imageUrls && listing.imageUrls.length > 0 ? listing.imageUrls[0] : null"
         :price="listing.price"
         :latitude="listing.latitude"
         :longitude="listing.longitude"
