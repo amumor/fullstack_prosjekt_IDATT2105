@@ -1,14 +1,15 @@
 <script setup>
-import { defineProps } from 'vue';
+import { defineProps, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import { get } from 'superagent';
 import { useListingStore } from '@/stores/listing.js';
+import { fetchImage } from '@/services/ImageService.js';
 
 const props = defineProps({
   id: Number,
-  // image: String,
+  image: String,
   price: String,
   latitude: Number,
   longitude: Number,
@@ -17,8 +18,13 @@ const props = defineProps({
 
 // Get address from coordinates
 const address = ref('Loading address...');
-const image = 'https://iqboatlifts.com/wp-content/uploads/2018/06/Yacht-vs-Boat-Whats-the-Difference-Between-the-Two-1024x571.jpg';
 
+const getImageUrl = computed(() => {
+  if (props.image) {
+    return fetchImage(props.image);
+  }
+  return 'https://placehold.co/600x400?text=No+Image';
+});
 
 /**
 const getAddress = async () => {
@@ -61,7 +67,7 @@ const toListingView = () => {
 <template>
   <button class="listings" @click="toListingView">
     <span class="image-container">
-      <img class="image-item" :src="image" alt="Boat">
+      <img class="image-item" :src="getImageUrl" alt="Listing image">
       <span class="price">{{ props.price + ' kr' }}</span>
     </span>
     <span class="description">
