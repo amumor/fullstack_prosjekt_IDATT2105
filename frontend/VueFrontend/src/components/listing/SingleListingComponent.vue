@@ -390,7 +390,7 @@ const formatDateTime = (dateTimeString) => {
   border-radius: 5px;
   width: 105px;
   height: 40px;
-  margin: 0 50px 50px 650px;
+  margin: 0 50px 50px 655px;
 }
 
 .slider:before {
