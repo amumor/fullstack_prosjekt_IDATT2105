@@ -3,9 +3,15 @@ import {onMounted, ref} from 'vue'
 import {getAllCategories} from "@/services/CategoryService.js";
 import {userStore} from "@/stores/user.js";
 import {isTokenExpired} from "@/services/TokenService.js";
+import {createListing2} from "@/services/ListingService.js";
+import router from "@/router/index.js";
+import SuccessFailModal from "@/components/modal/SuccessFailModal.vue";
 
 const categories = ref([]);
 const selectedCategories = ref([]);
+
+const showResultModal = ref(false);
+const resultModalMessage = ref('');
 
 const title = ref('');
 const description = ref('');
@@ -28,39 +34,69 @@ const localGetCategories = async () => {
 };
 
 const handleCreateListing = async () => {
-  const formData = new FormData();
-  formData.append('title', title.value);
-  formData.append('description', description.value);
-  formData.append('price', price.value);
-  formData.append('location', location.value);
-  formData.append('coordinates', JSON.stringify(coordinates.value));
-  formData.append('categories', JSON.stringify(selectedCategories.value));
 
-  images.value.forEach((image) => {
-    formData.append('images', image);
-  });
+  /* TODO: dette må inn som en requestPart
+    private String title;
+    private String description;
+    private String categoryName;
+    private ListingStatus listingStatus;
+    private double price;
+    private double latitude;
+    private double longitude;
+    private List<String> imagesToDelete;
+   */
+  const listing = {
+    title: title.value,
+    description: description.value,
+    categoryName: selectedCategory.value,
+    listingStatus: 'ACTIVE',
+    price: price.value,
+    latitude: coordinates.value[0],
+    longitude: coordinates.value[1],
+  };
+  const formData = new FormData();
+  formData.append('listing', JSON.stringify(listing));
+
+  // images.value.forEach((image) => { // TODO: implement when images is fixed
+  //   formData.append('images', image);
+  // });
+
+  const token = user.token;
+  if (isTokenExpired(token)) {
+    user.logout();
+    await router.push('/login');
+    return;
+  }
 
   try {
-    // Call the API to create the listing
-    // await createListingAPI(formData);
-    console.log('Listing created successfully');
+    const response = await createListing2(formData, token);
+    console.log('Listing created successfully:', response);
+    resultModalMessage.value = 'Listing created successfully!';
+    showResultModal.value = true;
   } catch (error) {
     console.error('Error creating listing:', error);
   }
 };
 
+const handleFileChange = () => {
+
+}
+
 onMounted(() => {
   localGetCategories();
+
+  // Check if the user is logged in and if the token is expired, if not logout
   const token = user.token;
   if (isTokenExpired(token)) {
     user.logout();
+    router.push("/login")
   }
 });
 </script>
 
 <template>
   <div class="display-page-container">
-    <form @submit.prevent="createListing" class="fields">
+    <form @submit.prevent="handleCreateListing" class="fields">
       <h2>Create a new listing</h2>
       <div class="text-fields">
         <input v-model="title" type="text" placeholder="Header" required />
@@ -81,13 +117,18 @@ onMounted(() => {
       </div>
       <div class="image-field">
         <label for="file">Upload image:</label>
-        <input type="file" id="file" name="file" accept="image/*" @change="handleFileChange" />
+        <input type="file" id="file" name="file" accept="image/*" @change="handleFileChange" disabled="disabled"/>
       </div>
       <div class="submit-button">
-        <button type="submit" class="basic-blue-btn">Create</button>
+        <button type="submit" class="basic-blue-btn" @click="handleCreateListing">Create</button>
       </div>
     </form>
   </div>
+  <SuccessFailModal
+      v-if="showResultModal"
+      :message="resultModalMessage"
+      @close="showResultModal = false"
+  />
 </template>
 
 <style scoped>
