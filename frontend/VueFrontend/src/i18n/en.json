@@ -1,5 +1,14 @@
 {
-	"Logo": "FIND.no",
+	"logo": "FIND.no",
+	"languages": {
+		"language": "EN",
+		"english": "English",
+		"norwegian": "Norsk",
+		"french": "French",
+		"spanish": "Spanish",
+		"mandarin": "Chinese (mandarin)",
+		"arabic": "Arabic"
+	},
 	"button": {
 		"delete": "Delete",
 		"password": "Password",
@@ -19,6 +28,7 @@
 		"make-bid": "Make bid",
 		"reset": "Reset"
 	},
+
 	"header": {
 		"edit-listing": "Edit Listing",
 		"create-new-listing": "Create New Listing",
