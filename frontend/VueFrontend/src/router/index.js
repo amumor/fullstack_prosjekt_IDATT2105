@@ -13,7 +13,7 @@ import EditListingView from '@/views/listing/EditListingView.vue'
 import AdminSettingsView from '@/views/admin/AdminSettingsView.vue'
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHistory(),
   routes: [
     {
       path: '/',
