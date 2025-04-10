@@ -2,6 +2,9 @@
 import { ref, onMounted } from 'vue';
 import { Icon } from '@iconify/vue'
 import { userStore } from '@/stores/user.js';
+import { useI18n } from 'vue-i18n'
+
+const { locale } = useI18n()
 
 const user = userStore();
 
@@ -20,15 +23,24 @@ const checkScreenSize = () => {
   if (!isMobile.value) isOpen.value = false;
 };
 
+// Set language based on user preference
+const setLanguage = (lang) => {
+  locale.value = lang
+  localStorage.setItem('lang', lang) 
+}
+
 // Detect screen resize
 onMounted(() => {
   window.addEventListener('resize', checkScreenSize);
+
+  const savedLang = localStorage.getItem('lang')
+  if (savedLang) locale.value = savedLang
 });
 </script>
 
 <template>
 <div class="navbar">
-  <router-link to="/" id="header">FIND.no</router-link>
+  <router-link to="/" id="header">{{ $t('logo') }}</router-link>
 
   <!-- Desktop Menu -->
   <template v-if="!isMobile">
@@ -37,10 +49,10 @@ onMounted(() => {
 
         <!-- Logged in menu -->
         <template v-if="user.isLoggedIn">
-          <router-link to="/newListing" id="router-link">New listing</router-link>
-          <router-link to="/profile/favorites" id="router-link">Favorites</router-link>
-          <router-link to="/inbox" id="router-link">Inbox</router-link>
-          <router-link to="/profile" id="router-link">Profile</router-link>
+          <router-link to="/newListing" id="router-link">{{ $t('header.new-listing') }}</router-link>
+          <router-link to="/profile/favorites" id="router-link">{{ $t('header.favorites') }}</router-link>
+          <router-link to="/inbox" id="router-link">{{ $t('header.inbox') }}</router-link>
+          <router-link to="/profile" id="router-link">{{ $t('header.profile') }}</router-link>
 
           <!-- Admin settings -->
           <router-link to="/admin" id="admin-settings" v-if="isAdmin">
@@ -50,7 +62,7 @@ onMounted(() => {
 
         <!-- Logged out menu -->
         <template v-else>
-          <router-link to="/login" id="router-link">Log in</router-link>
+          <router-link to="/login" id="router-link">{{ $t('header.login') }}</router-link>
         </template>
       </div>
     </div>
@@ -65,10 +77,10 @@ onMounted(() => {
         <ul v-show="isOpen" class="dropdown">
           <!-- Logged In Menu -->
           <template v-if="user.isLoggedIn" v-show="isOpen">
-            <li><router-link to="/newListing" @click="toggleMenu" id="router-link">New listing</router-link></li>
-            <li><router-link to="/profile/favorites" @click="toggleMenu" id="router-link">Favorites</router-link></li>
-            <li><router-link to="/inbox" @click="toggleMenu" id="router-link">Inbox</router-link></li>
-            <li><router-link to="/profile" @click="toggleMenu" id="router-link">Profile</router-link></li>
+            <li><router-link to="/newListing" @click="toggleMenu" id="router-link">{{ $t('button.new-listing') }}</router-link></li>
+            <li><router-link to="/profile/favorites" @click="toggleMenu" id="router-link">{{ $t('button.favorites') }}</router-link></li>
+            <li><router-link to="/inbox" @click="toggleMenu" id="router-link">{{ $t('button.inbox') }}</router-link></li>
+            <li><router-link to="/profile" @click="toggleMenu" id="router-link">{{ $t('button.profile') }}</router-link></li>
 
             <!-- Admin settings -->
             <li><router-link to="/admin" @click="toggleMenu" id="admin-settings" v-if="isAdmin">
@@ -85,6 +97,21 @@ onMounted(() => {
       </div>
     </div>
   </template>
+
+  <!-- Language Dropdown -->
+  <div class="language-dropdown">
+    <button class="dropbtn">{{ $t('languages.language') }}
+      <Icon :icon="'material-symbols:globe'" width="20" height="20" />
+    </button>
+    <div class="language-content">
+      <a href="#" @click="setLanguage('en')">{{ $t('languages.english') }}</a>
+      <a href="#" @click="setLanguage('no')">{{ $t('languages.norwegian') }}</a>
+      <a href="#" @click="setLanguage('fr')">{{ $t('languages.french') }}</a>
+      <a href="#" @click="setLanguage('es')">{{ $t('languages.spanish') }}</a>
+      <a href="#" @click="setLanguage('cmn')">{{ $t('languages.mandarin') }}</a>
+      <a href="#" @click="setLanguage('ar')">{{ $t('languages.arabic') }}</a>
+    </div>
+  </div>
 </div>
 </template>
 
@@ -116,7 +143,6 @@ onMounted(() => {
 #admin-settings {
   text-decoration: none;
   color: #333;
-  margin-right: 20px;
 }
 
 .desktop-navbar {
@@ -156,7 +182,6 @@ onMounted(() => {
 /* Mobile Navbar */
 .mobile-navbar {
   display: flex;
-  justify-content: space-between;
   align-items: center;
   width: 100%;
 }
@@ -171,54 +196,115 @@ onMounted(() => {
   font-size: 28px;
   background: none;
   border: none;
-  color: black;
+  color: #333;
 
   cursor: pointer;
   padding: 20px;
   transition: color 0.3s;
   position: absolute;
-  right: 0;
+  right: 120px;
 }
 
 .menu-btn:hover {
   color: #0056b3;
 }
 
-/* Dropdown menu */
+/* Dropdown language menu */
 .dropdown {
-  background-color: white;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-
+  display: none;
+  flex-direction: column;
+  background-color: #ffffff;
   position: absolute;
   top: 60px;
-  right: 20px;
-  padding: 10px;
-  border-radius: 4px;
-  list-style-type: none;
+  right: 220px;
   width: 200px;
-  z-index: 1000;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  border-radius: 8px;
+  
+  padding: 10px 0;
+}
+
+.dropdown[style*="display: block"] {
+  display: flex !important;
 }
 
 .dropdown li {
-  padding: 10px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
 .dropdown li a {
   text-decoration: none;
-  color: black;
+  color: #333;
   display: block;
+  padding: 10px 15px;
+  transition: background-color 0.3s;
 }
 
 .dropdown li a:hover {
   background-color: #f1f1f1;
 }
 
-/* When isOpen is true, show dropdown */
-.dropdown[style*="display: block"] {
+/* Language Dropdown */
+.language-dropdown {
+  position: relative;
+  display: inline-block;
+  margin-left: 30px;
+  z-index: 999;
+  
+}
+
+.dropbtn {
+  color: #333;
+  padding: 7px 10px;
+  font-size: 18px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-right: 10px;
+  margin-top: 2px;
+  transition: background-color 0.3s;
+  border: 1px solid #333;
+}
+
+.dropbtn:hover {
+  background-color: #f0f0f0;
+}
+
+.language-content {
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: #ffffff;
+  min-width: 160px;
+  border-radius: 5px;
+  overflow: hidden;
+  padding: 5px 0;
+  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+.language-dropdown:hover .language-content {
   display: block;
 }
 
-/* Media Query for Mobile */
+.language-content a {
+  color: #333;
+  padding: 10px 15px;
+  text-decoration: none;
+  display: block;
+  font-size: 14px;
+}
+
+.language-content a:hover {
+  background-color: #f0f0f0;
+}
+
+/* Media for Mobile */
 @media (max-width: 768px) {
   .desktop-navbar {
     display: none;

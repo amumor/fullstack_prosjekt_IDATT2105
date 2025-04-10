@@ -98,30 +98,30 @@ const saveChanges = () => {
 
 <template>
   <div class="display-page-container">
-    <h2 class="display-credentials-title">Edit Profile</h2>
+    <h2 class="display-credentials-title">{{ $t('profile.edit-profile') }}</h2>
     <div class="display-credentials-content">
       <div class="display-credentials-item">
-        <label for="firstName">First name:</label>
+        <label for="firstName">{{ $t('profile.first-name') }}:</label>
         <input type="text" id="first-name" v-model="newFirstName"/>
       </div>
       <div class="display-credentials-item">
-        <label for="lastName">Last name:</label>
+        <label for="lastName">{{ $t('profile.last-name') }}:</label>
         <input type="text" id="last-name" v-model="newLastName"/>
       </div>
       <div class="display-credentials-item">
-        <label for="email">Email:</label>
+        <label for="email">{{ $t('profile.email') }}:</label>
         <input type="email" id="email" v-model="newEmail"/>
       </div>
       <div class="display-credentials-item">
-        <label for="phoneNumber">Phone number:</label>
+        <label for="phoneNumber">{{ $t('profile.phone-number') }}:</label>
         <input type="text" id="phone-number" v-model="newPhoneNumber"/>
       </div>
       <div class="display-credentials-item">
-        <label for="Password">Password:</label>
+        <label for="Password">{{ $t('profile.password') }}:</label>
         <input type="password" id="password" v-model="newPassword"/>
       </div>
-      <button @click="saveChanges">Save changes</button>
-      <p class="restart-note">Updating user information requires an automatic logout to take effect.</p>
+      <button @click="saveChanges">{{ $t('button.save-changes') }}</button>
+      <p class="restart-note">{{ $t('update-user-info-warning')}}</p>
     </div>
   </div>
   <SuccessFailModal

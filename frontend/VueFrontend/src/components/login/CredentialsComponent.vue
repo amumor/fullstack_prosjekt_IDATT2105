@@ -238,37 +238,37 @@ const toggleForm = () => {
 
 <template>
   <div class="display-page-container">
-    <router-link to="/" id="title-header">FIND.no</router-link>
+    <router-link to="/" id="title-header">{{ $t('logo') }}</router-link>
 
     <template v-if="isUserRegistered">
       <div class="login">
-        <h2>Log in</h2>
+        <h2>{{ $t('header.login') }}</h2>
         <div class="fields">
-          <input v-model="email" type="text" placeholder="E-mail"/>
-          <input v-model="password" type="password" placeholder="Password"/>
-          <button class="basic-blue-btn" @click="login">Log in</button>
+          <input v-model="email" type="text" :placeholder="$t('profile.email')"/>
+          <input v-model="password" type="password" :placeholder="$t('profile.password')"/>
+          <button class="basic-blue-btn" @click="login">{{ $t('header.login') }}</button>
         </div>
         <div class="to-sign-up">
-          <p>Don't have an account yet?</p>
-          <button @click="toggleForm">Sign up</button>
+          <p>{{ $t('login.dont-have-an-account-yet') }}</p>
+          <button @click="toggleForm">{{ $t('button.sign-up') }}</button>
         </div>
       </div>
     </template>
     <template v-else>
       <div class="sign-up">
-        <h2>Register</h2>
+        <h2>{{ $t('header.register') }}</h2>
         <div class="fields">
-          <input v-model="firstName" type="text" placeholder="First name"/>
-          <input v-model="lastName" type="text" placeholder="Last name"/>
-          <input v-model="email" type="text" placeholder="E-mail"/>
-          <input v-model="phoneNumber" type="text" placeholder="Phone number"/>
-          <input v-model="password" type="password" placeholder="Password"/>
-          <input v-model="confirmPassword" type="password" placeholder="Confirm password"/>
-          <button class="basic-blue-btn" @click="register">Register</button>
+          <input v-model="firstName" type="text" :placeholder="$t('profile.first-name')"/>
+          <input v-model="lastName" type="text" :placeholder="$t('profile.last-name')"/>
+          <input v-model="email" type="text" :placeholder="$t('profile.email')"/>
+          <input v-model="phoneNumber" type="text" :placeholder="$t('profile.phone-number')"/>
+          <input v-model="password" type="password" :placeholder="$t('profile.password')"/>
+          <input v-model="confirmPassword" type="password" :placeholder="$t('profile.confirm-password')"/>
+          <button class="basic-blue-btn" @click="register">{{ $t('header.register') }}</button>
         </div>
         <div class="to-login">
-          <p>Already have an account?</p>
-          <button @click="toggleForm">Log in</button>
+          <p>{{ $t('login.already-have-an-account') }}</p>
+          <button @click="toggleForm">{{ $t('header.login') }}</button>
         </div>
       </div>
     </template>

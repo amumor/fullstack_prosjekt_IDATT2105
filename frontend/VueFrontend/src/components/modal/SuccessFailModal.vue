@@ -2,7 +2,7 @@
   <div class="modal-overlay" @click.self="closeModal">
     <div class="modal-content">
       <p>{{ message }}</p>
-      <button class="modal-close-btn" @click="closeModal">Close</button>
+      <button class="modal-close-btn" @click="closeModal">{{ $t('button.close') }}</button>
     </div>
   </div>
 </template>

@@ -11,32 +11,6 @@ import {getListingsByTitle} from "@/services/ListingService.js";
 
 document.body.style.backgroundColor = "#ffffff";
 
-//Get images from backend
-// const listings = [
-//   {
-//     id: 1,
-//     price: '100 mill',
-//     image: 'https://iqboatlifts.com/wp-content/uploads/2018/06/Yacht-vs-Boat-Whats-the-Difference-Between-the-Two-1024x571.jpg',
-//     town: 'Elverum',
-//     title: 'Big boat 1',
-//   },
-//   {
-//     id: 2,
-//     price: '60 mill',
-//     image: 'https://iqboatlifts.com/wp-content/uploads/2018/06/Yacht-vs-Boat-Whats-the-Difference-Between-the-Two-1024x571.jpg',
-//     town: 'Baerum',
-//     title: 'Big Boat 2',
-//   },
-// ];
-
-// //Get categories from backend
-// const categories = [
-//   {id: 1, name: 'Boats'},
-//   {id: 2, name: 'Cars'},
-//   {id: 3, name: 'Motorcycles'},
-//   {id: 4, name: 'Real Estate'},
-// ];
-
 const user = userStore()
 const categories = ref([]);
 const listings = ref([]);
@@ -142,9 +116,9 @@ const prevPage = () => {
 
     <!-- Search bar -->
     <div class="search-container">
-      <input v-model="searchInput" type="text" class="search-input" placeholder="Search for listings..." id="searchInput">
-      <button class="search-btn" @click="searchFunction">Search</button>
-      <router-link class="map-btn" to="/map" id="router-link">Map</router-link>
+      <input v-model="searchInput" type="text" class="search-input" :placeholder="$t('home.search-placeholder') + '...'" id="searchInput">
+      <button class="search-btn" @click="searchFunction">{{ $t('home.search') }}</button>
+      <router-link class="map-btn" to="/map" id="router-link">{{ $t('map.map') }}</router-link>
   
     </div>
 
@@ -153,8 +127,8 @@ const prevPage = () => {
       <div v-for="category in categories" :key="category.id">
         <button id="category-btn" @click="() => handleCategoryFilterClick(category.name)">{{ category.name }}</button>
       </div>
-      <button id="category-btn" @click="handleFilterReset">Reset</button>
-      <h3>Current filter: {{currentFilter}}</h3>
+      <button id="category-btn" @click="handleFilterReset">{{ $t('button.reset') }}</button>
+      <h3>{{ $t('home.current-filter') }}: {{currentFilter}}</h3>
     </div>
 
     <!-- Listings -->
@@ -170,14 +144,14 @@ const prevPage = () => {
       </div>
     </div>
     <div v-else>
-      <h1>No results found</h1>
+      <h1>{{ $('home.no-listings-found') }}</h1>
     </div>
 
     <!-- Pagination controls -->
     <div class="pagination-controls">
-      <button @click="prevPage" :disabled="currentPage === 1">Previous</button>
-      <span>Page {{ currentPage }} of {{ totalPages }}</span>
-      <button @click="nextPage" :disabled="currentPage === totalPages">Next</button>
+      <button @click="prevPage" :disabled="currentPage === 1">{{ $t('pageination.previous') }}</button>
+      <span>{{ $t('pageination.page') }} {{ currentPage }} {{ $t('pageination.of') }} {{ totalPages }}</span>
+      <button @click="nextPage" :disabled="currentPage === totalPages">{{ $t('pageination.next') }}</button>
     </div>
   </div>
 </template>

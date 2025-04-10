@@ -1,0 +1,109 @@
+{
+    "logo": "FIND.no",
+    "languages": {
+      "language": "NO",
+      "english": "Engelsk",
+      "norwegian": "Norsk",
+      "french": "Fransk",
+      "spanish": "Spansk",
+      "mandarin": "Kinesisk (mandarin)",
+      "arabic": "Arabisk"
+    },
+    "button": {
+      "delete": "Slett",
+      "password": "Passord",
+      "save-changes": "Lagre endringer",
+      "save": "Lagre",
+      "create": "Opprett",
+      "message": "Melding",
+      "buy": "Kjøp",
+      "send": "Send",
+      "edit": "Rediger",
+      "sign-up": "Registrer deg",
+      "close": "Lukk",
+      "go-back": "Gå tilbake",
+      "logout": "Logg ut",
+      "cancel": "Avbryt",
+      "accept": "Godta",
+      "reject": "Avslå",
+      "make-bid": "Gi bud",
+      "reset": "Tilbakestill"
+    },
+    "header": {
+      "edit-listing": "Rediger annonse",
+      "create-new-listing": "Opprett ny annonse",
+      "login": "Logg inn",
+      "register": "Registrer",
+      "admin-settings": "Admininnstillinger",
+      "register-admin": "Registrer administrator",
+      "messages": "Meldinger",
+      "new-listing": "Ny annonse",
+      "favorites": "Favoritter",
+      "inbox": "Innboks",
+      "profile": "Profil"
+    },
+    "chat": {
+      "bid": "Bud",
+      "price": "Pris",
+      "accepted": "Akseptert",
+      "rejected": "Avslått",
+      "make-a-bid": "Gi et bud",
+      "no-messages-yet": "Ingen meldinger ennå",
+      "cancelled": "Kansellert"
+    },
+    "listing": {
+      "listings": "Annonser",
+      "see-all-your-listings": "Se alle dine annonser",
+      "see-all-your-favorites": "Se alle dine favoritter",
+      "header": "Tittel",
+      "description": "Beskrivelse",
+      "price": "Pris",
+      "category": "Kategori",
+      "location": "Sted",
+      "images": "Bilder",
+      "delete": "Slett",
+      "upload-image": "Last opp bilde",
+      "activeCL": "AKTIV",
+      "inactiveCL": "INAKTIV",
+      "last-edited": "Sist redigert",
+      "file": "Fil"
+    },
+    "map": {
+      "map": "Kart",
+      "loading-map": "Laster kart"
+    },
+    "login": {
+      "username": "Brukernavn",
+      "password": "Passord",
+      "register": "Registrer",
+      "dont-have-an-account-yet": "Har du ikke en konto ennå?",
+      "already-have-an-account": "Har du allerede en konto?"
+    },
+    "profile": {
+      "edit-profile": "Rediger profil",
+      "name": "Navn",
+      "first-name": "Fornavn",
+      "last-name": "Etternavn",
+      "email": "E-post",
+      "phone-number": "Telefonnummer",
+      "password": "Passord",
+      "confirm-password": "Bekreft passord",
+      "update-user-info-warning": "Oppdatering av brukerinfo krever automatisk utlogging for å tre i kraft.",
+      "my-profile": "Min profil",
+		  "edit-profile-information": "Rediger profilinformasjon"
+    },
+    "pageination": {
+      "page": "Side",
+      "of": "av",
+      "next": "Neste",
+      "previous": "Forrige"
+    },
+    "home": {
+      "search": "Søk",
+      "search-placeholder": "Søk etter annonser",
+      "no-listings-found": "Ingen annonser funnet",
+      "no-favorites-found": "Ingen favoritter funnet",
+      "current-filter": "Nåværende filter"
+    }
+  }
+  

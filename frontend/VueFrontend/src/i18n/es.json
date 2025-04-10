@@ -1,0 +1,109 @@
+{
+    "logo": "FIND.no",
+    "languages": {
+      "language": "ES",
+      "english": "Inglés",
+      "norwegian": "Noruego",
+      "french": "Francés",
+      "spanish": "Español",
+      "mandarin": "Chino (mandarín)",
+      "arabic": "Árabe"
+    },
+    "button": {
+      "delete": "Eliminar",
+      "password": "Contraseña",
+      "save-changes": "Guardar cambios",
+      "save": "Guardar",
+      "create": "Crear",
+      "message": "Mensaje",
+      "buy": "Comprar",
+      "send": "Enviar",
+      "edit": "Editar",
+      "sign-up": "Registrarse",
+      "close": "Cerrar",
+      "go-back": "Volver",
+      "logout": "Cerrar sesión",
+      "cancel": "Cancelar",
+      "accept": "Aceptar",
+      "reject": "Rechazar",
+      "make-bid": "Hacer oferta",
+      "reset": "Restablecer"
+    },
+    "header": {
+      "edit-listing": "Editar anuncio",
+      "create-new-listing": "Crear nuevo anuncio",
+      "login": "Iniciar sesión",
+      "register": "Registrarse",
+      "admin-settings": "Configuraciones de administrador",
+      "register-admin": "Registrar administrador",
+      "messages": "Mensajes",
+      "new-listing": "Nuevo anuncio",
+      "favorites": "Favoritos",
+      "inbox": "Bandeja de entrada",
+      "profile": "Perfil"
+    },
+    "chat": {
+      "bid": "Oferta",
+      "price": "Precio",
+      "accepted": "Aceptado",
+      "rejected": "Rechazado",
+      "make-a-bid": "Hacer una oferta",
+      "no-messages-yet": "Aún no hay mensajes",
+      "cancelled": "Cancelado"
+    },
+    "listing": {
+      "listings": "Anuncios",
+      "see-all-your-listings": "Ver todos tus anuncios",
+      "see-all-your-favorites": "Ver todos tus favoritos",
+      "header": "Título",
+      "description": "Descripción",
+      "price": "Precio",
+      "category": "Categoría",
+      "location": "Ubicación",
+      "images": "Imágenes",
+      "delete": "Eliminar",
+      "upload-image": "Subir imagen",
+      "activeCL": "ACTIVO",
+      "inactiveCL": "INACTIVO",
+      "last-edited": "Última edición",
+      "file": "Archivo"
+    },
+    "map": {
+      "map": "Mapa",
+      "loading-map": "Cargando mapa"
+    },
+    "login": {
+      "username": "Nombre de usuario",
+      "password": "Contraseña",
+      "register": "Registrarse",
+      "dont-have-an-account-yet": "¿Aún no tienes una cuenta?",
+      "already-have-an-account": "¿Ya tienes una cuenta?"
+    },
+    "profile": {
+      "edit-profile": "Editar perfil",
+      "name": "Nombre",
+      "first-name": "Nombre",
+      "last-name": "Apellido",
+      "email": "Correo electrónico",
+      "phone-number": "Número de teléfono",
+      "password": "Contraseña",
+      "confirm-password": "Confirmar contraseña",
+      "update-user-info-warning": "Actualizar la información del usuario requiere un cierre de sesión automático para que surta efecto.",
+      "my-profile": "Mi perfil",
+		  "edit-profile-information": "Editar información del perfil"
+    },
+    "pageination": {
+      "page": "Página",
+      "of": "de",
+      "next": "Siguiente",
+      "previous": "Anterior"
+    },
+    "home": {
+      "search": "Buscar",
+      "search-placeholder": "Buscar anuncios",
+      "no-listings-found": "No se encontraron anuncios",
+      "no-favorites-found": "No se encontraron favoritos",
+      "current-filter": "Filtro actual"
+    }
+  }
+  

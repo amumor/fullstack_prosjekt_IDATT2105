@@ -249,13 +249,13 @@ const toggleArchive = async () => {
       <input type="checkbox" @change="toggleArchive()">
       <span class="slider">
       <template v-if="isArchived">
-        <span class="switch-label">INACTIVE</span>
+        <span class="switch-label">{{ $t('listing.activeCL') }}</span>
       </template>
       <template v-else>
-        <span class="switch-label">ACTIVE</span>
+        <span class="switch-label">{{ $t('listing.inactiveCL') }}</span>
       </template>
     </span>
-    </label>
+   </label>
   </div>
   <div class="display-page-container" v-if="listing">
     <!-- Image container -->
@@ -264,7 +264,7 @@ const toggleArchive = async () => {
       <button v-if="user.isLoggedIn" class="favorite" :class="{ 'isFavorite': isFavorite }" @click="toggleFavorite">
         <Icon icon="material-symbols:favorite" width="40" height="40"/>
       </button>
-      <p id="lastEdited">Last edited: {{ format(listing.lastEdited, listing.createdAt) }}</p>
+      <p id="lastEdited">{{ $t('listing.last-edited') }}: {{ format(listing.lastEdited, listing.createdAt) }}</p>
     </div>
 
     <div class="sidebar">
@@ -280,15 +280,15 @@ const toggleArchive = async () => {
 
       <!-- Buy item or message seller -->
       <div class="btn" v-if="user.isLoggedIn && !isOwner">
-        <button class="message-btn">Message</button>
-        <button class="buy-btn">Buy</button>
+        <button class="message-btn">{{ $t('button.message') }}</button>
+        <button class="buy-btn">{{ $t('button.buy') }}</button>
       </div>
 
       <!-- Owner options -->
       <div class="owner-options">
         <template v-if="isOwner">
-          <button class="owner-btn" id="edit" @click="toEditListing">Edit</button>
-          <button class="owner-btn" id="delete" @click=delListing>Delete</button>
+          <button class="owner-btn" id="edit" @click="toEditListing">{{ $t('button.edit') }</button>
+          <button class="owner-btn" id="delete" @click=delListing>{{ $t('button.delete') }}</button>
         </template>
       </div>
 
@@ -297,11 +297,7 @@ const toggleArchive = async () => {
         <ListingMapComponent
             :location="[listing.latitude, listing.longitude]"/>
       </div>
-
-
     </div>
-
-
   </div>
 </template>
 

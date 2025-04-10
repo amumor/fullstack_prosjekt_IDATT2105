@@ -134,18 +134,18 @@ onMounted(() => {
 
 <template>
   <div class="display-page-container">
-    <h2 class="display-values-title">Edit listing</h2>
+    <h2 class="display-values-title">{{ $t('header.edit-listing') }}</h2>
     <div class="display-values-content">
 
       <!-- Title -->
       <div class="display-values-item">
-        <label for="title">Header:</label>
+        <label for="title">{{ $t('listing.header') }}:</label>
         <input type="text" id="title" v-model="newTitle"/>
       </div>
 
       <!-- Description -->
       <div class="display-values-item">
-        <label for="description">Description:</label>
+        <label for="description">{{ $t('header.description') }}:</label>
         <input type="text" id="description" v-model="newDescription"/>
       </div>
 
@@ -167,18 +167,18 @@ onMounted(() => {
 
       <!-- Price -->
       <div class="display-values-item">
-        <label for="price">Price:</label>
+        <label for="price">{{ $t('listing.price') }}:</label>
         <input type="text" id="price" v-model="newPrice"/>
       </div>
 
       <!-- Location -->
       <div class="display-values-item">
-        <label for="location">Location:</label>
+        <label for="location">{{ $t('listing.location') }}</label>
         <input type="text" id="location" v-model="newLocation"/>
       </div>
 
       <!-- Save changes -->
-      <button class="basic-blue-btn" @click="saveChanges">Save changes</button>
+      <button class="basic-blue-btn" @click="saveChanges">{{ $t('button.save-changes') }}</button>
     </div>
   </div>
 </template>

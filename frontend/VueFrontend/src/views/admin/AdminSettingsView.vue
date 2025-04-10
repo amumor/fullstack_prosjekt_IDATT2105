@@ -148,12 +148,12 @@ const registerAdmin = async () => {
   <div class="display-page-container">
     <div class="admin-settings">
       <div class="header-container">
-        <h2>Admin settings</h2>
+        <h2>{{ $t('header.admin-settings') }}</h2>
         <div class="edit-mode" v-if="isEditeMode">
-          <button class="basic-blue-btn" @click="toggleEditMode">Save</button>
+          <button class="basic-blue-btn" @click="toggleEditMode">{{ $t('button.save') }}</button>
         </div>
         <div class="edit-mode" v-else>
-          <button class="basic-blue-btn" id="edit-btn" @click="toggleEditMode">Edit</button>
+          <button class="basic-blue-btn" id="edit-btn" @click="toggleEditMode">{{ $t('button.edit') }}</button>
         </div>
       </div>
       <suspense>
@@ -161,15 +161,15 @@ const registerAdmin = async () => {
       </suspense>
     </div>
     <div class="sign-up">
-      <h2>Register Admin</h2>
+      <h2>{{ $t('header.register-admin') }}</h2>
       <div class="fields">
-        <input v-model="firstName" type="text" placeholder="First name"/>
-        <input v-model="lastName" type="text" placeholder="Last name"/>
-        <input v-model="email" type="text" placeholder="E-mail"/>
-        <input v-model="phoneNumber" type="text" placeholder="Phone number"/>
-        <input v-model="password" type="password" placeholder="Password"/>
-        <input v-model="confirmPassword" type="password" placeholder="Confirm password"/>
-        <button class="basic-blue-btn" @click="registerAdmin">Register</button>
+        <input v-model="firstName" type="text" :placeholder="$t('profile.first-name')" />
+        <input v-model="lastName" type="text" :placeholder="$t('profile.last-name')"/>
+        <input v-model="email" type="text" :placeholder="$t('profile.email')"/>
+        <input v-model="phoneNumber" type="text" :placeholder="$t('profile.phone-number')"/>
+        <input v-model="password" type="password" :placeholder="$t('profile.password')"/>
+        <input v-model="confirmPassword" type="password" :placeholder="$t('profile.confirm-password')"/>
+        <button class="basic-blue-btn" @click="registerAdmin">{{ $t('header.register') }}</button>
       </div>
     </div>
   </div>

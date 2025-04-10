@@ -1,0 +1,109 @@
+{
+    "logo": "FIND.no",
+    "languages": {
+      "language": "FR",
+      "english": "Anglais",
+      "norwegian": "Norvégien",
+      "french": "Français",
+      "spanish": "Espagnol",
+      "mandarin": "Chinois (mandarin)",
+      "arabic": "Arabe"
+    },
+    "button": {
+      "delete": "Supprimer",
+      "password": "Mot de passe",
+      "save-changes": "Enregistrer les modifications",
+      "save": "Enregistrer",
+      "create": "Créer",
+      "message": "Message",
+      "buy": "Acheter",
+      "send": "Envoyer",
+      "edit": "Modifier",
+      "sign-up": "S'inscrire",
+      "close": "Fermer",
+      "go-back": "Retour",
+      "logout": "Déconnexion",
+      "cancel": "Annuler",
+      "accept": "Accepter",
+      "reject": "Rejeter",
+      "make-bid": "Faire une offre",
+      "reset": "Réinitialiser"
+    },
+    "header": {
+      "edit-listing": "Modifier l'annonce",
+      "create-new-listing": "Créer une nouvelle annonce",
+      "login": "Connexion",
+      "register": "Inscription",
+      "admin-settings": "Paramètres administrateur",
+      "register-admin": "Inscrire un administrateur",
+      "messages": "Messages",
+      "new-listing": "Nouvelle annonce",
+      "favorites": "Favoris",
+      "inbox": "Boîte de réception",
+      "profile": "Profil"
+    },
+    "chat": {
+      "bid": "Offre",
+      "price": "Prix",
+      "accepted": "Accepté",
+      "rejected": "Rejeté",
+      "make-a-bid": "Faire une offre",
+      "no-messages-yet": "Pas encore de messages",
+      "cancelled": "Annulé"
+    },
+    "listing": {
+      "listings": "Annonces",
+      "see-all-your-listings": "Voir toutes vos annonces",
+      "see-all-your-favorites": "Voir tous vos favoris",
+      "header": "Titre",
+      "description": "Description",
+      "price": "Prix",
+      "category": "Catégorie",
+      "location": "Emplacement",
+      "images": "Images",
+      "delete": "Supprimer",
+      "upload-image": "Téléverser une image",
+      "activeCL": "ACTIF",
+      "inactiveCL": "INACTIF",
+      "last-edited": "Dernière modification",
+      "file": "Fichier"
+    },
+    "map": {
+      "map": "Carte",
+      "loading-map": "Chargement de la carte"
+    },
+    "login": {
+      "username": "Nom d'utilisateur",
+      "password": "Mot de passe",
+      "register": "S'inscrire",
+      "dont-have-an-account-yet": "Vous n'avez pas encore de compte ?",
+      "already-have-an-account": "Vous avez déjà un compte ?"
+    },
+    "profile": {
+      "edit-profile": "Modifier le profil",
+      "name": "Nom",
+      "first-name": "Prénom",
+      "last-name": "Nom",
+      "email": "Email",
+      "phone-number": "Numéro de téléphone",
+      "password": "Mot de passe",
+      "confirm-password": "Confirmer le mot de passe",
+      "update-user-info-warning": "La mise à jour des informations utilisateur nécessite une déconnexion automatique pour prendre effet.",
+      "my-profile": "Mon profil",
+		  "edit-profile-information": "Modifier les informations du profil"
+    },
+    "pageination": {
+      "page": "Page",
+      "of": "de",
+      "next": "Suivant",
+      "previous": "Précédent"
+    },
+    "home": {
+      "search": "Recherche",
+      "search-placeholder": "Rechercher des annonces",
+      "no-listings-found": "Aucune annonce trouvée",
+      "no-favorites-found": "Aucun favori trouvé",
+      "current-filter": "Filtre actuel"
+    }
+  }
+  

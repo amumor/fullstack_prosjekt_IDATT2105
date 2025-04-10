@@ -126,12 +126,12 @@ onMounted(() => {
 <template>
   <div class="display-page-container">
     <form @submit.prevent="handleCreateListing" class="fields">
-      <h2>Create a new listing</h2>
+      <h2>{{ $t('header.create-new-listing') }}</h2>
       <div class="text-fields">
-        <input v-model="title" type="text" placeholder="Header" required/>
-        <textarea v-model="description" id="description" placeholder="Description" required></textarea>
-        <input v-model="price" type="text" placeholder="Price" required/>
-        <input v-model="location" type="text" placeholder="Location" required/>
+        <input v-model="title" type="text" :placeholder="$t('listing.header')" required/>
+        <textarea v-model="description" id="description" :placeholder="$t('listing.description')" required></textarea>
+        <input v-model="price" type="text" :placeholder="$t('listing.price')" required/>
+        <input v-model="location" type="text" :placeholder="$t('listing.location')" required/>
         <div v-for="category in categories" :key="category.id">
           <label>
             <input
@@ -145,11 +145,11 @@ onMounted(() => {
         </div>
       </div>
       <div class="image-field">
-        <label for="file">Upload image:</label>
-        <input type="file" id="file" name="file" accept="image/*" @change="handleFileChange" disabled />
+        <label for="file">{{ $t('listing.upload-image') }}:</label>
+        <input type="file" id="file" :name="$t('listing.file')" accept="image/*" @change="handleFileChange" disabled />
       </div>
       <div class="submit-button">
-        <button type="submit" class="basic-blue-btn">Create</button>
+        <button type="submit" class="basic-blue-btn">{{ $t('button.create') }}</button>
       </div>
     </form>
   </div>
