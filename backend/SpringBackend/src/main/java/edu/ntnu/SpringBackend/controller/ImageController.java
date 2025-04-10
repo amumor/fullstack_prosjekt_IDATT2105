@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -66,6 +67,7 @@ public class ImageController {
         }
     }
 
+    // TODO: Fix, requests from Postman working, but JS requests not working, error msg: backend-1   | 2025-04-10T16:25:56.432Z ERROR 1 --- [nio-8080-exec-5] e.n.S.exception.GlobalExceptionHandler   : !!! Internal server error: Required part 'images' is not present.: exc: class org.springframework.web.multipart.support.MissingServletRequestPartException
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/set-image")
     public ResponseEntity<?> setImageOnListing(
@@ -73,8 +75,9 @@ public class ImageController {
             @RequestParam("images")MultipartFile[] images,
             @RequestParam("listing-id") UUID listingId
             ) {
-        return ResponseEntity.ok(listingService.setImagesInListingWithUserCheck(listingId, images, user));
-
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
+                .body("The endpoint is not currently available.");
+//        return ResponseEntity.ok(listingService.setImagesInListingWithUserCheck(listingId, images, user));
     }
 
 
