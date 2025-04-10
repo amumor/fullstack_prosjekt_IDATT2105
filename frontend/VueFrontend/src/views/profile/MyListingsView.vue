@@ -76,7 +76,7 @@ const prevPage = () => {
 
 <div class="display-page-container">
   <BackToComponent />
-  <h2>My listings</h2>
+  <h2>{{ $t('header.my-listings') }}</h2>
 
   <!-- Listings -->
   <div class="listings">
@@ -93,9 +93,9 @@ const prevPage = () => {
 
   <!-- Pagination controls -->
   <div class="pagination-controls">
-    <button @click="prevPage" :disabled="currentPage === 1">Previous</button>
-    <span>Page {{ currentPage }} of {{ totalPages }}</span>
-    <button @click="nextPage" :disabled="currentPage === totalPages">Next</button>
+    <button @click="prevPage" :disabled="currentPage === 1">{{ $t('pageination.previous') }}</button>
+    <span>{{ $('pageination.page') }} {{ currentPage }} {{ $t('pageination.of') }} {{ totalPages }}</span>
+    <button @click="nextPage" :disabled="currentPage === totalPages">{{ $t('pageination.next') }}</button>
   </div>
 </div>
 </template>

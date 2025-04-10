@@ -65,10 +65,10 @@ onMounted(() => {
         <ul v-show="isOpen" class="dropdown">
           <!-- Logged In Menu -->
           <template v-if="user.isLoggedIn" v-show="isOpen">
-            <li><router-link to="/newListing" @click="toggleMenu" id="router-link">New listing</router-link></li>
-            <li><router-link to="/profile/favorites" @click="toggleMenu" id="router-link">Favorites</router-link></li>
-            <li><router-link to="/inbox" @click="toggleMenu" id="router-link">Inbox</router-link></li>
-            <li><router-link to="/profile" @click="toggleMenu" id="router-link">Profile</router-link></li>
+            <li><router-link to="/newListing" @click="toggleMenu" id="router-link">{{ $t('button.new-listing') }}</router-link></li>
+            <li><router-link to="/profile/favorites" @click="toggleMenu" id="router-link">{{ $t('button.favorites') }}</router-link></li>
+            <li><router-link to="/inbox" @click="toggleMenu" id="router-link">{{ $t('button.inbox') }}</router-link></li>
+            <li><router-link to="/profile" @click="toggleMenu" id="router-link">{{ $t('button.profile') }}</router-link></li>
 
             <!-- Admin settings -->
             <li><router-link to="/admin" @click="toggleMenu" id="admin-settings" v-if="isAdmin">

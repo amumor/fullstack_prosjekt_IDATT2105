@@ -143,8 +143,8 @@ const prevPage = () => {
     <!-- Search bar -->
     <div class="search-container">
       <input v-model="searchInput" type="text" class="search-input" placeholder="Search for listings..." id="searchInput">
-      <button class="search-btn" @click="searchFunction">Search</button>
-      <router-link class="map-btn" to="/map" id="router-link">Map</router-link>
+      <button class="search-btn" @click="searchFunction">{{ $t('home.search') }}</button>
+      <router-link class="map-btn" to="/map" id="router-link">{{ $t('map.map') }}</router-link>
   
     </div>
 
@@ -153,7 +153,7 @@ const prevPage = () => {
       <div v-for="category in categories" :key="category.id">
         <button id="category-btn" @click="() => handleCategoryFilterClick(category.name)">{{ category.name }}</button>
       </div>
-      <button id="category-btn" @click="handleFilterReset">Reset</button>
+      <button id="category-btn" @click="handleFilterReset">{{ $t('button.reset') }}</button>
       <h3>Current filter: {{currentFilter}}</h3>
     </div>
 
@@ -170,14 +170,14 @@ const prevPage = () => {
       </div>
     </div>
     <div v-else>
-      <h1>No results found</h1>
+      <h1>{{ $('home.no-listings-found') }}</h1>
     </div>
 
     <!-- Pagination controls -->
     <div class="pagination-controls">
-      <button @click="prevPage" :disabled="currentPage === 1">Previous</button>
-      <span>Page {{ currentPage }} of {{ totalPages }}</span>
-      <button @click="nextPage" :disabled="currentPage === totalPages">Next</button>
+      <button @click="prevPage" :disabled="currentPage === 1">{{ $t('pageination.previous') }}</button>
+      <span>{{ $t('pageination.page') }} {{ currentPage }} {{ $t('pageination.of') }} {{ totalPages }}</span>
+      <button @click="nextPage" :disabled="currentPage === totalPages">{{ $t('pageination.next') }}</button>
     </div>
   </div>
 </template>

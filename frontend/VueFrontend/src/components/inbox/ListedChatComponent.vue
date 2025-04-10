@@ -45,7 +45,7 @@ const selectChat = () => {
     <p v-if="props.messages && props.messages.length > 0">
       {{ props.messages.at(-1).message }}
     </p>
-    <p v-else>No messages yet</p>
+    <p v-else>{{ $t('chat.no-messages-yet') }}</p>
 
   </div>
 </div>

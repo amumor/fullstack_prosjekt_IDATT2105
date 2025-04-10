@@ -60,7 +60,7 @@ const newCategory = () => {
         <input id="category-input" type="text" v-model="newCategoryName" placeholder="Name"/>
       </div>
       <div class="category-item" v-for="(category, index) in categories" :key="category.id">
-        <button class="basic-blue-btn" id="delete-btn" @click="() => localDeleteCategory(index)">Delete</button>
+        <button class="basic-blue-btn" id="delete-btn" @click="() => localDeleteCategory(index)">{{ $t('buttons.delete') }}</button>
         <input type="text" v-model="category.name"/>
       </div>
     </div>

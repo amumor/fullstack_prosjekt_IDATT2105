@@ -9,7 +9,7 @@ const goBack = () => {
 </script>
 
 <template>
-<button @click="goBack">Go back</button>
+<button @click="goBack">{{ $('button.go-back')}}</button>
 </template>
 
 <style scoped>

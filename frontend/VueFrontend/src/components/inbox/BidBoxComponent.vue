@@ -56,26 +56,26 @@ const rejectBid = () => {
 
 	<!-- Bids in chat -->
 	<div class="inchat-bid-box" v-if="props.inChat">
-		<h3>Bid</h3>
-		<p>Price: {{ props.bidPrice }}</p>
+		<h3>{{ $t('chat.bid') }}</h3>
+		<p>{{ $t('chat.price') }}: {{ props.bidPrice }}</p>
 
 		<!-- Options for bid receiver on pending bids -->
 		<div v-if="!isBidder && bidStatus === 'PENDING'" class="action-buttons">
-			<button class="basic-blue-btn" @click="acceptBid">Accept</button>
-			<button class="basic-blue-btn" @click="rejectBid">Reject</button>
+			<button class="basic-blue-btn" @click="acceptBid">{{ $t('button.accept') }}</button>
+			<button class="basic-blue-btn" @click="rejectBid">{{ $t('button.reject') }}</button>
 		</div>
 
 		<!-- Status display -->
-		<p v-if="bidStatus === 'ACCEPTED'" class="status accepted">Accepted</p>
-		<p v-if="bidStatus === 'REJECTED'" class="status rejected">Rejected</p>
+		<p v-if="bidStatus === 'ACCEPTED'" class="status accepted">{{ $t('chat.accepted') }}</p>
+		<p v-if="bidStatus === 'REJECTED'" class="status rejected">{{ $t('chat.rejected') }}</p>
 	</div>
 
 	<!-- Make new bid -->
 	<div class="send-bid-box" v-if="props.isBidder && !props.inChat">
-			<h3>Make a bid</h3>
+			<h3>{{ $t('chat.make-a-bid') }}</h3>
 			<button class="close-btn" @click="closeBidBox">✕</button>
 			<input v-model="price" type="text" placeholder="Price" />
-			<button class="submit-btn" @click="submitBid">Send</button>
+			<button class="submit-btn" @click="submitBid">{{ $t('button.send') }}</button>
 	</div>
 </div>
 </template>

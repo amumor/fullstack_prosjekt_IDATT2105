@@ -39,12 +39,12 @@ const createListing = () => {
 <template>
 <div class="display-page-container">
   <div class="fields">
-    <h2>Create a new listing</h2>
+    <h2>{{ $t('header.create-new-listing') }}</h2>
     <div class="text-fields">
-      <input type="text" placeholder="Header" required />
-      <textarea type="text" id="description" placeholder="Description" required />
-      <input type="text" placeholder="Price" required />
-      <input type="text" placeholder="Location" required />
+      <input type="text" :placeholder="$('listing.header')" required />
+      <textarea type="text" id="description" :placeholder="$('listing.description')" required />
+      <input type="text" :placeholder="$('listing.price')" required />
+      <input type="text" :placeholder="$('listing.location')" required />
       <div v-for="category in categories" :key="category.id">
         <label>
           <input type="checkbox" :name=category.name :value=category.name>{{ category.name }}
@@ -53,12 +53,12 @@ const createListing = () => {
     </div>
     <div class="image-field">
       <form action="/upload" method="post" enctype="multipart/form-data">
-        <label for="file">Upload image:</label>
-        <input type="file" id="file" name="file" accept="image/*">
+        <label for="file">{{ $t('listing.upload-image') }}:</label>
+        <input type="file" id="file" :name="$('listing.file')" accept="image/*">
       </form>
     </div>
     <div class="submit-button">
-      <button type="submit" class="basic-blue-btn" @click="createListing">Create</button>
+      <button type="submit" class="basic-blue-btn" @click="createListing">{{ $t('button.create') }}</button>
     </div>
   </div>
 </div>

@@ -9,7 +9,7 @@ const props = defineProps({
 
 <template>
   <!-- Map -->
-  <div v-if="!location">Loading map...</div>
+  <div v-if="!location">{{ $t('map.loading-map') }}...</div>
   <div class="map-container" v-else>
     <LMap :zoom="12" :center=location>
       <!-- Map Background -->

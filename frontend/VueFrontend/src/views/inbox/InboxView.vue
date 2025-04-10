@@ -257,7 +257,7 @@ onUpdated(() => {
 <Navbar />
 <div class="display-page-container" >
   <div class="display-left-container">
-    <h2>Messages</h2>
+    <h2>{{ $t('header.messages') }}</h2>
     <div class="chats-container">
       <ListedChatComponent
         v-for="(chatItem) in chats"
@@ -308,8 +308,8 @@ onUpdated(() => {
                 class="basic-blue-btn" 
                 id="cancel-btn" 
                 v-if="message.status === 'PENDING'" 
-                @click="cancelBid(message)">Cancel</button>
-              <p id="cancelled" v-if="message.status === 'CANCELLED'">Cancelled</p>
+                @click="cancelBid(message)">{{ $t('button.cancel') }}</button>
+              <p id="cancelled" v-if="message.status === 'CANCELLED'">{{ $t('chat.cancelled') }}</p>
               <p id="sent-timestamp">{{message.sentAt}}</p>
             </div>
             <!-- Text messages -->
@@ -363,7 +363,7 @@ onUpdated(() => {
         :disabled="selectedChat.hasPendingBids"
         v-if="!isOwner" 
         @click="toggleBid(selectedChat.id)"
-        >Make bid</button>
+        >{{ $t('button.make-bid') }}</button>
     </div>
   </div>
 </div>

@@ -44,7 +44,7 @@ const logout = async () => {
         <h2>{{ userStorage.firstName + ' ' + userStorage.lastName }}</h2>
         <h1>{{ userStorage.email }}</h1>
       </div>
-      <button class="basic-blue-btn" @click="logout">Log out</button>
+      <button class="basic-blue-btn" @click="logout">{{ $t('button.logout') }}</button>
     </div>
     <div class="options-containers">
       <ProfileOption
