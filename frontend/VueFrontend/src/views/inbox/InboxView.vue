@@ -192,9 +192,24 @@ const handleCancelBid = async () => {
   }
 }
 
+const sortedChats = computed(() => {
+  if (!chatStore.chats || chatStore.chats.length === 0) return [];
+  
+  return [...chatStore.chats].sort((a, b) => {
+    // Get timestamps of the latest messages
+    const lastMessageA = a.messages && a.messages.length > 0 ? 
+      new Date(a.messages[a.messages.length - 1].sentAt).getTime() : 0;
+    const lastMessageB = b.messages && b.messages.length > 0 ? 
+      new Date(b.messages[b.messages.length - 1].sentAt).getTime() : 0;
+    
+    // Sort in descending order (newest first)
+    return lastMessageB - lastMessageA;
+  });
+});
+
 // Check if there are any chats available
 const hasChats = computed(() => {
-  return chatStore.chats && chatStore.chats.length > 0
+  return sortedChats.value && sortedChats.value.length > 0
 })
 
 // Check if the current user is the buyer in this chat
@@ -234,13 +249,22 @@ const isSeller = computed(() => {
 
         <!-- Chat list -->
         <div v-else class="chats-container">
-          <ListedChatComponent v-for="chat in chatStore.chats" :key="chat.id" :chatId="chat.id"
-            :listingTitle="chat.listing ? chat.listing.title : `Chat #${chat.id.substring(0, 8)}`" :image="chat.listing && chat.listing.imageUrls && chat.listing.imageUrls.length > 0 ?
-              fetchImage(chat.listing.imageUrls) : 'https://placehold.co/600x400?text=No+Image'" :lastMessageTime="chat.messages && chat.messages.length > 0 ?
-                chat.messages[chat.messages.length - 1].sentAt : ''" :isMessageRead="chat.isMessageRead" :messengerName="chat.buyerFirstName ?
-                `${chat.buyerFirstName} ${chat.buyerLastName}` :
-                `${chat.sellerFirstName} ${chat.sellerLastName}`" :messages="chat.messages || []"
-            :selected="chat === chatStore.selectedChat" />
+          <ListedChatComponent 
+            v-for="chat in sortedChats" 
+            :key="chat.id" 
+            :chatId="chat.id"
+            :listingTitle="chat.listing ? chat.listing.title : `Chat #${chat.id.substring(0, 8)}`" 
+            :image="chat.listing && chat.listing.imageUrls && chat.listing.imageUrls.length > 0 ?
+              fetchImage(chat.listing.imageUrls) : 'https://placehold.co/600x400?text=No+Image'" 
+            :lastMessageTime="chat.messages && chat.messages.length > 0 ?
+              chat.messages[chat.messages.length - 1].sentAt : ''" 
+            :isMessageRead="chat.isMessageRead" 
+            :messengerName="chat.buyerFirstName ?
+              `${chat.buyerFirstName} ${chat.buyerLastName}` :
+              `${chat.sellerFirstName} ${chat.sellerLastName}`" 
+            :messages="chat.messages || []"
+            :selected="chat === chatStore.selectedChat" 
+          />
         </div>
       </div>
 

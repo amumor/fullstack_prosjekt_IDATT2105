@@ -27,6 +27,29 @@ export const useChatStore = defineStore('chat', {
         }
       })
     },
+
+    addChat(chat) {
+      const processedChat = {
+        ...chat,
+        messages: chat.messages || [],
+        bids: chat.bids || [],
+        selected: false,
+        isMessageRead: chat.isMessageRead || false,
+        hasPendingBids: chat.bids ? chat.bids.some(bid => bid.status === 'PENDING') : false
+      };
+
+      if (!processedChat.listing && processedChat.listingId) {
+        processedChat.listing = {
+          id: processedChat.listingId,
+          title: `Chat with ${processedChat.sellerFirstName || processedChat.buyerFirstName}`,
+          imageUrls: []
+        };
+      }
+
+      this.chats.unshift(processedChat);
+      
+      this.selectChat(processedChat);
+    },
     
     addMessageToChat(chatId, message) {
       const chat = this.chats.find((c) => c.id === chatId)
@@ -75,7 +98,7 @@ export const useChatStore = defineStore('chat', {
       }
 
       const bid = {
-        id: Date.now(), // Temporary ID
+        id: Date.now(),
         chat: this.selectedChat.id,
         buyer: buyerId,
         price: price,

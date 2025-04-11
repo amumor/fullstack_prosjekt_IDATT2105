@@ -100,7 +100,6 @@ const initiateChat = async () => {
     return
   }
   
-  // Check if the user is the owner of the listing
   if (isOwner.value) {
     console.warn('You cannot chat with yourself as the listing owner')
     return
@@ -108,7 +107,11 @@ const initiateChat = async () => {
 
   try {
     const token = user.token
-    await createChatFromBuyer(listing.value.id, messageContent.value, token)
+    const newChat = await createChatFromBuyer(listing.value.id, messageContent.value, token)
+    
+    const chatStore = useChatStore()
+    chatStore.addChat(newChat)
+    
     router.push('/inbox')
   } catch (error) {
     console.error('Error initiating chat:', error)
