@@ -18,3 +18,30 @@ export async function getAddressFromCoordinates(latitude, longitude){
     console.error('Error fetching address:', err);
   }
 };
+
+export async function getCoordinatesFromAddress(address) {
+  const encodedAddress = encodeURIComponent(address);
+  const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodedAddress}`;
+
+  try {
+    const response = await fetch(url, {
+      headers: {
+        'Accept': 'application/json'
+      }
+    });
+
+    const data = await response.json();
+
+    if (Array.isArray(data) && data.length > 0) {
+      const lat = parseFloat(data[0].lat);
+      const lon = parseFloat(data[0].lon);
+      return [lat, lon];
+    } else {
+      console.warn('No coordinates found for address:', address);
+      return null;
+    }
+  } catch (error) {
+    console.error('Error fetching coordinates:', error);
+    return null;
+  }
+};

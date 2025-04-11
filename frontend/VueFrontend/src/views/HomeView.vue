@@ -144,7 +144,7 @@ const prevPage = () => {
       </div>
     </div>
     <div v-else>
-      <h1>{{ $('home.no-listings-found') }}</h1>
+      <h1>{{ $t('home.no-listings-found') }}</h1>
     </div>
 
     <!-- Pagination controls -->

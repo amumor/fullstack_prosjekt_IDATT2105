@@ -8,6 +8,7 @@ import {userStore} from '@/stores/user.js'
 import {getListingById, updateListing} from '@/services/ListingService.js'
 import {getAllCategories} from '../../services/CategoryService';
 import {isTokenExpired} from "@/services/TokenService.js";
+import {getCoordinatesFromAddress} from "@/utils/Location.js";
 
 
 // Router instance
@@ -21,7 +22,7 @@ const newTitle = ref('');
 const newDescription = ref('');
 // const newStatus = ref('');
 const newPrice = ref('');
-const newLocation = ref('Loading address...');
+const newLocation = ref('No address');
 const newCategory = ref('');
 
 
@@ -31,26 +32,6 @@ const newCategory = ref('');
 //   { value: 'SOLD', label: 'Sold' },
 //   { value: 'INACTIVE', label: 'Inactive' },
 // ];
-
-// Create address from coordinates
-const getAddressFromCoordinates = async (latitude, longitude) => {
-  const url = `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`;
-  try {
-    const response = await fetch(url, {
-      headers: {'User-Agent': 'YourAppName/1.0 (your@email.com)'}
-    });
-
-    if (!response.ok) {
-      throw new Error('Failed to fetch address');
-    }
-
-    const data = await response.json();
-    return data.display_name;
-  } catch (error) {
-    console.error('Error:', error);
-    return null;
-  }
-};
 
 const localGetCategories = async () => {
   try {
@@ -76,14 +57,15 @@ const saveChanges = async () => {
   console.log('newPrice:', newPrice.value);
   console.log('latitude:', listing.value.latitude);
   console.log('longitude:', listing.value.longitude);
+  let coord = await getCoordinatesFromAddress(newLocation.value);
   try {
     await updateListing(listing.value.id, {
       title: newTitle.value,
       description: newDescription.value,
       categoryName: newCategory.value,
       listingStatus: 'ACTIVE',
-      latitude: listing.value.latitude, // TODO: Replace with actual latitude
-      longitude: listing.value.longitude, // TODO: Replace with actual longitude
+      latitude: coord[0], // TODO: Replace with actual latitude
+      longitude: coord[1], // TODO: Replace with actual longitude
       price: newPrice.value,
     }, token);
     router.go(-1);
