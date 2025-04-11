@@ -52,6 +52,7 @@
       "cancelled": "Kansellert"
     },
     "listing": {
+      "my-listings": "Mine annonser",
       "listings": "Annonser",
       "see-all-your-listings": "Se alle dine annonser",
       "see-all-your-favorites": "Se alle dine favoritter",

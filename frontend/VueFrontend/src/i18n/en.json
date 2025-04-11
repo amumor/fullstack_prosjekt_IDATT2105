@@ -53,6 +53,7 @@
 		"cancelled": "Cancelled"
 	},
 	"listing": {
+		"my-listings": "My listings",
 		"listings": "Listings",
 		"see-all-your-listings": "See all your listings",
 		"see-all-your-favorites": "See all your favorites",

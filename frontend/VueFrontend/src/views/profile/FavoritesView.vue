@@ -7,25 +7,6 @@ import { userStore } from '@/stores/user.js'
 import { ref, computed } from 'vue';
 import { getListingById } from '../../services/ListingService';
 
-/**
-const listings = [
-  {
-    id: 1,
-    price: '100 mill',
-    image: 'https://iqboatlifts.com/wp-content/uploads/2018/06/Yacht-vs-Boat-Whats-the-Difference-Between-the-Two-1024x571.jpg',
-    town: 'Elverum',
-    title: 'Big boat 1',
-  },
-  {
-    id: 2,
-    price: '60 mill',
-    image: 'https://iqboatlifts.com/wp-content/uploads/2018/06/Yacht-vs-Boat-Whats-the-Difference-Between-the-Two-1024x571.jpg',
-    town: 'Baerum',
-    title: 'Big Boat 2',
-  },
-];
-*/
-
 // User store
 const user = userStore()
 const token = user.token;
@@ -70,7 +51,7 @@ fetchBookmarks();
 
 // Pagination state
 const currentPage = ref(1)
-const itemsPerPage = 50
+const itemsPerPage = 20
 
 // Total number of pages
 const totalPages = computed(() => Math.ceil(listings.value.length / itemsPerPage))
@@ -128,13 +109,13 @@ const prevPage = () => {
   gap: 20px;
   display: flex;
   flex-wrap: wrap;
-  margin-left: 15px;
+  margin-left: 30px;
   margin-bottom: 10px;
 }
 
 .listing-item {
   flex: 1 0 26%; /* 4 items per row */
-  max-width: 250px;
+  max-width: 300px;
 }
 
 .pagination-controls {

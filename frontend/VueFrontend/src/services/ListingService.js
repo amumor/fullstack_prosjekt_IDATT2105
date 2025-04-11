@@ -160,7 +160,7 @@ export const getListingById = (id) => {
  *   .then(listings => console.log('Listing suggestions:', listings))
  *   .catch(error => console.error('Failed to retrieve suggestions:', error));
  */
-export function getListingSuggestions(opts = {page: 0, size: 10}) {
+export function getListingSuggestions(opts = {page: 0, size: 20}) {
     const client = new ApiClient(baseURL);
     client.timeout = timeout;
 
@@ -223,9 +223,11 @@ export async function updateListing(id, updateData, token) {
  * @returns {Promise<Object>} A promise that resolves to the listings.
  * @throws {Error} If the request fails.
  */
-export async function getListingsByCategory(categoryName) {
+export async function getListingsByCategory(categoryName, page = 0, size = 20) {
     const url = new URL(baseURL + '/api/v1/listing/get-by-category');
     url.searchParams.append('categoryName', categoryName);
+    url.searchParams.append('page', page);
+    url.searchParams.append('size', size);
 
     try {
         const response = await fetch(url, {
@@ -244,7 +246,7 @@ export async function getListingsByCategory(categoryName) {
     }
 }
 
-export async function getListingsBySeller(token, page, size) {
+export async function getListingsBySeller(token, page = 0, size = 20) {
     const url = new URL(baseURL + '/api/v1/listing/get-by-seller');
     url.searchParams.append('page', page);
     url.searchParams.append('size', size);
@@ -301,7 +303,7 @@ export const deleteListing = (token, id) => {
  * @returns {Promise<Object>} A promise that resolves to the response body.
  */
 export const getListingsByTitle = (title, opts = {}) => {
-    const { page = 0, size = 10 } = opts;
+    const { page = 0, size = 20 } = opts;
 
     return request
         .get(baseURL + '/api/v1/listing/get-by-title')
