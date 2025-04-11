@@ -68,6 +68,21 @@ public class ImageController {
     }
 
     // TODO: Fix, requests from Postman working, but JS requests not working, error msg: backend-1   | 2025-04-10T16:25:56.432Z ERROR 1 --- [nio-8080-exec-5] e.n.S.exception.GlobalExceptionHandler   : !!! Internal server error: Required part 'images' is not present.: exc: class org.springframework.web.multipart.support.MissingServletRequestPartException
+    /**
+     * <p>THIS ENDPOINT IS DIABLED DUE TO A BUG.</p>
+     *
+     * <p>Updates the images associated with a specific listing.</p>
+     *
+     * <p>This endpoint is secured and requires an authenticated user to perform the operation.
+     * The method accepts an array of images and a unique listing identifier. It updates the images
+     * for the given listing and returns the updated listing details if the operation is successful.</p>
+     *
+     * @param user the authenticated user making the request, injected through Spring Security
+     * @param images an array of {@code MultipartFile} objects containing the images to be set for the listing
+     * @param listingId the {@code UUID} of the listing to which the images belong
+     * @return a {@code ResponseEntity} containing the result of updating the listing images, typically
+     *         with HTTP status 200 if the update succeeds, otherwise an error status is returned
+     */
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/set-image")
     public ResponseEntity<?> setImageOnListing(
