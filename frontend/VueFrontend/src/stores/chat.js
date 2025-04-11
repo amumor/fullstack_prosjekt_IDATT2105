@@ -7,56 +7,89 @@ export const useChatStore = defineStore('chat', {
   }),
 
   actions: {
-    setChats(newChats) {
-      this.chats = newChats.map(chat => ({
-        id: chat.id || 1,
-        buyer: chat.buyer || null,
-        listing: chat.listing || null,
-        createdAt: chat.createdAt || new Date().getTime(),
-        messages: chat.messages || [],
-        bids: chat.bids || [],
-        hasPendingBids: chat.hasPendingBids || false,
-        selected: chat.selected || false,
-        isMessageRead: chat.isMessageRead || false,
-      }))
-
-      // Set the first chat as the selected chat
-      this.selectedChat = this.chats[0] || null
+    setChats(chats) {
+      this.chats = chats.map(chat => {
+        if (!chat.listing && chat.listingId) {
+          chat.listing = {
+            id: chat.listingId,
+            title: `Chat with ${chat.sellerFirstName || chat.buyerFirstName}`,
+            imageUrls: []
+          }
+        }
+        
+        return {
+          ...chat,
+          messages: chat.messages || [],
+          bids: chat.bids || [],
+          selected: false,
+          isMessageRead: chat.isMessageRead || false,
+          hasPendingBids: chat.bids ? chat.bids.some(bid => bid.status === 'PENDING') : false
+        }
+      })
     },
+
     addChat(chat) {
-      const newChat = {
-        id: chat.id || null,
-        buyer: chat.buyer || null,
-        listing: chat.listing || null,
-        createdAt: chat.createdAt || new Date().toISOString(),
+      const processedChat = {
+        ...chat,
         messages: chat.messages || [],
         bids: chat.bids || [],
-        hasPendingBids: false,
         selected: false,
-        isMessageRead: false,
+        isMessageRead: chat.isMessageRead || false,
+        hasPendingBids: chat.bids ? chat.bids.some(bid => bid.status === 'PENDING') : false
+      };
+
+      if (!processedChat.listing && processedChat.listingId) {
+        processedChat.listing = {
+          id: processedChat.listingId,
+          title: `Chat with ${processedChat.sellerFirstName || processedChat.buyerFirstName}`,
+          imageUrls: []
+        };
       }
-      this.chats.push(newChat)
+
+      this.chats.unshift(processedChat);
+      
+      this.selectChat(processedChat);
+    },
+    
+    addMessageToChat(chatId, message) {
+      const chat = this.chats.find((c) => c.id === chatId)
+      if (chat) {
+        if (!chat.messages) chat.messages = []
+        chat.messages.push(message)
+      }
     },
 
     selectChat(chat) {
       if (this.selectedChat) this.selectedChat.selected = false
       this.selectedChat = chat
-      this.selectedChat.selected = true
-      this.selectedChat.isMessageRead = true
+      if (chat) {
+        chat.selected = true
+        chat.isMessageRead = true
+      }
     },
 
     postMessage(messageText, senderId) {
       if (!this.selectedChat || !messageText.trim()) return
+      
+      if (!this.selectedChat.messages) {
+        this.selectedChat.messages = []
+      }
+      
       this.selectedChat.messages.push({
+        id: Date.now(), // Temporary ID
         chat: this.selectedChat.id,
         sender: senderId,
         content: messageText,
-        sentAt: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        sentAt: new Date().toISOString(),
       })
     },
 
     postBid(price, buyerId) {
       if (!this.selectedChat || !price) return
+
+      if (!this.selectedChat.bids) {
+        this.selectedChat.bids = []
+      }
 
       const hasPending = this.selectedChat.bids.some(bid => bid.status === 'PENDING')
       if (hasPending) {
@@ -65,34 +98,41 @@ export const useChatStore = defineStore('chat', {
       }
 
       const bid = {
+        id: Date.now(),
         chat: this.selectedChat.id,
         buyer: buyerId,
         price: price,
         status: 'PENDING',
-        sentAt: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        sentAt: new Date().toISOString(),
       }
       this.selectedChat.bids.push(bid)
       this.selectedChat.hasPendingBids = true
     },
 
     acceptBid(bidId) {
-      const bid = this.selectedChat?.bids.find(b => b.chat === bidId && b.status === 'PENDING')
+      if (!this.selectedChat || !this.selectedChat.bids) return
+      
+      const bid = this.selectedChat.bids.find(b => b.id === bidId && b.status === 'PENDING')
       if (bid) {
         bid.status = 'ACCEPTED'
+        this.selectedChat.hasPendingBids = false
       }
     },
 
     rejectBid(bidId) {
-      const bid = this.selectedChat?.bids.find(b => b.chat === bidId && b.status === 'PENDING')
+      if (!this.selectedChat || !this.selectedChat.bids) return
+      
+      const bid = this.selectedChat.bids.find(b => b.id === bidId && b.status === 'PENDING')
       if (bid) {
         bid.status = 'REJECTED'
         this.selectedChat.hasPendingBids = false
       }
-      console.log('storeselect: ', this.selectedChat.bids)
     },
 
     cancelBid(bidId) {
-      const bid = this.selectedChat?.bids.find(b => b.chat === bidId && b.status === 'PENDING')
+      if (!this.selectedChat || !this.selectedChat.bids) return
+      
+      const bid = this.selectedChat.bids.find(b => b.id === bidId && b.status === 'PENDING')
       if (bid) {
         bid.status = 'CANCELLED'
         this.selectedChat.hasPendingBids = false
