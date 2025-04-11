@@ -1,17 +1,65 @@
 <script setup>
-import { defineProps } from 'vue'
+import { defineProps, computed } from 'vue'
 import { useChatStore } from '@/stores/chat.js'
 import InitialsDisplayComponent from '@/components/profile/InitialsDisplayComponent.vue'
 
 const props = defineProps({
-  listingTitle: String,
-  image: String,
-  lastMessageTime: String,
-  isMessageRead: Boolean,
-  messengerName: String,
-  messages: Array,
-  selected: Boolean,
-  chatId: Number,
+  chatId: {
+    type: [Number, String],
+    required: true
+  },
+  listingTitle: {
+    type: String,
+    default: 'Unknown Listing'
+  },
+  image: {
+    type: String,
+    default: 'https://placehold.co/600x400?text=No+Image'
+  },
+  lastMessageTime: {
+    type: String,
+    default: ''
+  },
+  isMessageRead: {
+    type: Boolean,
+    default: false
+  },
+  messengerName: {
+    type: String,
+    default: 'Unknown User'
+  },
+  messages: {
+    type: Array,
+    default: () => []
+  },
+  selected: {
+    type: Boolean,
+    default: false
+  },
+})
+
+const formattedTime = computed(() => {
+  if (!props.lastMessageTime) return '';
+  
+  const date = new Date(props.lastMessageTime);
+  if (isNaN(date.getTime())) return '';
+  
+  // Format: dd.mm HH:MM
+  const day = date.getDate().toString().padStart(2, '0');
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const hours = date.getHours().toString().padStart(2, '0');
+  const minutes = date.getMinutes().toString().padStart(2, '0');
+  
+  return `${day}.${month} ${hours}:${minutes}`;
+})
+
+// Get last message for display
+const lastMessage = computed(() => {
+  if (props.messages && props.messages.length > 0) {
+    const message = props.messages[props.messages.length - 1];
+    return message.content || 'No message content';
+  }
+  return 'No messages yet';
 })
 
 // Access the chat store to update the selected chat
@@ -19,40 +67,46 @@ const chatStore = useChatStore()
 
 // Function to handle chat selection
 const selectChat = () => {
-  const chat = chatStore.chats.find(c => c.id === props.chatId)
-  if (chat) {
-    chatStore.selectChat(chat)
+  try {
+    const chat = chatStore.chats.find(c => {
+      return c.id === props.chatId || c.id === parseInt(props.chatId)
+    })
+    
+    if (chat) {
+      chatStore.selectChat(chat)
+    } else {
+      console.error('Chat not found with ID:', props.chatId)
+    }
+  } catch (error) {
+    console.error('Error selecting chat:', error)
   }
 }
 </script>
 
 <template>
   <div
-  :class="['listed-chat-container', { 'selected-chat': props.selected, 'chat-read': props.isMessageRead }]"
-  @click="selectChat">
-  <div class="chat-image-container">
-    <img :src="props.image" class="chat-image" alt="Chat Image" />
-    <InitialsDisplayComponent
-      :name=props.messengerName
-      :height=35
-      :width=35
-      class="initials"/>
+    :class="['listed-chat-container', { 'selected-chat': props.selected, 'chat-read': props.isMessageRead }]"
+    @click="selectChat">
+    <div class="chat-image-container">
+      <img :src="props.image" class="chat-image" alt="Chat Image" />
+      <InitialsDisplayComponent
+        :name="props.messengerName"
+        :height="35"
+        :width="35"
+        class="initials"/>
+    </div>
+    <div class="chat-content">
+      <h3>{{ props.listingTitle }}</h3>
+      <p class="timestamp" v-if="formattedTime">{{ formattedTime }}</p>
+      <p v-if="!props.isMessageRead" class="chat-unread">
+        {{ lastMessage }}
+      </p>
+    </div>
   </div>
-  <div class="chat-unread">
-    <h3>{{ props.listingTitle }}</h3>
-    <p>{{ props.lastMessageTime }}</p>
-    <!-- Remove? -->
-    <p v-if="props.messages && props.messages.length > 0">
-      {{ props.messages.at(-1).message }}
-    </p>
-    <p v-else>{{ $t('chat.no-messages-yet') }}</p>
-
-  </div>
-</div>
 </template>
 
+
 <style scoped>
-/* Container for each chat */
 .listed-chat-container {
   display: flex;
   align-items: center;
@@ -62,6 +116,10 @@ const selectChat = () => {
   width: 100%;
   max-width: 600px;
   cursor: pointer;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .listed-chat-container:hover {
@@ -71,6 +129,7 @@ const selectChat = () => {
 /* Grey background for selected chat */
 .selected-chat {
   background: #f5f5f5;
+  transform: translateY(-2px);
 }
 
 /* Image container */
@@ -78,6 +137,7 @@ const selectChat = () => {
   display: flex;
   align-items: center;
   position: relative;
+  flex: 0 0 auto;
 }
 
 .chat-image {
@@ -95,23 +155,30 @@ const selectChat = () => {
 }
 
 /* Unread message styling */
-.chat-unread {
+.chat-content {
   flex: 1;
   display: flex;
   flex-direction: column;
 }
 
-.chat-unread h3 {
+.chat-content h3 {
   font-size: 16px;
   color: #333;
   margin-bottom: 5px;
   font-weight: 600;
 }
 
-.chat-unread p{
+.chat-content p{
   font-size: 14px;
   color: #666;
   margin: 2px 0;
+}
+
+.timestamp {
+  font-size: 14px;
+  color: #666;
+  margin: 2px 0;
+  align-self: left;
 }
 
 /* Read message styling */

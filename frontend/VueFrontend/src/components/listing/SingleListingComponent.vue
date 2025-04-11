@@ -13,19 +13,18 @@ import { useListingStore } from '@/stores/listing.js'
 import { getAddressFromCoordinates } from '@/utils/Location.js'
 import { format } from '@/utils/DateTimeFormat.js'
 import { fetchImage } from '@/services/ImageService.js'
+import { createChatFromBuyer } from '@/services/ChatService.js'
 
 const listing = ref(null); 
 const image = 'https://iqboatlifts.com/wp-content/uploads/2018/06/Yacht-vs-Boat-Whats-the-Difference-Between-the-Two-1024x571.jpg';
 
-// User store
+
 const user = userStore()
+const router = useRouter();
 const token = user.token;
-// Favorite props
 const favorites = ref([]);
 const isFavorite = ref();
-// Archive props
 const isArchived = ref(false);
-// Address props
 const address = ref('Loading...');
 
 // Verify token
@@ -93,6 +92,28 @@ const getImageUrl = computed(() => {
     }
     return 'https://placehold.co/600x400?text=No+Image';
 });
+
+const messageContent = ref('Is this still available?')
+const initiateChat = async () => {
+  if (!user.isLoggedIn) {
+    router.push('/login')
+    return
+  }
+  
+  // Check if the user is the owner of the listing
+  if (isOwner.value) {
+    console.warn('You cannot chat with yourself as the listing owner')
+    return
+  }
+
+  try {
+    const token = user.token
+    await createChatFromBuyer(listing.value.id, messageContent.value, token)
+    router.push('/inbox')
+  } catch (error) {
+    console.error('Error initiating chat:', error)
+  }
+}
 
 
 // Fetch user bookmarks only if the user is logged in
@@ -168,7 +189,6 @@ const delListing = () => {
 }
 
 // Route to edit listing
-const router = useRouter();
 const toEditListing = () => {
   router.push('/listing/update/' + listing.value.id + '/edit');
 }
@@ -241,6 +261,10 @@ const toggleArchive = async () => {
   isArchived.value = !isArchived.value;
 }
 
+const routeToLogin = () => {
+  router.push('/login')
+}
+
 </script>
 
 <template>
@@ -279,9 +303,13 @@ const toggleArchive = async () => {
       </div>
 
       <!-- Buy item or message seller -->
-      <div class="btn" v-if="user.isLoggedIn && !isOwner">
-        <button class="message-btn">{{ $t('button.message') }}</button>
-        <button class="buy-btn">{{ $t('button.buy') }}</button>
+      <div class="btn" v-if="!isOwner">
+        <button v-if="user.isLoggedIn" class="message-btn" @click="initiateChat">
+          {{ $t('button.message') }}
+        </button>
+        <button v-else class="login-btn" @click="routeToLogin">
+          {{ $t('button.login-to-message') }}
+        </button>
       </div>
 
       <!-- Owner options -->
@@ -423,6 +451,23 @@ const toggleArchive = async () => {
 #delete:hover {
   background-color: crimson;
   border: crimson 2px solid;
+}
+
+.login-btn {
+  background-color: #D9D9D9;
+  color: #333333;
+  border: #1C64FF 2px solid;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  flex: 1;
+  border-radius: 5px;
+  cursor: pointer;
+  line-height: 10px;
+}
+
+.login-btn:hover {
+  background-color: #f1f1f1;
+  border-color: #0056b3;
 }
 
 .switch {
