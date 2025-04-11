@@ -52,6 +52,7 @@
       "cancelled": "已取消"
     },
     "listing": {
+      "my-listings": "我的列表",
       "listings": "列表",
       "see-all-your-listings": "查看所有列表",
       "see-all-your-favorites": "查看所有收藏",

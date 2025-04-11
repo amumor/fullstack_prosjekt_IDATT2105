@@ -52,6 +52,7 @@
       "cancelled": "تم الإلغاء"
     },
     "listing": {
+      "my-listings": "إعلاناتي",
       "listings": "الإعلانات",
       "see-all-your-listings": "عرض جميع إعلاناتك",
       "see-all-your-favorites": "عرض جميع المفضلات",

@@ -23,7 +23,7 @@ onMounted(async () => {
 const currentFilter = ref("None");
 const handleCategoryFilterClick = async (categoryName) => {
   try {
-    listings.value = await getListingsByCategory(categoryName, {page: 1, size: 10});
+    listings.value = await getListingsByCategory(categoryName, 0, 100);
     console.log("Listings value after filtering", listings.value)
     currentFilter.value = categoryName + " (category)";
 
@@ -37,6 +37,7 @@ const handleFilterReset = async () => {
   currentFilter.value = "None";
   noResults.value = false;  
   searchInput.value = "";
+  currentPage.value = 1;
 }
 
 const localGetSuggestions = async () => {
@@ -44,7 +45,7 @@ const localGetSuggestions = async () => {
     const token = user.token
     if (!token) {
       // If user is not logged in, get listings without token
-      const listingResponse = await getListingSuggestions({page: 1, size: 10})
+      const listingResponse = await getListingSuggestions({page: 0, size: 100})
       const categoryResponse = await getAllCategories()
       console.log("listing response:", listingResponse)
       console.log("category response:", categoryResponse)
@@ -58,7 +59,7 @@ const localGetSuggestions = async () => {
         await router.push("/")
       } else {
         // If user is logged in, get listings with token
-        const listingResponse = await getListingSuggestions({page: 1, size: 10})
+        const listingResponse = await getListingSuggestions({page: 0, size: 100})
         const categoryResponse = await getAllCategories()
         listings.value = listingResponse.listings
         categories.value = categoryResponse.categories
@@ -88,7 +89,7 @@ const searchFunction = async() => {
 
 // Pagination state
 const currentPage = ref(1)
-const itemsPerPage = 50
+const itemsPerPage = 20
 
 // Total number of pages
 const totalPages = computed(() => Math.ceil(listings.value.length / itemsPerPage))
@@ -144,7 +145,7 @@ const prevPage = () => {
       </div>
     </div>
     <div v-else>
-      <h1>{{ $('home.no-listings-found') }}</h1>
+      <h1>{{ $t('home.no-listings-found') }}</h1>
     </div>
 
     <!-- Pagination controls -->
@@ -239,13 +240,13 @@ h1 {
   gap: 20px;
   display: flex;
   flex-wrap: wrap;
-  margin-left: 15px;
+  margin-left: 30px;
   margin-bottom: 10px;
 }
 
 .listing-item {
   flex: 1 0 26%; /* 4 items per row */
-  max-width: 250px;
+  max-width: 300px;
 }
 
 .pagination-controls {

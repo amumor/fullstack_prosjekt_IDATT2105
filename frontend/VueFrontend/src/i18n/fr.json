@@ -52,6 +52,7 @@
       "cancelled": "Annulé"
     },
     "listing": {
+      "my-listings": "Mes annonces",
       "listings": "Annonces",
       "see-all-your-listings": "Voir toutes vos annonces",
       "see-all-your-favorites": "Voir tous vos favoris",
