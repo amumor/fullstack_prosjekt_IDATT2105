@@ -7,6 +7,8 @@ import {createListing2, createListingWithoutImage} from "@/services/ListingServi
 import router from "@/router/index.js";
 import SuccessFailModal from "@/components/modal/SuccessFailModal.vue";
 import {sendImagesToListing, setImageOnListing} from "@/services/ImageService.js";
+import { get } from 'superagent';
+import { getCoordinatesFromAddress } from '@/utils/Location.js'
 
 const categories = ref([]);
 const selectedCategories = ref([]);
@@ -21,8 +23,6 @@ const price = ref('');
 const location = ref('');
 const images = ref([]);
 
-const coordinates = ref([59.9139, 10.7522]); // Default coordinates (Oslo)
-
 const user = userStore();
 
 const localGetCategories = async () => {
@@ -35,32 +35,18 @@ const localGetCategories = async () => {
 };
 
 const handleCreateListing = async () => {
+  let coord = await getCoordinatesFromAddress(location.value);
+  console.log('location', location.value);
 
-  /* TODO: dette må inn som en requestPart
-    private String title;
-    private String description;
-    private String categoryName;
-    private ListingStatus listingStatus;
-    private double price;
-    private double latitude;
-    private double longitude;
-    private List<String> imagesToDelete;
-   */
   const listing = {
     title: title.value,
     description: description.value,
     categoryName: selectedCategory.value,
     listingStatus: 'ACTIVE',
     price: price.value,
-    latitude: coordinates.value[0],
-    longitude: coordinates.value[1],
-  };
-  // const formData = new FormData();
-  // formData.append('listing', JSON.stringify(listing));
-
-  // images.value.forEach((image) => { // TODO: implement when images is fixed
-  //   formData.append('images', image);
-  // });
+    latitude: coord[0],
+    longitude: coord[1],
+  }; 
 
   // Check token before sending the request
   const token = user.token;
@@ -121,6 +107,7 @@ onMounted(() => {
     router.push("/login")
   }
 });
+
 </script>
 
 <template>
