@@ -1,67 +1,150 @@
 <script setup>
-import { ref } from 'vue'
+import {onMounted, ref} from 'vue'
+import {getAllCategories} from "@/services/CategoryService.js";
+import {userStore} from "@/stores/user.js";
+import {isTokenExpired} from "@/services/TokenService.js";
+import {createListing2, createListingWithoutImage} from "@/services/ListingService.js";
+import router from "@/router/index.js";
+import SuccessFailModal from "@/components/modal/SuccessFailModal.vue";
+import {sendImagesToListing, setImageOnListing} from "@/services/ImageService.js";
+import { get } from 'superagent';
+import { getCoordinatesFromAddress } from '@/utils/Location.js'
 
-const categories = [
-  { id: 1, name: 'Boats' },
-  { id: 2, name: 'Cars' },
-  { id: 3, name: 'Motorcycles' },
-  { id: 4, name: 'Real Estate' },
-];
+const categories = ref([]);
+const selectedCategories = ref([]);
 
-const coordinates = ref([59.9139, 10.7522]); // Default coordinates (Oslo)
+const showResultModal = ref(false);
+const resultModalMessage = ref('');
 
-const getCoordinates = async (address) => {
-  const encodedAddress = encodeURIComponent(address);
-  const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodedAddress}`;
+const title = ref('');
+const description = ref('');
+const selectedCategory = ref('');
+const price = ref('');
+const location = ref('');
+const images = ref([]);
 
+const user = userStore();
+
+const localGetCategories = async () => {
   try {
-    const response = await fetch(url, {
-      headers: {
-        'Accept': 'application/json'
-      }
-    });
-    const data = await response.json();
-    if (data.length > 0) {
-      coordinates.value = [parseFloat(data[0].lat), parseFloat(data[0].lon)];
-    }
+    const categoryResponse = await getAllCategories();
+    categories.value = categoryResponse.categories
   } catch (error) {
-    console.error('Error fetching coordinates:', error);
+    console.error('Error fetching categories:', error);
   }
-  return null;
 };
 
-const createListing = () => {
-  // Logic to save the listing (v-model?)
+const handleCreateListing = async () => {
+  let coord = await getCoordinatesFromAddress(location.value);
+  console.log('location', location.value);
+
+  const listing = {
+    title: title.value,
+    description: description.value,
+    categoryName: selectedCategory.value,
+    listingStatus: 'ACTIVE',
+    price: price.value,
+    latitude: coord[0],
+    longitude: coord[1],
+  }; 
+
+  // Check token before sending the request
+  const token = user.token;
+  if (isTokenExpired(token)) {
+    user.logout();
+    await router.push('/login');
+    return;
+  }
+
+  let createListingResponse = "";
+  let createListingSuccess = false;
+  try {
+    createListingResponse = await createListingWithoutImage(listing, token);
+    console.log('Listing created successfully:', createListingResponse);
+    createListingSuccess = true;
+  } catch (error) {
+    console.error('Error creating listing:', error);
+    resultModalMessage.value = 'Error while creating listing. Please try again.';
+    showResultModal.value = true;
+  }
+  // If images are selected, send them to the server
+  if (images.value.length > 0 && createListingSuccess) {
+    try {
+      const listingId = createListingResponse.listingId; // Assuming the response contains the listing ID
+      console.log('Listing ID:', listingId);
+      const imageResponse = await sendImagesToListing(images.value, listingId, token);
+      console.log('Images sent successfully:', imageResponse);
+      resultModalMessage.value = 'Listing created successfully with images.';
+      showResultModal.value = true;
+    } catch (error) {
+      console.error('Error sending images:', error);
+      resultModalMessage.value = 'Error while sending images. Please try again.';
+      showResultModal.value = true;
+    }
+  } else {
+    resultModalMessage.value = 'Listing created successfully.';
+    showResultModal.value = true;
+  }
 };
+
+const handleFileChange = (event) => {
+  const selectedFiles = event.target.files;
+
+  if (selectedFiles && selectedFiles.length > 0) {
+    images.value = Array.from(selectedFiles); // Store files in the `images` array
+    console.log('Selected files:', images.value);
+  } else {
+    console.log('No files selected.');
+  }
+};
+
+onMounted(() => {
+  localGetCategories();
+  // Check if the user is logged in and if the token is expired, if not logout
+  const token = user.token;
+  if (isTokenExpired(token)) {
+    user.logout();
+    router.push("/login")
+  }
+});
 
 </script>
 
 <template>
-<div class="display-page-container">
-  <div class="fields">
-    <h2>Create a new listing</h2>
-    <div class="text-fields">
-      <input type="text" placeholder="Header" required />
-      <textarea type="text" id="description" placeholder="Description" required />
-      <input type="text" placeholder="Price" required />
-      <input type="text" placeholder="Location" required />
-      <div v-for="category in categories" :key="category.id">
-        <label>
-          <input type="checkbox" :name=category.name :value=category.name>{{ category.name }}
-        </label>
+  <div class="display-page-container">
+    <form @submit.prevent="handleCreateListing" class="fields">
+      <h2>{{ $t('header.create-new-listing') }}</h2>
+      <div class="text-fields">
+        <input v-model="title" type="text" :placeholder="$t('listing.header')" required/>
+        <textarea v-model="description" id="description" :placeholder="$t('listing.description')" required></textarea>
+        <input v-model="price" type="text" :placeholder="$t('listing.price')" required/>
+        <input v-model="location" type="text" :placeholder="$t('listing.location')" required/>
+        <div v-for="category in categories" :key="category.id">
+          <label>
+            <input
+                v-model="selectedCategory"
+                type="radio"
+                name="category"
+                :value="category.name"
+            />
+            {{ category.name }}
+          </label>
+        </div>
       </div>
-    </div>
-    <div class="image-field">
-      <form action="/upload" method="post" enctype="multipart/form-data">
-        <label for="file">Upload image:</label>
-        <input type="file" id="file" name="file" accept="image/*">
-      </form>
-    </div>
-    <div class="submit-button">
-      <button type="submit" class="basic-blue-btn" @click="createListing">Create</button>
-    </div>
+      <div class="image-field">
+        <label for="file">{{ $t('listing.upload-image') }}:</label>
+        <input type="file" id="file" :name="$t('listing.file')" accept="image/*" @change="handleFileChange" disabled />
+      </div>
+      <div class="submit-button">
+        <button type="submit" class="basic-blue-btn">{{ $t('button.create') }}</button>
+      </div>
+    </form>
   </div>
-</div>
+  <SuccessFailModal
+      v-if="showResultModal"
+      :message="resultModalMessage"
+      @close="showResultModal = false"
+  />
 </template>
 
 <style scoped>
@@ -163,6 +246,57 @@ h2 {
   .display-page-container {
     width: 80%;
     padding: 20px;
+  }
+}
+
+/* Responsive Design for very small screens (max-width: 480px) */
+@media (max-width: 480px) {
+  .display-page-container {
+    width: 90%; /* Take almost full width */
+    padding: 15px; /* Reduce padding */
+    box-shadow: none; /* Simplify shadow for smaller screens */
+    border-radius: 8px; /* Slightly reduce border radius */
+  }
+
+  h2 {
+    font-size: 18px; /* Adjust font size for smaller screens */
+    text-align: center; /* Keep heading centered */
+  }
+
+  .text-fields {
+    gap: 10px; /* Reduce gap between input fields */
+  }
+
+  #description {
+    font-size: 14px; /* Adjust font size */
+    height: 80px; /* Reduce height */
+    padding: 8px; /* Reduce padding */
+  }
+
+  .text-fields input[type="text"],
+  .text-fields textarea {
+    font-size: 14px; /* Adjust font size */
+    padding: 8px; /* Reduce padding */
+  }
+
+  .text-fields label {
+    font-size: 12px; /* Adjust label font size */
+    gap: 3px; /* Reduce gap between checkbox and label text */
+  }
+
+  .image-field {
+    margin-top: 15px; /* Reduce margin */
+  }
+
+  .image-field input {
+    font-size: 12px; /* Adjust font size */
+    padding: 5px; /* Add padding for better usability */
+  }
+
+  .submit-button button {
+    font-size: 14px; /* Adjust button font size */
+    padding: 10px; /* Add padding for better usability */
+    width: 100%; /* Ensure button takes full width */
   }
 }
 </style>

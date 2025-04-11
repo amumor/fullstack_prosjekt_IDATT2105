@@ -7,10 +7,23 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+/**
+ * DTO for a list of listings.
+ * This class is used to transfer a list of listings from the server to the client.
+ * It contains a list of ListingResponseDTO objects.
+ *
+ * @author Vetle Hodne, Amund Mørk
+ * @version 1.0
+ * @since 1.0
+ */
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class ListingListResponseDTO {
-    private List<ListingResponseDTO> listings;
+
+  /**
+   * A list of ListingResponseDTOs.
+   */
+  private List<ListingResponseDTO> listings;
 }

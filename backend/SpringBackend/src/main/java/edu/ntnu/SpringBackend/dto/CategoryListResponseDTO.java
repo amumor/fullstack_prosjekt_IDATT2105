@@ -7,10 +7,24 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+/**
+ * DTO for a list of categories.
+ * This class is used to transfer a list of categories from the server to the client.
+ * It contains a list of CategoryResponseDTO objects.
+ *
+ * @author Vetle Hodne, Amund Mørk
+ * @version 1.0
+ * @see CategoryResponseDTO
+ * @since 1.0
+ */
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class CategoryListResponseDTO {
-    List<CategoryResponseDTO> categories;
+
+  /**
+   * A list of CategoryResponseDTOs.
+   */
+  List<CategoryResponseDTO> categories;
 }

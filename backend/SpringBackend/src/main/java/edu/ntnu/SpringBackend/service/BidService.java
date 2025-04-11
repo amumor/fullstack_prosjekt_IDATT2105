@@ -49,8 +49,8 @@ public class BidService {
    * Place a bid on a chat.
    * The buyer can only place one pending bid at a time.
    *
-   * @param chatId the id of the chat
-   * @param user the user who is placing the bid
+   * @param chatId  the id of the chat
+   * @param user    the user who is placing the bid
    * @param request the bid request
    * @return the bid response
    */
@@ -86,7 +86,7 @@ public class BidService {
    * Only the seller of the listing can accept a bid.
    *
    * @param bidId the id of the bid
-   * @param user the user who is accepting the bid
+   * @param user  the user who is accepting the bid
    * @return the bid response
    */
   @Transactional
@@ -111,7 +111,7 @@ public class BidService {
    * Only the seller of the listing can reject a bid.
    *
    * @param bidId the id of the bid
-   * @param user the user who is rejecting the bid
+   * @param user  the user who is rejecting the bid
    * @return the bid response
    */
   @Transactional
@@ -135,7 +135,7 @@ public class BidService {
    * Only the buyer of the bid can cancel a bid.
    *
    * @param bidId the id of the bid
-   * @param user the user who is canceling the bid
+   * @param user  the user who is canceling the bid
    * @return the bid response
    */
   @Transactional
@@ -163,8 +163,8 @@ public class BidService {
    * Helper method to validate the bid based on the chat and user.
    * This method checks if the listing is active and if the user is either the buyer or seller of the chat.
    *
-   * @param chatId the id of the chat
-   * @param user the user who is placing the bid
+   * @param chatId  the id of the chat
+   * @param user    the user who is placing the bid
    * @param isBuyer true if the action is from the buyer, false if from the seller
    */
   private void validateBid(UUID chatId, User user, boolean isBuyer) {

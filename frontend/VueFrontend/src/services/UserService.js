@@ -7,6 +7,8 @@ import {
 } from '@/api';
 import {serviceConfigParams} from '@/services/ServiceSetup.js';
 
+import request from 'superagent';
+
 const {bearerTokenAuth, timeout, baseURL} = serviceConfigParams();
 
 /**
@@ -51,19 +53,16 @@ export function deleteUser(id, token) {
  *   .then(user => console.log('User retrieved:', user))
  *   .catch(error => console.error('Failed to get user:', error));
  */
-export function getUserByEmail(email, token) {
-    const client = new ApiClient(baseURL);
-    client.timeout = timeout;
-    client.authentications.bearerAuth = {type: 'bearer', accessToken: token};
-
-    const userApi = new UserControllerApi(client);
-    return userApi.getUserByEmail(email)
-        .then(response_and_data => response_and_data)
-        .catch(error => {
-            console.error('Failed to get user by email:', error);
-            throw error;
+export const getUserByEmail = (token, email) => {
+    return request
+        .get(`http://localhost:8080/api/v1/users/email/${email}`)
+        .set('Authorization', `Bearer ${token}`)
+        .then(res => res.body)
+        .catch(err => {
+            console.error('Failed to get user by email:', err);
+            throw err;
         });
-}
+};
 
 /**
  * Retrieves a user by their ID.
@@ -78,6 +77,7 @@ export function getUserByEmail(email, token) {
  *   .then(user => console.log('User retrieved:', user))
  *   .catch(error => console.error('Failed to get user:', error));
  */
+/** 
 export function getUserById(id, token) {
     const client = new ApiClient(baseURL);
     client.timeout = timeout;
@@ -91,6 +91,31 @@ export function getUserById(id, token) {
             throw error;
         });
 }
+*/
+
+/**
+ * Retrieves a user by their ID.
+ *
+ * @param {string} id - The ID of the user.
+ * @param {string} token - JWT token.
+ * @returns {Promise<Object>} A promise that resolves to a UserResponseDTO.
+ * @throws {Error} If fetching the user fails.
+ *
+ * @example
+ * getUserById('user123', 'jwt.tok.en')
+ *   .then(user => console.log('User retrieved:', user))
+ *   .catch(error => console.error('Failed to get user:', error));
+ */
+export const getUserById = (id, token) => {
+    return request
+        .get(`http://localhost:8080/api/v1/users/id/${id}`) // Adjust the URL to match your API
+        .set('Authorization', `Bearer ${token}`)
+        .then(res => res.body) // Assuming the response body contains the user data
+        .catch(err => {
+            console.error('Failed to get user by ID:', err);
+            throw err;
+        });
+};
 
 /**
  * Updates the current user's profile with the provided details.
@@ -151,6 +176,7 @@ export function updateUser(user, token) {
  *   .then(profile => console.log('My profile:', profile))
  *   .catch(error => console.error('Failed to retrieve my profile:', error));
  */
+/** 
 export function getMyProfile(token) {
     const client = new ApiClient(baseURL);
     client.timeout = timeout;
@@ -162,5 +188,29 @@ export function getMyProfile(token) {
         .catch(error => {
             console.error('Failed to retrieve my profile:', error);
             throw error;
+        });
+}
+*/
+
+/**
+ * Retrieves the profile of the currently authenticated user.
+ *
+ * @param {string} token - JWT token.
+ * @returns {Promise<Object>} A promise that resolves to a UserResponseDTO containing the user's profile.
+ * @throws {Error} If fetching the profile fails.
+ *
+ * @example
+ * getMyProfile('jwt-token')
+ *   .then(profile => console.log('My profile:', profile))
+ *   .catch(error => console.error('Failed to retrieve my profile:', error));
+ */
+export function getMyProfile(token) {
+    return request
+        .get('http://localhost:8080/api/v1/users/get-my-profile')  // Adjust the URL to your API endpoint
+        .set('Authorization', `Bearer ${token}`)
+        .then(res => res.body)
+        .catch(err => {
+            console.error('Failed to retrieve my profile:', err);
+            throw err;
         });
 }

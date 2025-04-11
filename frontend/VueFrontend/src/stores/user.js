@@ -10,6 +10,7 @@ export const userStore = defineStore('user', {
         phoneNumber: '',
         isLoggedIn: false,
     }),
+    
     actions: {
         setUser(user) {
             this.token = user.token;

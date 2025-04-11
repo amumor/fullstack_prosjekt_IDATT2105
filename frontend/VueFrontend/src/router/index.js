@@ -13,7 +13,7 @@ import EditListingView from '@/views/listing/EditListingView.vue'
 import AdminSettingsView from '@/views/admin/AdminSettingsView.vue'
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHistory(),
   routes: [
     {
       path: '/',
@@ -31,7 +31,7 @@ const router = createRouter({
       component: ProfileView
     },
     {
-      path: '/listing/:id',
+      path: '/listing/id/:id',
       name: 'listing',
       component: ListingView,
     },
@@ -66,7 +66,7 @@ const router = createRouter({
       component: MapView
     },
     {
-      path: '/listing/:id/edit',
+      path: '/listing/update/:id/edit',
       name: 'editListing',
       component: EditListingView,
     },

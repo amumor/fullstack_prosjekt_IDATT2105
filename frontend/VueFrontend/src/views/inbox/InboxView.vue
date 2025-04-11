@@ -1,400 +1,418 @@
 <script setup>
-import { ref, computed, nextTick, watch, onUpdated } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import Navbar from '@/components/Navbar.vue'
 import { useChatStore } from '@/stores/chat'
-import { storeToRefs } from 'pinia'
 import { userStore } from '@/stores/user'
-import { useListingStore } from '@/stores/listing'
-
+import { useRouter } from 'vue-router'
 import ListedChatComponent from '@/components/inbox/ListedChatComponent.vue'
-import InitialsDisplayComponent from '@/components/profile/InitialsDisplayComponent.vue'
 import BidBoxComponent from '@/components/inbox/BidBoxComponent.vue'
-
-// Set dummy listings
-const initialListings = [
-  {
-    id: 1,
-    seller: 50,
-    title: 'Boat for sale',
-    description: 'A great boat for sale.',
-    category: 'Boat',
-    status: 'ACTIVE',
-    price: 10000,
-    location: 'Helsinki, Finland',
-    createdAt: '2023-10-01',
-    lastEditedAt: '2023-10-01',
-    image: 'https://iqboatlifts.com/wp-content/uploads/2018/06/Yacht-vs-Boat-Whats-the-Difference-Between-the-Two-1024x571.jpg',
-  },
-  {
-    id: 2,
-    seller: 10,
-    title: 'Boat for sale',
-    description: 'A great boat for sale.',
-    category: 'Boat',
-    status: 'ACTIVE',
-    price: 10000,
-    location: 'Helsinki, Finland',
-    createdAt: '2023-10-01',
-    lastEditedAt: '2023-10-01',
-    image: 'https://iqboatlifts.com/wp-content/uploads/2018/06/Yacht-vs-Boat-Whats-the-Difference-Between-the-Two-1024x571.jpg',
-  },
-  {
-    id: 3,
-    seller: 20,
-    title: 'Boat for sale',
-    description: 'A great boat for sale.',
-    category: 'Boat',
-    status: 'ACTIVE',
-    price: 10000,
-    location: 'Helsinki, Finland',
-    createdAt: '2023-10-01',
-    lastEditedAt: '2023-10-01',
-    image: 'https://iqboatlifts.com/wp-content/uploads/2018/06/Yacht-vs-Boat-Whats-the-Difference-Between-the-Two-1024x571.jpg',
-  },
-]
-
-const listingStore = useListingStore()
-listingStore.setListings(initialListings)
-
-// Set dummy users
-const useUserStore = userStore()
-useUserStore.login({
-  id: 50,
-  firstName: 'Alice',
-  lastName: 'Smith',
-  email: 'alice@smith.com',
-  phoneNumber: '555555555',
-})
-
-// Set dummy chats
-const buyer1 = 30
-const buyer2 = 40
-const buyer3 = 50
-const initialChats = [
-  {
-    id: 100,
-    buyer: buyer1,
-    listing: initialListings[0],
-    createdAt: '2023-10-01',
-    updatedAt: '2023-10-01',
-    messages: [{chat: 100, sender: buyer1, content: 'hallo', sentAt:'09:05'}, {chat: 100, sender: initialListings[0].seller, content: 'How are you?', sentAt: '10:25'}],
-    bids: [{chat: 100, buyer: 30, price: '600', status: 'PENDING', sentAt: '11:35'}],
-    hasPendingBids: true,
-    selected: true,
-    isMessageRead: true,
-  },
-  {
-    id: 200,
-    buyer: buyer2,
-    listing: initialListings[1],
-    createdAt: '2023-10-01',
-    updatedAt: '2023-10-01',
-    messages: [{chat: 200, sender: buyer2, content: 'hallo', sentAt:'09:05'}, {chat: 200, sender: initialListings[1].seller, content: 'How are you?', sentAt: '10:25'}],
-    bids: [],
-    hasPendingBids: false,
-    selected: false,
-    isMessageRead: false,
-  },
-  {
-    id: 300,
-    buyer: buyer3,
-    listing: initialListings[2],
-    createdAt: '2023-10-01',
-    updatedAt: '2023-10-01',
-    messages: [{chat: 300, sender: buyer3, content: 'hallo', sentAt:'09:05'}, {chat: 300, sender: initialListings[2].seller, content: 'How are you?', sentAt: '10:25'}],
-    bids: [],
-    hasPendingBids: false,
-    selected: false,
-    isMessageRead: false,
-  },
-]
+import { isTokenExpired } from '@/services/TokenService.js'
+import { fetchImage } from '@/services/ImageService.js'
+import {
+  addMessageToChat,
+  getAllChatsForUser
+} from '@/services/ChatService.js'
+import {
+  placeBid,
+  acceptBid,
+  rejectBid,
+  cancelBid
+} from '@/services/BidService.js'
 
 const chatStore = useChatStore()
-const { chats, selectedChat } = storeToRefs(chatStore)
-chatStore.setChats(initialChats)
-
-const chatMessages = ref([])
+const user = userStore()
 const newMessage = ref('')
-const makingBid = ref({})
+const bidPrice = ref('')
+const showBidBox = ref(false)
+const router = useRouter()
+const loading = ref(true)
+const error = ref(null)
 
-// Set initial chat messages
-for (const chat of initialChats) {
-  for (const message of chat.messages) {
-    chatMessages.value.push({
-      chatId: chat.id,
-      message: message.content,
-      sender: message.sender,
-      sentAt: message.sentAt,
-      type: 'MESSAGE',
-    })
+onMounted(async () => {
+  console.log('InboxView mounted')
+  loading.value = true
+  error.value = null
+
+  if (!user.isLoggedIn) {
+    console.warn('User not logged in. Redirecting to login.')
+    router.push('/login')
+    return
   }
-  for (const bid of chat.bids) {
-    chatMessages.value.push({
-      id: chatMessages.value.length + 1,
-      chatId: chat.id,
-      price: bid.price,
-      sender: bid.buyer,
-      sentAt: bid.sentAt,
-      type: 'BID',
-      status: bid.status,
-    })
-  }
-}
 
-
-// Function to select a chat
-const openChat = (chatItem) => {
-  chatStore.selectChat(chatItem) 
-}
-
-// Check if the user is the owner of the listing
-const isOwner = computed(() => {
-  if (!selectedChat.value) return false
-  return selectedChat.value.listing.seller === useUserStore.id
-})
-
-// TODO: Sort messages last message time ???
-
-const sendMessage = () => {
-  if (selectedChat) {
-    chatStore.postMessage(newMessage.value, useUserStore.id)
-    chatMessages.value.push({
-      chatId: selectedChat.value.id,
-      message: newMessage.value,
-      sender: useUserStore.id,
-      sentAt: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-      type: 'MESSAGE',
-    })
-  }
-  newMessage.value = ''
-}
-
-const sendBid = (bid) => {
-  if (selectedChat) {
-    chatStore.postBid(bid.price, selectedChat.value.buyer)
-    chatMessages.value.push({
-      id: chatMessages.value.length + 1,
-      chatId: selectedChat.value.id,
-      price: bid.price,
-      sender: useUserStore.id,
-      sentAt: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-      type: 'BID',
-      status: 'PENDING',
-    })
-  }
-  selectedChat.value.hasPendingBids = true
-  makingBid.value[selectedChat.value.id] = false
-}
-
-const acceptBid = async (bid) => {
-  if (!bid || !bid.id) return
-  await chatStore.acceptBid(bid.chatId)
-
-  const index = chatMessages.value.findIndex(b => b.id === bid.id)
-  if (index !== -1) {
-    chatMessages.value[index].status = 'ACCEPTED'
-  }
-  
-  console.log(chatMessages.value)
-  console.log(selectedChat.value.bids)
-  await nextTick()
-}
-
-const rejectBid = async (bid) => {
-  if (!bid || !bid.id) return
-  await chatStore.rejectBid(bid.chatId)
-
-  const index = chatMessages.value.findIndex(b => b.id === bid.id)
-  if (index !== -1) {
-    chatMessages.value[index].status = 'REJECTED'
-  }
-  
-  console.log(chatMessages.value)
-  console.log(selectedChat.value.bids)
-  await nextTick()
-}
-
-const cancelBid = async (bid) => {
-  if (!bid || !bid.id) return
-  await chatStore.cancelBid(bid.chatId)
-
-  const index = chatMessages.value.findIndex(b => b.id === bid.id)
-  if (index !== -1) {
-    chatMessages.value[index].status = 'CANCELLED'
-  }
-  
-  console.log(chatMessages.value)
-  console.log(selectedChat.value.bids)
-  await nextTick()
-}
-
-const toggleBid = (chatId) => {
-  makingBid.value[chatId] = !makingBid.value[chatId]
-}
-
-// Watch for changes in selectedChat and update the makingBid state
-const scrollToBottom = () => {
-  nextTick(() => {
-    const container = document.querySelector('.message-info')
-    if (container) {
-      container.scrollTop = container.scrollHeight
+  try {
+    if (isTokenExpired(user.token)) {
+      user.logout()
+      router.push('/login')
+      return
     }
-  })
+
+    console.log('Fetching chats...')
+    const chats = await getAllChatsForUser(user.token)
+    console.log('Chats received:', chats)
+
+    if (chats && Array.isArray(chats)) {
+      const processedChats = chats.map(chat => {
+        chat.messages = chat.messages || []
+        chat.bids = chat.bids || []
+
+        if (!chat.listing && chat.listingId) {
+  
+          chat.listing = {
+            id: chat.listingId,
+            title: `Chat with ${chat.sellerFirstName} ${chat.buyerFirstName}`, 
+            imageUrls: [] 
+          }
+        }
+
+        return chat
+      })
+
+      console.log('Processed chats:', processedChats)
+      chatStore.setChats(processedChats)
+
+      // Select the first chat if available
+      if (processedChats.length > 0 && !chatStore.selectedChat) {
+        chatStore.selectChat(processedChats[0])
+      }
+    } else {
+      console.warn('Invalid chat data structure:', chats)
+      chatStore.setChats([])
+    }
+  } catch (error) {
+    console.error('Error loading chats:', error)
+    error.value = 'Failed to load chats. Please try again.'
+  } finally {
+    loading.value = false
+  }
+})
+
+// Send a new message in the current chat
+const sendMessage = async () => {
+  if (!chatStore.selectedChat || !newMessage.value.trim()) return
+
+  try {
+    // Send the message to the backend
+    const response = await addMessageToChat(
+      chatStore.selectedChat.id,
+      newMessage.value,
+      user.token
+    )
+
+    // Update the chat store with the new message
+    chatStore.postMessage(newMessage.value, user.id)
+    newMessage.value = ''
+  } catch (error) {
+    console.error('Error sending message:', error)
+  }
 }
 
-watch(() => selectedChat.value?.messages.length || selectedChat.value?.bids.length, () => {
-  scrollToBottom()
+// Handle placing a new bid
+const handleSubmitBid = async (bidData) => {
+  if (!chatStore.selectedChat) return
+
+  try {
+    // Place the bid via the BidService
+    const response = await placeBid(
+      chatStore.selectedChat.id,
+      bidData.price,
+      user.token
+    )
+
+    // Update the store with the new bid
+    chatStore.postBid(bidData.price, user.id)
+    showBidBox.value = false
+  } catch (error) {
+    console.error('Error placing bid:', error)
+  }
+}
+
+// Handle accepting a bid
+const handleAcceptBid = async () => {
+  if (!chatStore.selectedChat || !chatStore.selectedChat.hasPendingBids) return
+
+  // Find the pending bid for this chat
+  const pendingBid = chatStore.selectedChat.bids.find(
+    bid => bid.status === 'PENDING'
+  )
+
+  if (!pendingBid) return
+
+  try {
+    // Accept the bid via the BidService
+    await acceptBid(pendingBid.id, user.token)
+
+    // Update the store
+    chatStore.acceptBid(pendingBid.id)
+  } catch (error) {
+    console.error('Error accepting bid:', error)
+  }
+}
+
+// Handle rejecting a bid
+const handleRejectBid = async () => {
+  if (!chatStore.selectedChat || !chatStore.selectedChat.hasPendingBids) return
+
+  // Find the pending bid for this chat
+  const pendingBid = chatStore.selectedChat.bids.find(
+    bid => bid.status === 'PENDING'
+  )
+
+  if (!pendingBid) return
+
+  try {
+    // Reject the bid via the BidService
+    await rejectBid(pendingBid.id, user.token)
+
+    // Update the store
+    chatStore.rejectBid(pendingBid.id)
+  } catch (error) {
+    console.error('Error rejecting bid:', error)
+  }
+}
+
+// Handle cancelling a bid (as the buyer)
+const handleCancelBid = async () => {
+  if (!chatStore.selectedChat || !chatStore.selectedChat.hasPendingBids) return
+
+  // Find the pending bid for this chat
+  const pendingBid = chatStore.selectedChat.bids.find(
+    bid => bid.status === 'PENDING' && bid.buyer === user.id
+  )
+
+  if (!pendingBid) return
+
+  try {
+    // Cancel the bid via the BidService
+    await cancelBid(pendingBid.id, user.token)
+
+    // Update the store
+    chatStore.cancelBid(pendingBid.id)
+  } catch (error) {
+    console.error('Error cancelling bid:', error)
+  }
+}
+
+const sortedChats = computed(() => {
+  if (!chatStore.chats || chatStore.chats.length === 0) return [];
+  
+  return [...chatStore.chats].sort((a, b) => {
+    // Get timestamps of the latest messages
+    const lastMessageA = a.messages && a.messages.length > 0 ? 
+      new Date(a.messages[a.messages.length - 1].sentAt).getTime() : 0;
+    const lastMessageB = b.messages && b.messages.length > 0 ? 
+      new Date(b.messages[b.messages.length - 1].sentAt).getTime() : 0;
+    
+    // Sort in descending order (newest first)
+    return lastMessageB - lastMessageA;
+  });
+});
+
+// Check if there are any chats available
+const hasChats = computed(() => {
+  return sortedChats.value && sortedChats.value.length > 0
 })
 
-onUpdated(() => {
-  scrollToBottom()
+// Check if the current user is the buyer in this chat
+const isBuyer = computed(() => {
+  if (!chatStore.selectedChat) return false
+  return chatStore.selectedChat.buyerId === user.id
 })
 
-
+// Check if the current user is the seller in this chat
+const isSeller = computed(() => {
+  if (!chatStore.selectedChat) return false
+  return !isBuyer.value
+})
 </script>
 
 <template>
-<Navbar />
-<div class="display-page-container" >
-  <div class="display-left-container">
-    <h2>Messages</h2>
-    <div class="chats-container">
-      <ListedChatComponent
-        v-for="(chatItem) in chats"
-        :key="chatItem.id"
-        :listingTitle="chatItem.listing.title"
-        :image="chatItem.listing.image"
-        :lastMessageTime="chatItem.messages[chatItem.messages.length - 1]?.sentAt"
-        :isMessageRead="chatItem.isMessageRead"
-        :messengerName="'Han Karen'"
-        :messages="chatItem.messages"
-        :selected="chatItem.selected"
-        :chatId="chatItem.id"
-        class="chat-item"
-        @click="openChat(chatItem)" />
+  <Navbar />
+  <div class="display-page-container">
+    <div v-if="loading" class="loading-container">
+      <div class="loader"></div>
+      <p>Loading chats...</p>
     </div>
-  </div>
-  <div class="display-right-container" v-if="selectedChat">
-    <!-- Fix scroll! -->
-    <div class="message-info">
-      <div class="initials" v-if="isOwner">
-        <InitialsDisplayComponent 
-        :name="'Kar selger'"
-        :width="120"
-        :height="120" />
-        <h2>{{ selectedChat.listing.seller }}</h2>
-      </div>
-      <div class="initials" v-else>
-        <InitialsDisplayComponent
-        :name="'Karen kjøper'"
-        :width="120"
-        :height="120" />
-        <h2>{{ selectedChat.buyer }}</h2>
+
+    <div v-else-if="error" class="error-container">
+      <p>{{ error }}</p>
+      <button @click="router.go(0)" class="basic-blue-btn">Reload</button>
+    </div>
+
+    <template v-else>
+      <div class="display-left-container">
+        <h2>{{ $t('header.messages') }}</h2>
+
+        <!-- No chats message -->
+        <div v-if="!hasChats" class="no-chats-message">
+          <p>You don't have any conversations yet.</p>
+        </div>
+
+        <!-- Chat list -->
+        <div v-else class="chats-container">
+          <ListedChatComponent 
+            v-for="chat in sortedChats" 
+            :key="chat.id" 
+            :chatId="chat.id"
+            :listingTitle="chat.listing ? chat.listing.title : `Chat #${chat.id.substring(0, 8)}`" 
+            :image="chat.listing && chat.listing.imageUrls && chat.listing.imageUrls.length > 0 ?
+              fetchImage(chat.listing.imageUrls) : 'https://placehold.co/600x400?text=No+Image'" 
+            :lastMessageTime="chat.messages && chat.messages.length > 0 ?
+              chat.messages[chat.messages.length - 1].sentAt : ''" 
+            :isMessageRead="chat.isMessageRead" 
+            :messengerName="chat.buyerFirstName ?
+              `${chat.buyerFirstName} ${chat.buyerLastName}` :
+              `${chat.sellerFirstName} ${chat.sellerLastName}`" 
+            :messages="chat.messages || []"
+            :selected="chat === chatStore.selectedChat" 
+          />
+        </div>
       </div>
 
-      <div class="messages" v-for="(message, index) in chatMessages" :key="index">
-        <template v-if="message.chatId === selectedChat.id">
-          <!-- Sent messages -->
-          <div class="sent-message" v-if="message.sender === useUserStore.id">
-            <!-- Bids -->
-            <div v-if="message.type === 'BID'" class="bid-message">
-              <BidBoxComponent
-                :isBidder="true"
-                :inChat="true"
-                :bidPrice="message.price"
-                :bidStatus="message.status" />
-              <!-- Cancel bid -->
-              <button 
-                class="basic-blue-btn" 
-                id="cancel-btn" 
-                v-if="message.status === 'PENDING'" 
-                @click="cancelBid(message)">Cancel</button>
-              <p id="cancelled" v-if="message.status === 'CANCELLED'">Cancelled</p>
-              <p id="sent-timestamp">{{message.sentAt}}</p>
+      <!-- Chat messages and bids (right side) -->
+      <div class="display-right-container" v-if="chatStore.selectedChat">
+        <div class="message-info">
+          <!-- Messages -->
+          <div class="messages">
+            <div v-if="!chatStore.selectedChat.messages || chatStore.selectedChat.messages.length === 0"
+              class="no-messages-yet">
+              <p>No messages yet. Start the conversation!</p>
             </div>
-            <!-- Text messages -->
-            <div v-else-if="message.type === 'MESSAGE'" class="text-message">
-              <p>{{ message.message }}</p>
-              <p id="sent-timestamp">{{message.sentAt}}</p>
+
+            <div v-else v-for="message in chatStore.selectedChat.messages" :key="message.id">
+              <div :class="message.sender === user.id ? 'sent-message' : 'received-message'">
+                {{ message.content }}
+                <div :id="message.sender === user.id ? 'sent-timestamp' : 'received-timestamp'">
+                  {{ new Date(message.sentAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }}
+                </div>
+              </div>
             </div>
           </div>
 
-          <!-- Received messages -->
-          <!-- Fix: receives messages from other users than sender id??? -->
-          <div class="received-message" v-else>
-            <!-- Bids -->
-            <div v-if="message.type === 'BID'" class="bid-message">
-              <BidBoxComponent
-                :isBidder="false"
-                :inChat="true"
-                :bidPrice="message.price"
-                :bidStatus="message.status"
-                @accept-bid="acceptBid(message)"
-                @reject-bid="rejectBid(message)" />
-              <p id="received-timestamp">{{message.sentAt}}</p>
-            </div>
-            <!-- Text messages -->
-            <div v-else-if="message.type === 'MESSAGE'" class="text-message">
-              <p>{{ message.message }}</p>
-              <p id="received-timestamp">{{message.sentAt}}</p>
+          <!-- Bids -->
+          <div v-if="chatStore.selectedChat.bids && chatStore.selectedChat.bids.length > 0">
+            <div v-for="bid in chatStore.selectedChat.bids" :key="bid.id">
+              <BidBoxComponent :isBidder="bid.buyer === user.id" :inChat="true" :bidPrice="bid.price"
+                :bidStatus="bid.status" @accept-bid="handleAcceptBid" @reject-bid="handleRejectBid" />
             </div>
           </div>
-        </template>
-      </div>
-      <!-- New bid -->
-      <div class="bid-box" v-if="makingBid[selectedChat.id]"> 
-        <BidBoxComponent 
-          :isBidder="true"
-          :inChat="false"
-          :bidStatus="'PENDING'"
-          @submit-bid="sendBid"
-          @close-bid-box="makingBid[selectedChat.id] = false" />
-      </div>
-    </div>
+        </div>
 
-    
-    <!-- New message -->
-    <div class="message-input">
-      <textarea v-model="newMessage" placeholder="Type a message..." @keydown.enter.prevent="sendMessage"></textarea>
-      <button class="basic-blue-btn" @click="sendMessage">Send</button>
-      <button 
-        class="basic-blue-btn"  
-        :id="selectedChat.hasPendingBids ? 'pending-bid-button' : 'make-bid-button'" 
-        :disabled="selectedChat.hasPendingBids"
-        v-if="!isOwner" 
-        @click="toggleBid(selectedChat.id)"
-        >Make bid</button>
-    </div>
+        <div class="message-input">
+          <textarea v-model="newMessage" placeholder="Type a message..."
+            @keydown.enter.prevent="sendMessage"></textarea>
+
+          <div class="button-container">
+            <button @click="sendMessage" class="send-btn">
+              {{ $t('button.send') }}
+            </button>
+
+            <button v-if="isBuyer && !showBidBox && (!chatStore.selectedChat.hasPendingBids)" @click="showBidBox = true"
+              class="bid-btn">
+              {{ $t('button.make-bid') }}
+            </button>
+
+            <button v-if="isBuyer && chatStore.selectedChat.hasPendingBids" @click="handleCancelBid" class="cancel-btn">
+              {{ $t('button.cancel-bid') }}
+            </button>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="display-right-container empty-state" v-else>
+        <div class="empty-message">
+          <p>{{ hasChats ? $t('chat.select-conversation') : 'Start a conversation by messaging a listing owner!' }}</p>
+        </div>
+      </div>
+    </template>
   </div>
-</div>
 </template>
 
 <style scoped>
-/* Page container */
-.display-page-container{
+.loading-container,
+.error-container {
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 60vh;
+  width: 100%;
 }
 
-/* Left container */
+.loader {
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid #1C64FF;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+  margin-bottom: 20px;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.error-container p {
+  color: #d9534f;
+  margin-bottom: 20px;
+}
+
+.no-chats-message {
+  padding: 20px;
+  text-align: center;
+  color: #666;
+}
+
+.no-messages-yet {
+  text-align: center;
+  padding: 20px;
+  color: #666;
+  font-style: italic;
+}
+
+.display-page-container {
+  display: flex;
+  min-height: calc(100vh - 60px);
+}
+
 .display-left-container {
   flex: 1;
   max-width: 40%;
+  overflow: auto;
+  padding: 20px;
 }
 
-/* Right container */
 .display-right-container {
   flex: 1;
-  max-width: 100%;
+  max-width: 60%;
   background: #f5f5f5;
-  text-align: center;
-  border-radius: 2%;
+  border-radius: 8px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: calc(94vh - 56px); 
+  height: calc(94vh - 56px);
+  margin: 10px;
 }
 
-/* Messages container */
+.empty-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.empty-message {
+  font-size: 18px;
+  color: #666;
+  text-align: center;
+}
+
 .chats-container {
   display: flex;
   flex-direction: column;
@@ -411,9 +429,8 @@ onUpdated(() => {
 /* Right side chat display */
 .message-info {
   flex-direction: column;
-  align-items: center;
+  align-items: right;
   overflow-y: auto;
-  
   padding: 20px;
   gap: 10px;
 }
@@ -423,7 +440,7 @@ onUpdated(() => {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin: 0 auto; 
+  margin: 0 auto;
 }
 
 /* Message display */
@@ -431,94 +448,212 @@ onUpdated(() => {
   display: flex;
   flex-direction: column;
   width: 100%;
+  padding: 10px;
+  gap: 12px;
+  height: 100%;
+  overflow-y: auto;
 }
 
 .messages::-webkit-scrollbar {
   width: 6px;
 }
+
 .messages::-webkit-scrollbar-thumb {
   background-color: #ccc;
   border-radius: 10px;
 }
 
 .sent-message {
-  background: #1C64FF;
+  background: linear-gradient(135deg, #1C64FF, #0056b3);
   color: white;
-
   align-self: flex-end;
-  text-align: right;
-  padding: 5px 10px;
-  border-radius: 10px;
-  margin-bottom: 10px;
+  text-align: left;
+  padding: 12px 16px;
+  border-radius: 18px 18px 4px 18px;
+  margin-left: 40px;
+  margin-bottom: 4px;
   max-width: 70%;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  position: relative;
+  word-wrap: break-word;
+  line-height: 1.4;
+  align-items: flex-end;
+  display: flex;
+  flex-direction: column;
 }
 
 .received-message {
-  background: #e5e5ea;
-  color: black;
-
+  background: white;
+  color: #333;
   align-self: flex-start;
   text-align: left;
-  padding: 5px 10px;
-  border-radius: 10px;
-  margin-bottom: 10px;
+  padding: 12px 16px;
+  border-radius: 18px 18px 18px 4px;
+  margin-right: 40px;
+  margin-bottom: 4px;
   max-width: 70%;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  position: relative;
+  word-wrap: break-word;
+  line-height: 1.4;
+  border: 1px solid #e1e1e1;
+  align-self: flex-start;
+  display: flex;
+  flex-direction: column;
 }
 
-/* Timestamp styling */
-#sent-timestamp,
+#sent-timestamp {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.7);
+  text-align: right;
+  margin-top: 4px;
+  align-self: flex-end; 
+  width: 100%; 
+}
+
 #received-timestamp {
-  font-size: 12px;
-  margin-top: 5px;
-  opacity: 0.7;
+  font-size: 11px;
+  color: #888;
+  text-align: left;
+  margin-top: 4px;
+  align-self: flex-start; 
+  width: 100%; 
 }
 
-
-/* Message input */
 .message-input {
   display: flex;
-  align-items: center;
-  padding: 0 10px 10px 10px;
+  flex-direction: column;
+  padding: 15px;
+  background-color: white;
+  border-top: 1px solid #e0e0e0;
+  border-radius: 0 0 8px 8px;
+  margin-top: auto;
 }
 
 .message-input textarea {
-  flex: 1;
-  padding: 10px;
-  border-radius: 5px;
+  width: 100%;
+  padding: 14px;
+  border-radius: 20px;
   border: 1px solid #ddd;
   resize: none;
+  margin-bottom: 12px;
+  font-size: 14px;
+  min-height: 60px;
+  background-color: #f9f9f9;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-.message-input button {
-  padding: 10px 20px;
-  margin-left: 10px;
+.message-input textarea:focus {
+  outline: none;
+  border-color: #1C64FF;
+  box-shadow: 0 0 0 2px rgba(28, 100, 255, 0.1);
+  background-color: white;
+}
+
+.button-container {
+  display: flex;
+  gap: 10px;
+}
+
+.send-btn {
+  flex: 3;
+  padding: 12px;
   border: none;
   background-color: #1C64FF;
   color: white;
-  border-radius: 5px;
+  border-radius: 20px;
   cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
 }
 
-.message-input button:hover {
-  background-color: #155ab6;
-}
-
-/* buttons */
-.basic-blue-btn {
-  width: 15%;
-}
-
-#pending-bid-button {
-  background-color: #ccc;
+.bid-btn {
+  flex: 1; 
+  padding: 12px;
+  border: none;
+  background-color: #34c759;
   color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s;
 }
 
-#cancel-btn {
-  background-color: #e5e5ea;
-  color: #333;
-
-  width:auto;
+.bid-btn {
+  flex: 1; 
+  padding: 12px;
+  border: none;
+  background-color: #34c759;
+  color: white;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  white-space: nowrap;
 }
 
+.cancel-btn {
+  flex: 1; 
+  padding: 12px;
+  border: none;
+  background-color: #ff3b30;
+  color: white;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
 
+.send-btn:hover {
+  background-color: #0056b3;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.bid-btn:hover {
+  background-color: #2eb350;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.cancel-btn:hover {
+  background-color: #e0352b;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 768px) {
+  .sent-message, .received-message {
+    max-width: 85%;
+    padding: 10px 14px;
+  }
+  
+  .message-input textarea {
+    min-height: 50px;
+    padding: 10px;
+  }
+  
+  #sent-timestamp, #received-timestamp {
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .sent-message, .received-message {
+    max-width: 90%;
+    padding: 8px 12px;
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+  
+  .button-container {
+    gap: 6px;
+  }
+  
+  .send-btn, .bid-btn, .cancel-btn {
+    padding: 10px;
+    font-size: 12px;
+    border-radius: 16px;
+  }
+}
 </style>

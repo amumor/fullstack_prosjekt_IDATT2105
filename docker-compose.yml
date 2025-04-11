@@ -1,4 +1,3 @@
-version: '3.8'
 services:
   backend:
     build: ./backend/SpringBackend
@@ -6,12 +5,13 @@ services:
       - "8080:8080"
     volumes:
       - ./backend/SpringBackend/uploads:/app/uploads
+      - ./backend/SpringBackend/data:/app/data
     environment:
-      SPRING_DATASOURCE_URL: jdbc:h2:mem:testdb
+      SPRING_DATASOURCE_URL: jdbc:h2:file:./data/marketplaceDB
       SPRING_H2_CONSOLE_ENABLED: "true"
       SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.h2.Driver
       SPRING_DATASOURCE_USERNAME: sa
-      SPRING_DATASOURCE_PASSWORD: 
+      SPRING_DATASOURCE_PASSWORD:
     networks:
       - app-network
 

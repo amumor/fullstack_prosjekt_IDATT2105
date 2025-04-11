@@ -56,26 +56,26 @@ const rejectBid = () => {
 
 	<!-- Bids in chat -->
 	<div class="inchat-bid-box" v-if="props.inChat">
-		<h3>Bid</h3>
-		<p>Price: {{ props.bidPrice }}</p>
+		<h3>{{ $t('chat.bid') }}</h3>
+		<p>{{ $t('chat.price') }}: {{ props.bidPrice }}</p>
 
 		<!-- Options for bid receiver on pending bids -->
 		<div v-if="!isBidder && bidStatus === 'PENDING'" class="action-buttons">
-			<button class="basic-blue-btn" @click="acceptBid">Accept</button>
-			<button class="basic-blue-btn" @click="rejectBid">Reject</button>
+			<button class="basic-blue-btn" @click="acceptBid">{{ $t('button.accept') }}</button>
+			<button class="basic-blue-btn" @click="rejectBid">{{ $t('button.reject') }}</button>
 		</div>
 
 		<!-- Status display -->
-		<p v-if="bidStatus === 'ACCEPTED'" class="status accepted">Accepted</p>
-		<p v-if="bidStatus === 'REJECTED'" class="status rejected">Rejected</p>
+		<p v-if="bidStatus === 'ACCEPTED'" class="status accepted">{{ $t('chat.accepted') }}</p>
+		<p v-if="bidStatus === 'REJECTED'" class="status rejected">{{ $t('chat.rejected') }}</p>
 	</div>
 
 	<!-- Make new bid -->
 	<div class="send-bid-box" v-if="props.isBidder && !props.inChat">
-			<h3>Make a bid</h3>
+			<h3>{{ $t('chat.make-a-bid') }}</h3>
 			<button class="close-btn" @click="closeBidBox">✕</button>
 			<input v-model="price" type="text" placeholder="Price" />
-			<button class="submit-btn" @click="submitBid">Send</button>
+			<button class="submit-btn" @click="submitBid">{{ $t('button.send') }}</button>
 	</div>
 </div>
 </template>
@@ -212,5 +212,102 @@ const rejectBid = () => {
 
 .send-bid-box .submit-btn:hover {
   background-color: #0056b3;
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 768px) {
+  .bid-box-container {
+    max-width: 90%; /* Reduce the width for smaller screens */
+    padding: 0.5rem; /* Reduce padding */
+  }
+
+  .inchat-bid-box {
+    padding: 0.5rem; /* Reduce padding */
+  }
+
+  .inchat-bid-box h3 {
+    font-size: 1rem; /* Adjust font size */
+  }
+
+  .inchat-bid-box p {
+    font-size: 0.9rem; /* Adjust font size */
+  }
+
+  .action-buttons .basic-blue-btn {
+    padding: 0.4rem 0.8rem; /* Reduce button padding */
+    font-size: 0.8rem; /* Adjust font size */
+  }
+
+  .send-bid-box {
+    padding: 0.5rem; /* Reduce padding */
+  }
+
+  .send-bid-box h3 {
+    font-size: 1rem; /* Adjust font size */
+  }
+
+  .send-bid-box input {
+    padding: 0.4rem; /* Reduce input padding */
+    font-size: 0.9rem; /* Adjust font size */
+  }
+
+  .send-bid-box .submit-btn {
+    padding: 0.4rem; /* Reduce button padding */
+    font-size: 0.9rem; /* Adjust font size */
+  }
+}
+
+/* Responsive design for very small screens (max-width: 480px) */
+@media (max-width: 480px) {
+  .bid-box-container {
+    max-width: 100%; /* Take full width */
+    padding: 0.5rem; /* Reduce padding */
+  }
+
+  .inchat-bid-box {
+    padding: 0.5rem; /* Reduce padding */
+  }
+
+  .inchat-bid-box h3 {
+    font-size: 0.9rem; /* Adjust font size */
+  }
+
+  .inchat-bid-box p {
+    font-size: 0.8rem; /* Adjust font size */
+  }
+
+  .action-buttons {
+    flex-direction: column; /* Stack buttons vertically */
+    gap: 0.5rem; /* Add spacing between buttons */
+  }
+
+  .action-buttons .basic-blue-btn {
+    padding: 0.4rem; /* Reduce button padding */
+    font-size: 0.8rem; /* Adjust font size */
+    width: 100%; /* Make buttons take full width */
+  }
+
+  .send-bid-box {
+    padding: 0.5rem; /* Reduce padding */
+  }
+
+  .send-bid-box h3 {
+    font-size: 0.9rem; /* Adjust font size */
+  }
+
+  .send-bid-box input {
+    padding: 0.4rem; /* Reduce input padding */
+    font-size: 0.8rem; /* Adjust font size */
+  }
+
+  .send-bid-box .submit-btn {
+    padding: 0.4rem; /* Reduce button padding */
+    font-size: 0.8rem; /* Adjust font size */
+    width: 100%; /* Make button take full width */
+  }
+
+  .send-bid-box .close-btn {
+    font-size: 1rem; /* Adjust font size */
+  }
 }
 </style>

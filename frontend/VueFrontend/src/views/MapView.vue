@@ -1,9 +1,10 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { LMap, LTileLayer, LMarker, LPopup } from '@vue-leaflet/vue-leaflet';
 import { Icon } from "leaflet";
 import Navbar from '@/components/Navbar.vue'
 import BackToComponent from '@/components/BackToComponent.vue'
+import { getListingSuggestions } from '../services/ListingService';
 
 // Fix for missing Leaflet icons
 delete Icon.Default.prototype._getIconUrl;
@@ -16,18 +17,32 @@ Icon.Default.mergeOptions({
 // Set initial map center
 const center = ref([63.417152858467574, 10.404550601471463]);
 
-// Array to store pins
-const markers = ref([
-  { id: 1, position: [59.9139, 10.7522], popup: "Oslo" },
-  { id: 2, position: [63.417152858467574, 10.404550601471463], popup: "TIHLDE kontoret" }
-]);
+const listings = ref([]);
+onMounted(async () => {
+  try {
+    const data = await getListingSuggestions();
+  
+    
+    if (data && Array.isArray(data.listings)) {
+      listings.value = data.listings;  
+    } else {
+      console.error('No listings found or listings is not an array:', data);
+    }
+
+  } catch (err) {
+    console.error('Error fetching listings:', err);
+  }
+})
+
+
+
 </script>
 
 <template>
   <Navbar />
   <BackToComponent />
   <div class="map-container">
-    <LMap :zoom="10" :center="center">
+    <LMap :zoom="5" :center="center">
       <!-- Map Background -->
       <LTileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -36,10 +51,10 @@ const markers = ref([
 
       <!-- Add pins -->
       <LMarker
-        v-for="marker in markers"
-        :key="marker.id"
-        :lat-lng="marker.position">
-        <l-popup>{{ marker.popup }}</l-popup>
+        v-for="listing in listings"
+        :key="listing.id"
+        :lat-lng="[listing.latitude, listing.longitude]">
+        <l-popup>{{ listing.title }}</l-popup>
       </LMarker>
     </LMap>
   </div>

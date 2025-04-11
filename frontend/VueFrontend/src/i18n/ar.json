@@ -1,0 +1,110 @@
+{
+    "logo": "FIND.no",
+    "languages": {
+      "language": "AR",
+      "english": "الإنجليزية",
+      "norwegian": "النرويجية",
+      "french": "الفرنسية",
+      "spanish": "الإسبانية",
+      "mandarin": "الصينية (الماندرين)",
+      "arabic": "العربية"
+    },
+    "button": {
+      "delete": "حذف",
+      "password": "كلمة المرور",
+      "save-changes": "حفظ التغييرات",
+      "save": "حفظ",
+      "create": "إنشاء",
+      "message": "رسالة",
+      "buy": "شراء",
+      "send": "إرسال",
+      "edit": "تعديل",
+      "sign-up": "إنشاء حساب",
+      "close": "إغلاق",
+      "go-back": "عودة",
+      "logout": "تسجيل الخروج",
+      "cancel": "إلغاء",
+      "accept": "قبول",
+      "reject": "رفض",
+      "make-bid": "تقديم عرض",
+      "reset": "إعادة تعيين"
+    },
+    "header": {
+      "edit-listing": "تعديل الإعلان",
+      "create-new-listing": "إنشاء إعلان جديد",
+      "login": "تسجيل الدخول",
+      "register": "تسجيل",
+      "admin-settings": "إعدادات المسؤول",
+      "register-admin": "تسجيل مسؤول",
+      "messages": "الرسائل",
+      "new-listing": "إعلان جديد",
+      "favorites": "المفضلة",
+      "inbox": "صندوق الوارد",
+      "profile": "الملف الشخصي"
+    },
+    "chat": {
+      "bid": "عرض",
+      "price": "السعر",
+      "accepted": "تم القبول",
+      "rejected": "تم الرفض",
+      "make-a-bid": "تقديم عرض",
+      "no-messages-yet": "لا توجد رسائل حتى الآن",
+      "cancelled": "تم الإلغاء"
+    },
+    "listing": {
+      "my-listings": "إعلاناتي",
+      "listings": "الإعلانات",
+      "see-all-your-listings": "عرض جميع إعلاناتك",
+      "see-all-your-favorites": "عرض جميع المفضلات",
+      "header": "العنوان",
+      "description": "الوصف",
+      "price": "السعر",
+      "category": "الفئة",
+      "location": "الموقع",
+      "images": "الصور",
+      "delete": "حذف",
+      "upload-image": "تحميل صورة",
+      "activeCL": "نشط",
+      "inactiveCL": "غير نشط",
+      "last-edited": "آخر تعديل",
+      "file": "ملف"
+    },
+    "map": {
+      "map": "الخريطة",
+      "loading-map": "جارٍ تحميل الخريطة"
+    },
+    "login": {
+      "username": "اسم المستخدم",
+      "password": "كلمة المرور",
+      "register": "تسجيل",
+      "dont-have-an-account-yet": "لا تملك حسابًا بعد؟",
+      "already-have-an-account": "هل لديك حساب بالفعل؟"
+    },
+    "profile": {
+      "edit-profile": "تعديل الملف الشخصي",
+      "name": "الاسم",
+      "first-name": "الاسم الأول",
+      "last-name": "اسم العائلة",
+      "email": "البريد الإلكتروني",
+      "phone-number": "رقم الهاتف",
+      "password": "كلمة المرور",
+      "confirm-password": "تأكيد كلمة المرور",
+      "update-user-info-warning": "تحديث معلومات المستخدم يتطلب تسجيل الخروج تلقائيًا لتفعيل التغييرات.",
+      "my-profile": "ملفي الشخصي",
+		  "edit-profile-information": "تعديل معلومات الملف الشخصي"
+    },
+    "pageination": {
+      "page": "صفحة",
+      "of": "من",
+      "next": "التالي",
+      "previous": "السابق"
+    },
+    "home": {
+      "search": "بحث",
+      "search-placeholder": "ابحث عن الإعلانات",
+      "no-listings-found": "لم يتم العثور على إعلانات",
+      "no-favorites-found": "لا توجد عناصر مفضلة",
+      "current-filter": "الفلتر الحالي"
+    }
+  }
+  

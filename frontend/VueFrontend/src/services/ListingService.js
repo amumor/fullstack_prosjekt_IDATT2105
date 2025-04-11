@@ -5,9 +5,12 @@ import {
     ListingControllerApi,
     ListingCreationRequestDTO
 } from '@/api';
-import { serviceConfigParams } from '@/services/ServiceSetup.js';
+import {serviceConfigParams} from '@/services/ServiceSetup.js';
 
-const { timeout, baseURL } = serviceConfigParams();
+
+const {timeout, baseURL} = serviceConfigParams();
+
+import request from 'superagent';
 
 /**
  * Creates a new listing with the provided details.
@@ -40,41 +43,86 @@ const { timeout, baseURL } = serviceConfigParams();
  *   .catch(error => console.error('Creation failed:', error));
  */
 export function createListing(listing, images = [], token) {
-    const client = new ApiClient(baseURL);
-    client.timeout = timeout;
-    // Set up bearer authentication using the provided token.
-    client.authentications.bearerAuth = {
-        type: 'bearer',
-        accessToken: token,
+    const requestData = {
+        title: listing.title,
+        description: listing.description,
+        categoryName: listing.categoryName,
+        listingStatus: listing.listingStatus,
+        price: listing.price,
+        latitude: listing.latitude,
+        longitude: listing.longitude,
+        imagesToDelete: listing.imagesToDelete || [],
     };
+    console.log('imagesToDelete:', requestData.imagesToDelete);
 
-    // Create an instance of the ListingControllerApi.
-    const listingApi = new ListingControllerApi(client);
+    // Initialize the superagent request.
+    let req = request
+        .post(baseURL + '/api/v1/listing/create')
+        .set('Authorization', `Bearer ${token}`)
+        .type('multipart/form-data');
 
-    // Set up the ListingCreationRequestDTO with the listing details.
-    const listingCreationRequestDTO = new ListingCreationRequestDTO();
-    listingCreationRequestDTO.title = listing.title;
-    listingCreationRequestDTO.description = listing.description;
-    listingCreationRequestDTO.categoryName = listing.categoryName;
-    listingCreationRequestDTO.listingStatus = ListingCreationRequestDTO.ListingStatusEnum[listing.listingStatus];
-    listingCreationRequestDTO.price = listing.price;
-    listingCreationRequestDTO.latitude = listing.latitude;
-    listingCreationRequestDTO.longitude = listing.longitude;
-    listingCreationRequestDTO.imagesToDelete = listing.imagesToDelete || [];
+    // Add listing details as fields to the form.
+    Object.keys(requestData).forEach(key => {
+        req.field(key, requestData[key]);
+    });
 
-    // Pass the optional images via opts.
-    const opts = { images };
+    // Add the images if provided.
+    if (images.length > 0) {
+        images.forEach(image => {
+            req.attach('images', image);
+        });
+    }
 
-    return listingApi.create(listingCreationRequestDTO, opts)
-        .then(listingResponseDTO => listingResponseDTO)
+    // Send the request and return a promise.
+    console.log('Request:', req);
+    return req
+        .then(response => {
+            return response.body;
+        })
         .catch(error => {
             console.error('Listing creation failed:', error);
-            throw error;
+            throw new Error(`Listing creation failed: ${error.message}`);
         });
 }
 
+export async function createListing2(formData, token) {
+    try {
+        const response = await request
+            .post(baseURL + '/api/v1/listing/create')
+            .set('Authorization', `Bearer ${token}`)
+            .type('multipart/form-data')
+            .send(formData); // Send FormData
+        return response.body;
+    } catch (error) {
+        console.error('Listing creation failed:', error);
+        throw new Error(`Listing creation failed: ${error.message}`);
+    }
+}
+
+export async function createListingWithoutImage(listing, token) {
+    try {
+        const response = await fetch(baseURL + '/api/v1/listing/create-split', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(listing)
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error('Error creating listing without image:', error);
+        throw new Error(`Listing creation failed: ${error.message}`);
+    }
+}
+
 /**
- * Retrieves a listing by its ID.
+ * Retrieves a listing by its ID using superagent.
  *
  * @param {string} id - The ID of the listing.
  * @param {string} token - JWT token.
@@ -86,24 +134,16 @@ export function createListing(listing, images = [], token) {
  *   .then(listing => console.log('Listing retrieved:', listing))
  *   .catch(error => console.error('Failed to fetch listing:', error));
  */
-export function getListingById(id, token) {
-    const client = new ApiClient(baseURL);
-    client.timeout = timeout;
-    if (token) {
-        client.authentications.bearerAuth = {
-            type: 'bearer',
-            accessToken: token,
-        };
-    }
-
-    const listingApi = new ListingControllerApi(client);
-    return listingApi.getById(id)
-        .then(listingResponseDTO => listingResponseDTO)
+export const getListingById = (id) => {
+    return request
+        .get(baseURL + `/api/v1/listing/id/${id}`)
+        .then(res => res.body)
         .catch(error => {
             console.error('Failed to retrieve listing by ID:', error);
             throw error;
         });
-}
+};
+
 
 /**
  * Retrieves listing suggestions with optional pagination.
@@ -120,13 +160,9 @@ export function getListingById(id, token) {
  *   .then(listings => console.log('Listing suggestions:', listings))
  *   .catch(error => console.error('Failed to retrieve suggestions:', error));
  */
-export function getListingSuggestions(opts = { page: 0, size: 10 }, token) {
+export function getListingSuggestions(opts = {page: 0, size: 20}) {
     const client = new ApiClient(baseURL);
     client.timeout = timeout;
-    client.authentications.bearerAuth = {
-        type: 'bearer',
-        accessToken: token,
-    };
 
     const listingApi = new ListingControllerApi(client);
     return listingApi.getSuggestions(opts)
@@ -138,7 +174,7 @@ export function getListingSuggestions(opts = { page: 0, size: 10 }, token) {
 }
 
 /**
- * Updates an existing listing with the provided details.
+ * Updates an existing listing with the provided details using fetch().
  *
  * @param {string} id - The ID of the listing to update.
  * @param {Object} updateData - An object containing the updated listing details.
@@ -155,32 +191,131 @@ export function getListingSuggestions(opts = { page: 0, size: 10 }, token) {
  * @param {string} token - JWT token.
  * @returns {Promise<Object>} A promise that resolves to the updated ListingResponseDTO.
  * @throws {Error} If updating the listing fails.
- *
- * @example
- * updateListing('listing123', {
- *   title: 'Updated Title',
- *   description: 'Updated Description',
- *   imagesToDelete: ['oldImage1.jpg']
- * }, 'jwt-token')
- *   .then(response => console.log('Listing updated:', response))
- *   .catch(error => console.error('Update failed:', error));
  */
-export function updateListing(id, updateData, token) {
-    const client = new ApiClient(baseURL);
-    client.timeout = timeout;
-    client.authentications.bearerAuth = {
-        type: 'bearer',
-        accessToken: token,
-    };
+export async function updateListing(id, updateData, token) {
+    const url = `${baseURL}/api/v1/listing/update-split/${id}`;
 
-    const listingApi = new ListingControllerApi(client);
-    // Pass the update data in the opts parameter under updateListingRequest.
-    const opts = { updateListingRequest: updateData };
-
-    return listingApi.updateListing(id, opts)
-        .then(listingResponseDTO => listingResponseDTO)
-        .catch(error => {
-            console.error('Failed to update listing:', error);
-            throw error;
+    try {
+        const response = await fetch(url, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(updateData),
         });
+
+        if (!response.ok) {
+            throw new Error(`Failed to update listing: ${response.statusText}`);
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error('Failed to update listing:', error);
+        throw error;
+    }
 }
+
+/**
+ * Retrieves listings by category name.
+ *
+ * @param {string} categoryName - The category name to filter listings.
+ * @returns {Promise<Object>} A promise that resolves to the listings.
+ * @throws {Error} If the request fails.
+ */
+export async function getListingsByCategory(categoryName, page = 0, size = 20) {
+    const url = new URL(baseURL + '/api/v1/listing/get-by-category');
+    url.searchParams.append('categoryName', categoryName);
+    url.searchParams.append('page', page);
+    url.searchParams.append('size', size);
+
+    try {
+        const response = await fetch(url, {
+            method: 'GET',
+        });
+
+        if (!response.ok) {
+            throw new Error(`Failed to fetch listings: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        return data.listings;
+    } catch (error) {
+        console.error('Error fetching listings by category:', error);
+        throw error;
+    }
+}
+
+export async function getListingsBySeller(token, page = 0, size = 20) {
+    const url = new URL(baseURL + '/api/v1/listing/get-by-seller');
+    url.searchParams.append('page', page);
+    url.searchParams.append('size', size);
+
+    try {
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error(`Failed to fetch listings: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        return data.listings;
+    } catch (error) {
+        console.error('Error fetching listings by category:', error);
+        throw error;
+    }
+}
+
+/**
+ * Deletes a listing by its ID.
+ *
+ * @param {string} token - The authentication token.
+ * @param {UUID} id - The ID of the listing to delete.
+ * @returns {Promise<void>} - Resolves when the listing is successfully deleted.
+ */
+export const deleteListing = (token, id) => {
+    return request
+        .delete(baseURL + `/api/v1/listing/delete/${id}`)
+        .set('Authorization', `Bearer ${token}`)
+        .then(() => {
+            console.log(`Listing with ID ${id} deleted successfully.`);
+        })
+        .catch(err => {
+            console.error(`Failed to delete listing with ID ${id}:`, err);
+            throw err;
+        });
+};
+
+/**
+ * Get listings by title (search), with optional pagination.
+ * 
+ * @param {String} title - The title or keyword to search for.
+ * @param {Object} opts - Optional parameters.
+ * @param {Number} opts.page - Page number (default 0).
+ * @param {Number} opts.size - Page size (default 10).
+ * @param {String} token - Optional JWT token for auth (if needed).
+ * @returns {Promise<Object>} A promise that resolves to the response body.
+ */
+export const getListingsByTitle = (title, opts = {}) => {
+    const { page = 0, size = 20 } = opts;
+
+    return request
+        .get(baseURL + '/api/v1/listing/get-by-title')
+        .query({ title, page, size })
+        .then(res => res.body)
+        .catch(err => {
+            if (err.status === 404) {
+                // No listings found — return empty result to handle gracefully
+                return { listings: [] };
+            }
+
+            console.error('Failed to retrieve listings by title:', err);
+            throw err;
+        });
+};

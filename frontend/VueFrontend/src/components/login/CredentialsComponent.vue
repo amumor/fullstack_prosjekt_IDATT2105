@@ -53,15 +53,10 @@ const password = ref('');
  * @type {import('vue').Ref<string>}
  */
 const confirmPassword = ref('');
-
 const errorMsg = ref('');
-
 const nameRegex = /^[A-Za-zÆØÅæøå]+$/;
-
 const emailRegex = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/;
-
 const phoneRegex = /^\d{8}$/;
-
 const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&()_+\-={}:;"'|<>,.?]).{10,}$/;
 
 /**
@@ -243,36 +238,37 @@ const toggleForm = () => {
 
 <template>
   <div class="display-page-container">
-    <h2 class="logo-header">FIND.no</h2>
+    <router-link to="/" id="title-header">{{ $t('logo') }}</router-link>
+
     <template v-if="isUserRegistered">
       <div class="login">
-        <h2>Log in</h2>
+        <h2>{{ $t('header.login') }}</h2>
         <div class="fields">
-          <input v-model="email" type="text" placeholder="E-mail"/>
-          <input v-model="password" type="password" placeholder="Password"/>
-          <button class="basic-blue-btn" @click="login">Log in</button>
+          <input v-model="email" type="text" :placeholder="$t('profile.email')"/>
+          <input v-model="password" type="password" :placeholder="$t('profile.password')"/>
+          <button class="basic-blue-btn" @click="login">{{ $t('header.login') }}</button>
         </div>
         <div class="to-sign-up">
-          <p>Don't have an account yet?</p>
-          <button @click="toggleForm">Sign up</button>
+          <p>{{ $t('login.dont-have-an-account-yet') }}</p>
+          <button @click="toggleForm">{{ $t('button.sign-up') }}</button>
         </div>
       </div>
     </template>
     <template v-else>
       <div class="sign-up">
-        <h2>Register</h2>
+        <h2>{{ $t('header.register') }}</h2>
         <div class="fields">
-          <input v-model="firstName" type="text" placeholder="First name"/>
-          <input v-model="lastName" type="text" placeholder="Last name"/>
-          <input v-model="email" type="text" placeholder="E-mail"/>
-          <input v-model="phoneNumber" type="text" placeholder="Phone number"/>
-          <input v-model="password" type="password" placeholder="Password"/>
-          <input v-model="confirmPassword" type="password" placeholder="Confirm password"/>
-          <button class="basic-blue-btn" @click="register">Register</button>
+          <input v-model="firstName" type="text" :placeholder="$t('profile.first-name')"/>
+          <input v-model="lastName" type="text" :placeholder="$t('profile.last-name')"/>
+          <input v-model="email" type="text" :placeholder="$t('profile.email')"/>
+          <input v-model="phoneNumber" type="text" :placeholder="$t('profile.phone-number')"/>
+          <input v-model="password" type="password" :placeholder="$t('profile.password')"/>
+          <input v-model="confirmPassword" type="password" :placeholder="$t('profile.confirm-password')"/>
+          <button class="basic-blue-btn" @click="register">{{ $t('header.register') }}</button>
         </div>
         <div class="to-login">
-          <p>Already have an account?</p>
-          <button @click="toggleForm">Log in</button>
+          <p>{{ $t('login.already-have-an-account') }}</p>
+          <button @click="toggleForm">{{ $t('header.login') }}</button>
         </div>
       </div>
     </template>
@@ -299,6 +295,13 @@ const toggleForm = () => {
   text-align: left;
 
   margin: 0;
+}
+
+#title-header {
+  text-decoration: none;
+  color: #333;
+  font-size: 24px;
+  font-weight: bold;
 }
 
 /* Title */
@@ -333,4 +336,58 @@ input {
   text-decoration: underline;
 }
 
+/* Responsive Design for medium screens (max-width: 768px) */
+@media (max-width: 768px) {
+  .display-page-container {
+    width: 80%; /* Adjust width for medium screens */
+    padding: 30px; /* Adjust padding */
+  }
+
+  input {
+    width: 90%; /* Make inputs take more width */
+  }
+
+  .logo-header {
+    font-size: 22px; /* Adjust font size */
+    text-align: center; /* Center align logo */
+  }
+
+  h2 {
+    font-size: 20px; /* Adjust heading font size */
+    text-align: center; /* Center align heading */
+  }
+}
+
+/* Responsive Design for very small screens (max-width: 480px) */
+@media (max-width: 480px) {
+  .display-page-container {
+    width: 90%; /* Take almost full width */
+    padding: 20px; /* Reduce padding */
+  }
+
+  input {
+    width: 100%; /* Make inputs take full width */
+    font-size: 14px; /* Adjust font size */
+    padding: 10px; /* Add padding for better usability */
+  }
+
+  .logo-header {
+    font-size: 18px; /* Adjust font size */
+    text-align: center; /* Center align logo */
+  }
+
+  h2 {
+    font-size: 18px; /* Adjust heading font size */
+    text-align: center; /* Center align heading */
+  }
+
+  .to-sign-up, .to-login {
+    font-size: 12px; /* Adjust font size */
+    justify-content: center; /* Center align links */
+  }
+
+  .to-sign-up button, .to-login button {
+    font-size: 12px; /* Adjust button font size */
+  }
+}
 </style>

@@ -17,14 +17,21 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class BidMapper {
+
+  /**
+   * Converts a Bid entity to a BidResponseDTO.
+   *
+   * @param bid The Bid entity to convert.
+   * @return A BidResponseDTO containing the mapped fields from the Bid entity.
+   */
   public BidResponseDTO toDto(Bid bid) {
     return BidResponseDTO.builder()
-        .id(bid.getId())
-        .chatId(bid.getChat().getId())
-        .price(bid.getPrice())
-        .status(bid.getStatus())
-        .timestamp(bid.getTimestamp())
-        .build();
+            .id(bid.getId())
+            .chatId(bid.getChat().getId())
+            .price(bid.getPrice())
+            .status(bid.getStatus())
+            .timestamp(bid.getTimestamp())
+            .build();
   }
 
 }

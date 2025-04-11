@@ -22,7 +22,7 @@ import java.util.UUID;
  * Service class for managing bookmarks.
  * Handles operations related to bookmarks such as creating, deleting, and fetching bookmarks.
  *
- * @author Vetle Hodne
+ * @author Vetle Hodne, Amund Mørk
  * @version 1.0
  * @since 1.0
  */
@@ -48,11 +48,11 @@ public class BookmarkService {
    * Creates a new bookmark for the given listing and user.
    *
    * @param bookmarkRequestDTO The request DTO containing the listing ID.
-   * @param user              The user who is creating the bookmark.
+   * @param user               The user who is creating the bookmark.
    * @return The created bookmark.
    */
   @Transactional
-  public Bookmark createBookmark(BookmarkRequestDTO bookmarkRequestDTO, User user) {
+  public Bookmark createBookmark(User user, BookmarkRequestDTO bookmarkRequestDTO) {
     logger.info("> Handling bookmark creation for user: {}", user.getEmail());
 
     Listing listing = listingRepository.findById(bookmarkRequestDTO.getListingId())
@@ -78,10 +78,10 @@ public class BookmarkService {
    * Deletes a bookmark by its UUID.
    *
    * @param bookmarkId The ID of the bookmark to be deleted.
-   * @param user      The user who is deleting the bookmark.
+   * @param user       The user who is deleting the bookmark.
    */
   @Transactional
-  public void deleteBookmark(UUID bookmarkId, User user) {
+  public void deleteBookmark(User user, UUID bookmarkId) {
     logger.info("> Deleting bookmark with ID: {}", bookmarkId);
     Bookmark bookmark = bookmarkRepository.findById(bookmarkId)
             .orElseThrow(() -> new ObjectNotFoundException(bookmarkId, "Bookmark not found"));

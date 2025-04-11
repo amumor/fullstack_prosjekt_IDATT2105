@@ -4,6 +4,9 @@ import edu.ntnu.SpringBackend.dto.ListingCreationRequestDTO;
 import edu.ntnu.SpringBackend.dto.ListingListResponseDTO;
 import edu.ntnu.SpringBackend.dto.ListingResponseDTO;
 import edu.ntnu.SpringBackend.mapper.ListingMapper;
+import edu.ntnu.SpringBackend.model.Category;
+import edu.ntnu.SpringBackend.model.Listing;
+import edu.ntnu.SpringBackend.model.SearchHistory;
 import edu.ntnu.SpringBackend.model.User;
 import edu.ntnu.SpringBackend.service.CategoryService;
 import edu.ntnu.SpringBackend.service.ListingService;
@@ -13,6 +16,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,6 +27,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -57,15 +62,29 @@ public class ListingController {
         }
         logger.info("GET Request received on [/api/v1/listing/get-suggestions]");
         Pageable pageable = PageRequest.of(page, size);
-        return ResponseEntity.ok(
-                listingMapper.toDto(
-                        listingService.findByCategories(
-                                categoryService.findBySearchHistory(
-                                        searchHistoryService.findByUser(user)
-                                ), pageable
-                        )
-                )
-        );
+        // Retrieve the search history of the user
+        List<SearchHistory> searchHistory = searchHistoryService.findByUser(user);
+        logger.info(" ---- Search history retrieved: {}", searchHistory.toString());
+
+        // Retrieve categories based on the search history
+        List<Category> categories = categoryService.findBySearchHistory(searchHistory);
+        logger.info(" ---- Categories found: {}", categories.toString());
+
+        // Find the listings using the categories and pageable
+//        List<Listing> listings = listingService.findByCategories(categories, pageable); //TODO: fix this piece of shit
+        List<Listing> listings = listingService.findByCategories2(categories, pageable).toList();
+
+        logger.info(" ---- Listings retrieved: {}", listings.toString());
+        for (Listing listing : listings) {
+            logger.info(" ---- Listing: {}", listing.toString());
+        }
+
+        // Map the listings to a DTO
+        var dto = listingMapper.toDto(listings);
+        logger.info(" ---- Mapped DTO: {}", dto.toString());
+
+        // Return the response with the mapped DTO
+        return ResponseEntity.ok(dto);
     }
 
     /**
@@ -167,8 +186,13 @@ public class ListingController {
         }
         logger.info("GET Request received on [/api/v1/listing/get-by-category] with categoryName: {}", categoryName);
         Pageable pageable = PageRequest.of(page, size);
-        return ResponseEntity.ok(listingMapper.toDto(listingService.getListingsBySingleCategory(categoryName, pageable)));
-    }
+        List<Listing> listingsPage = listingService.getListingsBySingleCategory(categoryName, pageable);
+        logger.info("> Retrieved {} listings for category: {}", listingsPage.size(), categoryName);
+
+        var listingsDto = listingMapper.toDto(listingsPage);
+        logger.info("> Mapping result: {}", listingsDto);
+
+        return ResponseEntity.ok(listingsDto);    }
 
 
     /**
@@ -176,9 +200,9 @@ public class ListingController {
      * This endpoint allows the authenticated user to create a new listing.
      * Only authenticated users can create listings.
      *
-     * @param user the authenticated user creating the listing
+     * @param user    the authenticated user creating the listing
      * @param request the request DTO containing listing details
-     * @param images array of images for the listing
+     * @param images  array of images for the listing
      * @return the created listing response DTO
      */
     @PreAuthorize("isAuthenticated()")
@@ -192,6 +216,36 @@ public class ListingController {
         logger.info("POST Request received on [/api/v1/listing/create]");
         logger.info("> Received {} image(s)", images != null ? images.length : 0);
         return ResponseEntity.ok(listingMapper.toDto(listingService.createListing(request, user, images)));
+    }
+
+    /**
+     * Creates a new listing without handling images.
+     * <p>
+     * This endpoint creates a listing using the provided listing details.
+     * Image handling is performed via another endpoint, so no images are processed.
+     * If an IO exception occurs during listing creation, an HTTP 500 response is returned.
+     * </p>
+     *
+     * @param user       the authenticated user creating the listing
+     * @param requestDTO the DTO containing the listing creation details
+     * @return a {@code ResponseEntity} containing the listing response DTO on success,
+     *         or an HTTP 500 error if an IO exception occurs
+     */
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping(value = "/create-split")
+    @Operation(summary = "Create a new listing, images handled by another endpoint", security = @SecurityRequirement(name = "bearerAuth"))
+    public ResponseEntity<ListingResponseDTO> createWithoutImage(
+            @AuthenticationPrincipal User user,
+            @RequestBody ListingCreationRequestDTO requestDTO
+    ) {
+        logger.info("POST Request received on [/api/v1/category/create-split]");
+        try {
+            var listing = listingService.createListing(requestDTO, user, null);
+            return ResponseEntity.ok(listingMapper.toDto(listing));
+        } catch (IOException e) {
+            logger.error("Failed to create listing due to an IO exception", e);
+            return ResponseEntity.internalServerError().build();
+        }
     }
 
     /**
@@ -218,12 +272,40 @@ public class ListingController {
     }
 
     /**
+     * Updates a listing without handling images.
+     * <p>
+     * This endpoint allows an authenticated user to update a listing's details
+     * using the provided DTO, excluding image data. Image updates must be handled
+     * through another endpoint.
+     * </p>
+     *
+     * @param id         the unique identifier of the listing to update
+     * @param user       the authenticated user performing the update
+     * @param requestDTO the DTO containing the new details for the listing
+     * @return a ResponseEntity containing the updated listing as a DTO
+     * @throws IOException if an IO error occurs during the update process
+     */
+    @PreAuthorize("isAuthenticated()")
+    @PutMapping("/update-split/{id}")
+    @Operation(summary = "Update a listing", security = @SecurityRequirement(name = "bearerAuth"))
+    public ResponseEntity<ListingResponseDTO> updateListingWithoutImage(
+            @PathVariable UUID id,
+            @AuthenticationPrincipal User user,
+            @RequestBody ListingCreationRequestDTO requestDTO
+    ) throws IOException {
+        logger.info("PUT Request received on [/api/v1/listing/update-split/{}]", id);
+        return ResponseEntity.ok(
+                listingMapper.toDto(listingService.updateListing(id, user, requestDTO, null))
+        );
+    }
+
+    /**
      * Delete a listing by its ID.
      * This endpoint allows the authenticated user to delete a listing.
      * Only authenticated users can delete listings.
      *
      * @param user the authenticated user deleting the listing
-     * @param id the ID of the listing to delete
+     * @param id   the ID of the listing to delete
      * @return a response entity with no content
      */
     @PreAuthorize("isAuthenticated()")

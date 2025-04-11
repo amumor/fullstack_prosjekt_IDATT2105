@@ -47,7 +47,7 @@ public class BookmarkController {
   @GetMapping("/my-bookmarks")
   @Operation(summary = "Getting all bookmarks for a user", security = @SecurityRequirement(name = "bearerAuth"))
   public List<BookmarkResponseDTO> getUserBookmarks(
-         @AuthenticationPrincipal User user
+          @AuthenticationPrincipal User user
   ) {
     logger.info("Received GET request on [/api/v1/bookmarks/my-bookmarks]");
 
@@ -60,7 +60,7 @@ public class BookmarkController {
    * Create a new bookmark for a listing.
    * Only authenticated users can create bookmarks for listings.
    *
-   * @param user the authenticated user creating the bookmark
+   * @param user               the authenticated user creating the bookmark
    * @param bookmarkRequestDTO the request DTO containing the listing ID
    * @return the created bookmark response DTO
    */
@@ -73,14 +73,14 @@ public class BookmarkController {
   ) {
     logger.info("Received POST request on [/api/v1/bookmarks/create] with body: {}", bookmarkRequestDTO);
 
-    return ResponseEntity.ok(BookmarkMapper.toDto(bookmarkService.createBookmark(bookmarkRequestDTO, user)));
+    return ResponseEntity.ok(BookmarkMapper.toDto(bookmarkService.createBookmark(user, bookmarkRequestDTO)));
   }
 
   /**
    * Delete a bookmark by its ID.
    * Only the authenticated user who created the bookmark can delete it.
    *
-   * @param user the authenticated user deleting the bookmark
+   * @param user       the authenticated user deleting the bookmark
    * @param bookmarkId the ID of the bookmark to delete
    * @return a response entity with no content
    */
@@ -92,7 +92,7 @@ public class BookmarkController {
           @PathVariable UUID bookmarkId
   ) {
     logger.info("Received DELETE request on [/api/v1/bookmarks/{}]", bookmarkId);
-    bookmarkService.deleteBookmark(bookmarkId, user);
+    bookmarkService.deleteBookmark(user, bookmarkId);
 
     return ResponseEntity.noContent().build();
   }
